@@ -10,7 +10,20 @@ D2DGraphics::D2DGraphics()
 D2DGraphics::~D2DGraphics()
 {}
 
-bool D2DGraphics::Initialize( const ImageLoader &ImgLoader, const UINT Width, const UINT Height )
+void D2DGraphics::BeginDraw()
+{	// Anything needed for the overlay should go between the begin and end
+	// draw calls
+	m_pRenderTarget->BeginDraw();
+}
+
+void D2DGraphics::EndDraw()
+{
+	m_pRenderTarget->EndDraw();
+
+}
+
+bool D2DGraphics::Initialize( const D3DGraphics &D3D, const ImageLoader &ImgLoader, 
+	const UINT ScreenWidth, const UINT ScreenHeight )
 {
 	// Initialize the Direct2D factory
 	HRESULT hr = D2D1CreateFactory( 
@@ -22,7 +35,7 @@ bool D2DGraphics::Initialize( const ImageLoader &ImgLoader, const UINT Width, co
 	}
 
 	// Use the image loader to create an empty texture buffer
-	auto bitmapResult = ImgLoader.CreateBitmap( Width, Height );
+	auto bitmapResult = ImgLoader.CreateBitmap( ScreenWidth, ScreenHeight );
 	hr = bitmapResult.first;
 	if( FAILED( hr ) )
 	{
@@ -56,10 +69,53 @@ bool D2DGraphics::Initialize( const ImageLoader &ImgLoader, const UINT Width, co
 		return false;
 	}
 
+	// Initialize and create the overlay texture
+	D3D11_TEXTURE2D_DESC texDesc{};
+	texDesc.Width = ScreenWidth;
+	texDesc.Height = ScreenHeight;
+	texDesc.MipLevels = 1;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Usage = D3D11_USAGE_DYNAMIC;
+	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	texDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	texDesc.MiscFlags = 0;
+
+	auto pDevice = D3D.GetDevice();
+	hr = pDevice->CreateTexture2D( &texDesc, nullptr, overlay.GetAddressOf() );
+	
+	if( FAILED( hr ) )
+	{
+		MessageBox( nullptr, L"Could not initialize overlay texture", L"error", MB_OK );
+		return false;
+	}
+
 	return true;
 }
 
-bool D2DGraphics::FillTexture( BYTE *const Pixels )const
+void D2DGraphics::Render( const D3DGraphics &D3D )
+{	
+	// Get the pointer from the ID3D11Texture2D and pass to fillTexture
+	D3D11_MAPPED_SUBRESOURCE ms{};
+	auto context = D3D.GetDeviceContext();
+
+	context->Map( overlay.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &ms );
+	fillTexture( reinterpret_cast<BYTE *>( ms.pData ) );
+	context->Unmap( overlay.Get(), 0 );
+
+}
+
+void D2DGraphics::DrawString( const std::wstring & String, const FontLoader & FntLoader, const D2D1_RECT_F &PositionAndSize )
+{
+	m_pRenderTarget->DrawTextW(
+		String.c_str(), String.size(), FntLoader.GetTextFormat(),
+		PositionAndSize, m_pBrush.Get()
+	);
+}
+
+bool D2DGraphics::fillTexture( BYTE *const Pixels )const
 {
 	// The purpose of this function is to copy the render target to 
 	// a ID3D11Texture2D, this will probably go through some changes
@@ -94,7 +150,7 @@ bool D2DGraphics::FillTexture( BYTE *const Pixels )const
 			CopyMemory( &Pixels[ y * stride ], &data[ y * stride ], stride );
 		}
 	}
-
+	
 
 	return SUCCEEDED( hr );
 }

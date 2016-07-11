@@ -6,7 +6,9 @@
 ///////////////////////
 #include "D2DGraphics.h"
 #include "ImageLoader.h"
+#include "FontLoader.h"
 #include "d3dgraphics.h"
+
 #include <memory>
 
 /////////////
@@ -38,4 +40,5 @@ private:
     D3DGraphics* m_pD3D;
 	std::unique_ptr<D2DGraphics> m_pD2D;
 	std::unique_ptr<ImageLoader> m_pImgLoader;
+	std::unique_ptr<FontLoader> m_pFntLoader;
 };
