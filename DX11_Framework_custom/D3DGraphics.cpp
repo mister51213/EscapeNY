@@ -448,12 +448,12 @@ void D3DGraphics::EndScene()
 	return;
 }
 
-ID3D11Device* D3DGraphics::GetDevice()
+ID3D11Device* D3DGraphics::GetDevice()const
 {
 	return m_device;
 }
 
-ID3D11DeviceContext* D3DGraphics::GetDeviceContext()
+ID3D11DeviceContext* D3DGraphics::GetDeviceContext()const
 {
 	return m_deviceContext;
 }
@@ -463,7 +463,6 @@ void D3DGraphics::GetProjectionMatrix( DirectX::XMMATRIX& projectionMatrix)
 	projectionMatrix = m_projectionMatrix;
 	return;
 }
-
 
 void D3DGraphics::GetWorldMatrix( DirectX::XMMATRIX& worldMatrix)
 {
