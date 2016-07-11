@@ -1,0 +1,93 @@
+Win32 Game "Escape from NY" (Tentative title) 
+Development Guidelines 
+July 11th, 2016
+
+PROJECT OVERVIEW
+"Escape from NY" is a puzzle-solving / maze / action game, 
+that puts the player in a crowded parking lot, which happens to 
+be floating in New York Bay, which happens to be swimming with
+sharks (We took some artistic license here).
+
+The player finds himself in a corner of the parking lot and is trying
+to reach the exit through a maze of cars blocking the way -
+luckily for him, the cars have been parked in neutral, so he can push
+them out of the way to clear a path (cars can only move forward or
+backward, not sideways or diagonally). But beware! Some drivers
+are still asleep at the wheel, and when pushed, the cars will rev
+their engines, giving the player a few seconds to move before the
+angry driver runs the player off the floating parking lot, and into
+the bay full of sharks!
+
+This combines Tetris-like puzzle-solving and geometric reasoning 
+skills, with motor skills and quick thinking when it's time to move out
+of the way of an angry driver.
+
+CODING CONVENTIONS
+1. ALWAYS err on the side of commenting.
+Use self-documenting variable names as much as possible,
+but try to add explanatory comments for any code that is the slightest 
+bit vague; comments are much easier to remove than add later on.
+
+*Add at least a line explaining the role of EVERY function,
+and even what it does is obvious ({x++;} for example), add a 
+comment explaining what this code is doing within the context
+of the application (// increment horizontal coordinate of player,
+represented by x).
+
+2. Use camelCase for private members, and PascalCase for public
+members and function names.
+
+3. Use the following prefixes to denote scope and type:
+m_      local member variable
+g_       global variable
+p         pointer
+e         enum
+i          interface
+
+4. Write parameters in PascalCase in the function signature,
+to distinguish arguments from parameters and avoid confusion
+over masking by local variables.
+
+5. For any functions that are very complex and crucial to the
+application's functioning, add a description in the following format:
+(For less crucial, shorter functions, just precede them with a single
+line comment)
+
+////////////////////////////////////////////////////////////////////////////////
+// The input object will store the state of each key   //
+// in a keyboard array. When queried it will tell the  //
+// calling functions if a certain key is pressed.         //
+////////////////////////////////////////////////////////////////////////////////
+
+6. Add a header surrounded by ****** borders to every file, 
+containing the following information:
+File name
+Creation Date 
+Purpose
+Description
+Requirements
+
+7. At the beginning of headers, use #pragma once instead of 
+#ifdef _SOMEHEADER_H_
+#define _SOMEHEADER_H_
+#endif
+
+DEVELOPMENT PROCEDURE
+1. The basic framework for displaying the main window and D3D Graphics will be
+uploaded to and developed in the Master branch.
+2. Until the framework is ready to incorporate game logic, the 2D rendering class
+for fonts, menus, etc, will be developed in a separate branch, in files called 
+"Graphics2D.h/.cpp".
+3. Game logic will also be developed in a separate branch.
+4. The 2D rendering and Game logic branches will later be merged into a single
+branch off of the master when they have been separately completed and tested.
+5. TBD
+
+DEVELOPMENT TIMELINE (Tentative)
+1. Framework:
+Windows/D3D Framework (Greg) - Week ending July 15th
+2D Graphics/Font class (Josh) - Week ending July 15th
+2. Discussion - Sunday July 17th, Evening (CT) (tentative)
+3. Game grid layout, player/obstacles/ collision logic, 
+adding graphics, display, porting to other systems - TBD
+
