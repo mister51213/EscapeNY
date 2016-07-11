@@ -39,10 +39,10 @@ members and function names.
 
 3. Use the following prefixes to denote scope and type:
 m_      local member variable
-g_       global variable
-p         pointer
-e         enum
-i          interface
+g_      global variable
+p       pointer
+e       enum
+i       interface
 
 4. Write parameters in PascalCase in the function signature,
 to distinguish arguments from parameters and avoid confusion
@@ -71,6 +71,9 @@ Requirements
 #ifdef _SOMEHEADER_H_
 #define _SOMEHEADER_H_
 #endif
+
+8. Use the task list for to do's when you need to remember a list of things or want
+to let the other know what you want them to do.
 
 DEVELOPMENT PROCEDURE
 1. The basic framework for displaying the main window and D3D Graphics will be
