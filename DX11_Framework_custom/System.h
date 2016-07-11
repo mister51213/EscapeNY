@@ -15,40 +15,58 @@
 *  are all encapsulated.                                                       *
 *                                                                              *
 ********************************************************************************/
+#pragma once
 
-#include "System.h"
+#ifndef _SYSTEMCLASS_H_
+#define _SYSTEMCLASS_H_
+#define WIN32_LEAN_AND_MEAN
 
+#include <windows.h>
 
-// TEST comment - checking to see if pushing to the master works.
-// TEST comment - checking push - Josh
+///////////////////////////
+// Custom class includes //
+///////////////////////////
+#include "Input.h"
+#include "Graphics.h"
 
-//DEFAULT MAIN FUNCTION
-int WINAPI WinMain(HINSTANCE hInstance,
-    HINSTANCE hPrevInstance,
-    PSTR lpCmdLine,
-    int nCmdShow)
+class System
 {
-    // Create System object
-    System* g_pSystem; // efficient to instantiate on heap?
-    bool g_result;
+public:
+    System();
+    System(const System&);
+    ~System();
 
-    g_pSystem = new System;
-    if (!g_pSystem)
-    {
-        return 0;
-    }
+    bool Initialize();
+    void Shutdown();
+    void Run();
 
-    // Initialize and run g_pSystem object
-    g_result = g_pSystem->Initialize();
-    if (g_result)
-    {
-        g_pSystem->Run();
-    }
+    // forward declaration
+    LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 
-    // Shutdown and release g_pSystem object
-    g_pSystem->Shutdown();
-    delete g_pSystem;
-    g_pSystem = 0;
+private:
+	bool Frame();
+	void InitializeWindows(int&, int&);
+	void ShutdownWindows();
 
-    return 0; // return 0 if successful   
-}
+private:
+	LPCWSTR m_applicationName;
+	HINSTANCE m_hInstance;
+	HWND m_hwnd;
+
+	Input* m_Input;
+	Graphics* m_Graphics;
+};
+
+///////////////////////////////////////////////////////////////////////
+// The WndProc function and ApplicationHandle pointer are also included 
+// in this class file so we can re-direct the windows g_pSystem messaging 
+// into our MessageHandler function inside the g_pSystem class.
+///////////////////////////////////////////////////////////////////////
+
+// FUNCTION PROTOTYPES //
+static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
+// GLOBALS //
+static System* ApplicationHandle = 0;
+
+#endif
