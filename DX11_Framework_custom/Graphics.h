@@ -1,9 +1,10 @@
 #pragma once
-
-#ifndef _GRAPHICSCLASS_H_
-#define _GRAPHICSCLASS_H_
-
 #include <windows.h>
+
+///////////////////////
+// MY CLASS INCLUDES //
+///////////////////////
+#include "d3dgraphics.h"
 
 /////////////
 // GLOBALS //
@@ -14,7 +15,7 @@ const float SCREEN_DEPTH = 1000.0f;
 const float SCREEN_NEAR = 0.1f;
 
 ////////////////////////////////////////////////////////////////////////////////
-// Class name: GraphicsClass
+// Class name: Graphics
 ////////////////////////////////////////////////////////////////////////////////
 class Graphics
 {
@@ -31,7 +32,5 @@ private:
 	bool Render();
 
 private:
-
+    D3DGraphics* m_pD3D;
 };
-
-#endif

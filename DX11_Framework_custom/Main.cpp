@@ -1,6 +1,6 @@
 /*******************************************************************************
 *  MAIN ARCHITECTURE:                                                          *
-*  1) The WinMain function required by Win32 system is contained in Main.cpp   *
+*  1) The WinMain function required by Win32 g_pSystem is contained in Main.cpp   *
 *  2) The guts of the standard Windows instantiation code (MSG proc, etc),     *
 *  are contained in separate "MainWindow.h/.cpp" files.                        *
 *  3) The Game logic is contained in Game.h/cpp                                *
@@ -26,26 +26,26 @@ int WINAPI WinMain(HINSTANCE hInstance,
 {
 	// TODO: Test comment
     // Create System object
-    System* system; // efficient to instantiate on heap?
-    bool result;
+    System* g_pSystem; // efficient to instantiate on heap?
+    bool g_result;
 
-    system = new System;
-    if (!system)
+    g_pSystem = new System;
+    if (!g_pSystem)
     {
         return 0;
     }
 
-    // Initialize and run system object
-    result = system->Initialize();
-    if (result)
+    // Initialize and run g_pSystem object
+    g_result = g_pSystem->Initialize();
+    if (g_result)
     {
-        system->Run();
+        g_pSystem->Run();
     }
 
-    // Shutdown and release system object
-    system->Shutdown();
-    delete system;
-    system = 0;
+    // Shutdown and release g_pSystem object
+    g_pSystem->Shutdown();
+    delete g_pSystem;
+    g_pSystem = 0;
 
     return 0; // return 0 if successful   
 }
