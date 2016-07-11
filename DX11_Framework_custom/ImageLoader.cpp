@@ -50,7 +50,7 @@ WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const
 	if( SUCCEEDED( hr ) )
 	{
 		// Decode the image, which for bitmaps is the 0th frame
-		hr = decoder->GetFrame( 0, pFrame.GetAddressOf() );
+		hr = pDecoder->GetFrame( 0, pFrame.GetAddressOf() );
 	}
 	if( SUCCEEDED( hr ) )
 	{

@@ -1,5 +1,7 @@
 #include "D3DGraphics.h"
 
+using namespace DirectX;
+
 D3DGraphics::D3DGraphics()
 {
     m_swapChain = 0;
@@ -15,7 +17,6 @@ D3DGraphics::D3DGraphics()
 D3DGraphics::D3DGraphics(const D3DGraphics& other)
 {
 }
-
 
 D3DGraphics::~D3DGraphics()
 {
@@ -316,9 +317,13 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	// Now set the rasterizer state.
 	m_deviceContext->RSSetState(m_rasterState);
     
+	// Float casted screenWidth and screenHeight
+	float fScreenWidth = static_cast<float>( screenWidth );
+	float fScreenHeight = static_cast<float>( screenHeight );
+
 	// Setup the viewport for rendering.
-	viewport.Width = (float)screenWidth;
-	viewport.Height = (float)screenHeight;
+	viewport.Width = fScreenWidth;
+	viewport.Height = fScreenHeight;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0.0f;
@@ -328,17 +333,21 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	m_deviceContext->RSSetViewports(1, &viewport);
 
 	// Setup the projection matrix.
-	fieldOfView = (float)D3DX_PI / 4.0f;
-	screenAspect = (float)screenWidth / (float)screenHeight;
+	fieldOfView = DirectX::XM_PIDIV4;
+	screenAspect = fScreenWidth / fScreenHeight;
 
-	// Create the projection matrix for 3D rendering.
-	D3DXMatrixPerspectiveFovLH(&m_projectionMatrix, fieldOfView, screenAspect, screenNear, screenDepth);
-    
+	// Create the projection matrix for 3D rendering.	
+	m_projectionMatrix = 
+		XMMatrixPerspectiveFovLH( fieldOfView, screenAspect, screenNear, screenDepth );
+	    
 	// Initialize the world matrix to the identity matrix.
-	D3DXMatrixIdentity(&m_worldMatrix);
+	m_worldMatrix = XMMatrixIdentity();
     
 	// Create an orthographic projection matrix for 2D rendering.
-	D3DXMatrixOrthoLH(&m_orthoMatrix, (float)screenWidth, (float)screenHeight, screenNear, screenDepth);
+	m_orthoMatrix = 
+		XMMatrixOrthographicLH( fScreenWidth, fScreenHeight, screenNear, screenDepth 
+	);
+	
 
 	return true;
 }
@@ -449,20 +458,20 @@ ID3D11DeviceContext* D3DGraphics::GetDeviceContext()
 	return m_deviceContext;
 }
 
-void D3DGraphics::GetProjectionMatrix(D3DXMATRIX& projectionMatrix)
+void D3DGraphics::GetProjectionMatrix( DirectX::XMMATRIX& projectionMatrix)
 {
 	projectionMatrix = m_projectionMatrix;
 	return;
 }
 
 
-void D3DGraphics::GetWorldMatrix(D3DXMATRIX& worldMatrix)
+void D3DGraphics::GetWorldMatrix( DirectX::XMMATRIX& worldMatrix)
 {
 	worldMatrix = m_worldMatrix;
 	return;
 }
 
-void D3DGraphics::GetOrthoMatrix(D3DXMATRIX& orthoMatrix)
+void D3DGraphics::GetOrthoMatrix( DirectX::XMMATRIX& orthoMatrix)
 {
 	orthoMatrix = m_orthoMatrix;
 	return;
