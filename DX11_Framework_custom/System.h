@@ -1,6 +1,6 @@
 /*******************************************************************************
 *  MAIN ARCHITECTURE:                                                          *
-*  1) The WinMain function required by Win32 system is contained in Main.cpp   *
+*  1) The WinMain function required by Win32 g_pSystem is contained in Main.cpp   *
 *  2) The guts of the standard Windows instantiation code (MSG proc, etc),     *
 *  are contained in separate "MainWindow.h/.cpp" files.                        *
 *  3) The Game logic is contained in Game.h/cpp                                *
@@ -59,8 +59,8 @@ private:
 
 ///////////////////////////////////////////////////////////////////////
 // The WndProc function and ApplicationHandle pointer are also included 
-// in this class file so we can re-direct the windows system messaging 
-// into our MessageHandler function inside the system class.
+// in this class file so we can re-direct the windows g_pSystem messaging 
+// into our MessageHandler function inside the g_pSystem class.
 ///////////////////////////////////////////////////////////////////////
 
 // FUNCTION PROTOTYPES //

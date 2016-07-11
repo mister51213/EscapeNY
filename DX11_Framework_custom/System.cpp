@@ -1,6 +1,6 @@
 /*******************************************************************************
 *  MAIN ARCHITECTURE:                                                          *
-*  1) The WinMain function required by Win32 system is contained in Main.cpp   *
+*  1) The WinMain function required by Win32 g_pSystem is contained in Main.cpp   *
 *  2) The guts of the standard Windows instantiation code (MSG proc, etc),     *
 *  are contained in separate "MainWindow.h/.cpp" files.                        *
 *  3) The Game logic is contained in Game.h/cpp                                *
@@ -37,7 +37,7 @@ System::~System() // cleanup will be done in Shutdown() function, not here.
 bool System::Initialize()
 {
     int screenWidth, screenHeight;
-    bool result;
+    bool g_result;
 
     // initialize screenwidth / height to 0; will be later modified w variables
     screenWidth = 0;
@@ -63,8 +63,8 @@ bool System::Initialize()
         return false;
     }
     // Initialize the graphics object.
-    result = m_Graphics->Initialize(screenWidth, screenHeight, m_hwnd);
-    if (!result)
+    g_result = m_Graphics->Initialize(screenWidth, screenHeight, m_hwnd);
+    if (!g_result)
     {
         return false;
     }
@@ -104,7 +104,7 @@ void System::Shutdown()
 void System::Run() 
 {
 MSG msg;
-	bool done, result;
+	bool done, g_result;
 
 	// Initialize the message structure.
 	ZeroMemory(&msg, sizeof(MSG));
@@ -128,8 +128,8 @@ MSG msg;
 		else
 		{
 			// Otherwise do the frame processing.
-			result = Frame();
-			if(!result)
+			g_result = Frame();
+			if(!g_result)
 			{
 				done = true;
 			}
@@ -146,7 +146,7 @@ MSG msg;
 
 bool System::Frame()
 {
-bool result;
+bool g_result;
 
 
 	// Check if user pressed esc and wants to exit.
@@ -156,8 +156,8 @@ bool result;
 	}
 
 	// Do the frame processing for the graphics object.
-	result = m_Graphics->Frame();
-	if(!result)
+	g_result = m_Graphics->Frame();
+	if(!g_result)
 	{
 		return false;
 	}
@@ -223,7 +223,7 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
 
     // Setup window class with default settings
     wcex.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    wcex.lpfnWndProc = WndProc; // pass global result of function from header
+    wcex.lpfnWndProc = WndProc; // pass global g_result of function from header
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = m_hInstance;
@@ -337,7 +337,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 			return 0;
 		}
 
-		// All other messages pass to the message handler in the system class.
+		// All other messages pass to the message handler in the g_pSystem class.
 		default:
 		{
 			return ApplicationHandle->MessageHandler(hwnd, umessage, wparam, lparam);
