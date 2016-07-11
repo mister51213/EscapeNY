@@ -24,7 +24,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
     PSTR lpCmdLine,
     int nCmdShow)
 {
-	// TODO: Test comment
     // Create System object
     System* system; // efficient to instantiate on heap?
     bool result;

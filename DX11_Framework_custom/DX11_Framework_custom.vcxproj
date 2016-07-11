@@ -142,15 +142,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="D2DGraphics.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="D2DGraphics.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="System.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Development Guidelines.txt" />
+    <Text Include="Devel_Template.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
