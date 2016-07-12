@@ -13,7 +13,7 @@
 #include <wincodec.h>
 #include <wrl.h>
 
-#pragma comment(lib, "windowcodecs.lib")
+#pragma comment(lib, "windowscodecs.lib")
 
 using WicBitmapResult = std::pair<HRESULT, Microsoft::WRL::ComPtr<IWICBitmap>>;
 
