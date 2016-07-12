@@ -28,9 +28,9 @@ public:
 
 	void BeginDraw();
 	void EndDraw();
-	bool Initialize(const D3DGraphics &D3D, const ImageLoader &ImgLoader, const UINT Width, const UINT Height);
+	bool Initialize( D3DGraphics &D3D, const ImageLoader &ImgLoader, const UINT Width, const UINT Height);
 	void DrawString( const std::wstring &String, const FontLoader &FntLoader, const D2D1_RECT_F &PositionAndSize );
-	void Render( const D3DGraphics &D3D );
+	void Render( D3DGraphics &D3D );
 
 private:
 	bool fillTexture( BYTE *const Pixels )const;

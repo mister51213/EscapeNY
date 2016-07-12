@@ -22,7 +22,7 @@ void D2DGraphics::EndDraw()
 
 }
 
-bool D2DGraphics::Initialize( const D3DGraphics &D3D, const ImageLoader &ImgLoader, 
+bool D2DGraphics::Initialize( D3DGraphics &D3D, const ImageLoader &ImgLoader, 
 	const UINT ScreenWidth, const UINT ScreenHeight )
 {
 	// Initialize the Direct2D factory
@@ -95,7 +95,7 @@ bool D2DGraphics::Initialize( const D3DGraphics &D3D, const ImageLoader &ImgLoad
 	return true;
 }
 
-void D2DGraphics::Render( const D3DGraphics &D3D )
+void D2DGraphics::Render( D3DGraphics &D3D )
 {	
 	// Get the pointer from the ID3D11Texture2D and pass to fillTexture
 	D3D11_MAPPED_SUBRESOURCE ms{};

@@ -33,8 +33,8 @@ public:
 	void BeginScene(float, float, float, float);
 	void EndScene();
 
-	ID3D11Device* GetDevice()const;
-	ID3D11DeviceContext* GetDeviceContext()const;
+	ID3D11Device* GetDevice();
+	ID3D11DeviceContext* GetDeviceContext();
 
 	void GetProjectionMatrix(XMMATRIX&);
 	void GetWorldMatrix(XMMATRIX&);
