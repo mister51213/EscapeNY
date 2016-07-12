@@ -1,21 +1,24 @@
+////////////////////////////////////////////////////////////////////////////////
+// Filename: D3DGraphics.h
+////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
 /////////////
 // LINKING //
 /////////////
-#pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "dxgi.lib")
+#pragma comment(lib, "d3dcompiler.lib")
 
 //////////////
 // INCLUDES //
 //////////////
-#include <dxgi.h>
 #include <d3d11.h>
-
-#include <DirectXMath.h> // possibly redundant
+#include <directxmath.h>
+using namespace DirectX;
 
 ////////////////////////////////////////////////////////////////////////////////
-// Class name: D3DClass
+// Class name: D3DGraphics
 ////////////////////////////////////////////////////////////////////////////////
 class D3DGraphics
 {
@@ -33,9 +36,9 @@ public:
 	ID3D11Device* GetDevice()const;
 	ID3D11DeviceContext* GetDeviceContext()const;
 
-	void GetProjectionMatrix(DirectX::XMMATRIX&);
-	void GetWorldMatrix( DirectX::XMMATRIX&);
-	void GetOrthoMatrix( DirectX::XMMATRIX&);
+	void GetProjectionMatrix(XMMATRIX&);
+	void GetWorldMatrix(XMMATRIX&);
+	void GetOrthoMatrix(XMMATRIX&);
 
 	void GetVideoCardInfo(char*, int&);
 
@@ -51,7 +54,7 @@ private:
 	ID3D11DepthStencilState* m_depthStencilState;
 	ID3D11DepthStencilView* m_depthStencilView;
 	ID3D11RasterizerState* m_rasterState;
-	DirectX::XMMATRIX m_projectionMatrix;
-	DirectX::XMMATRIX m_worldMatrix;
-	DirectX::XMMATRIX m_orthoMatrix;
+	XMMATRIX m_projectionMatrix;
+	XMMATRIX m_worldMatrix;
+	XMMATRIX m_orthoMatrix;
 };

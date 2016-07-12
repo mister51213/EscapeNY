@@ -1,15 +1,11 @@
 #pragma once
-#include <windows.h>
-
 ///////////////////////
 // MY CLASS INCLUDES //
 ///////////////////////
-#include "D2DGraphics.h"
-#include "ImageLoader.h"
-#include "FontLoader.h"
-#include "d3dgraphics.h"
-
-#include <memory>
+#include "D3DGraphics.h"
+#include "camera.h"
+#include "model.h"
+#include "colorshader.h"
 
 /////////////
 // GLOBALS //
@@ -37,8 +33,8 @@ private:
 	bool Render();
 
 private:
-    D3DGraphics* m_pD3D;
-	std::unique_ptr<D2DGraphics> m_pD2D;
-	std::unique_ptr<ImageLoader> m_pImgLoader;
-	std::unique_ptr<FontLoader> m_pFntLoader;
+   	D3DGraphics* m_pDirect3D;    
+	Camera* m_Camera;
+	Model* m_Model;
+	ColorShader* m_ColorShader;
 };

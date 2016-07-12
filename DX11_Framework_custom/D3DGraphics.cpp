@@ -1,10 +1,8 @@
 #include "D3DGraphics.h"
 
-using namespace DirectX;
-
 D3DGraphics::D3DGraphics()
 {
-    m_swapChain = 0;
+	m_swapChain = 0;
 	m_device = 0;
 	m_deviceContext = 0;
 	m_renderTargetView = 0;
@@ -29,7 +27,8 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	IDXGIFactory* factory;
 	IDXGIAdapter* adapter;
 	IDXGIOutput* adapterOutput;
-	unsigned int numModes, i, numerator, denominator, stringLength;
+	unsigned int numModes, i, numerator, denominator;
+	size_t stringLength;
 	DXGI_MODE_DESC* displayModeList;
 	DXGI_ADAPTER_DESC adapterDesc;
 	int error;
@@ -43,11 +42,10 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	D3D11_VIEWPORT viewport;
 	float fieldOfView, screenAspect;
 
-
 	// Store the vsync setting.
 	m_vsync_enabled = vsync;
-    	
-    // Create a DirectX graphics interface factory.
+    
+	// Create a DirectX graphics interface factory.
 	result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
 	if(FAILED(result))
 	{
@@ -113,12 +111,13 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	// Store the dedicated video card memory in megabytes.
 	m_videoCardMemory = (int)(adapterDesc.DedicatedVideoMemory / 1024 / 1024);
 
-	//// Convert the name of the video card to a character array and store it.
-	//error = wcstombs_s(&stringLength, m_videoCardDescription, 128, adapterDesc.Description, 128);
-	//if(error != 0)
-	//{
-	//	return false;
-	//}
+	// Convert the name of the video card to a character array and store it.
+	
+	error = wcstombs_s(&stringLength, m_videoCardDescription, 128, adapterDesc.Description, 128);
+	if(error != 0)
+	{
+		return false;
+	}
     
 	// Release the display mode list.
 	delete [] displayModeList;
@@ -135,7 +134,7 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	// Release the factory.
 	factory->Release();
 	factory = 0;
-
+    
 	// Initialize the swap chain description.
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
 
@@ -220,7 +219,7 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	backBufferPtr->Release();
 	backBufferPtr = 0;
 
-	// Initialize the description of the depth buffer.
+    // Initialize the description of the depth buffer.
 	ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
 
 	// Set up the description of the depth buffer.
@@ -235,15 +234,15 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	depthBufferDesc.CPUAccessFlags = 0;
 	depthBufferDesc.MiscFlags = 0;
-
-	// Create the texture for the depth buffer using the filled out description.
+    
+    // Create the texture for the depth buffer using the filled out description.
 	result = m_device->CreateTexture2D(&depthBufferDesc, NULL, &m_depthStencilBuffer);
 	if(FAILED(result))
 	{
 		return false;
 	}
-    
-	// Initialize the description of the stencil state.
+
+    // Initialize the description of the stencil state.
 	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
 
 	// Set up the description of the stencil state.
@@ -273,11 +272,10 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	{
 		return false;
 	}
-    
-	// Set the depth stencil state.
+    	// Set the depth stencil state.
 	m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
-
-	// Initailze the depth stencil view.
+    
+	// Initialize the depth stencil view.
 	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
 
 	// Set up the depth stencil view description.
@@ -291,10 +289,10 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	{
 		return false;
 	}
-
+    
 	// Bind the render target view and depth stencil buffer to the output render pipeline.
 	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
-
+    
 	// Setup the raster description which will determine how and what polygons will be drawn.
 	rasterDesc.AntialiasedLineEnable = false;
 	rasterDesc.CullMode = D3D11_CULL_BACK;
@@ -317,13 +315,9 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	// Now set the rasterizer state.
 	m_deviceContext->RSSetState(m_rasterState);
     
-	// Float casted screenWidth and screenHeight
-	float fScreenWidth = static_cast<float>( screenWidth );
-	float fScreenHeight = static_cast<float>( screenHeight );
-
-	// Setup the viewport for rendering.
-	viewport.Width = fScreenWidth;
-	viewport.Height = fScreenHeight;
+    // Setup the viewport for rendering.
+	viewport.Width = (float)screenWidth;
+	viewport.Height = (float)screenHeight;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0.0f;
@@ -331,35 +325,38 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 
 	// Create the viewport.
 	m_deviceContext->RSSetViewports(1, &viewport);
+    
+    // Setup the projection matrix used to translate the 3D scene 
+    // into the 2D viewport space
+    fieldOfView = 3.141592654f / 4.0f;
+	screenAspect = (float)screenWidth / (float)screenHeight;
 
-	// Setup the projection matrix.
-	fieldOfView = DirectX::XM_PIDIV4;
-	screenAspect = fScreenWidth / fScreenHeight;
+	// Create the projection matrix for 3D rendering.
+	m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
 
-	// Create the projection matrix for 3D rendering.	
-	m_projectionMatrix = 
-		XMMatrixPerspectiveFovLH( fieldOfView, screenAspect, screenNear, screenDepth );
-	    
-	// Initialize the world matrix to the identity matrix.
+    // Initialize the world matrix to the identity matrix.
+    // This matrix is used to convert the vertices of our objects into 
+    // vertices in the 3D scene. 
 	m_worldMatrix = XMMatrixIdentity();
     
-	// Create an orthographic projection matrix for 2D rendering.
-	m_orthoMatrix = 
-		XMMatrixOrthographicLH( fScreenWidth, fScreenHeight, screenNear, screenDepth 
-	);
-	
+    // Create an orthographic projection matrix for 2D rendering.
+    // used for rendering 2D elements like user interfaces on the screen 
+    // allowing us to skip the 3D rendering.
+	m_orthoMatrix = XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
 
 	return true;
 }
 
 void D3DGraphics::Shutdown()
 {
-	// Before shutting down set to windowed mode or when you release the swap chain it will throw an exception.
+	// Force the swap chain to go into windowed mode first before 
+    // releasing any pointers. Otherwise exceptions can be thrown.
 	if(m_swapChain)
 	{
 		m_swapChain->SetFullscreenState(false, NULL);
 	}
 
+    // Release all pointers
 	if(m_rasterState)
 	{
 		m_rasterState->Release();
@@ -411,10 +408,11 @@ void D3DGraphics::Shutdown()
 	return;
 }
 
+// Called at the beginning of each frame whenever we are going to draw a new 3D scene.
+// Initializes the buffers so they are blank and ready to be drawn to.
 void D3DGraphics::BeginScene(float red, float green, float blue, float alpha)
 {
 	float color[4];
-
 
 	// Setup the color to clear the buffer to.
 	color[0] = red;
@@ -431,6 +429,8 @@ void D3DGraphics::BeginScene(float red, float green, float blue, float alpha)
 	return;
 }
 
+// Tells the swap chain to display our 3D scene once all 
+// the drawing has completed at the end of each frame.
 void D3DGraphics::EndScene()
 {
 	// Present the back buffer to the screen since rendering is complete.
@@ -448,29 +448,37 @@ void D3DGraphics::EndScene()
 	return;
 }
 
-ID3D11Device* D3DGraphics::GetDevice()const
+//////////////////////
+// HELPER FUNCTIONS //
+//////////////////////
+
+// Get pointers to the Direct3D device and the Direct3D device context. 
+// These helper functions will be called by the framework often.
+ID3D11Device* D3DGraphics::GetDevice()
 {
 	return m_device;
 }
 
-ID3D11DeviceContext* D3DGraphics::GetDeviceContext()const
+ID3D11DeviceContext* D3DGraphics::GetDeviceContext()
 {
 	return m_deviceContext;
 }
 
-void D3DGraphics::GetProjectionMatrix( DirectX::XMMATRIX& projectionMatrix)
+// Gives access to projection, world, orthographic matrices because
+// most shaders will need these matrices for rendering
+void D3DGraphics::GetProjectionMatrix(XMMATRIX& projectionMatrix)
 {
 	projectionMatrix = m_projectionMatrix;
 	return;
 }
 
-void D3DGraphics::GetWorldMatrix( DirectX::XMMATRIX& worldMatrix)
+void D3DGraphics::GetWorldMatrix(XMMATRIX& worldMatrix)
 {
 	worldMatrix = m_worldMatrix;
 	return;
 }
 
-void D3DGraphics::GetOrthoMatrix( DirectX::XMMATRIX& orthoMatrix)
+void D3DGraphics::GetOrthoMatrix(XMMATRIX& orthoMatrix)
 {
 	orthoMatrix = m_orthoMatrix;
 	return;
