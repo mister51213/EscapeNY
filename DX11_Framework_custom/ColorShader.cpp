@@ -13,11 +13,9 @@ ColorShader::ColorShader()
 	m_matrixBuffer = 0;
 }
 
-
 ColorShader::ColorShader(const ColorShader& other)
 {
 }
-
 
 ColorShader::~ColorShader()
 {
@@ -32,8 +30,9 @@ bool ColorShader::Initialize(ID3D11Device* device, HWND hwnd)
 	result = InitializeShader(
         device, 
         hwnd, 
-        //L"../Engine/color.vs", L"../Engine/color.ps"
-L"color.vs", L"color.ps");
+        L"/Engine/color.vs", L"/Engine/color.ps"
+        //L"Color.vs", L"Color.ps"
+    );
 	if(!result)
 	{
 		return false;

@@ -67,10 +67,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Color.ps">
+    <None Include="..\..\Engine\Color.ps">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Color.vs">
+    <None Include="..\..\Engine\Color.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
