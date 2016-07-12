@@ -99,7 +99,7 @@ bool ColorShader::InitializeShader( ID3D11Device* device,
 	// and the buffer to compile the shader into.
 
 	// Compile the vertex shader code.
-	result = D3DCompileFromFile( vsFilename, NULL, NULL, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0,
+	result = D3DCompileFromFile( vsFilename, NULL, NULL, "ColorVertexShader", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0,
 		&vertexShaderBuffer, &errorMessage );
 	if( FAILED( result ) )
 	{
@@ -123,7 +123,7 @@ bool ColorShader::InitializeShader( ID3D11Device* device,
 		NULL,
 		"ColorPixelShader",
 		"ps_5_0",
-		D3D10_SHADER_ENABLE_STRICTNESS,
+		D3DCOMPILE_ENABLE_STRICTNESS,
 		0,
 		&pixelShaderBuffer,
 		&errorMessage );
