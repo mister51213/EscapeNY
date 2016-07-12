@@ -30,5 +30,5 @@ private:
 	bool Render();
 
 private:
-   	D3DGraphics* m_Direct3D;
+   	D3DGraphics* m_pDirect3D;
 };

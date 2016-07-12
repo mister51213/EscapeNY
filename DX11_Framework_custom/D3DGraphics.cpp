@@ -326,17 +326,22 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	// Create the viewport.
 	m_deviceContext->RSSetViewports(1, &viewport);
     
-    // Setup the projection matrix.
-	fieldOfView = 3.141592654f / 4.0f;
+    // Setup the projection matrix used to translate the 3D scene 
+    // into the 2D viewport space
+    fieldOfView = 3.141592654f / 4.0f;
 	screenAspect = (float)screenWidth / (float)screenHeight;
 
 	// Create the projection matrix for 3D rendering.
 	m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
 
     // Initialize the world matrix to the identity matrix.
+    // This matrix is used to convert the vertices of our objects into 
+    // vertices in the 3D scene. 
 	m_worldMatrix = XMMatrixIdentity();
     
     // Create an orthographic projection matrix for 2D rendering.
+    // used for rendering 2D elements like user interfaces on the screen 
+    // allowing us to skip the 3D rendering.
 	m_orthoMatrix = XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
 
 	return true;
@@ -344,12 +349,14 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 
 void D3DGraphics::Shutdown()
 {
-	// Before shutting down set to windowed mode or when you release the swap chain it will throw an exception.
+	// Force the swap chain to go into windowed mode first before 
+    // releasing any pointers. Otherwise exceptions can be thrown.
 	if(m_swapChain)
 	{
 		m_swapChain->SetFullscreenState(false, NULL);
 	}
 
+    // Release all pointers
 	if(m_rasterState)
 	{
 		m_rasterState->Release();
@@ -401,6 +408,8 @@ void D3DGraphics::Shutdown()
 	return;
 }
 
+// Called at the beginning of each frame whenever we are going to draw a new 3D scene.
+// Initializes the buffers so they are blank and ready to be drawn to.
 void D3DGraphics::BeginScene(float red, float green, float blue, float alpha)
 {
 	float color[4];
@@ -420,6 +429,8 @@ void D3DGraphics::BeginScene(float red, float green, float blue, float alpha)
 	return;
 }
 
+// Tells the swap chain to display our 3D scene once all 
+// the drawing has completed at the end of each frame.
 void D3DGraphics::EndScene()
 {
 	// Present the back buffer to the screen since rendering is complete.
@@ -437,6 +448,12 @@ void D3DGraphics::EndScene()
 	return;
 }
 
+//////////////////////
+// HELPER FUNCTIONS //
+//////////////////////
+
+// Get pointers to the Direct3D device and the Direct3D device context. 
+// These helper functions will be called by the framework often.
 ID3D11Device* D3DGraphics::GetDevice()
 {
 	return m_device;
@@ -447,6 +464,8 @@ ID3D11DeviceContext* D3DGraphics::GetDeviceContext()
 	return m_deviceContext;
 }
 
+// Gives access to projection, world, orthographic matrices because
+// most shaders will need these matrices for rendering
 void D3DGraphics::GetProjectionMatrix(XMMATRIX& projectionMatrix)
 {
 	projectionMatrix = m_projectionMatrix;
