@@ -77,7 +77,9 @@ bool Graphics::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	{
 		MessageBox(hwnd, L"Could not initialize the color shader object.", L"Error", MB_OK);
 		return false;
-	}}
+	}
+
+}
 
 void Graphics::Shutdown()
 {   
