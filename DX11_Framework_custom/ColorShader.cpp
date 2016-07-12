@@ -313,7 +313,7 @@ void ColorShader::OutputShaderErrorMessage(ID3D10Blob* errorMessage,
 // The matrices used in this function are created inside the Graphics class, 
 // after which this function is called to send them from there into the vertex 
 // shader during the Render function call.
-///////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
 bool ColorShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, 
     XMMATRIX worldMatrix, 
