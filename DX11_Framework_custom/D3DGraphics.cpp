@@ -42,7 +42,6 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	D3D11_VIEWPORT viewport;
 	float fieldOfView, screenAspect;
 
-
 	// Store the vsync setting.
 	m_vsync_enabled = vsync;
     

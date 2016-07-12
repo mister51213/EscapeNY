@@ -176,7 +176,7 @@ bool ColorShader::InitializeShader(ID3D11Device* device,
     ///////////////////////////////////////////////////////////////////////////////////
 
     // Create the vertex input layout description.
-	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
+	// This setup needs to match the VertexType stucture in the Model class and in the shader.
 	polygonLayout[0].SemanticName = "POSITION";
 	polygonLayout[0].SemanticIndex = 0;
 	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
