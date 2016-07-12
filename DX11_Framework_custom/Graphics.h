@@ -1,10 +1,8 @@
 #pragma once
-#include <windows.h>
-
 ///////////////////////
 // MY CLASS INCLUDES //
 ///////////////////////
-#include "d3dgraphics.h"
+#include "D3DGraphics.h"
 
 /////////////
 // GLOBALS //
@@ -32,5 +30,5 @@ private:
 	bool Render();
 
 private:
-    D3DGraphics* m_pD3D;
+   	D3DGraphics* m_Direct3D;
 };
