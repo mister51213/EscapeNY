@@ -26,7 +26,7 @@
 ///////////////////////////
 // Custom class includes //
 ///////////////////////////
-//#include "Input.h"
+#include "Input.h"
 #include "Graphics.h"
 
 class System

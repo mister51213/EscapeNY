@@ -38,7 +38,6 @@ bool Graphics::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		MessageBox(hwnd, L"Could not initialize Direct3D", L"Error", MB_OK);
 		return false;
 	}
-	return true;
 
 	// Create the camera object.
 	m_Camera = new Camera;
