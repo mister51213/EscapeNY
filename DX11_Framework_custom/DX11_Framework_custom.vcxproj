@@ -148,6 +148,7 @@
     <ClCompile Include="D2DGraphics.cpp" />
     <ClCompile Include="D3DGraphics.cpp" />
     <ClCompile Include="FontLoader.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="D2DGraphics.h" />
     <ClInclude Include="D3DGraphics.h" />
     <ClInclude Include="FontLoader.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="Model.h" />

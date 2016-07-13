@@ -20,7 +20,7 @@ using namespace std;
 class ColorShader
 {
 private:
-    	struct MatrixBufferType
+    struct MatrixBufferType
 	{
 		XMMATRIX world;
 		XMMATRIX view;

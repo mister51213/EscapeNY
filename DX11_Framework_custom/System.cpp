@@ -68,6 +68,15 @@ bool System::Initialize()
     {
         return false;
     }
+
+	m_pGame = new Game;
+	if( !m_pGame )
+	{
+		return false;
+	}
+
+	// Initialize the game object
+	g_result = m_pGame->Initialize( m_Graphics );
     return true;
 }
 

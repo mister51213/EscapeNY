@@ -34,7 +34,10 @@ private:
 
 private:
    	D3DGraphics* m_pDirect3D;    
-	Camera* m_Camera;
-	Model* m_Model;
 	ColorShader* m_ColorShader;
 };
+
+inline void HandleResult( const std::wstring &Message )
+{
+	MessageBox( nullptr, Message.c_str(), L"Error!", MB_OK );
+}

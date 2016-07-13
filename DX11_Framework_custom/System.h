@@ -28,6 +28,7 @@
 ///////////////////////////
 #include "Input.h"
 #include "Graphics.h"
+#include "Game.h"
 
 class System
 {
@@ -55,6 +56,7 @@ private:
 
 	Input* m_Input;
 	Graphics* m_Graphics;
+	Game* m_pGame;
 };
 
 ///////////////////////////////////////////////////////////////////////
