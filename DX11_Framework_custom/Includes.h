@@ -10,6 +10,8 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <stdio.h>
+
 
 // Win API headers
 #include <windows.h>

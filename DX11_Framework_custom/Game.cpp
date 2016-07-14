@@ -49,6 +49,12 @@ bool Game::Initialize( Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight,
 	result = m_pColorShader->Initialize( m_pDirect3D->GetDevice(), WinHandle );
 	RETURN_MESSAGE_IF_FALSE( result, L"Could not initialize color shader object." );
 
+	m_pStoneTexture.reset( new Texture );
+	RETURN_MESSAGE_IF_FALSE( m_pStoneTexture != nullptr, L"Could not allocate memory for Texture." );
+
+	result = m_pStoneTexture->Initialize( m_pDirect3D->GetDevice(), m_pDirect3D->GetDeviceContext(),
+		L"Textures\\uncompressed_stone.tga" );
+	RETURN_IF_FALSE( result );
 	return true;
 }
 

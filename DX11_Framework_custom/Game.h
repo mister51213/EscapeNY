@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Graphics.h"
 #include "ColorShader.h"
+#include "Texture.h"
 
 class Game
 {
@@ -24,5 +25,6 @@ private:
 	std::unique_ptr<Camera> m_pCamera;
 	std::unique_ptr<Model> m_pModel;
 	std::unique_ptr<ColorShader> m_pColorShader;
+	std::unique_ptr<Texture> m_pStoneTexture;
 };
 
