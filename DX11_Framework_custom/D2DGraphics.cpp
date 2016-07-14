@@ -25,22 +25,16 @@ void D2DGraphics::EndDraw()
 bool D2DGraphics::Initialize( D3DGraphics &D3D, const ImageLoader &ImgLoader, 
 	const UINT ScreenWidth, const UINT ScreenHeight )
 {
+	ID2D1Factory *pFactory = nullptr;
 	// Initialize the Direct2D factory
-	HRESULT hr = D2D1CreateFactory( 
-		D2D1_FACTORY_TYPE_SINGLE_THREADED, m_pFactory.GetAddressOf() 
-	);
-	if( FAILED( hr ) )
-	{
-		return false;
-	}
+	HRESULT hr = D2D1CreateFactory( D2D1_FACTORY_TYPE_SINGLE_THREADED, &pFactory );	
+	m_pFactory.Attach( pFactory );
+	RETURN_IF_FAILED( hr );
 
 	// Use the image loader to create an empty texture buffer
 	auto bitmapResult = ImgLoader.CreateBitmap( ScreenWidth, ScreenHeight );
 	hr = bitmapResult.first;
-	if( FAILED( hr ) )
-	{
-		return false;
-	}
+	RETURN_IF_FAILED( hr );
 
 	// Use the texture buffer to create a render target 
 	m_pRenderSurface = std::move( bitmapResult.second );
@@ -54,20 +48,14 @@ bool D2DGraphics::Initialize( D3DGraphics &D3D, const ImageLoader &ImgLoader,
 	hr = m_pFactory->CreateWicBitmapRenderTarget(
 		m_pRenderSurface.Get(),
 		renderProperties,
-		m_pRenderTarget.GetAddressOf()
+		&m_pRenderTarget
 	);
-	if( FAILED( hr ) )
-	{
-		return false;
-	}
+	RETURN_IF_FAILED( hr );
 
 	// Create a solid color brush for painting the fonts
 	D2D1::ColorF defaultColor( D2D1::ColorF::White );
-	hr = m_pRenderTarget->CreateSolidColorBrush( defaultColor, m_pBrush.GetAddressOf() );
-	if( FAILED( hr ) )
-	{
-		return false;
-	}
+	hr = m_pRenderTarget->CreateSolidColorBrush( defaultColor, &m_pBrush );
+	RETURN_IF_FAILED( hr );
 
 	// Initialize and create the overlay texture
 	D3D11_TEXTURE2D_DESC texDesc{};
@@ -84,7 +72,8 @@ bool D2DGraphics::Initialize( D3DGraphics &D3D, const ImageLoader &ImgLoader,
 	texDesc.MiscFlags = 0;
 
 	auto pDevice = D3D.GetDevice();
-	hr = pDevice->CreateTexture2D( &texDesc, nullptr, overlay.GetAddressOf() );
+	hr = pDevice->CreateTexture2D( &texDesc, nullptr, &overlay );
+	
 	
 	if( FAILED( hr ) )
 	{
@@ -120,37 +109,28 @@ bool D2DGraphics::fillTexture( BYTE *const Pixels )const
 	// The purpose of this function is to copy the render target to 
 	// a ID3D11Texture2D, this will probably go through some changes
 	// so I'll hold off commenting for now.
-	BYTE *data = nullptr;
-	UINT stride = 0;
-	UINT width = 0;
-	UINT height = 0;
 
 	ComPtr<IWICBitmapLock> lock;
-	HRESULT hr = m_pRenderSurface->Lock(
-		nullptr, WICBitmapLockRead, lock.GetAddressOf() 
-	);
-	if( SUCCEEDED( hr ) )
-	{
-		hr = lock->GetStride( &stride );
-	}
-	if( SUCCEEDED( hr ) )
-	{
-		hr = lock->GetSize( &width, &height );
-	}
-	if( SUCCEEDED( hr ) )
-	{
-		UINT bufferSize = stride * height;
-		hr = lock->GetDataPointer( &bufferSize, &data );
-	}
-	
-	if( SUCCEEDED( hr ) )
-	{
-		for( UINT y = 0; y < height; ++y )
-		{
-			CopyMemory( &Pixels[ y * stride ], &data[ y * stride ], stride );
-		}
-	}
-	
+	HRESULT hr = m_pRenderSurface->Lock( nullptr, WICBitmapLockRead, &lock );
+	RETURN_IF_FAILED( hr );
 
-	return SUCCEEDED( hr );
+	UINT stride = 0;
+	hr = lock->GetStride( &stride );
+	RETURN_IF_FAILED( hr );
+
+	UINT width = 0, height = 0;
+	hr = lock->GetSize( &width, &height );
+	RETURN_IF_FAILED( hr );
+
+	BYTE *data = nullptr;
+	UINT bufferSize = stride * height;
+	hr = lock->GetDataPointer( &bufferSize, &data );
+	RETURN_IF_FAILED( hr );
+
+	for( UINT y = 0; y < height; ++y )
+	{
+		CopyMemory( &Pixels[ y * stride ], &data[ y * stride ], stride );
+	}
+
+	return true;
 }

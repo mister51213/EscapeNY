@@ -5,9 +5,6 @@
 
 Graphics::Graphics()
 {
-	m_pDirect3D = 0;
-    // Initialize the camera, model, and color shader objects to null.
- 	m_ColorShader = 0;
 }
 
 Graphics::Graphics(const Graphics& other)
@@ -18,129 +15,56 @@ Graphics::~Graphics()
 {
 }
 
-bool Graphics::Initialize(int screenWidth, int screenHeight, HWND hwnd)
+bool Graphics::Initialize( int ScreenWidth, int ScreenHeight, HWND WinHandle,
+	float Red, float Green, float Blue, float Alpha )
 {
-	bool result;
+	// Set background color
+	SetBackgroundColor( Red, Green, Blue, Alpha );
 
 	// Create the Direct3D object.
-	m_pDirect3D = new D3DGraphics;
-	if (!m_pDirect3D)
-	{
-		return false;
-	}
+	m_pDirect3D.reset( new D3DGraphics );
+	RETURN_MESSAGE_IF_FALSE( m_pDirect3D != nullptr,
+		L"Could not allocate memory for Direct3D object.");
 
-	// Initialize the Direct3D object.
-	result = m_pDirect3D->Initialize(screenWidth, screenHeight, 
-		VSYNC_ENABLED, hwnd, FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
-	if (!result)
-	{
-		HandleResult( L"Cound not initialize Direct3D." );
-		return false;
-	}
-
-	// Create the color shader object.
-	m_ColorShader = new ColorShader;
-	if (!m_ColorShader)
-	{
-		HandleResult( L"Could not allocate memory for ColorShader." );
-		return false;
-	}
-
-	// Initialize the color shader object.
-	result = m_ColorShader->Initialize(m_pDirect3D->GetDevice(), hwnd);
-	if (!result)
-	{
-		HandleResult( L"Could not initialize color shader object." );
-		return false;
-	}
-
-}
-
-void Graphics::Shutdown()
-{   
-	// Release the color shader object.
-	if (m_ColorShader)
-	{
-		m_ColorShader->Shutdown();
-		delete m_ColorShader;
-		m_ColorShader = 0;
-	}
-
-	// Release the model object.
-	if (m_Model)
-	{
-		m_Model->Shutdown();
-		delete m_Model;
-		m_Model = 0;
-	}
-
-	// Release the camera object.
-	if (m_Camera)
-	{
-		delete m_Camera;
-		m_Camera = 0;
-	}
-
-	// Release the Direct3D object.
-	if (m_pDirect3D)
-	{
-		m_pDirect3D->Shutdown();
-		delete m_pDirect3D;
-		m_pDirect3D = 0;
-	}
-
-	return;
-}
-
-bool Graphics::Frame()
-{
-	bool result;
-
-	// Render the graphics scene.
-	result = Render();
-	if (!result)
-	{
-		return false;
-	}
+	// Initialize the Direct3D object.	
+	RETURN_MESSAGE_IF_FALSE( m_pDirect3D->Initialize( ScreenWidth, ScreenHeight,
+		VSYNC_ENABLED, WinHandle, FULL_SCREEN ), L"Could not initialize Direct3D." );
 
 	return true;
 }
 
-bool Graphics::Render()
+// Called at the beginning of each frame whenever we are going to draw a new 3D scene.
+// Initializes the buffers so they are blank and ready to be drawn to.
+void Graphics::BeginScene()
 {
-	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
-	bool result;
+	auto pContext = m_pDirect3D->m_deviceContext.Get();
+	auto pRenderTargetView = m_pDirect3D->m_renderTargetView.Get();
+	auto pDepthStencilView = m_pDirect3D->m_depthStencilView.Get();
 
-	// Clear the buffers to begin the scene.
-    // Parameters represent render background color.
-	m_pDirect3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
+	// Clear the back buffer.
+	pContext->ClearRenderTargetView( pRenderTargetView, m_backgroundColor );
 
-	// Generate the view matrix based on the camera's position.
-	m_Camera->Render();
+	// Clear the depth buffer.
+	pContext->ClearDepthStencilView( pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
+}
 
-	// Get the world, view, and projection matrices from the camera and d3d 
-	// objects.
-	m_pDirect3D->GetWorldMatrix(worldMatrix);
-	m_Camera->GetViewMatrix(viewMatrix);
-	m_pDirect3D->GetProjectionMatrix(projectionMatrix);
+// Tells the swap chain to display our 3D scene once all 
+// the drawing has completed at the end of each frame.
+void Graphics::EndScene()
+{	
+	// Present the back buffer to the screen since rendering is complete.
+	m_pDirect3D->m_swapChain->Present( m_pDirect3D->m_vsync_enabled ? 1 : 0, 0 );
+}
 
-	// Put the model vertex and index buffers on the graphics pipeline to
-	// prepare them for drawing.
-	m_Model->Render(m_pDirect3D->GetDeviceContext());
+void Graphics::SetBackgroundColor( float Red, float Green, float Blue, float Alpha )
+{
+	m_backgroundColor[ 0 ] = Red;
+	m_backgroundColor[ 1 ] = Green;
+	m_backgroundColor[ 2 ] = Blue;
+	m_backgroundColor[ 3 ] = Alpha;
+}
 
-	// Render the model using the color shader.
-	result = m_ColorShader->Render(m_pDirect3D->GetDeviceContext(), 
-        m_Model->GetIndexCount(), 
-        worldMatrix, 
-        viewMatrix, 
-        projectionMatrix);
-	if (!result)
-	{
-		return false;
-	}
-
-	// Present the rendered scene to the screen.
-	m_pDirect3D->EndScene();
-
-	return true;
+D3DGraphics * Graphics::GetDirect3D() const
+{
+	return m_pDirect3D.get();
 }

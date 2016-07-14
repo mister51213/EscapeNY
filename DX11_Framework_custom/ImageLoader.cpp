@@ -26,12 +26,9 @@ bool ImageLoader::Initialize()
 	// Create an instance of the imaging factory
 	HRESULT hr = CoCreateInstance(
 		CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
-		IID_PPV_ARGS( m_pFactory.GetAddressOf() )
+		IID_PPV_ARGS( &m_pFactory )
 	);
-	if( FAILED( hr ) )
-	{
-		return false;
-	}
+	
 	return true;
 }
 
@@ -45,18 +42,18 @@ WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const
 
 	// Create the decoder from the file
 	HRESULT hr = m_pFactory->CreateDecoderFromFilename( Filename.c_str(), nullptr,
-		GENERIC_READ, WICDecodeMetadataCacheOnDemand, pDecoder.GetAddressOf() );
+		GENERIC_READ, WICDecodeMetadataCacheOnDemand, &pDecoder );
 
 	if( SUCCEEDED( hr ) )
 	{
 		// Decode the image, which for bitmaps is the 0th frame
-		hr = pDecoder->GetFrame( 0, pFrame.GetAddressOf() );
+		hr = pDecoder->GetFrame( 0, &pFrame );
 	}
 	if( SUCCEEDED( hr ) )
 	{
 		// Create the format converter, used to convert to different color
 		// palettes and such.
-		hr = m_pFactory->CreateFormatConverter( pConverter.GetAddressOf() );
+		hr = m_pFactory->CreateFormatConverter( &pConverter );
 	}
 	if( SUCCEEDED( hr ) )
 	{
@@ -69,7 +66,7 @@ WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const
 	{
 		// Create the bitmap from the converter interface
 		hr = m_pFactory->CreateBitmapFromSource( pConverter.Get(), WICBitmapCacheOnDemand,
-			pBitmap.GetAddressOf() );
+			&pBitmap );
 	}
 
 	return{hr,pBitmap};
@@ -81,10 +78,10 @@ WicBitmapResult  ImageLoader::CreateBitmap( const UINT Width, const UINT Height 
 	Microsoft::WRL::ComPtr<IWICBitmap> pBitmap;
 	// Create bitmap from memory using the temp bitmap
 	HRESULT hr = m_pFactory->CreateBitmap(
-		Width, Height,							// Width and height of bitmap
-		GUID_WICPixelFormat32bppPBGRA,			// BGRA pixel format
-		WICBitmapCacheOnDemand,					// Cache on demand, not sure what this does
-		pBitmap.GetAddressOf()					// Pass address of the bitmap interface
+		Width, Height,								// Width and height of bitmap
+		GUID_WICPixelFormat32bppPBGRA,				// BGRA pixel format
+		WICBitmapCacheOnDemand,						// Cache on demand, not sure what this does
+		&pBitmap									// Pass address of the bitmap interface
 	);
 	return{hr, pBitmap};							// if creation fails, the pointer is nullptr
 }

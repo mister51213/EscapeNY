@@ -8,12 +8,10 @@
 *					  Direct2D														*
 *  Requirements		:																*
 *************************************************************************************/
-
-#include <string>
-#include <wincodec.h>
-#include <wrl.h>
-
 #pragma comment(lib, "windowscodecs.lib")
+
+#include "Includes.h"
+#include "Utilities.h"
 
 using WicBitmapResult = std::pair<HRESULT, Microsoft::WRL::ComPtr<IWICBitmap>>;
 

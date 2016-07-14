@@ -14,7 +14,7 @@
 //////////////
 // INCLUDES //
 //////////////
-#include <directxmath.h>
+#include "Includes.h"
 using namespace DirectX;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -27,20 +27,26 @@ public:
 	Camera(const Camera&);
 	~Camera();
 
-    //  set the position and rotation of the camera object. 
-	void SetPosition(float, float, float);
-	void SetRotation(float, float, float);
+	// Initialize the camera object
+	bool Initialize( const XMFLOAT3 &Position, const XMFLOAT3 &Rotation,
+		const XMUINT2 &ScreenSize, const XMFLOAT2 &ScreenClipDepth );
+    // set the position and rotation of the camera object. 
+	void SetPosition( const XMFLOAT3 &Position );
+	void SetRotation( const XMFLOAT3 &Rotation );
 
 	XMFLOAT3 GetPosition();
 	XMFLOAT3 GetRotation();
 
     // create the view matrix based on the position and rotation of the camera. 
 	void Render();
+
     // retrieve the view matrix from the camera object so that the shaders can use it for rendering.
-	void GetViewMatrix(XMMATRIX&);
+	void GetViewMatrix( XMMATRIX& ViewMatrix );
+	void GetProjectionMatrix( XMMATRIX& ProjectionMatrix );
+	void GetOrthoMatrix( XMMATRIX &OrthoMatrix );
 
 private:
-	float m_positionX, m_positionY, m_positionZ;
-	float m_rotationX, m_rotationY, m_rotationZ;
-	XMMATRIX m_viewMatrix;
+	XMFLOAT3 m_Position, m_Rotation;
+	XMMATRIX m_ViewMatrix, m_ProjectionMatrix, m_OrthoMatrix;
+
 };

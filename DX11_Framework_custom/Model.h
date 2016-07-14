@@ -10,8 +10,7 @@
 //////////////
 // INCLUDES //
 //////////////
-#include <d3d11.h>
-#include <directxmath.h>
+#include "Graphics.h"
 using namespace DirectX;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -20,7 +19,8 @@ using namespace DirectX;
 class Model
 {
 private:
-    // Definition of the vertex type that will be used with the vertex buffer in this class.
+    // Definition of the vertex type that will be used with the vertex buffer
+	// in this class.  
     // *This typedef must match the layout in the ColorShader class*
     
 	struct VertexType
@@ -35,18 +35,17 @@ public:
 	~Model();
     
 	bool Initialize(ID3D11Device*);
-	void Shutdown();
 	void Render(ID3D11DeviceContext*);
-
+	void GetWorldMatrix( XMMATRIX &WorldMatrix );
 	int GetIndexCount();
 
 private:
 	bool InitializeBuffers(ID3D11Device*);
-	void ShutdownBuffers();
     // The Render function puts the model geometry on the video card to prepare it for drawing by the color shader.
 	void RenderBuffers(ID3D11DeviceContext*);
   
 private:
-	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
+	comptr<ID3D11Buffer> m_vertexBuffer, m_indexBuffer;
 	int m_vertexCount, m_indexCount; // keep track of the size of each buffer
+	XMMATRIX m_worldMatrix;
 };

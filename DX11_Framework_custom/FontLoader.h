@@ -6,9 +6,9 @@ FontLoader.h
 The FontLoader class is use to create dwrite font objects which will be used to 
 load fonts and font styles (bold, italic, etc...).  
 */
-#include <dwrite.h>
-#include <wrl.h>
 #pragma comment(lib, "dwrite.lib")
+#include "Includes.h"
+#include "Utilities.h"
 
 class FontLoader
 {

@@ -13,8 +13,8 @@
 //////////////
 // INCLUDES //
 //////////////
-#include <d3d11.h>
-#include <directxmath.h>
+#include "Includes.h"
+#include "Utilities.h"
 using namespace DirectX;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -22,39 +22,41 @@ using namespace DirectX;
 ////////////////////////////////////////////////////////////////////////////////
 class D3DGraphics
 {
+	friend class Graphics;
 public:
 	D3DGraphics();
 	D3DGraphics(const D3DGraphics&);
 	~D3DGraphics();
 
-	bool Initialize(int, int, bool, HWND, bool, float, float);
+	bool Initialize( UINT ScreenWidth, UINT ScreenHeight, bool, HWND, bool);
 	void Shutdown();
 	
-	void BeginScene(float, float, float, float);
-	void EndScene();
-
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetDeviceContext();
+	void GetVideoCardInfo(std::wstring &Description, int& Memory);
 
-	void GetProjectionMatrix(XMMATRIX&);
-	void GetWorldMatrix(XMMATRIX&);
-	void GetOrthoMatrix(XMMATRIX&);
-
-	void GetVideoCardInfo(char*, int&);
+private:
+	bool initializeAdapterInfo( UINT ScreenWidth, UINT ScreenHeight, DXGI_RATIONAL &Ratio );
+	bool initializeDeviceAndSwapchain( UINT ScreenWidth, UINT ScreenHeight, 
+		DXGI_RATIONAL RefreshRate, HWND WinHandle, bool FullScreen);
+	bool initializeBackBuffer();
+	bool initializeDepthBuffer( UINT ScreenWidth, UINT ScreenHeight );
+	bool initializeDepthStencilState();
+	bool initializeDepthStencilView();
+	bool initializeRasterizer();
+	bool initializeViewport( UINT ScreenWidth, UINT ScreenHeight );
 
 private:
 	bool m_vsync_enabled;
-	int m_videoCardMemory;
-	char m_videoCardDescription[128];
-	IDXGISwapChain* m_swapChain;
-	ID3D11Device* m_device;
-	ID3D11DeviceContext* m_deviceContext;
-	ID3D11RenderTargetView* m_renderTargetView;
-	ID3D11Texture2D* m_depthStencilBuffer;
-	ID3D11DepthStencilState* m_depthStencilState;
-	ID3D11DepthStencilView* m_depthStencilView;
-	ID3D11RasterizerState* m_rasterState;
-	XMMATRIX m_projectionMatrix;
-	XMMATRIX m_worldMatrix;
-	XMMATRIX m_orthoMatrix;
+	int m_videoCardMemory;	
+	std::wstring m_videoCardDescription;
+
+	comptr<IDXGISwapChain> m_swapChain;
+	comptr<ID3D11Device> m_device;
+	comptr<ID3D11DeviceContext> m_deviceContext;
+	comptr<ID3D11RenderTargetView> m_renderTargetView;
+	comptr<ID3D11Texture2D> m_depthStencilBuffer;
+	comptr<ID3D11DepthStencilState> m_depthStencilState;
+	comptr<ID3D11DepthStencilView> m_depthStencilView;
+	comptr<ID3D11RasterizerState> m_rasterState;
 };
