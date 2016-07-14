@@ -16,6 +16,8 @@ Model::Model()
 {
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
+    
+	m_Texture = 0;
 }
 
 Model::Model(const Model& other)
@@ -26,7 +28,10 @@ Model::~Model()
 {
 }
 
-bool Model::Initialize(ID3D11Device* device)
+bool Model::Initialize(
+    ID3D11Device* device, 
+    ID3D11DeviceContext* deviceContext, 
+    char* textureFilename)
 {
 	bool result;
 
@@ -36,12 +41,22 @@ bool Model::Initialize(ID3D11Device* device)
 	{
 		return false;
 	}
-
-	return true;
+    
+    // Load the texture for this model.
+	result = LoadTexture(device, deviceContext, textureFilename);
+	if (!result)
+	{
+		return false;
+	}
+	
+    return true;
 }
 
 void Model::Shutdown()
 {
+    // Release the model texture object that was loaded during initialization.
+    ReleaseTexture();
+
 	// Shutdown the vertex and index buffers.
 	ShutdownBuffers();
 
@@ -56,8 +71,7 @@ void Model::Shutdown()
 
 void Model::Render(ID3D11DeviceContext* deviceContext)
 {
-	// Put the vertex and index buffers on the graphics pipeline 
-    // to prepare them for drawing.
+	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	RenderBuffers(deviceContext);
 	return;
 }
@@ -66,6 +80,12 @@ void Model::Render(ID3D11DeviceContext* deviceContext)
 int Model::GetIndexCount()
 {
 	return m_indexCount;
+}
+
+// Returns the model texture resource. The texture shader will need access to this texture to render the model.
+ID3D11ShaderResourceView* Model::GetTexture()
+{
+	return m_Texture->GetTexture();
 }
 
 // Create the vertex and index buffers. 
@@ -113,13 +133,13 @@ bool Model::InitializeBuffers(ID3D11Device* device)
     
 	// Load the vertex array with data.
 	vertices[0].position = XMFLOAT3(-1.0f, -1.0f, 0.0f);  // Bottom left.
-	vertices[0].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+    vertices[0].texture = XMFLOAT2(0.0f, 1.0f);
 
 	vertices[1].position = XMFLOAT3(0.0f, 1.0f, 0.0f);  // Top middle.
-	vertices[1].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[1].texture = XMFLOAT2(0.5f, 0.0f);
 
 	vertices[2].position = XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
-	vertices[2].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[2].texture = XMFLOAT2(1.0f, 1.0f);
 
 	// Load the index array with data.
 	indices[0] = 0;  // Bottom left.
@@ -224,6 +244,48 @@ void Model::RenderBuffers(ID3D11DeviceContext* deviceContext)
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	return;
+}
+
+// Create the texture object and then initialize it with the input 
+// file name provided. This function is called during initialization.
+
+bool Model::LoadTexture(
+    ID3D11Device* device, 
+    ID3D11DeviceContext* deviceContext, 
+    char* filename)
+{
+	bool result;
+
+	// Create the texture object.
+	m_Texture = new Texture;
+	if (!m_Texture)
+	{
+		return false;
+	}
+
+	// Initialize the texture object.
+	result = m_Texture->Initialize(device, deviceContext, filename);
+	if (!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+// Release the texture object that was created and 
+// loaded during the LoadTexture function.
+void Model::ReleaseTexture()
+{
+	// Release the texture object.
+	if (m_Texture)
+	{
+		m_Texture->Shutdown();
+		delete m_Texture;
+		m_Texture = 0;
+	}
 
 	return;
 }

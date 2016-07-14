@@ -39,7 +39,7 @@ public:
 	Model(const Model&);
 	~Model();
     
-	bool Initialize(ID3D11Device*);
+	bool Initialize(ID3D11Device*, ID3D11DeviceContext*, char*);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 

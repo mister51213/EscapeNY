@@ -5,7 +5,7 @@
 #include "D3DGraphics.h"
 #include "camera.h"
 #include "model.h"
-#include "colorshader.h"
+#include "textureshader.h" // change to textureshader
 
 /////////////
 // GLOBALS //
@@ -36,5 +36,5 @@ private:
    	D3DGraphics* m_pDirect3D;    
 	Camera* m_Camera;
 	Model* m_Model;
-	ColorShader* m_ColorShader;
+	TextureShader* m_TextureShader; // changed to texture
 };

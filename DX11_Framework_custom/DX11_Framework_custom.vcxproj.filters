@@ -16,6 +16,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{bec70f72-87ad-479a-9565-a680f13e5e41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\data">
+      <UniqueIdentifier>{55e04d62-f7e3-436b-acf1-556e63c8b2f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -91,5 +94,10 @@
     <None Include="Texture.ps">
       <Filter>Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Shaders\data\stone01.tga">
+      <Filter>Shaders\data</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@ Graphics::Graphics()
     // Initialize the camera, model, and color shader objects to null.
     m_Camera = 0;
 	m_Model = 0;
-	m_ColorShader = 0;
+	m_TextureShader = 0; // changed to texture
 }
 
 Graphics::Graphics(const Graphics& other)
@@ -56,8 +56,9 @@ bool Graphics::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	// Initialize the model object.
-	result = m_Model->Initialize(m_pDirect3D->GetDevice());
+	// Initialize the model object.    
+	result = m_Model->Initialize(m_pDirect3D->GetDevice(), m_pDirect3D->GetDeviceContext(), "Shaders/data/stone01.tga");
+	//result = m_Model->Initialize(m_pDirect3D->GetDevice());
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -65,30 +66,39 @@ bool Graphics::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Create the color shader object.
-	m_ColorShader = new ColorShader;
-	if (!m_ColorShader)
+	//m_ColorShader = new ColorShader;
+	//if (!m_ColorShader)
+	//{
+	//	return false;
+	//}
+
+    // Create the texture shader object.
+	m_TextureShader = new TextureShader;
+	if (!m_TextureShader)
 	{
 		return false;
 	}
 
 	// Initialize the color shader object.
-	result = m_ColorShader->Initialize(m_pDirect3D->GetDevice(), hwnd);
+	//result = m_ColorShader->Initialize(m_pDirect3D->GetDevice(), hwnd); 
+    result = m_TextureShader->Initialize(m_pDirect3D->GetDevice(), hwnd); // Change to textures
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the color shader object.", L"Error", MB_OK);
 		return false;
 	}
 
+    return true;
 }
 
 void Graphics::Shutdown()
 {   
-	// Release the color shader object.
-	if (m_ColorShader)
+	// Release the texture shader object.
+	if (m_TextureShader)
 	{
-		m_ColorShader->Shutdown();
-		delete m_ColorShader;
-		m_ColorShader = 0;
+		m_TextureShader->Shutdown();
+		delete m_TextureShader;
+		m_TextureShader = 0;
 	}
 
 	// Release the model object.
@@ -151,12 +161,13 @@ bool Graphics::Render()
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	m_Model->Render(m_pDirect3D->GetDeviceContext());
 
-	// Render the model using the color shader.
-	result = m_ColorShader->Render(m_pDirect3D->GetDeviceContext(), 
+	// Render the model using the texture shader.
+	result = m_TextureShader->Render(m_pDirect3D->GetDeviceContext(), 
         m_Model->GetIndexCount(), 
         worldMatrix, 
         viewMatrix, 
-        projectionMatrix);
+        projectionMatrix,
+        m_Model->GetTexture());
 	if (!result)
 	{
 		return false;
