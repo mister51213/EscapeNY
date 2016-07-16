@@ -8,6 +8,7 @@ public:
 	PrimitiveMaker();
 	~PrimitiveMaker();
 
+    // All of these functions take center, size, and orientation of the primitive to be created
 	void CreateTriangle( const DirectX::XMFLOAT3 &Center, const DirectX::XMFLOAT2 &Extent, const DirectX::XMFLOAT3 &Orientation = {0.f, 0.f, 0.f} );
 	void CreatePlane( const DirectX::XMFLOAT3 &Center, const DirectX::XMFLOAT2 &Extent,
 		const DirectX::XMFLOAT3 &Orientation = {0.f, 0.f, 0.f} );
@@ -23,7 +24,8 @@ public:
 private:
 	std::vector<DirectX::XMFLOAT3> vertices;
 	std::vector<DirectX::XMFLOAT3> normals;
-	std::vector<DirectX::XMFLOAT2> uvs;
+    // texture uv coordinates (x and y) 
+	std::vector<DirectX::XMFLOAT2> uvs; 
 	std::vector<DWORD> indices;
 };
 

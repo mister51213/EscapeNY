@@ -5,7 +5,6 @@ using namespace DirectX;
 PrimitiveMaker::PrimitiveMaker()
 {}
 
-
 PrimitiveMaker::~PrimitiveMaker()
 {}
 
@@ -136,7 +135,10 @@ void PrimitiveMaker::CreatePlane( const DirectX::XMFLOAT3 & Center, const Direct
 
 }
 
-void PrimitiveMaker::CreateCube( const DirectX::XMFLOAT3 & Center, const DirectX::XMFLOAT3 & Extent, const DirectX::XMFLOAT3 & Orientation )
+void PrimitiveMaker::CreateCube( 
+    const DirectX::XMFLOAT3 & Center, 
+    const DirectX::XMFLOAT3 & Extent, 
+    const DirectX::XMFLOAT3 & Orientation )
 {
 	vertices = 
 	{

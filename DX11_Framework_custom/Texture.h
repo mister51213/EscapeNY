@@ -28,12 +28,15 @@ public:
 	bool Initialize( ID3D11Device* pDevice, ID3D11DeviceContext* pContext, UINT TextureWidth, UINT TextureHeight );
 
 	
-	// If needed, would also make a procudure that creates a texture from memory
+	// If needed, would also make a procedure that creates a texture from memory
 	// I would consider using an std::vector<BYTE> because vector keeps track of it's size, 
 	// so wouldn't need a BYTE pointer and a separate UINT ImageSize parameter.
 	//bool Initialize( ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const std::vector<BYTE> &PixelData );
 
-	// Returns the shader resource view of the texture
+    // ID3D11Texture2D is Microsoft's structure for HOLDING the PIXEL DATA of a texture;
+    // the GetTexture() function ACCESSES that texture.
+
+	// Interface used to get the data (Returns the shader resource view of the texture)
 	ID3D11ShaderResourceView* GetTexture();
 
 private:
