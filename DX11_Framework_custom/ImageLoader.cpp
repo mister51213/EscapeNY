@@ -14,7 +14,6 @@ using namespace Microsoft::WRL;
 ImageLoader::ImageLoader()
 {}
 
-
 ImageLoader::~ImageLoader()
 {}
 
@@ -32,9 +31,12 @@ bool ImageLoader::Initialize()
 	return true;
 }
 
-WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const
+// Normally supports bmp, gif, jpg, ico, png, tiff
+WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const // can't change any class members
 {
 	std::wstring extension( Filename.substr( Filename.size() - 3, 3 ) );
+    // check to see if the image file is targa; in which case it will have to 
+    // use our custome image loading function
 	int cmpResult = extension.compare( L"tga" );
 
 	UINT width = 0, height = 0;
@@ -43,7 +45,10 @@ WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const
 	{
 		return loadTarga( Filename );
 	}
-	else
+
+    // Functions for loading bitmap into memory
+    // Supported formats: bmp, gif, jpg, ico, png, tiff
+    else
 	{
 		WicBitmapResult imgResult;
 
@@ -75,12 +80,19 @@ WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const
 
 		// Initialize the converter using the frame grabbed.
 		// This is just to make sure that the colors are in BGRA order
+        // TODO: Change pixel format from BGRA to RGBA to complement DirectX colors
 		imgResult.first = pConverter->Initialize( pFrame.Get(), GUID_WICPixelFormat32bppPBGRA,
 			WICBitmapDitherTypeNone, nullptr, 1.f, WICBitmapPaletteTypeCustom );
 		if( FAILED( imgResult.first ) )
 		{
 			return imgResult;
 		}
+
+        // ComPtrs are like shared pointers; variables on the stack that function as 
+        // WRAPPERS around a pointer; there can multipile comptprs representing one
+        // pointer (they're reference counted); you can delete one of them and the others
+        // will keep track of when to delete themselves, and ultimately destroy the pointed to 
+        // object and release the memory.
 
 		// Create the bitmap from the converter interface
 		imgResult.first = m_pFactory->CreateBitmapFromSource( pConverter.Get(), WICBitmapCacheOnDemand,
@@ -94,7 +106,14 @@ WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const
 	}
 }
 
-WicBitmapResult  ImageLoader::CreateBitmap( const UINT Width, const UINT Height )const
+///////////////
+// FOR FONTS //
+///////////////
+//TODO: May use this otherwise; add a comment if you do
+// TODO: Change pixel format from BGRA to RGBA to complement DirectX colors
+// Create an empty bitmap using width and height that you give it
+// Will be used for font rendering
+WicBitmapResult ImageLoader::CreateBitmap( const UINT Width, const UINT Height )const
 {
 	// Create temp bitmap
 	Microsoft::WRL::ComPtr<IWICBitmap> pBitmap;
@@ -110,6 +129,8 @@ WicBitmapResult  ImageLoader::CreateBitmap( const UINT Width, const UINT Height 
 	return{hr, pBitmap};							// if creation fails, the pointer is nullptr
 }
 
+// Custom Targa loading function just in case 
+// (Default supported formats of WIC API are bmp, gif, jpg, ico, png, tiff)
 WicBitmapResult ImageLoader::loadTarga( const std::wstring &Filename)const
 {
 	// Found out that this procedure doesn't support compressed or palette based images
