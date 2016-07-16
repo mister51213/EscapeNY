@@ -5,7 +5,6 @@ using namespace DirectX;
 Game::Game()
 {}
 
-
 Game::~Game()
 {
 }

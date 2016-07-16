@@ -82,6 +82,7 @@ bool Model::InitializeBuffers(ID3D11Device* device)
 {
     // First create two temporary arrays to hold the vertex and index data that we will use later to populate the final buffers with.
 	PrimitiveMaker primMaker;
+
 	//primMaker.CreateTriangle( {0.f,0.f,0.f}, {1.f,1.f}, {0.f,0.f, DirectX::XMConvertToRadians( 45.f )} );
     primMaker.CreateCube({ 3, 5, 10 }, { 1, 1, 1 }, {}); // THIS WORKS
 
