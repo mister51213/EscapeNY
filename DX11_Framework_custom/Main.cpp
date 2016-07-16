@@ -18,33 +18,25 @@
 
 #include "System.h"
 
+
 //DEFAULT MAIN FUNCTION
-int WINAPI WinMain(HINSTANCE hInstance,
-    HINSTANCE hPrevInstance,
-    PSTR lpCmdLine,
-    int nCmdShow)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+    PSTR lpCmdLine, int nCmdShow)
 {
     // Create System object
-    System* g_pSystem; // efficient to instantiate on heap?
-    bool g_result;
-
-    g_pSystem = new System;
-    if (!g_pSystem)
+	// efficient to instantiate on heap?
+	std::unique_ptr<System> pSystem(new System);	
+    if (!pSystem )
     {
         return 0;
     }
 
     // Initialize and run g_pSystem object
-    g_result = g_pSystem->Initialize();
-    if (g_result)
+	bool result = pSystem->Initialize();
+    if ( result )
     {
-        g_pSystem->Run();
+		pSystem->Run();
     }
-
-    // Shutdown and release g_pSystem object
-    g_pSystem->Shutdown();
-    delete g_pSystem;
-    g_pSystem = 0;
 
     return 0; // return 0 if successful   
 }

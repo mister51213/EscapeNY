@@ -3,9 +3,6 @@
 // MY CLASS INCLUDES //
 ///////////////////////
 #include "D3DGraphics.h"
-#include "camera.h"
-#include "model.h"
-#include "textureshader.h" // change to textureshader
 
 /////////////
 // GLOBALS //
@@ -25,16 +22,21 @@ public:
 	Graphics(const Graphics&);
 	~Graphics();
 
-	bool Initialize(int, int, HWND);
-	void Shutdown();
-	bool Frame();
+	bool Initialize(int ScreenWidth, int ScreenHeight, HWND WinHandle, 
+		float Red, float Green, float Blue, float Alpha = 1.f );
+
+	void BeginScene();
+	void EndScene();
+
+	void SetBackgroundColor( float Red, float Green, float Blue, float Alpha = 1.f );
+	D3DGraphics *GetDirect3D()const;
 
 private:
-	bool Render();
-
-private:
-   	D3DGraphics* m_pDirect3D;    
-	Camera* m_Camera;
-	Model* m_Model;
-	TextureShader* m_TextureShader; // changed to texture
+   	std::unique_ptr<D3DGraphics> m_pDirect3D;
+	float m_backgroundColor[ 4 ];
 };
+
+inline void HandleResult( const std::wstring &Message )
+{
+	MessageBox( nullptr, Message.c_str(), L"Error!", MB_OK );
+}

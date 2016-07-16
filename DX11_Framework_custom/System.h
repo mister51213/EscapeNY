@@ -17,44 +17,44 @@
 ********************************************************************************/
 #pragma once
 
-#ifndef _SYSTEMCLASS_H_
-#define _SYSTEMCLASS_H_
-#define WIN32_LEAN_AND_MEAN
-
-#include <windows.h>
 
 ///////////////////////////
 // Custom class includes //
 ///////////////////////////
+
+
 #include "Input.h"
 #include "Graphics.h"
+#include "Game.h"
 
 class System
 {
 public:
-    System();
-    System(const System&);
-    ~System();
+	System();
+	System( const System& ) = delete;
+	~System();
 
-    bool Initialize();
-    void Shutdown();
-    void Run();
+	bool Initialize();
+	void Run();
 
-    // forward declaration
-    LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
+	// forward declaration
+	LRESULT CALLBACK MessageHandler( HWND, UINT, WPARAM, LPARAM );
 
 private:
+	void Quit();
 	bool Frame();
-	void InitializeWindows(int&, int&);
-	void ShutdownWindows();
+	void InitializeWindows( int&, int& );
 
 private:
-	LPCWSTR m_applicationName;
+	std::wstring m_applicationName;
 	HINSTANCE m_hInstance;
 	HWND m_hwnd;
 
-	Input* m_Input;
-	Graphics* m_Graphics;
+	std::unique_ptr<Input> m_Input;
+	std::unique_ptr<Graphics> m_Graphics;
+	std::unique_ptr<Game> m_pGame;
+
+	bool done;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -64,9 +64,7 @@ private:
 ///////////////////////////////////////////////////////////////////////
 
 // FUNCTION PROTOTYPES //
-static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+static LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
 
 // GLOBALS //
 static System* ApplicationHandle = 0;
-
-#endif

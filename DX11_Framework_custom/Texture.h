@@ -1,58 +1,50 @@
-/*****************************************************************
-* The TextureClass encapsulates the loading, unloading,          *
-* and accessing of a single texture resource. For each           *
-* texture needed an object of this class must be instantiated.   *
-*                                                                *
-******************************************************************/
 #pragma once
-
 ////////////////////////////////////////////////////////////////////////////////
-// Filename: texture.h
+// Filename: textureclass.h
 ////////////////////////////////////////////////////////////////////////////////
-
 //////////////
 // INCLUDES //
 //////////////
-#include <d3d11.h>
-#include <stdio.h>
+#include "Includes.h"
+#include "Utilities.h"
+#include "ImageLoader.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-// Class name: Texture
+// Class name: TextureClass
 ////////////////////////////////////////////////////////////////////////////////
 class Texture
 {
-private:
-// Define the targa file header structure here to make reading in the data easier.
-	struct TargaHeader
-	{
-		unsigned char data1[12];
-		unsigned short width;
-		unsigned short height;
-		unsigned char bpp;
-		unsigned char data2;
-	};
-
 public:
 	Texture();
-	Texture(const Texture&);
+	Texture( const Texture& );
 	~Texture();
 
-	bool Initialize(ID3D11Device*, ID3D11DeviceContext*, char*);
-	void Shutdown();
+	Texture &operator=( const Texture &Tex );
 
+	// This procedure loads a texture from file
+	bool Initialize( ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const std::wstring &Filename );
+
+	// This prcedure creates a blank texture based on dimensions
+	bool Initialize( ID3D11Device* pDevice, ID3D11DeviceContext* pContext, UINT TextureWidth, UINT TextureHeight );
+
+	
+	// If needed, would also make a procedure that creates a texture from memory
+	// I would consider using an std::vector<BYTE> because vector keeps track of it's size, 
+	// so wouldn't need a BYTE pointer and a separate UINT ImageSize parameter.
+	//bool Initialize( ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const std::vector<BYTE> &PixelData );
+
+    // ID3D11Texture2D is Microsoft's structure for HOLDING the PIXEL DATA of a texture;
+    // the GetTexture() function ACCESSES that texture.
+
+	// Interface used to get the data (Returns the shader resource view of the texture)
 	ID3D11ShaderResourceView* GetTexture();
 
 private:
- // Targa reading function. If you wanted to support more 
- // formats you would add reading functions here.
-
-	bool LoadTarga(char*, int&, int&);
-
+	bool createTextureAndResourceView( ID3D11Device* pDevice, ID3D11DeviceContext* pContext, UINT TextureWidth, UINT TextureHeight, std::unique_ptr<BYTE[]> &pImageData);
+	bool loadImageData( const std::wstring &Filename, UINT &TextureWidth, UINT &TextureHeight, std::unique_ptr<BYTE[]> &pImageData );
+	bool createTextureFromWICImage( IWICBitmap *pBitmap, std::unique_ptr<BYTE[]> &pImageData );
 private:
-// This holds the raw targa data read straight in from the file. 
-	unsigned char* m_targaData;
-// Holds the structured texture data that DirectX will use for rendering. 
-    ID3D11Texture2D* m_texture;
-// This is the resource view that the shader uses to access the texture data when drawing.
-    ID3D11ShaderResourceView* m_textureView;
+	comptr<ID3D11Texture2D> m_texture;
+	comptr<ID3D11ShaderResourceView> m_textureView;
 };
+
