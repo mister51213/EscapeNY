@@ -98,7 +98,7 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -126,7 +126,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -153,8 +153,10 @@
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="PrimitiveMaker.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TexturedPlane.cpp" />
     <ClCompile Include="TextureShader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,8 +171,10 @@
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="PrimitiveMaker.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TexturedPlane.h" />
     <ClInclude Include="TextureShader.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>

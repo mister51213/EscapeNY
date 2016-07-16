@@ -9,6 +9,7 @@ using comptr = Microsoft::WRL::ComPtr<T>;
 #define RETURN_IF_FALSE(Result)\
 if( !( Result ) ) \
 { \
+	ShowCursor(TRUE);\
 	return false; \
 }\
 else int a = 0

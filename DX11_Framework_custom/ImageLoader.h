@@ -17,13 +17,25 @@ using WicBitmapResult = std::pair<HRESULT, Microsoft::WRL::ComPtr<IWICBitmap>>;
 
 class ImageLoader
 {
+	struct TargaHeader
+	{
+		unsigned char data1[ 12 ];
+		unsigned short width;
+		unsigned short height;
+		unsigned char bpp;
+		unsigned char data2;
+	};
+
 public:
 	ImageLoader();
 	~ImageLoader();
 
 	bool Initialize();
-	WicBitmapResult  CreateBitmap( const std::wstring &Filename )const;
-	WicBitmapResult  CreateBitmap( const UINT Width, const UINT Height )const;
+	WicBitmapResult CreateBitmap( const std::wstring &Filename )const;
+	WicBitmapResult CreateBitmap( const UINT Width, const UINT Height )const;
+private:
+	WicBitmapResult loadTarga( const std::wstring &Filename )const;
+
 private:
 	Microsoft::WRL::ComPtr<IWICImagingFactory> m_pFactory;
 };
