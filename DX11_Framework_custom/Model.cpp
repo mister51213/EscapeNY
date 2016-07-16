@@ -10,6 +10,7 @@
 // Filename: model.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "model.h"
+#include "PrimitiveMaker.h"
 
 // initialize the vertex and index buffer pointers to null.
 Model::Model()
@@ -80,35 +81,43 @@ int Model::GetIndexCount()
 bool Model::InitializeBuffers(ID3D11Device* device)
 {
     // First create two temporary arrays to hold the vertex and index data that we will use later to populate the final buffers with.
-    
-	// Set the number of vertices in the vertex array.
-	m_vertexCount = 3;
+	PrimitiveMaker primMaker;
+	primMaker.CreateTriangle( {0.f,0.f,0.f}, {1.f,1.f}, {0.f,0.f, DirectX::XMConvertToRadians( 45.f )} );
 
-	// Set the number of indices in the index array.
-	m_indexCount = 3;
-
-    // Now fill both the vertex and index array with the three points of the triangle as well as the index to each of the points. 
+	// Now fill both the vertex and index array with the three points of the triangle as well as the index to each of the points. 
     // *POINTS ARE CREATED IN CLOCKWISE ORDER*
     // *If you do this counter clockwise it will think the triangle is 
     // facing the opposite direction and not draw it due to back face culling.
     
 	// Create the vertex array.
 	// Load the vertex array with data.
-	std::vector<VertexType> vertices =
+	auto verts = primMaker.GetVertices();
+
+	// Set the number of vertices in the vertex array.
+	m_vertexCount = verts.size();
+
+	// Create the VertexType array
+	auto color( primMaker.CreateColor( 0.0f, 1.0f, 0.0f, 1.0f ) );
+	std::vector<VertexType> vertices( verts.size() );
+	UINT idx = 0;
+	for( auto &v : verts )
 	{
-		{XMFLOAT3( -1.0f, -1.0f, 0.0f ),	XMFLOAT4( 0.0f, 1.0f, 0.0f, 1.0f )},	// Bottom left.
-		{XMFLOAT3( 0.0f, 1.0f, 0.0f ),		XMFLOAT4( 0.0f, 1.0f, 0.0f, 1.0f )},	// Top middle.
-		{XMFLOAT3( 1.0f, -1.0f, 0.0f ),		XMFLOAT4( 0.0f, 1.0f, 0.0f, 1.0f )}		// Bottom right.
-	};
+		vertices[ idx++ ] = {v, color};
+	}
 
 	// Create the index array.
 	// Load the index array with data.
-	std::vector<UINT> indices = 
-	{
-		0,		// Bottom left.
-		1,		// Top middle.
-		2		// Bottom right.
-	};
+	auto indices = primMaker.GetIndices();
+
+	// Set the number of indices in the index array.
+	m_indexCount = indices.size();
+
+	//std::vector<UINT> indices =
+	//{
+	//	0,		// Bottom left.
+	//	1,		// Top middle.
+	//	2		// Bottom right.
+	//};
 
     // use vertex and index arrays to create the vertex and index buffers.
 	// Set up the description of the static vertex buffer.

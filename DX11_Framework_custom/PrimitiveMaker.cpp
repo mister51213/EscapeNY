@@ -9,13 +9,15 @@ PrimitiveMaker::PrimitiveMaker()
 PrimitiveMaker::~PrimitiveMaker()
 {}
 
-void PrimitiveMaker::CreateTriangle( const DirectX::XMFLOAT3 & Center, const DirectX::XMFLOAT2 & Extent )
+void PrimitiveMaker::CreateTriangle( const DirectX::XMFLOAT3 & Center, 
+	const DirectX::XMFLOAT2 & Extent, const DirectX::XMFLOAT3 &Orientation )
 {
+	auto extentHalf = DirectX::XMFLOAT2( Extent.x * 0.5f, Extent.y * 0.5f );
 	vertices = 
 	{
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z},
-		{Center.x, Extent.y, Center.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z}
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z},
+		{Center.x, Center.y + extentHalf.y, Center.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z}
 	};
 
 	normals = 
@@ -31,6 +33,36 @@ void PrimitiveMaker::CreateTriangle( const DirectX::XMFLOAT3 & Center, const Dir
 		{0.5f, 0.f},
 		{1.f, 1.f}
 	};
+
+	indices.resize( vertices.size() );
+	for( int i = 0; i < vertices.size(); ++i )
+	{
+		indices[ i ] = i;
+	}
+
+	// Load the orienation into SIMD register and create the rotation matrix
+	auto rotationVector = XMLoadFloat3( &Orientation );
+	auto rotationMatrix = XMMatrixRotationRollPitchYawFromVector( rotationVector );
+
+	// Rotate each vertex
+	for( auto &vertex : vertices )
+	{
+		auto xmVector = XMLoadFloat3( &vertex );
+		auto rotatedVector = XMVector3TransformCoord( xmVector, rotationMatrix );
+		XMStoreFloat3( &vertex, rotatedVector );
+	}
+
+	// Load the reverse orientation into SIMD register and create the reverse rotation matrix
+	// for the normals.  This makes sure that lights don't follow the direction of the 
+	// plane, but instead go in the opposite direction
+	auto reverseRotationMatrix = XMMatrixRotationRollPitchYawFromVector( -rotationVector );
+	for( auto &normal : normals )
+	{
+		auto xmVector = XMLoadFloat3( &normal );
+		auto rotatedVector = XMVector3TransformCoord( xmVector, reverseRotationMatrix );
+		XMStoreFloat3( &normal, rotatedVector );
+	}
+
 }
 
 void PrimitiveMaker::CreatePlane( const DirectX::XMFLOAT3 & Center, const DirectX::XMFLOAT2 & Extent, const DirectX::XMFLOAT3 & Orientation )
@@ -44,6 +76,8 @@ void PrimitiveMaker::CreatePlane( const DirectX::XMFLOAT3 & Center, const Direct
 		{Center.x - Extent.x, Center.y + Extent.y, Center.z},
 		{Center.x + Extent.x, Center.y + Extent.y, Center.z},
 		{Center.x - Extent.x, Center.y - Extent.y, Center.z},
+		{Center.x - Extent.x, Center.y - Extent.y, Center.z},
+		{Center.x + Extent.x, Center.y + Extent.y, Center.z},
 		{Center.x + Extent.x, Center.y - Extent.y, Center.z}
 	};
 	
@@ -52,6 +86,8 @@ void PrimitiveMaker::CreatePlane( const DirectX::XMFLOAT3 & Center, const Direct
 	{
 		{0.f,0.f,-1.f},
 		{0.f,0.f,-1.f}, 
+		{0.f,0.f,-1.f},
+		{0.f,0.f,-1.f},
 		{0.f,0.f,-1.f},
 		{0.f,0.f,-1.f}
 	};
@@ -62,15 +98,18 @@ void PrimitiveMaker::CreatePlane( const DirectX::XMFLOAT3 & Center, const Direct
 		{0.f, 0.f}, 
 		{1.f, 0.f}, 
 		{0.f, 1.f}, 
+		{0.f, 1.f},
+		{1.f, 0.f},
 		{1.f, 1.f} 
 	};
 
 	// This is for a D3D11_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, for a 
 	// D3D11_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP you would only need 0,1,2,3
-	indices = 
+	indices.resize( vertices.size() );
+	for( int i = 0; i < vertices.size(); ++i )
 	{
-		{0},{1},{2},{2},{1},{3}
-	};
+		indices[ i ] = i;
+	}
 
 	// Load the orienation into SIMD register and create the rotation matrix
 	auto rotationVector = XMLoadFloat3( &Orientation );
@@ -277,6 +316,11 @@ void PrimitiveMaker::CreateCube( const DirectX::XMFLOAT3 & Center, const DirectX
 	}
 
 
+}
+
+DirectX::XMFLOAT4 PrimitiveMaker::CreateColor( float R, float G, float B, float A )
+{
+	return DirectX::XMFLOAT4( R, G, B, A );
 }
 
 std::vector<DirectX::XMFLOAT3> PrimitiveMaker::GetVertices() const
