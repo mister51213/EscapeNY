@@ -78,9 +78,6 @@
     <ClCompile Include="Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="COMHandler.cpp">
-      <Filter>Header Files\Utility Classes</Filter>
-    </ClCompile>
     <ClCompile Include="Wic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -98,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="Shader_Texture.cpp">
       <Filter>Source Files\Shader Files</Filter>
+    </ClCompile>
+    <ClCompile Include="COMHandler.cpp">
+      <Filter>Source Files\Utility Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,9 +149,6 @@
     <ClInclude Include="TexturedPlane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="COMHandler.h">
-      <Filter>Source Files\Utility Classes</Filter>
-    </ClInclude>
     <ClInclude Include="Wic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -172,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="Shader_Texture.h">
       <Filter>Header Files\Shader Files</Filter>
+    </ClInclude>
+    <ClInclude Include="COMHandler.h">
+      <Filter>Header Files\Utility Classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

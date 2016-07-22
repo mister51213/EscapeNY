@@ -3,9 +3,9 @@
 #include "Camera.h"
 #include "Model.h"
 #include "Graphics.h"
-#include "ColorShader.h"
+#include "Shader_Color.h"
 #include "Texture.h"
-#include "TextureShader.h"
+#include "Shader_Texture.h"
 #include "Overlay.h"
 
 class Game
@@ -25,9 +25,9 @@ private:
 
 	// Camera, Model and ColorShader are created in Game, so has ownership
 	std::unique_ptr<Camera> m_pCamera;
-	std::unique_ptr<TexturedModel> m_pModel;
+	std::unique_ptr<Model_Textured> m_pModel;
 	//std::unique_ptr<ColorShader> m_pColorShader;
-	std::unique_ptr<TextureShader> m_pTextureShader;
+	std::unique_ptr<Shader_Texture> m_pShader_Texture;
 	std::unique_ptr<Texture> m_pStoneTexture;
 	Overlay m_Overlay;};
 

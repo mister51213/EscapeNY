@@ -6,7 +6,7 @@
 #include "Utilities.h"
 #include "FontLoader.h"
 #include "Graphics.h"
-#include "TexturedModel.h"
+#include "Model_Textured.h"
 
 class Overlay
 {
@@ -24,7 +24,7 @@ private:
 
 private:
 	D2D1_RECT_F m_SurfaceRect;
-	TexturedModel m_TexturedModel;
+	Model_Textured m_Model_Textured;
 	Texture m_texture;
 	comptr<IDWriteTextFormat> m_Font;
 	IWICBitmap *m_pRenderSurface;

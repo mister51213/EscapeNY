@@ -31,7 +31,7 @@ bool Graphics::Initialize(
 		L"Could not allocate memory for Windows Imaging Component object." );
 
 	// Initialize the Windows Imaging Comonent object	
-	RETURN_MESSAGE_IF_FALSE( m_pWic->Initialzie(),
+	RETURN_MESSAGE_IF_FALSE( m_pWic->Initialize(),
 		L"Could not initialize the Windows Imaging Component ." );
 
 	// Set background color
@@ -63,9 +63,9 @@ bool Graphics::Initialize(
 // Initializes the buffers so they are blank and ready to be drawn to.
 void Graphics::BeginScene()
 {
-	auto pContext = m_pDirect3D->m_deviceContext.Get();
-	auto pRenderTargetView = m_pDirect3D->m_renderTargetView.Get();
-	auto pDepthStencilView = m_pDirect3D->m_depthStencilView.Get();
+	auto pContext = m_pDirect3D->m_pDeviceContext.Get();
+	auto pRenderTargetView = m_pDirect3D->m_pRenderTargetView.Get();
+	auto pDepthStencilView = m_pDirect3D->m_pDepthStencilView.Get();
 
 	// Clear the back buffer.
 	pContext->ClearRenderTargetView( pRenderTargetView, m_backgroundColor );

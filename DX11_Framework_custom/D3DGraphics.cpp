@@ -56,9 +56,9 @@ void D3DGraphics::Shutdown()
 {
 	// Force the swap chain to go into windowed mode first before 
     // releasing any pointers. Otherwise exceptions can be thrown.
-	if(m_swapChain)
+	if(m_pSwapChain)
 	{
-		m_swapChain->SetFullscreenState(false, NULL);
+		m_pSwapChain->SetFullscreenState(false, NULL);
 	}
 }
 

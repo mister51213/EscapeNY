@@ -30,7 +30,7 @@ bool Game::Initialize( Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight,
 	RETURN_IF_FALSE( result );
 
 	// Create the model object.
-	m_pModel.reset( new TexturedModel );
+	m_pModel.reset( new Model_Textured );
 	result = m_pModel != nullptr;
 	RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Model." );
 
@@ -41,15 +41,15 @@ bool Game::Initialize( Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight,
 	RETURN_IF_FALSE( result );
 
 	// Create the color shader object.
-	m_pTextureShader.reset( new TextureShader );
-	result = m_pTextureShader != nullptr;
-	RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for TextureShader." );
+	m_pShader_Texture.reset( new Shader_Texture );
+	result = m_pShader_Texture != nullptr;
+	RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Shader_Texture." );
 	//m_pColorShader.reset( new ColorShader );
 	//result = m_pColorShader != nullptr;
 	//RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for ColorShader." );
 
 	//// Initialize the color shader object.
-	result = m_pTextureShader->Initialize( m_pDirect3D->GetDevice(), WinHandle, *m_pModel );
+	result = m_pShader_Texture->Initialize( m_pDirect3D->GetDevice(), WinHandle, *m_pModel );
 	RETURN_IF_FALSE( result );
 
 	m_pStoneTexture.reset( new Texture );
@@ -81,7 +81,7 @@ bool Game::render()
 	m_pCamera->Render();
 	
 	// Render the model using the color shader.
-	bool result = m_pTextureShader->Render(
+	bool result = m_pShader_Texture->Render(
 		m_pDirect3D->GetDeviceContext(), 
 		m_pModel->GetWorldMatrix(),
 		m_pCamera->GetViewMatrix(),
@@ -93,7 +93,7 @@ bool Game::render()
 	m_pGraphics->RenderModel( *m_pModel );
 	RETURN_IF_FALSE( result );
 
-	m_pTextureShader->Render(
+	m_pShader_Texture->Render(
 		m_pDirect3D->GetDeviceContext(),
 		DirectX::XMMatrixIdentity(),
 		m_pCamera->GetViewMatrix(),

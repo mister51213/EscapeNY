@@ -16,7 +16,7 @@ bool Overlay::Initialize( const Graphics &Gfx )
 
 	PrimitiveMaker primMaker;
 	primMaker.CreatePlane( {0.f,300.f,0.f}, {200.f,20.f} );
-	result = m_TexturedModel.Initialize( primMaker, Gfx );
+	result = m_Model_Textured.Initialize( primMaker, Gfx );
 
 	FontLoader fntLoader;
 	result = fntLoader.Initialize();
@@ -65,7 +65,7 @@ void Overlay::Render( const Graphics &Gfx )
 	context->Unmap( pTexture, 0 );
 
 	// Graphics will handle setting the render state for the model
-	Gfx.RenderModel( m_TexturedModel );
+	Gfx.RenderModel( m_Model_Textured );
 }
 
 bool Overlay::fillTexture( BYTE *const Pixels )const
