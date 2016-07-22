@@ -96,6 +96,9 @@
     <ClCompile Include="Model_Colored.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Model_Textured.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -165,6 +168,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Model_Colored.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model_Textured.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
