@@ -3,7 +3,6 @@
 Wic::Wic()
 {}
 
-
 Wic::~Wic()
 {}
 
