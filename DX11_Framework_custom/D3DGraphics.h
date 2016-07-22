@@ -46,7 +46,6 @@ public:
 		LPVOID pImageData = nullptr );	// Initialize with pixels, nullptr for empty texture
 	comptr<ID3D11ShaderResourceView> CreateShaderResourceView( const Texture &Tex );
 	
-
 	ID3D11Device* GetDevice()const;
 	ID3D11DeviceContext* GetDeviceContext()const;
 	void GetVideoCardInfo(std::wstring &Description, int& Memory);
