@@ -30,13 +30,9 @@ public:
 	ImageLoader();
 	~ImageLoader();
 
-	bool Initialize();
-	WicBitmapResult CreateBitmap( const std::wstring &Filename )const;
-	WicBitmapResult CreateBitmap( const UINT Width, const UINT Height )const;
+	static WicBitmapResult CreateBitmap( const std::wstring &Filename, const Wic &crWic );
+	static WicBitmapResult CreateBitmap( const UINT Width, const UINT Height, const Wic &rcWic );
 private:
-	WicBitmapResult loadTarga( const std::wstring &Filename )const;
+	static WicBitmapResult loadTarga( const std::wstring &Filename, const Wic &rcWic );
 
-private:
-	Microsoft::WRL::ComPtr<IWICImagingFactory> m_pFactory;
 };
-

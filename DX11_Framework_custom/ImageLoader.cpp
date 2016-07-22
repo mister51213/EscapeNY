@@ -15,46 +15,30 @@ ImageLoader::ImageLoader()
 {}
 
 ImageLoader::~ImageLoader()
-{}
-
-bool ImageLoader::Initialize()
 {
-	// Initialize COM interface
-	CoInitialize( nullptr );
-
-	// Create an instance of the imaging factory
-	HRESULT hr = CoCreateInstance(
-		CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
-		IID_PPV_ARGS( m_pFactory.GetAddressOf() )
-	);
-	
-	return true;
 }
 
-// Normally supports bmp, gif, jpg, ico, png, tiff
-WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const // can't change any class members
+WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename, const Wic &crWic )
 {
+	// Get the WIC factory from the Wic object
+	auto pFactory = crWic.GetFactory();
+
 	std::wstring extension( Filename.substr( Filename.size() - 3, 3 ) );
-    // check to see if the image file is targa; in which case it will have to 
-    // use our custome image loading function
 	int cmpResult = extension.compare( L"tga" );
 
 	UINT width = 0, height = 0;
 
 	if( cmpResult == 0 )
 	{
-		return loadTarga( Filename );
+		return loadTarga( Filename, crWic );
 	}
-
-    // Functions for loading bitmap into memory
-    // Supported formats: bmp, gif, jpg, ico, png, tiff
-    else
+	else
 	{
 		WicBitmapResult imgResult;
 
 		// Create the decoder from the file
 		ComPtr<IWICBitmapDecoder> pDecoder;
-		imgResult.first = m_pFactory->CreateDecoderFromFilename( Filename.c_str(), nullptr,
+		imgResult.first = pFactory->CreateDecoderFromFilename( Filename.c_str(), nullptr,
 			GENERIC_READ, WICDecodeMetadataCacheOnDemand, pDecoder.GetAddressOf() );
 		if( FAILED( imgResult.first ) )
 		{
@@ -72,7 +56,7 @@ WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const 
 		// Create the format converter, used to convert to different color
 		// palettes and such.
 		ComPtr<IWICFormatConverter> pConverter;
-		imgResult.first = m_pFactory->CreateFormatConverter( pConverter.GetAddressOf() );
+		imgResult.first = pFactory->CreateFormatConverter( pConverter.GetAddressOf() );
 		if( FAILED( imgResult.first ) )
 		{
 			return imgResult;
@@ -80,7 +64,6 @@ WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const 
 
 		// Initialize the converter using the frame grabbed.
 		// This is just to make sure that the colors are in BGRA order
-        // TODO: Change pixel format from BGRA to RGBA to complement DirectX colors
 		imgResult.first = pConverter->Initialize( pFrame.Get(), GUID_WICPixelFormat32bppPBGRA,
 			WICBitmapDitherTypeNone, nullptr, 1.f, WICBitmapPaletteTypeCustom );
 		if( FAILED( imgResult.first ) )
@@ -88,14 +71,8 @@ WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const 
 			return imgResult;
 		}
 
-        // ComPtrs are like shared pointers; variables on the stack that function as 
-        // WRAPPERS around a pointer; there can multipile comptprs representing one
-        // pointer (they're reference counted); you can delete one of them and the others
-        // will keep track of when to delete themselves, and ultimately destroy the pointed to 
-        // object and release the memory.
-
 		// Create the bitmap from the converter interface
-		imgResult.first = m_pFactory->CreateBitmapFromSource( pConverter.Get(), WICBitmapCacheOnDemand,
+		imgResult.first = pFactory->CreateBitmapFromSource( pConverter.Get(), WICBitmapCacheOnDemand,
 			imgResult.second.GetAddressOf() );
 		if( FAILED( imgResult.first ) )
 		{
@@ -106,20 +83,16 @@ WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename )const 
 	}
 }
 
-///////////////
-// FOR FONTS //
-///////////////
-//TODO: May use this otherwise; add a comment if you do
-// TODO: Change pixel format from BGRA to RGBA to complement DirectX colors
-// Create an empty bitmap using width and height that you give it
-// Will be used for font rendering
-WicBitmapResult ImageLoader::CreateBitmap( const UINT Width, const UINT Height )const
+WicBitmapResult  ImageLoader::CreateBitmap( const UINT Width, const UINT Height, const Wic &crWic )
 {
+	// Get the WIC factory from the Wic object
+	auto pFactory = crWic.GetFactory();
+
 	// Create temp bitmap
 	Microsoft::WRL::ComPtr<IWICBitmap> pBitmap;
 
 	// Create bitmap from memory using the temp bitmap
-	HRESULT hr = m_pFactory->CreateBitmap(
+	HRESULT hr = pFactory->CreateBitmap(
 		Width, Height,								// Width and height of bitmap
 		GUID_WICPixelFormat32bppPBGRA,				// BGRA pixel format
 		WICBitmapCacheOnDemand,						// Cache on demand, not sure what this does
@@ -129,9 +102,7 @@ WicBitmapResult ImageLoader::CreateBitmap( const UINT Width, const UINT Height )
 	return{hr, pBitmap};							// if creation fails, the pointer is nullptr
 }
 
-// Custom Targa loading function just in case 
-// (Default supported formats of WIC API are bmp, gif, jpg, ico, png, tiff)
-WicBitmapResult ImageLoader::loadTarga( const std::wstring &Filename)const
+WicBitmapResult ImageLoader::loadTarga( const std::wstring &Filename, const Wic &rcWic )
 {
 	// Found out that this procedure doesn't support compressed or palette based images
 	// The tga file must be an RGB uncompressed image
@@ -162,7 +133,7 @@ WicBitmapResult ImageLoader::loadTarga( const std::wstring &Filename)const
 	}
 
 	// Create an empty WIC bitmap to copy the image data into
-	bitmapResult = CreateBitmap( targaFileHeader.width, targaFileHeader.height );
+	bitmapResult = CreateBitmap( targaFileHeader.width, targaFileHeader.height, rcWic );
 	if( FAILED( bitmapResult.first ) )
 	{
 		file.close();
