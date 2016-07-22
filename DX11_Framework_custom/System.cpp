@@ -87,7 +87,8 @@ bool System::Initialize()
 	RETURN_IF_FALSE( result );
 
 	// Initialize the game object
-	result = m_pGame->Initialize( m_Graphics.get(), screenWidth, screenHeight, m_hwnd );
+	result = m_pGame->Initialize( 
+        m_Graphics.get(), screenWidth, screenHeight, m_hwnd );
 	RETURN_IF_FALSE( result );
 	return true;
 }
@@ -119,16 +120,16 @@ void System::Run()
 	}
 }
 
-//////////////////////////////////
-// THIS is where all the actual //
-// processing is done:          //
-//////////////////////////////////
-
 void System::Quit()
 {
 	DestroyWindow( m_hwnd );
 	done = true;
 }
+
+//////////////////////////////////
+// THIS is where  the frame     //
+// processing is done:          //
+//////////////////////////////////
 
 bool System::Frame()
 {
@@ -198,7 +199,7 @@ LRESULT CALLBACK System::MessageHandler(
 
 void System::InitializeWindows(int& screenWidth, int& screenHeight)
 {
-    // Pass this object to external pointer so it will persist.
+    // Pass this object to external pointer so it will persist outside of scope.
     ApplicationHandle = this;
 
     // Setup window class with default settings
@@ -224,7 +225,7 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
     screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
 	int posX = 0, posY = 0;
-	// Setup screen settings depending on whether it is running in full screen or in windowed mode.
+	// Setup screen settings depending on whether it is running in full screen or windowed.
 	if (FULL_SCREEN)
     {
         // If full screen set the screen to maximum size of the users desktop and 32bit.

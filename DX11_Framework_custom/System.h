@@ -22,7 +22,7 @@
 // Custom class includes //
 ///////////////////////////
 
-
+#include "COMHandler.h"
 #include "Input.h"
 #include "Graphics.h"
 #include "Game.h"
@@ -53,7 +53,7 @@ private:
 	std::unique_ptr<Input> m_Input;
 	std::unique_ptr<Graphics> m_Graphics;
 	std::unique_ptr<Game> m_pGame;
-
+    COMHandler comHandler;
 	bool done;
 };
 
