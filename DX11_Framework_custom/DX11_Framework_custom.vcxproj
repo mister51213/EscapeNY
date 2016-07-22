@@ -154,6 +154,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Overlay.cpp" />
     <ClCompile Include="PrimitiveMaker.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Overlay.h" />
     <ClInclude Include="PrimitiveMaker.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Texture.h" />
