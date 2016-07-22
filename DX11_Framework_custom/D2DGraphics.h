@@ -9,12 +9,10 @@
 *  Requirements		: D3DGraphics, ImageLoader, FontLoader							*
 *************************************************************************************/
 
-#include <d2d1.h>
-#include <memory>
+#include "Includes.h"
+#include "Utilities.h"
 #include "ImageLoader.h"
 #include "FontLoader.h"
-#include "D3DGraphics.h"
-
 
 #pragma comment(lib, "d2d1.lib")
 // TODO: Decide how this class will interact with the main Graphics class
@@ -23,23 +21,19 @@
 class D2DGraphics
 {
 public:
+   	friend class Graphics;
 	D2DGraphics();
 	~D2DGraphics();
 
 	void BeginDraw();
 	void EndDraw();
 	bool Initialize( D3DGraphics &D3D, const ImageLoader &ImgLoader, const UINT Width, const UINT Height);
-	void DrawString( const std::wstring &String, const FontLoader &FntLoader, const D2D1_RECT_F &PositionAndSize );
-	void Render( D3DGraphics &D3D );
-
+	
+    IWICBitmap *GetRenderSurface()const;
+    
 private:
-	bool fillTexture( BYTE *const Pixels )const;
-
-private:
-	Microsoft::WRL::ComPtr<ID2D1Factory> m_pFactory;
-	Microsoft::WRL::ComPtr<ID2D1RenderTarget> m_pRenderTarget;
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> m_pBrush;
-	Microsoft::WRL::ComPtr<IWICBitmap> m_pRenderSurface;
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> overlay;
+	comptr<ID2D1Factory> m_pFactory;
+	comptr<ID2D1RenderTarget> m_pRenderTarget;
+	comptr<ID2D1SolidColorBrush> m_pBrush;
+	comptr<IWICBitmap> m_pRenderSurface;
 };
-
