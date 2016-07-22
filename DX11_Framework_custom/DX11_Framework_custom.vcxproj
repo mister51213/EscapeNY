@@ -165,8 +165,8 @@
     <ClCompile Include="Wic.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Desktop\temp\Input.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Shader_Color.h" />
     <ClInclude Include="COMHandler.h" />
     <ClInclude Include="D2DGraphics.h" />
