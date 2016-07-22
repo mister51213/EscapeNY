@@ -1,3 +1,9 @@
+/***********************************************************************************
+File: PrimitiveMaker.cpp
+Function: Create basic 3d primitives using vector math. Can be combined with 
+texture functionality for more detailed graphics.
+
+***************************************************************************************/
 #include "PrimitiveMaker.h"
 
 using namespace DirectX;
@@ -8,8 +14,10 @@ PrimitiveMaker::PrimitiveMaker()
 PrimitiveMaker::~PrimitiveMaker()
 {}
 
-void PrimitiveMaker::CreateTriangle( const DirectX::XMFLOAT3 & Center, 
-	const DirectX::XMFLOAT2 & Extent, const DirectX::XMFLOAT3 &Orientation )
+void PrimitiveMaker::CreateTriangle( 
+    const DirectX::XMFLOAT3 & Center, 
+	const DirectX::XMFLOAT2 & Extent, 
+    const DirectX::XMFLOAT3 &Orientation )
 {
 	auto extentHalf = DirectX::XMFLOAT2( Extent.x * 0.5f, Extent.y * 0.5f );
 	vertices = 
@@ -52,7 +60,7 @@ void PrimitiveMaker::CreateTriangle( const DirectX::XMFLOAT3 & Center,
 	}
 
 	// Load the reverse orientation into SIMD register and create the reverse rotation matrix
-	// for the normals.  This makes sure that lights don't follow the direction of the 
+	// for the normals. This makes sure that lights don't follow the direction of the 
 	// plane, but instead go in the opposite direction
 	auto reverseRotationMatrix = XMMatrixRotationRollPitchYawFromVector( -rotationVector );
 	for( auto &normal : normals )
@@ -64,13 +72,18 @@ void PrimitiveMaker::CreateTriangle( const DirectX::XMFLOAT3 & Center,
 
 }
 
-void PrimitiveMaker::CreatePlane( const DirectX::XMFLOAT3 & Center, const DirectX::XMFLOAT2 & Extent, const DirectX::XMFLOAT3 & Orientation )
+void PrimitiveMaker::CreatePlane( 
+    const DirectX::XMFLOAT3 & Center, 
+    const DirectX::XMFLOAT2 & Extent, 
+    const DirectX::XMFLOAT3 & Orientation )
 {
 	// There needs to be as many normals and uvs as there are vertices, 
 	// there can be more indices
 
-	// Create vertex list
-	vertices = 
+    // TODO: Better name this function
+    auto extentHalf = DirectX::XMFLOAT2( Extent.x * 0.5f, Extent.y * 0.5f );
+	// Create vertex list	
+    vertices = 
 	{
 		{Center.x - Extent.x, Center.y + Extent.y, Center.z},
 		{Center.x + Extent.x, Center.y + Extent.y, Center.z},
@@ -139,10 +152,13 @@ void PrimitiveMaker::CreateCube(
     const DirectX::XMFLOAT3 & Center, 
     const DirectX::XMFLOAT3 & Extent, 
     const DirectX::XMFLOAT3 & Orientation )
-{
+{    
+    // TODO: Better name this function
+    auto extentHalf = DirectX::XMFLOAT3( Extent.x * 0.5f, Extent.y * 0.5f, Extent.z * 0.5f );
+
 	vertices = 
-	{
-		// Left
+	{	
+        // Left
 		{Center.x - Extent.x, Center.y + Extent.y, Center.z + Extent.z},
 		{Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z},
 		{Center.x - Extent.x, Center.y - Extent.y, Center.z + Extent.z},
@@ -316,13 +332,11 @@ void PrimitiveMaker::CreateCube(
 		auto rotatedVector = XMVector3TransformCoord( xmVector, reverseRotationMatrix );
 		XMStoreFloat3( &normal, rotatedVector );
 	}
-
-
 }
 
-DirectX::XMFLOAT4 PrimitiveMaker::CreateColor( float R, float G, float B, float A )
+void PrimitiveMaker::CreateColor( float R, float G, float B, float A )
 {
-	return DirectX::XMFLOAT4( R, G, B, A );
+	color = DirectX::XMFLOAT4( R, G, B, A );
 }
 
 std::vector<DirectX::XMFLOAT3> PrimitiveMaker::GetVertices() const
@@ -343,4 +357,9 @@ std::vector<DirectX::XMFLOAT2> PrimitiveMaker::GetUVs() const
 std::vector<DWORD> PrimitiveMaker::GetIndices() const
 {
 	return indices;
+}
+
+DirectX::XMFLOAT4 PrimitiveMaker::GetColor() const
+{
+	return color;
 }
