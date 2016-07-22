@@ -26,8 +26,11 @@ Camera::~Camera()
 }
 
 // Set up the position and rotation of the camera.
-bool Camera::Initialize( const XMFLOAT3 &Position, const XMFLOAT3 &Rotation,
-	const XMUINT2 &ScreenSize, const XMFLOAT2 &ScreenClipDepth )
+bool Camera::Initialize( 
+    const XMFLOAT3 &Position, 
+    const XMFLOAT3 &Rotation,
+	const XMUINT2 &ScreenSize, 
+    const XMFLOAT2 &ScreenClipDepth )
 {
 	SetPosition( Position );
 	SetRotation( Rotation );
@@ -40,12 +43,20 @@ bool Camera::Initialize( const XMFLOAT3 &Position, const XMFLOAT3 &Rotation,
 	float screenAspect = screenWidth / screenHeight;
 
 	// Create the projection matrix for 3D rendering.
-	m_ProjectionMatrix = XMMatrixPerspectiveFovLH( fieldOfView, screenAspect, ScreenClipDepth.x, ScreenClipDepth.y );
+	m_ProjectionMatrix = XMMatrixPerspectiveFovLH( 
+        fieldOfView, 
+        screenAspect, 
+        ScreenClipDepth.x, 
+        ScreenClipDepth.y );
 
 	// Create an orthographic projection matrix for 2D rendering.
 	// used for rendering 2D elements like user interfaces on the screen 
 	// allowing us to skip the 3D rendering.
-	m_OrthoMatrix = XMMatrixOrthographicLH( screenWidth, screenHeight, ScreenClipDepth.x, ScreenClipDepth.y );
+	m_OrthoMatrix = XMMatrixOrthographicLH( 
+        screenWidth, 
+        screenHeight, 
+        ScreenClipDepth.x, 
+        ScreenClipDepth.y );
 	
 	return true;
 }
@@ -109,20 +120,19 @@ void Camera::Render()
 // GetViewMatrix function. The view matrix will be one of the three main 	 //
 // matrices used in the HLSL vertex shader.									 //
 ///////////////////////////////////////////////////////////////////////////////
-void Camera::GetViewMatrix(XMMATRIX& viewMatrix)
+XMMATRIX Camera::GetViewMatrix()const
 {
-	viewMatrix = m_ViewMatrix;
-	return;
+	return m_ViewMatrix;
 }
 
 // Gives access to projection, world, orthographic matrices because
 // most shaders will need these matrices for rendering
-void Camera::GetProjectionMatrix( XMMATRIX &rProjectionMatrix )
+XMMATRIX Camera::GetProjectionMatrix()const
 {
-	rProjectionMatrix = m_ProjectionMatrix;
+	return m_ProjectionMatrix;
 }
 
-void Camera::GetOrthoMatrix( XMMATRIX & OrthoMatrix )
+XMMATRIX Camera::GetOrthoMatrix()const
 {
-	OrthoMatrix = m_OrthoMatrix;
+	return m_OrthoMatrix;
 }

@@ -28,8 +28,11 @@ public:
 	~Camera();
 
 	// Initialize the camera object
-	bool Initialize( const XMFLOAT3 &Position, const XMFLOAT3 &Rotation,
-		const XMUINT2 &ScreenSize, const XMFLOAT2 &ScreenClipDepth );
+	bool Initialize( 
+        const XMFLOAT3 &Position, 
+        const XMFLOAT3 &Rotation,
+		const XMUINT2 &ScreenSize, 
+        const XMFLOAT2 &ScreenClipDepth );
     // set the position and rotation of the camera object. 
 	void SetPosition( const XMFLOAT3 &Position );
 	void SetRotation( const XMFLOAT3 &Rotation );
@@ -40,10 +43,11 @@ public:
     // create the view matrix based on the position and rotation of the camera. 
 	void Render();
 
-    // retrieve the view matrix from the camera object so that the shaders can use it for rendering.
-	void GetViewMatrix( XMMATRIX& ViewMatrix );
-	void GetProjectionMatrix( XMMATRIX& ProjectionMatrix );
-	void GetOrthoMatrix( XMMATRIX &OrthoMatrix );
+    // retrieve the view matrix from the camera object so that the 
+    // shaders can use it for rendering.
+	XMMATRIX GetViewMatrix()const;
+	XMMATRIX GetProjectionMatrix()const;
+	XMMATRIX GetOrthoMatrix()const;
 
 private:
 	XMFLOAT3 m_Position, m_Rotation;
