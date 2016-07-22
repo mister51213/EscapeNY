@@ -27,7 +27,7 @@ public:
 
 	void BeginDraw();
 	void EndDraw();
-	bool Initialize( D3DGraphics &D3D, const ImageLoader &ImgLoader, const UINT Width, const UINT Height);
+    bool Initialize(const Graphics &Gfx, const UINT Width, const UINT Height);
 	
     IWICBitmap *GetRenderSurface()const;
     
