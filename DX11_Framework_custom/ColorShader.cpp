@@ -1,24 +1,23 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Filename: colorshader.cpp
+// Filename: Shader_Color.cpp
 ////////////////////////////////////////////////////////////////////////////////
-#include "ColorShader.h"
+#include "Shader_Color.h"
+#include "Model.h"
 
 // class constructor initializes all the private pointers in the class to null.
 
-ColorShader::ColorShader()
+Shader_Color::Shader_Color()
 {
 }
 
-
-ColorShader::ColorShader( const ColorShader& other )
+Shader_Color::Shader_Color( const Shader_Color& other )
 {}
 
-
-ColorShader::~ColorShader()
+Shader_Color::~Shader_Color()
 {}
 
 // Pass in the names of the HLSL shader files, color.vs and color.ps
-bool ColorShader::Initialize( ID3D11Device* device, HWND hwnd )
+bool Shader_Color::Initialize( ID3D11Device* device, HWND hwnd, const Model &crModel )
 {
 	bool result;
 
@@ -26,7 +25,8 @@ bool ColorShader::Initialize( ID3D11Device* device, HWND hwnd )
 	result = InitializeShader(
 		device,
 		hwnd,
-		L"color.vs", L"color.ps" );
+		L"Shaders/color.vs", L"Shaders/color.ps",
+		crModel );
 	RETURN_IF_FALSE( result );
 
 	return true;
@@ -36,8 +36,7 @@ bool ColorShader::Initialize( ID3D11Device* device, HWND hwnd )
 // function. Once the parameters are set then call RenderShader to draw 
 // the green triangle using the HLSL shader.
 
-bool ColorShader::Render( ID3D11DeviceContext* deviceContext,
-	int indexCount,
+bool Shader_Color::Render( ID3D11DeviceContext* deviceContext,
 	XMMATRIX & worldMatrix,
 	XMMATRIX & viewMatrix,
 	XMMATRIX & projectionMatrix )
@@ -49,7 +48,7 @@ bool ColorShader::Render( ID3D11DeviceContext* deviceContext,
 	RETURN_IF_FALSE( result );
 
 	// Now render the prepared buffers with the shader.
-	RenderShader( deviceContext, indexCount );
+	RenderShader( deviceContext );
 
 	return true;
 }
@@ -57,10 +56,8 @@ bool ColorShader::Render( ID3D11DeviceContext* deviceContext,
 // This function is what actually loads the shader files and 
 // makes it usable to DirectX and the GPU. 
 
-bool ColorShader::InitializeShader( ID3D11Device* device,
-	HWND hwnd,
-	WCHAR* vsFilename,
-	WCHAR* psFilename )
+bool Shader_Color::InitializeShader( ID3D11Device* device, HWND hwnd, 
+	WCHAR* vsFilename, WCHAR* psFilename, const Model &crModel )
 {
 	//  Compile the shader programs into buffers. We pass the name of the 
 	// shader file, the name of the shader, the shader version (5.0 in DirectX 11), 
@@ -141,30 +138,9 @@ bool ColorShader::InitializeShader( ID3D11Device* device,
 		m_pixelShader.GetAddressOf() );							// Address of the vertex shader
 	RETURN_IF_FAILED( result );
 
-	///////////////////////////////////////////////////////////////////////////////////
-	// Create the layout of the VERTEX DATA that will be processed by the shader.    //
-	// We indicate the usage of each element in the layout to the shader by labeling //
-	// the first one POSITION and the second one COLOR.                              //
-	///////////////////////////////////////////////////////////////////////////////////
-
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the Model class and in the shader.
-	std::vector<D3D11_INPUT_ELEMENT_DESC> polygonLayout( 2 );
-	polygonLayout[ 0 ].SemanticName = "POSITION";
-	polygonLayout[ 0 ].SemanticIndex = 0;
-	polygonLayout[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[ 0 ].InputSlot = 0;
-	polygonLayout[ 0 ].AlignedByteOffset = 0;
-	polygonLayout[ 0 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[ 0 ].InstanceDataStepRate = 0;
-
-	polygonLayout[ 1 ].SemanticName = "COLOR";
-	polygonLayout[ 1 ].SemanticIndex = 0;
-	polygonLayout[ 1 ].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	polygonLayout[ 1 ].InputSlot = 0;
-	polygonLayout[ 1 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[ 1 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[ 1 ].InstanceDataStepRate = 0;
+	auto polygonLayout = crModel.GetInputElementDescriptions();
 
 	// Create the vertex input layout.
 	result = device->CreateInputLayout( 
@@ -194,7 +170,7 @@ bool ColorShader::InitializeShader( ID3D11Device* device,
 	return true;
 }
 
-void ColorShader::OutputShaderErrorMessage( ID3D10Blob* errorMessage,
+void Shader_Color::OutputShaderErrorMessage( ID3D10Blob* errorMessage,
 	HWND hwnd,
 	WCHAR* shaderFilename )
 {
@@ -228,10 +204,8 @@ void ColorShader::OutputShaderErrorMessage( ID3D10Blob* errorMessage,
 // shader during the Render function call.
 //////////////////////////////////////////////////////////////////////////////////
 
-bool ColorShader::SetShaderParameters( ID3D11DeviceContext* deviceContext,
-	XMMATRIX & worldMatrix,
-	XMMATRIX & viewMatrix,
-	XMMATRIX & projectionMatrix )
+bool Shader_Color::SetShaderParameters( ID3D11DeviceContext* deviceContext,
+	XMMATRIX & worldMatrix, XMMATRIX & viewMatrix, XMMATRIX & projectionMatrix )
 {
 	// Lock the constant buffer so it can be written to.
 	D3D11_MAPPED_SUBRESOURCE mappedResource{};
@@ -268,7 +242,7 @@ bool ColorShader::SetShaderParameters( ID3D11DeviceContext* deviceContext,
 
 // Second function called in the Render function;
 // actually does the RENDERING.
-void ColorShader::RenderShader( ID3D11DeviceContext* deviceContext, int indexCount )
+void Shader_Color::RenderShader( ID3D11DeviceContext* deviceContext )
 {
 	// Set the vertex input layout.
 	deviceContext->IASetInputLayout( m_layout.Get() );
@@ -276,9 +250,4 @@ void ColorShader::RenderShader( ID3D11DeviceContext* deviceContext, int indexCou
 	// Set the vertex and pixel shaders that will be used to render this triangle.
 	deviceContext->VSSetShader( m_vertexShader.Get(), NULL, 0 );
 	deviceContext->PSSetShader( m_pixelShader.Get(), NULL, 0 );
-
-	/////////////////////////
-	// RENDER THE TRIANGLE //
-	/////////////////////////
-	deviceContext->DrawIndexed( indexCount, 0, 0 );
 }

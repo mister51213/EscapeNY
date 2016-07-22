@@ -122,9 +122,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ColorShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="D3DGraphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -171,6 +168,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Model_Textured.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_Color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
