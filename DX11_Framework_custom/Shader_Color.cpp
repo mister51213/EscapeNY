@@ -1,6 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Filename: Shader_Color.cpp
 ////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// Includes
+////////////////////////////////////////////////////////////////////////////////
 #include "Shader_Color.h"
 #include "Model.h"
 
@@ -36,7 +40,8 @@ bool Shader_Color::Initialize( ID3D11Device* device, HWND hwnd, const Model &crM
 // function. Once the parameters are set then call RenderShader to draw 
 // the green triangle using the HLSL shader.
 
-bool Shader_Color::Render( ID3D11DeviceContext* deviceContext,
+bool Shader_Color::Render( 
+    ID3D11DeviceContext* deviceContext,
 	XMMATRIX & worldMatrix,
 	XMMATRIX & viewMatrix,
 	XMMATRIX & projectionMatrix )
@@ -204,8 +209,11 @@ void Shader_Color::OutputShaderErrorMessage( ID3D10Blob* errorMessage,
 // shader during the Render function call.
 //////////////////////////////////////////////////////////////////////////////////
 
-bool Shader_Color::SetShaderParameters( ID3D11DeviceContext* deviceContext,
-	XMMATRIX & worldMatrix, XMMATRIX & viewMatrix, XMMATRIX & projectionMatrix )
+bool Shader_Color::SetShaderParameters( 
+    ID3D11DeviceContext* deviceContext,
+	XMMATRIX & worldMatrix, 
+    XMMATRIX & viewMatrix, 
+    XMMATRIX & projectionMatrix )
 {
 	// Lock the constant buffer so it can be written to.
 	D3D11_MAPPED_SUBRESOURCE mappedResource{};

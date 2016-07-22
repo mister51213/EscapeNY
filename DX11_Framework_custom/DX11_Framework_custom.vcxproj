@@ -143,7 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ColorShader.cpp" />
+    <ClCompile Include="Shader_Color.cpp" />
     <ClCompile Include="COMHandler.cpp" />
     <ClCompile Include="D2DGraphics.cpp" />
     <ClCompile Include="D3DGraphics.cpp" />
@@ -161,7 +161,7 @@
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedPlane.cpp" />
-    <ClCompile Include="TextureShader.cpp" />
+    <ClCompile Include="Shader_Texture.cpp" />
     <ClCompile Include="Wic.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -181,10 +181,10 @@
     <ClInclude Include="Model_Textured.h" />
     <ClInclude Include="Overlay.h" />
     <ClInclude Include="PrimitiveMaker.h" />
+    <ClInclude Include="Shader_Texture.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TexturedPlane.h" />
-    <ClInclude Include="TextureShader.h" />
     <ClInclude Include="Utilities.h" />
     <ClInclude Include="Wic.h" />
   </ItemGroup>

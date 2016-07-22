@@ -2,6 +2,7 @@
 // Filename: textureclass.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "Texture.h"
+#include "Graphics.h"
 
 Texture::Texture()
 {
@@ -15,33 +16,39 @@ Texture::~Texture()
 
 Texture & Texture::operator=( const Texture & Tex )
 {
-	m_texture = Tex.m_texture;
-	m_textureView = Tex.m_textureView;
+	m_pTexture = Tex.m_pTexture;
+	m_pTextureView = Tex.m_pTextureView;
 	
 	return *this;
 }
 
-bool Texture::Initialize( ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const std::wstring &Filename )
-{	
+bool Texture::Initialize( const Graphics &Gfx, const std::wstring &Filename )
+{
 	UINT height = 0, width = 0;
 	std::unique_ptr<BYTE[]> pImageData;
-	bool result = loadImageData( Filename, width, height, pImageData );
+	auto pWic = Gfx.GetWIC();
+
+	bool result = loadImageData( Filename, width, height, pImageData, *pWic );
 	RETURN_IF_FALSE( result );
 
+	auto pDevice = Gfx.GetDirect3D()->GetDevice();
+	auto pContext = Gfx.GetDirect3D()->GetDeviceContext();
 	result = createTextureAndResourceView( pDevice, pContext, width, height, pImageData );
 	RETURN_IF_FALSE( result );
 
 	return true;
 }
 
-bool Texture::Initialize( ID3D11Device * pDevice, ID3D11DeviceContext * pContext, 
-	UINT TextureWidth, UINT TextureHeight )
+bool Texture::Initialize( const Graphics &Gfx, UINT TextureWidth, UINT TextureHeight )
 {
+	auto pDevice = Gfx.GetDirect3D()->GetDevice();
+	auto pContext = Gfx.GetDirect3D()->GetDeviceContext();
+	auto pWic = Gfx.GetWIC();
+
 	bool result = false;
 	UINT width = TextureWidth, height = TextureHeight;
-
-	ImageLoader loader;
-	auto imgResult = loader.CreateBitmap( width, height );
+		
+	auto imgResult = ImageLoader::CreateBitmap( width, height, *pWic );
 	result = SUCCEEDED( imgResult.first );
 	RETURN_IF_FALSE( result );
 
@@ -55,9 +62,32 @@ bool Texture::Initialize( ID3D11Device * pDevice, ID3D11DeviceContext * pContext
 	return true;
 }
 
-ID3D11ShaderResourceView* Texture::GetTexture()
+bool Texture::Initialize( const Graphics & Gfx, IWICBitmap * pWicBitmap )
 {
-	return m_textureView.Get();
+	auto pDevice = Gfx.GetDirect3D()->GetDevice();
+	auto pContext = Gfx.GetDirect3D()->GetDeviceContext();
+
+	UINT width = 0, height = 0;
+	pWicBitmap->GetSize( &width, &height );
+
+	std::unique_ptr<BYTE[]> pImageData;
+	bool result = createTextureFromWICImage( pWicBitmap, pImageData );
+	RETURN_IF_FALSE( result );
+
+	result = createTextureAndResourceView( pDevice, pContext, width, height, pImageData, false );
+	RETURN_IF_FALSE( result );
+
+	return true;
+}
+
+ID3D11Texture2D* Texture::GetTexture()const
+{
+	return m_pTexture.Get();
+}
+
+ID3D11ShaderResourceView * Texture::GetTextureView() const
+{
+	return m_pTextureView.Get();
 }
 
 bool Texture::createTextureAndResourceView( ID3D11Device* pDevice, ID3D11DeviceContext* pContext, UINT TextureWidth, UINT TextureHeight, std::unique_ptr<BYTE[]> &pImageData )
@@ -77,10 +107,10 @@ bool Texture::createTextureAndResourceView( ID3D11Device* pDevice, ID3D11DeviceC
 	textureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
 
 	// Create the empty texture.
-	HRESULT hResult = pDevice->CreateTexture2D( &textureDesc, nullptr, m_texture.GetAddressOf() );
+	HRESULT hResult = pDevice->CreateTexture2D( &textureDesc, nullptr, m_pTexture.GetAddressOf() );
 	RETURN_IF_FAILED( hResult );
 
-	pContext->UpdateSubresource( m_texture.Get(), 0, nullptr, pImageData.get(), TextureWidth * 4, 0 );
+	pContext->UpdateSubresource( m_pTexture.Get(), 0, nullptr, pImageData.get(), TextureWidth * 4, 0 );
 
 	// Setup the shader resource view description.
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
@@ -90,24 +120,56 @@ bool Texture::createTextureAndResourceView( ID3D11Device* pDevice, ID3D11DeviceC
 	srvDesc.Texture2D.MipLevels = -1;
 
 	// Create the shader resource view for the texture.
-	hResult = pDevice->CreateShaderResourceView( m_texture.Get(), &srvDesc,
-		m_textureView.GetAddressOf() );
+	hResult = pDevice->CreateShaderResourceView( m_pTexture.Get(), &srvDesc,
+		m_pTextureView.GetAddressOf() );
 	RETURN_IF_FAILED( hResult );
 
 	// Generate mipmaps for this texture.
-	pContext->GenerateMips( m_textureView.Get() );
+	pContext->GenerateMips( m_pTextureView.Get() );
 
 	return true;
 }
 
-bool Texture::loadImageData( const std::wstring &Filename, UINT &TextureWidth, UINT &TextureHeight, std::unique_ptr<BYTE[]> &pImageData )
+bool Texture::createTextureAndResourceView( ID3D11Device * pDevice, ID3D11DeviceContext * pContext, UINT TextureWidth, UINT TextureHeight, std::unique_ptr<BYTE[]>& pImageData, bool MipMapped )
 {
-	ImageLoader loader;
-	bool result = loader.Initialize();
-	RETURN_MESSAGE_IF_FALSE( result, L"Failed to initialize ImageLoader object." );
+	// Setup the description of the texture.
+	D3D11_TEXTURE2D_DESC textureDesc{};
+	textureDesc.Width = TextureWidth;
+	textureDesc.Height = TextureHeight;
+	textureDesc.MipLevels = 1;
+	textureDesc.ArraySize = 1;
+	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.SampleDesc.Quality = 0;
+	textureDesc.Usage = D3D11_USAGE_DYNAMIC;
+	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	textureDesc.MiscFlags = 0;
 
-	auto imgResult = loader.CreateBitmap( Filename );
-	result = SUCCEEDED( imgResult.first );
+	// Create the empty texture.
+	HRESULT hResult = pDevice->CreateTexture2D( &textureDesc, nullptr, m_pTexture.GetAddressOf() );
+	RETURN_IF_FAILED( hResult );
+
+	// Setup the shader resource view description.
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = textureDesc.Format;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.MipLevels = -1;
+
+	// Create the shader resource view for the texture.
+	hResult = pDevice->CreateShaderResourceView( m_pTexture.Get(), &srvDesc,
+		m_pTextureView.GetAddressOf() );
+	RETURN_IF_FAILED( hResult );
+
+	return true;
+}
+
+bool Texture::loadImageData( const std::wstring &Filename, UINT &TextureWidth, 
+	UINT &TextureHeight, std::unique_ptr<BYTE[]> &pImageData, const Wic &crWic )
+{	
+	auto imgResult = ImageLoader::CreateBitmap( Filename, crWic );
+	bool result = SUCCEEDED( imgResult.first );
 	RETURN_MESSAGE_IF_FALSE( result, L"Not a supported file type, or file not found." );
 
 	imgResult.second->GetSize( &TextureWidth, &TextureHeight );
@@ -156,4 +218,3 @@ bool Texture::createTextureFromWICImage( IWICBitmap * pBitmap, std::unique_ptr<B
 
 	return true;
 }
-

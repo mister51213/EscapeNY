@@ -54,9 +54,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ColorShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="D3DGraphics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -81,9 +78,6 @@
     <ClCompile Include="Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextureShader.cpp">
-      <Filter>Source Files\Shader Files</Filter>
-    </ClCompile>
     <ClCompile Include="COMHandler.cpp">
       <Filter>Header Files\Utility Classes</Filter>
     </ClCompile>
@@ -98,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="Model_Textured.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader_Color.cpp">
+      <Filter>Source Files\Shader Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader_Texture.cpp">
+      <Filter>Source Files\Shader Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,9 +149,6 @@
     <ClInclude Include="TexturedPlane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TextureShader.h">
-      <Filter>Header Files\Shader Files</Filter>
-    </ClInclude>
     <ClInclude Include="COMHandler.h">
       <Filter>Source Files\Utility Classes</Filter>
     </ClInclude>
@@ -167,11 +164,14 @@
     <ClInclude Include="Model_Textured.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shader_Color.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_Color.h">
+      <Filter>Header Files\Shader Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_Texture.h">
+      <Filter>Header Files\Shader Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
