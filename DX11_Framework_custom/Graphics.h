@@ -2,6 +2,8 @@
 ///////////////////////
 // MY CLASS INCLUDES //
 ///////////////////////
+#include "Wic.h"
+#include "D2DGraphics.h"
 #include "D3DGraphics.h"
 
 /////////////

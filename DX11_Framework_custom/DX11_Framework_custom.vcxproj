@@ -159,6 +159,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedPlane.cpp" />
     <ClCompile Include="TextureShader.cpp" />
+    <ClCompile Include="Wic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\Desktop\temp\Input.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="TexturedPlane.h" />
     <ClInclude Include="TextureShader.h" />
     <ClInclude Include="Utilities.h" />
+    <ClInclude Include="Wic.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Development Guidelines.txt" />

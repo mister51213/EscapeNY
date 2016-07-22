@@ -87,6 +87,9 @@
     <ClCompile Include="COMHandler.cpp">
       <Filter>Header Files\Utility Classes</Filter>
     </ClCompile>
+    <ClCompile Include="Wic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -148,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="COMHandler.h">
       <Filter>Source Files\Utility Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Wic.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
