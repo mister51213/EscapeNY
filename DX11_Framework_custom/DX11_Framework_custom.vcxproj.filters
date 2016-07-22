@@ -22,6 +22,12 @@
     <Filter Include="Source Files\Shader Files">
       <UniqueIdentifier>{a6998fbc-ca4d-46fb-87e5-e3556b32e64b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utility Classes">
+      <UniqueIdentifier>{a7b5fdcc-9e5f-4f66-bf48-4c3ec09063d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility Classes">
+      <UniqueIdentifier>{3c9be18c-2946-45b3-9678-04c45bc2b5e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -77,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="TextureShader.cpp">
       <Filter>Source Files\Shader Files</Filter>
+    </ClCompile>
+    <ClCompile Include="COMHandler.cpp">
+      <Filter>Header Files\Utility Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="TextureShader.h">
       <Filter>Header Files\Shader Files</Filter>
+    </ClInclude>
+    <ClInclude Include="COMHandler.h">
+      <Filter>Source Files\Utility Classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

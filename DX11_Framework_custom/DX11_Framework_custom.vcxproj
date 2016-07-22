@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ColorShader.cpp" />
+    <ClCompile Include="COMHandler.cpp" />
     <ClCompile Include="D2DGraphics.cpp" />
     <ClCompile Include="D3DGraphics.cpp" />
     <ClCompile Include="FontLoader.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="..\..\..\..\..\Desktop\temp\Input.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ColorShader.h" />
+    <ClInclude Include="COMHandler.h" />
     <ClInclude Include="D2DGraphics.h" />
     <ClInclude Include="D3DGraphics.h" />
     <ClInclude Include="FontLoader.h" />
