@@ -1,5 +1,5 @@
 #include "D3DGraphics.h"
-
+#include "Texture.h"
 
 D3DGraphics::D3DGraphics()
 {
@@ -13,7 +13,10 @@ D3DGraphics::~D3DGraphics()
 {
 }
 
-bool D3DGraphics::Initialize( UINT ScreenWidth, UINT ScreenHeight, bool VSync, 
+bool D3DGraphics::Initialize( 
+    UINT ScreenWidth, 
+    UINT ScreenHeight, 
+    bool VSync, 
 	HWND WinHandle, bool Fullscreen)
 {
 	// Store the vsync setting.
@@ -59,20 +62,101 @@ void D3DGraphics::Shutdown()
 	}
 }
 
+comptr<ID3D11Texture2D> D3DGraphics::CreateTexture2D( 
+    UINT Width, 
+    UINT Height, 
+    DXGI_FORMAT Format,
+	BOOL IsWritable, 
+    UINT MipLevels, 
+    UINT ArraySize, 
+    UINT SampleCount, 
+    UINT SampleQuality,
+	D3D11_USAGE Usage, 
+    D3D11_BIND_FLAG BindFlag, 
+    UINT MiscFlag, 
+    LPVOID pImageData )
+{
+	comptr<ID3D11Texture2D> pTexture;
+
+	// TODO: Testing section
+	UINT qualityLevels = 0;
+	HRESULT hr = m_pDevice->CheckMultisampleQualityLevels( Format, SampleCount, &qualityLevels );
+	RETURN_IF_FAILED( hr );
+
+	RETURN_MESSAGE_IF_FALSE( SampleQuality <= qualityLevels,
+		L"The sample quality requested isn't supported by your graphics card." );
+	// End of Testing section
+
+	// Setup the description of the texture.
+	D3D11_TEXTURE2D_DESC textureDesc{};
+	textureDesc.Width = Width;
+	textureDesc.Height = Height;
+	textureDesc.MipLevels = IsWritable ? 1 : MipLevels;
+	textureDesc.ArraySize = ArraySize;
+	textureDesc.Format = Format;
+	textureDesc.SampleDesc.Count = SampleCount;
+	textureDesc.SampleDesc.Quality = SampleQuality;
+	textureDesc.Usage = IsWritable ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
+	textureDesc.BindFlags = BindFlag;
+	textureDesc.CPUAccessFlags = IsWritable ? D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE : 0;
+	textureDesc.MiscFlags = MiscFlag;
+
+	D3D11_SUBRESOURCE_DATA srData{};
+	D3D11_SUBRESOURCE_DATA *pSrData = ( pImageData != nullptr ) ? &srData : nullptr;
+	if( pImageData )
+	{
+		pSrData = &srData;
+		srData.pSysMem = pImageData;
+		srData.SysMemPitch = Width * 4;
+		srData.SysMemSlicePitch = srData.SysMemPitch * Height;
+	}
+	// Create the empty texture.
+	HRESULT hResult = m_pDevice->CreateTexture2D( &textureDesc, pSrData, pTexture.GetAddressOf() );
+	RETURN_IF_FAILED( hResult );
+
+
+
+	return pTexture;
+}
+
+comptr<ID3D11ShaderResourceView> D3DGraphics::CreateShaderResourceView( const Texture & Tex )
+{
+	D3D11_TEXTURE2D_DESC texDesc{};
+	auto pTexture = Tex.GetTexture();
+	pTexture->GetDesc( &texDesc );
+
+	// Setup the shader resource view description.
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = texDesc.Format;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.MipLevels = -1;
+
+	comptr<ID3D11ShaderResourceView> pSrv;
+	// Create the shader resource view for the texture.
+	HRESULT hResult = m_pDevice->CreateShaderResourceView( pTexture, &srvDesc,
+		pSrv.GetAddressOf() );
+	if( FAILED( hResult ) )
+	{
+		MessageBox( nullptr, L"Failed to create shader resource view.", L"Error!", MB_OK );
+	}
+	return pSrv;
+}
+
 //////////////////////
 // HELPER FUNCTIONS //
 //////////////////////
 
 // Get pointers to the Direct3D device and the Direct3D device context. 
 // These helper functions will be called by the framework often.
-ID3D11Device* D3DGraphics::GetDevice()
+ID3D11Device* D3DGraphics::GetDevice()const
 {
-	return m_device.Get();
+	return m_pDevice.Get();
 }
 
-ID3D11DeviceContext* D3DGraphics::GetDeviceContext()
+ID3D11DeviceContext* D3DGraphics::GetDeviceContext()const
 {
-	return m_deviceContext.Get();
+	return m_pDeviceContext.Get();
 }
 
 
@@ -193,12 +277,15 @@ bool D3DGraphics::initializeDeviceAndSwapchain( UINT ScreenWidth, UINT ScreenHei
 	// Don't set the advanced flags.
 	swapChainDesc.Flags = 0;
 
-
+	UINT flags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+#ifdef _DEBUG
+	flags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
 	// Create the swap chain, Direct3D device, and Direct3D device context.
 	RETURN_IF_FAILED( D3D11CreateDeviceAndSwapChain(
-		nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, &featureLevel, 1,
-		D3D11_SDK_VERSION, &swapChainDesc, m_swapChain.GetAddressOf(), 
-		m_device.GetAddressOf(), nullptr, m_deviceContext.GetAddressOf() 
+		nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, flags, &featureLevel, 1,
+		D3D11_SDK_VERSION, &swapChainDesc, m_pSwapChain.GetAddressOf(), 
+		m_pDevice.GetAddressOf(), nullptr, m_pDeviceContext.GetAddressOf()
 	) );
 
 	return true;
@@ -209,11 +296,11 @@ bool D3DGraphics::initializeBackBuffer()
 	comptr<ID3D11Texture2D> pBackBuffer;
 
 	// Get the pointer to the back buffer.
-	RETURN_IF_FAILED( m_swapChain->GetBuffer( 0, IID_PPV_ARGS(pBackBuffer.GetAddressOf() ) ) );
+	RETURN_IF_FAILED( m_pSwapChain->GetBuffer( 0, IID_PPV_ARGS(pBackBuffer.GetAddressOf() ) ) );
 
 	// Create the render target view with the back buffer pointer.
-	RETURN_IF_FAILED( m_device->CreateRenderTargetView( pBackBuffer.Get(), NULL,
-		m_renderTargetView.GetAddressOf() ) );
+	RETURN_IF_FAILED( m_pDevice->CreateRenderTargetView( pBackBuffer.Get(), NULL,
+		m_pRenderTargetView.GetAddressOf() ) );
 
 	return true;
 }
@@ -222,6 +309,14 @@ bool D3DGraphics::initializeDepthBuffer( UINT ScreenWidth, UINT ScreenHeight )
 {
 	// Initialize the description of the depth buffer.
 	D3D11_TEXTURE2D_DESC depthBufferDesc{};
+
+	auto pDepthBuffer = CreateTexture2D( 
+		ScreenWidth, ScreenHeight,
+		DXGI_FORMAT_D24_UNORM_S8_UINT, 
+		FALSE, 1, 1, 1, 0, 
+		D3D11_USAGE_DEFAULT, 
+		D3D11_BIND_DEPTH_STENCIL 
+	);
 
 	// Set up the description of the depth buffer.
 	depthBufferDesc.Width = ScreenWidth;
@@ -237,7 +332,7 @@ bool D3DGraphics::initializeDepthBuffer( UINT ScreenWidth, UINT ScreenHeight )
 	depthBufferDesc.MiscFlags = 0;
 
 	// Create the texture for the depth buffer using the filled out description.
-	RETURN_IF_FAILED( m_device->CreateTexture2D( &depthBufferDesc, NULL, m_depthStencilBuffer.GetAddressOf() ) );
+	RETURN_IF_FAILED( m_pDevice->CreateTexture2D( &depthBufferDesc, NULL, m_pDepthStencilBuffer.GetAddressOf() ) );
 	
 	return true;
 }
@@ -269,10 +364,10 @@ bool D3DGraphics::initializeDepthStencilState()
 	depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 	// Create the depth stencil state.	
-	RETURN_IF_FAILED( m_device->CreateDepthStencilState( &depthStencilDesc, m_depthStencilState.GetAddressOf() ) );
+	RETURN_IF_FAILED( m_pDevice->CreateDepthStencilState( &depthStencilDesc, m_pDepthStencilState.GetAddressOf() ) );
 
 	// Set the depth stencil state.
-	m_deviceContext->OMSetDepthStencilState( m_depthStencilState.Get(), 1 );
+	m_pDeviceContext->OMSetDepthStencilState( m_pDepthStencilState.Get(), 1 );
 
 	return true;
 }
@@ -288,12 +383,12 @@ bool D3DGraphics::initializeDepthStencilView()
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 
 	// Create the depth stencil view.
-	RETURN_IF_FAILED( m_device->CreateDepthStencilView(
-		m_depthStencilBuffer.Get(), &depthStencilViewDesc, m_depthStencilView.GetAddressOf() ) );
+	RETURN_IF_FAILED( m_pDevice->CreateDepthStencilView(
+		m_pDepthStencilBuffer.Get(), &depthStencilViewDesc, m_pDepthStencilView.GetAddressOf() ) );
 
 	// Bind the render target view and depth stencil buffer to the output render pipeline.
-	m_deviceContext->OMSetRenderTargets( 1, m_renderTargetView.GetAddressOf(), 
-		m_depthStencilView.Get() );
+	m_pDeviceContext->OMSetRenderTargets( 1, m_pRenderTargetView.GetAddressOf(),
+		m_pDepthStencilView.Get() );
 
 	return true;
 }
@@ -307,17 +402,17 @@ bool D3DGraphics::initializeRasterizer()
 	rasterDesc.DepthBias = 0;
 	rasterDesc.DepthBiasClamp = 0.0f;
 	rasterDesc.DepthClipEnable = true;
-	rasterDesc.FillMode = D3D11_FILL_SOLID;
+	rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
 	rasterDesc.FrontCounterClockwise = false;
 	rasterDesc.MultisampleEnable = false;
 	rasterDesc.ScissorEnable = false;
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
 
 	// Create the rasterizer state from the description we just filled out.
-	RETURN_IF_FAILED( m_device->CreateRasterizerState( &rasterDesc, m_rasterState.GetAddressOf() ) );
+	RETURN_IF_FAILED( m_pDevice->CreateRasterizerState( &rasterDesc, m_pRasterState.GetAddressOf() ) );
 
 	// Now set the rasterizer state.
-	m_deviceContext->RSSetState( m_rasterState.Get() );
+	m_pDeviceContext->RSSetState( m_pRasterState.Get() );
 
 	return true;
 }
@@ -334,8 +429,7 @@ bool D3DGraphics::initializeViewport( UINT ScreenWidth, UINT ScreenHeight )
 	viewport.TopLeftY = 0.0f;
 
 	// Create the viewport.
-	m_deviceContext->RSSetViewports( 1, &viewport );
+	m_pDeviceContext->RSSetViewports( 1, &viewport );
 
 	return true;
 }
-
