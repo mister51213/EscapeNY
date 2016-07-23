@@ -1,17 +1,8 @@
 #include "D3DGraphics.h"
-
-using namespace DirectX;
+#include "Texture.h"
 
 D3DGraphics::D3DGraphics()
 {
-    m_swapChain = 0;
-	m_device = 0;
-	m_deviceContext = 0;
-	m_renderTargetView = 0;
-	m_depthStencilBuffer = 0;
-	m_depthStencilState = 0;
-	m_depthStencilView = 0;
-	m_rasterState = 0;
 }
 
 D3DGraphics::D3DGraphics(const D3DGraphics& other)
@@ -22,138 +13,240 @@ D3DGraphics::~D3DGraphics()
 {
 }
 
-bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, 
-			  float screenDepth, float screenNear)
+bool D3DGraphics::Initialize( 
+    UINT ScreenWidth, 
+    UINT ScreenHeight, 
+    bool VSync, 
+	HWND WinHandle, bool Fullscreen)
 {
-	HRESULT result;
-	IDXGIFactory* factory;
-	IDXGIAdapter* adapter;
-	IDXGIOutput* adapterOutput;
-	unsigned int numModes, i, numerator, denominator, stringLength;
-	DXGI_MODE_DESC* displayModeList;
-	DXGI_ADAPTER_DESC adapterDesc;
-	int error;
-	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-	D3D_FEATURE_LEVEL featureLevel;
-	ID3D11Texture2D* backBufferPtr;
-	D3D11_TEXTURE2D_DESC depthBufferDesc;
-	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
-	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
-	D3D11_RASTERIZER_DESC rasterDesc;
-	D3D11_VIEWPORT viewport;
-	float fieldOfView, screenAspect;
-
-
 	// Store the vsync setting.
-	m_vsync_enabled = vsync;
-    	
-    // Create a DirectX graphics interface factory.
-	result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
-	if(FAILED(result))
+	m_vsync_enabled = VSync;
+
+	// initialize adapter info and get refresh-rate
+	DXGI_RATIONAL refreshRate{0,1};
+
+	RETURN_IF_FALSE( initializeAdapterInfo( ScreenWidth, ScreenHeight, refreshRate ) );
+
+	// Create device, device context and swap chain
+	RETURN_IF_FALSE( initializeDeviceAndSwapchain( ScreenWidth, ScreenHeight, refreshRate, 
+		WinHandle, Fullscreen ) );
+
+	// Create back buffer
+	RETURN_IF_FALSE( initializeBackBuffer() );
+
+	// Create depth buffer
+	RETURN_IF_FALSE( initializeDepthBuffer( ScreenWidth, ScreenHeight ) );
+
+	// Create and set depth stencil state
+	RETURN_IF_FALSE( initializeDepthStencilState() );
+
+	// Create depth stencil view and set render targets
+	RETURN_IF_FALSE( initializeDepthStencilView() );
+
+	// Create and set rasterizer state	
+	RETURN_IF_FALSE( initializeRasterizer() );
+
+	// Create and set viewport
+	RETURN_IF_FALSE( initializeViewport( ScreenWidth, ScreenHeight ) );
+
+	return true;
+}
+
+void D3DGraphics::Shutdown()
+{
+	// Force the swap chain to go into windowed mode first before 
+    // releasing any pointers. Otherwise exceptions can be thrown.
+	if(m_pSwapChain)
 	{
-		return false;
+		m_pSwapChain->SetFullscreenState(false, NULL);
 	}
+}
+
+comptr<ID3D11Texture2D> D3DGraphics::CreateTexture2D( 
+    UINT Width, 
+    UINT Height, 
+    DXGI_FORMAT Format,
+	BOOL IsWritable, 
+    UINT MipLevels, 
+    UINT ArraySize, 
+    UINT SampleCount, 
+    UINT SampleQuality,
+	D3D11_USAGE Usage, 
+    D3D11_BIND_FLAG BindFlag, 
+    UINT MiscFlag, 
+    LPVOID pImageData )
+{
+	comptr<ID3D11Texture2D> pTexture;
+
+	// TODO: Testing section
+	UINT qualityLevels = 0;
+	HRESULT hr = m_pDevice->CheckMultisampleQualityLevels( Format, SampleCount, &qualityLevels );
+	RETURN_IF_FAILED( hr );
+
+	RETURN_MESSAGE_IF_FALSE( SampleQuality <= qualityLevels,
+		L"The sample quality requested isn't supported by your graphics card." );
+	// End of Testing section
+
+	// Setup the description of the texture.
+	D3D11_TEXTURE2D_DESC textureDesc{};
+	textureDesc.Width = Width;
+	textureDesc.Height = Height;
+	textureDesc.MipLevels = IsWritable ? 1 : MipLevels;
+	textureDesc.ArraySize = ArraySize;
+	textureDesc.Format = Format;
+	textureDesc.SampleDesc.Count = SampleCount;
+	textureDesc.SampleDesc.Quality = SampleQuality;
+	textureDesc.Usage = IsWritable ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
+	textureDesc.BindFlags = BindFlag;
+	textureDesc.CPUAccessFlags = IsWritable ? D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE : 0;
+	textureDesc.MiscFlags = MiscFlag;
+
+	D3D11_SUBRESOURCE_DATA srData{};
+	D3D11_SUBRESOURCE_DATA *pSrData = ( pImageData != nullptr ) ? &srData : nullptr;
+	if( pImageData )
+	{
+		pSrData = &srData;
+		srData.pSysMem = pImageData;
+		srData.SysMemPitch = Width * 4;
+		srData.SysMemSlicePitch = srData.SysMemPitch * Height;
+	}
+	// Create the empty texture.
+	HRESULT hResult = m_pDevice->CreateTexture2D( &textureDesc, pSrData, pTexture.GetAddressOf() );
+	RETURN_IF_FAILED( hResult );
+
+
+
+	return pTexture;
+}
+
+comptr<ID3D11ShaderResourceView> D3DGraphics::CreateShaderResourceView( const Texture & Tex )
+{
+	D3D11_TEXTURE2D_DESC texDesc{};
+	auto pTexture = Tex.GetTexture();
+	pTexture->GetDesc( &texDesc );
+
+	// Setup the shader resource view description.
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = texDesc.Format;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.MipLevels = -1;
+
+	comptr<ID3D11ShaderResourceView> pSrv;
+	// Create the shader resource view for the texture.
+	HRESULT hResult = m_pDevice->CreateShaderResourceView( pTexture, &srvDesc,
+		pSrv.GetAddressOf() );
+	if( FAILED( hResult ) )
+	{
+		MessageBox( nullptr, L"Failed to create shader resource view.", L"Error!", MB_OK );
+	}
+	return pSrv;
+}
+
+//////////////////////
+// HELPER FUNCTIONS //
+//////////////////////
+
+// Get pointers to the Direct3D device and the Direct3D device context. 
+// These helper functions will be called by the framework often.
+ID3D11Device* D3DGraphics::GetDevice()const
+{
+	return m_pDevice.Get();
+}
+
+ID3D11DeviceContext* D3DGraphics::GetDeviceContext()const
+{
+	return m_pDeviceContext.Get();
+}
+
+
+void D3DGraphics::GetVideoCardInfo( std::wstring &Description, int& Memory )
+{
+	Description = m_videoCardDescription;
+	Memory = m_videoCardMemory;
+	return;
+}
+
+bool D3DGraphics::initializeAdapterInfo( UINT ScreenWidth, UINT ScreenHeight, DXGI_RATIONAL &Ratio )
+{
+	comptr<IDXGIFactory> pFactory;
+	comptr<IDXGIAdapter> pAdapter;
+	comptr<IDXGIOutput> pAdapterOutput;
+
+	// Create a DirectX graphics interface factory.
+	RETURN_IF_FAILED( CreateDXGIFactory( IID_PPV_ARGS( pFactory.GetAddressOf() ) ) );
 
 	// Use the factory to create an adapter for the primary graphics interface (video card).
-	result = factory->EnumAdapters(0, &adapter);
-	if(FAILED(result))
-	{
-		return false;
-	}
+	RETURN_IF_FAILED( pFactory->EnumAdapters( 0, pAdapter.GetAddressOf() ) );
 
 	// Enumerate the primary adapter output (monitor).
-	result = adapter->EnumOutputs(0, &adapterOutput);
-	if(FAILED(result))
-	{
-		return false;
-	}
+	RETURN_IF_FAILED( pAdapter->EnumOutputs( 0, pAdapterOutput.GetAddressOf() ) );
 
-	// Get the number of modes that fit the DXGI_FORMAT_R8G8B8A8_UNORM display format for the adapter output (monitor).
-	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, NULL);
-	if(FAILED(result))
-	{
-		return false;
-	}
+	// Get the number of modes that fit the DXGI_FORMAT_R8G8B8A8_UNORM 
+	// display format for the adapter output (monitor).
+	UINT numModes = 0;
+	RETURN_IF_FAILED( pAdapterOutput->GetDisplayModeList( DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_ENUM_MODES_INTERLACED, &numModes, NULL ) );
 
-	// Create a list to hold all the possible display modes for this monitor/video card combination.
-	displayModeList = new DXGI_MODE_DESC[numModes];
-	if(!displayModeList)
-	{
-		return false;
-	}
-
+	// Create a list to hold all the possible display modes for this monitor/video 
+	// card combination.
+	std::vector<DXGI_MODE_DESC> displayModeList( numModes );
+	RETURN_IF_FALSE( !displayModeList.empty() );
+	
 	// Now fill the display mode list structures.
-	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, displayModeList);
-	if(FAILED(result))
-	{
-		return false;
-	}
+	RETURN_IF_FAILED( pAdapterOutput->GetDisplayModeList( DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_ENUM_MODES_INTERLACED, &numModes, displayModeList.data() ) );
 
 	// Now go through all the display modes and find the one that matches the screen width and height.
 	// When a match is found store the numerator and denominator of the refresh rate for that monitor.
-	for(i=0; i<numModes; i++)
+	for( UINT i = 0; i<numModes; i++ )
 	{
-		if(displayModeList[i].Width == (unsigned int)screenWidth)
+		if( displayModeList[ i ].Width == ScreenWidth )
 		{
-			if(displayModeList[i].Height == (unsigned int)screenHeight)
+			if( displayModeList[ i ].Height == ScreenHeight )
 			{
-				numerator = displayModeList[i].RefreshRate.Numerator;
-				denominator = displayModeList[i].RefreshRate.Denominator;
+				Ratio.Numerator = displayModeList[ i ].RefreshRate.Numerator;
+				Ratio.Denominator = displayModeList[ i ].RefreshRate.Denominator;
 			}
 		}
 	}
 
 	// Get the adapter (video card) description.
-	result = adapter->GetDesc(&adapterDesc);
-	if(FAILED(result))
-	{
-		return false;
-	}
-
+	DXGI_ADAPTER_DESC adapterDesc{};
+	RETURN_IF_FAILED( pAdapter->GetDesc( &adapterDesc ) );
+	
 	// Store the dedicated video card memory in megabytes.
-	m_videoCardMemory = (int)(adapterDesc.DedicatedVideoMemory / 1024 / 1024);
+	m_videoCardMemory = (int)( adapterDesc.DedicatedVideoMemory / 1024 / 1024 );
 
-	//// Convert the name of the video card to a character array and store it.
-	//error = wcstombs_s(&stringLength, m_videoCardDescription, 128, adapterDesc.Description, 128);
-	//if(error != 0)
-	//{
-	//	return false;
-	//}
-    
-	// Release the display mode list.
-	delete [] displayModeList;
-	displayModeList = 0;
+	// Store the video card description
+	m_videoCardDescription = adapterDesc.Description;
+	
+	return true;
+}
 
-	// Release the adapter output.
-	adapterOutput->Release();
-	adapterOutput = 0;
-
-	// Release the adapter.
-	adapter->Release();
-	adapter = 0;
-
-	// Release the factory.
-	factory->Release();
-	factory = 0;
+bool D3DGraphics::initializeDeviceAndSwapchain( UINT ScreenWidth, UINT ScreenHeight,
+	DXGI_RATIONAL RefreshRate, HWND WinHandle, bool FullScreen )
+{
+	// Set the feature level to DirectX 11.
+	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 
 	// Initialize the swap chain description.
-	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
+	DXGI_SWAP_CHAIN_DESC swapChainDesc{};
 
 	// Set to a single back buffer.
 	swapChainDesc.BufferCount = 1;
 
 	// Set the width and height of the back buffer.
-	swapChainDesc.BufferDesc.Width = screenWidth;
-	swapChainDesc.BufferDesc.Height = screenHeight;
+	swapChainDesc.BufferDesc.Width = ScreenWidth;
+	swapChainDesc.BufferDesc.Height = ScreenHeight;
 
 	// Set regular 32-bit surface for the back buffer.
 	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    
+
 	// Set the refresh rate of the back buffer.
-	if(m_vsync_enabled)
+	if( m_vsync_enabled )
 	{
-		swapChainDesc.BufferDesc.RefreshRate.Numerator = numerator;
-		swapChainDesc.BufferDesc.RefreshRate.Denominator = denominator;
+		swapChainDesc.BufferDesc.RefreshRate = RefreshRate;
 	}
 	else
 	{
@@ -165,21 +258,14 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
 	// Set the handle for the window to render to.
-	swapChainDesc.OutputWindow = hwnd;
+	swapChainDesc.OutputWindow = WinHandle;
 
 	// Turn multisampling off.
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.SampleDesc.Quality = 0;
 
 	// Set to full screen or windowed mode.
-	if(fullscreen)
-	{
-		swapChainDesc.Windowed = false;
-	}
-	else
-	{
-		swapChainDesc.Windowed = true;
-	}
+	swapChainDesc.Windowed = !FullScreen;
 
 	// Set the scan line ordering and scaling to unspecified.
 	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
@@ -190,42 +276,51 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 
 	// Don't set the advanced flags.
 	swapChainDesc.Flags = 0;
-    
-	// Set the feature level to DirectX 11.
-	featureLevel = D3D_FEATURE_LEVEL_11_0;
-    
+
+	UINT flags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+#ifdef _DEBUG
+	flags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
 	// Create the swap chain, Direct3D device, and Direct3D device context.
-	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1, 
-					       D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, NULL, &m_deviceContext);
-	if(FAILED(result))
-	{
-		return false;
-	}
-    
+	RETURN_IF_FAILED( D3D11CreateDeviceAndSwapChain(
+		nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, flags, &featureLevel, 1,
+		D3D11_SDK_VERSION, &swapChainDesc, m_pSwapChain.GetAddressOf(), 
+		m_pDevice.GetAddressOf(), nullptr, m_pDeviceContext.GetAddressOf()
+	) );
+
+	return true;
+}
+
+bool D3DGraphics::initializeBackBuffer()
+{
+	comptr<ID3D11Texture2D> pBackBuffer;
+
 	// Get the pointer to the back buffer.
-	result = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr);
-	if(FAILED(result))
-	{
-		return false;
-	}
+	RETURN_IF_FAILED( m_pSwapChain->GetBuffer( 0, IID_PPV_ARGS(pBackBuffer.GetAddressOf() ) ) );
 
 	// Create the render target view with the back buffer pointer.
-	result = m_device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
-	if(FAILED(result))
-	{
-		return false;
-	}
+	RETURN_IF_FAILED( m_pDevice->CreateRenderTargetView( pBackBuffer.Get(), NULL,
+		m_pRenderTargetView.GetAddressOf() ) );
 
-	// Release pointer to the back buffer as we no longer need it.
-	backBufferPtr->Release();
-	backBufferPtr = 0;
+	return true;
+}
 
+bool D3DGraphics::initializeDepthBuffer( UINT ScreenWidth, UINT ScreenHeight )
+{
 	// Initialize the description of the depth buffer.
-	ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
+	D3D11_TEXTURE2D_DESC depthBufferDesc{};
+
+	auto pDepthBuffer = CreateTexture2D( 
+		ScreenWidth, ScreenHeight,
+		DXGI_FORMAT_D24_UNORM_S8_UINT, 
+		FALSE, 1, 1, 1, 0, 
+		D3D11_USAGE_DEFAULT, 
+		D3D11_BIND_DEPTH_STENCIL 
+	);
 
 	// Set up the description of the depth buffer.
-	depthBufferDesc.Width = screenWidth;
-	depthBufferDesc.Height = screenHeight;
+	depthBufferDesc.Width = ScreenWidth;
+	depthBufferDesc.Height = ScreenHeight;
 	depthBufferDesc.MipLevels = 1;
 	depthBufferDesc.ArraySize = 1;
 	depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -237,14 +332,15 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	depthBufferDesc.MiscFlags = 0;
 
 	// Create the texture for the depth buffer using the filled out description.
-	result = m_device->CreateTexture2D(&depthBufferDesc, NULL, &m_depthStencilBuffer);
-	if(FAILED(result))
-	{
-		return false;
-	}
-    
+	RETURN_IF_FAILED( m_pDevice->CreateTexture2D( &depthBufferDesc, NULL, m_pDepthStencilBuffer.GetAddressOf() ) );
+	
+	return true;
+}
+
+bool D3DGraphics::initializeDepthStencilState()
+{
 	// Initialize the description of the stencil state.
-	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
+	D3D11_DEPTH_STENCIL_DESC depthStencilDesc{};
 
 	// Set up the description of the stencil state.
 	depthStencilDesc.DepthEnable = true;
@@ -266,19 +362,20 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
 	depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-    
-	// Create the depth stencil state.
-	result = m_device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
-	if(FAILED(result))
-	{
-		return false;
-	}
-    
-	// Set the depth stencil state.
-	m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
 
-	// Initailze the depth stencil view.
-	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
+	// Create the depth stencil state.	
+	RETURN_IF_FAILED( m_pDevice->CreateDepthStencilState( &depthStencilDesc, m_pDepthStencilState.GetAddressOf() ) );
+
+	// Set the depth stencil state.
+	m_pDeviceContext->OMSetDepthStencilState( m_pDepthStencilState.Get(), 1 );
+
+	return true;
+}
+
+bool D3DGraphics::initializeDepthStencilView()
+{
+	// Initialize the depth stencil view.
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc{};
 
 	// Set up the depth stencil view description.
 	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -286,199 +383,53 @@ bool D3DGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, HWND
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 
 	// Create the depth stencil view.
-	result = m_device->CreateDepthStencilView(m_depthStencilBuffer, &depthStencilViewDesc, &m_depthStencilView);
-	if(FAILED(result))
-	{
-		return false;
-	}
+	RETURN_IF_FAILED( m_pDevice->CreateDepthStencilView(
+		m_pDepthStencilBuffer.Get(), &depthStencilViewDesc, m_pDepthStencilView.GetAddressOf() ) );
 
 	// Bind the render target view and depth stencil buffer to the output render pipeline.
-	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
+	m_pDeviceContext->OMSetRenderTargets( 1, m_pRenderTargetView.GetAddressOf(),
+		m_pDepthStencilView.Get() );
 
+	return true;
+}
+
+bool D3DGraphics::initializeRasterizer()
+{
 	// Setup the raster description which will determine how and what polygons will be drawn.
+	D3D11_RASTERIZER_DESC rasterDesc{};
 	rasterDesc.AntialiasedLineEnable = false;
 	rasterDesc.CullMode = D3D11_CULL_BACK;
 	rasterDesc.DepthBias = 0;
 	rasterDesc.DepthBiasClamp = 0.0f;
 	rasterDesc.DepthClipEnable = true;
-	rasterDesc.FillMode = D3D11_FILL_SOLID;
+	rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
 	rasterDesc.FrontCounterClockwise = false;
 	rasterDesc.MultisampleEnable = false;
 	rasterDesc.ScissorEnable = false;
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
 
 	// Create the rasterizer state from the description we just filled out.
-	result = m_device->CreateRasterizerState(&rasterDesc, &m_rasterState);
-	if(FAILED(result))
-	{
-		return false;
-	}
+	RETURN_IF_FAILED( m_pDevice->CreateRasterizerState( &rasterDesc, m_pRasterState.GetAddressOf() ) );
 
 	// Now set the rasterizer state.
-	m_deviceContext->RSSetState(m_rasterState);
-    
-	// Float casted screenWidth and screenHeight
-	float fScreenWidth = static_cast<float>( screenWidth );
-	float fScreenHeight = static_cast<float>( screenHeight );
+	m_pDeviceContext->RSSetState( m_pRasterState.Get() );
 
+	return true;
+}
+
+bool D3DGraphics::initializeViewport( UINT ScreenWidth, UINT ScreenHeight )
+{
 	// Setup the viewport for rendering.
-	viewport.Width = fScreenWidth;
-	viewport.Height = fScreenHeight;
+	D3D11_VIEWPORT viewport{};
+	viewport.Width = static_cast<float>( ScreenWidth );
+	viewport.Height = static_cast<float>( ScreenHeight );
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
 
 	// Create the viewport.
-	m_deviceContext->RSSetViewports(1, &viewport);
-
-	// Setup the projection matrix.
-	fieldOfView = DirectX::XM_PIDIV4;
-	screenAspect = fScreenWidth / fScreenHeight;
-
-	// Create the projection matrix for 3D rendering.	
-	m_projectionMatrix = 
-		XMMatrixPerspectiveFovLH( fieldOfView, screenAspect, screenNear, screenDepth );
-	    
-	// Initialize the world matrix to the identity matrix.
-	m_worldMatrix = XMMatrixIdentity();
-    
-	// Create an orthographic projection matrix for 2D rendering.
-	m_orthoMatrix = 
-		XMMatrixOrthographicLH( fScreenWidth, fScreenHeight, screenNear, screenDepth 
-	);
-	
+	m_pDeviceContext->RSSetViewports( 1, &viewport );
 
 	return true;
-}
-
-void D3DGraphics::Shutdown()
-{
-	// Before shutting down set to windowed mode or when you release the swap chain it will throw an exception.
-	if(m_swapChain)
-	{
-		m_swapChain->SetFullscreenState(false, NULL);
-	}
-
-	if(m_rasterState)
-	{
-		m_rasterState->Release();
-		m_rasterState = 0;
-	}
-
-	if(m_depthStencilView)
-	{
-		m_depthStencilView->Release();
-		m_depthStencilView = 0;
-	}
-
-	if(m_depthStencilState)
-	{
-		m_depthStencilState->Release();
-		m_depthStencilState = 0;
-	}
-
-	if(m_depthStencilBuffer)
-	{
-		m_depthStencilBuffer->Release();
-		m_depthStencilBuffer = 0;
-	}
-
-	if(m_renderTargetView)
-	{
-		m_renderTargetView->Release();
-		m_renderTargetView = 0;
-	}
-
-	if(m_deviceContext)
-	{
-		m_deviceContext->Release();
-		m_deviceContext = 0;
-	}
-
-	if(m_device)
-	{
-		m_device->Release();
-		m_device = 0;
-	}
-
-	if(m_swapChain)
-	{
-		m_swapChain->Release();
-		m_swapChain = 0;
-	}
-
-	return;
-}
-
-void D3DGraphics::BeginScene(float red, float green, float blue, float alpha)
-{
-	float color[4];
-
-
-	// Setup the color to clear the buffer to.
-	color[0] = red;
-	color[1] = green;
-	color[2] = blue;
-	color[3] = alpha;
-
-	// Clear the back buffer.
-	m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
-    
-	// Clear the depth buffer.
-	m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-
-	return;
-}
-
-void D3DGraphics::EndScene()
-{
-	// Present the back buffer to the screen since rendering is complete.
-	if(m_vsync_enabled)
-	{
-		// Lock to screen refresh rate.
-		m_swapChain->Present(1, 0);
-	}
-	else
-	{
-		// Present as fast as possible.
-		m_swapChain->Present(0, 0);
-	}
-
-	return;
-}
-
-ID3D11Device* D3DGraphics::GetDevice()const
-{
-	return m_device;
-}
-
-ID3D11DeviceContext* D3DGraphics::GetDeviceContext()const
-{
-	return m_deviceContext;
-}
-
-void D3DGraphics::GetProjectionMatrix( DirectX::XMMATRIX& projectionMatrix)
-{
-	projectionMatrix = m_projectionMatrix;
-	return;
-}
-
-void D3DGraphics::GetWorldMatrix( DirectX::XMMATRIX& worldMatrix)
-{
-	worldMatrix = m_worldMatrix;
-	return;
-}
-
-void D3DGraphics::GetOrthoMatrix( DirectX::XMMATRIX& orthoMatrix)
-{
-	orthoMatrix = m_orthoMatrix;
-	return;
-}
-
-void D3DGraphics::GetVideoCardInfo(char* cardName, int& memory)
-{
-	strcpy_s(cardName, 128, m_videoCardDescription);
-	memory = m_videoCardMemory;
-	return;
 }

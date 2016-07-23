@@ -22,7 +22,7 @@
     <ProjectGuid>{7200C84D-46ED-4C68-AF3C-DCD45066CA7C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DX11_Framework_custom</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -74,14 +74,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -100,7 +98,7 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -128,7 +126,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -144,25 +142,61 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Shader_Color.cpp" />
+    <ClCompile Include="COMHandler.cpp" />
     <ClCompile Include="D2DGraphics.cpp" />
     <ClCompile Include="D3DGraphics.cpp" />
     <ClCompile Include="FontLoader.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MazeGenerator.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Model_Colored.cpp" />
+    <ClCompile Include="Model_Textured.cpp" />
+    <ClCompile Include="Overlay.cpp" />
+    <ClCompile Include="PrimitiveMaker.cpp" />
     <ClCompile Include="System.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TexturedPlane.cpp" />
+    <ClCompile Include="Shader_Texture.cpp" />
+    <ClCompile Include="Wic.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Shader_Color.h" />
+    <ClInclude Include="COMHandler.h" />
     <ClInclude Include="D2DGraphics.h" />
     <ClInclude Include="D3DGraphics.h" />
     <ClInclude Include="FontLoader.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="ImageLoader.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="MazeGenerator.h" />
+    <ClInclude Include="Includes.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="Model_Colored.h" />
+    <ClInclude Include="Model_Textured.h" />
+    <ClInclude Include="Overlay.h" />
+    <ClInclude Include="PrimitiveMaker.h" />
+    <ClInclude Include="Shader_Texture.h" />
     <ClInclude Include="System.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TexturedPlane.h" />
+    <ClInclude Include="Utilities.h" />
+    <ClInclude Include="Wic.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Development Guidelines.txt" />
+    <Text Include="Devel_Template.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Color.ps" />
+    <None Include="Color.vs" />
+    <None Include="texture.ps" />
+    <None Include="texture.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,36 @@
+Development Cycle
+
+Updates 7.16.16
+-Merged new D2DGraphics class and architecture reshuffling changes into master.
+-We will both be working on this master version of the framework from now on.
+
+TODO:
+Greg
+-Properly implement Texture class in Framework
+1) Add a Clone of Model.h/cpp - "ModelTextured.h/cpp"
+2) Successfully implement basic texturing on a single triangle
+3) Successfully implement mapping of this texture onto new 
+    3DPrimitive objects in framework
+-Add a new class "Direction" that uses 3D vectors to determine facing direction
+of an object, basic directional motion, collision detection (?); start to work out unit 
+vector functionality in framework
+
+Josh
+-Start working on procedural level generation
+Projected process from our last discussion:
+1) Start w a map filled with non-passable tiles (cars).
+Randomly "burrow through" to clear a path to the exit.
+2) After clearing the path, use cellular automata concept to test
+each cleared cell for game criteria.
+3) Also test each nonpassable cell w/ cellular automata concept
+for adherence to game principles (for example, there would have to
+be at least two cells adjacent to each nonpassable cell, on opposite sides
+to allow the player to get in and push the object into the opposite open space.
+4) After an appropriate map has been generated, replace the nonpassable
+cells with cars. Also take into account single cells (cars occupy two cells
+each). 
+*Possibly add "motorcycles" that only occupy one cell, or just free the
+single cells.
+5) Further AI testing to push cars into place in such a way that the exit
+is blocked, but there is at least way to push the cars out of the way
+and clear a path to win.

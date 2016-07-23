@@ -1,111 +1,144 @@
+//////////////////////////////////////////////////////////////////////////
+// Filename: graphics.cpp
+//////////////////////////////////////////////////////////////////////////
 #include "Graphics.h"
+#include "Model.h"
 
 Graphics::Graphics()
 {
-    // initialize pointer to null for safety
-	m_pD3D = 0;
 }
 
 Graphics::Graphics(const Graphics& other)
 {
 }
 
-
 Graphics::~Graphics()
 {
 }
 
-
-bool Graphics::Initialize(int screenWidth, int screenHeight, HWND hwnd)
+bool Graphics::Initialize( 
+    int ScreenWidth, 
+    int ScreenHeight, 
+    HWND WinHandle,
+	float Red, 
+    float Green, 
+    float Blue, 
+    float Alpha )
 {
-    // Create Direct 3D object
-    m_pD3D = new D3DGraphics;
-	bool result = ( m_pD3D != nullptr );
+	// Create the Windows Imaging Component object
+	m_pWic.reset( new Wic );
+	RETURN_MESSAGE_IF_FALSE( m_pWic != nullptr,
+		L"Could not allocate memory for Windows Imaging Component object." );
 
-	if( !result )
-	{
-		MessageBox( hwnd, L"Could not allocate memory for D3DGraphics", L"error", MB_OK );
-		return false;
-    }
-    
-	// Initialize Direct3D object
-	result = m_pD3D->Initialize(
-		screenWidth, screenHeight,
-		VSYNC_ENABLED, hwnd, FULL_SCREEN,
-		SCREEN_DEPTH, SCREEN_NEAR );
-	if( !result )
-	{
-		MessageBox( hwnd, L"Could not initialize Direct3D", L"error", MB_OK );
-		return false;
-	}
-	
-	// Initialize ImageLoader
-	m_pImgLoader = std::make_unique<ImageLoader>();
-	result = m_pImgLoader->Initialize();
-	if( !result )
-	{
-		MessageBox( hwnd, L"Could not initialize the ImageLoader", L"error", MB_OK );
-		return false;
-	}
+	// Initialize the Windows Imaging Comonent object	
+	RETURN_MESSAGE_IF_FALSE( m_pWic->Initialize(),
+		L"Could not initialize the Windows Imaging Component ." );
 
-	// Initialize Direct2D
-	m_pD2D = std::make_unique<D2DGraphics>();
-	result = m_pD2D->Initialize( *m_pD3D, *m_pImgLoader, screenWidth, screenHeight );
-	if( !result )
-	{
-		MessageBox( hwnd, L"Could not initialize Direct2D", L"error", MB_OK );
-		return false;
-	}
+	// Set background color
+	SetBackgroundColor( Red, Green, Blue, Alpha );
 
-	// Initialize FontLoader
-	m_pFntLoader = std::make_unique<FontLoader>();
-	result = m_pFntLoader->Initialize();
-	if( !result )
-	{
-		MessageBox( hwnd, L"Could not initialize FontLoader", L"error", MB_OK );
-		return false;
-	}
+	// Create the Direct3D object.
+	m_pDirect3D.reset( new D3DGraphics );
+	RETURN_MESSAGE_IF_FALSE( m_pDirect3D != nullptr,
+		L"Could not allocate memory for Direct3D object.");
+
+	// Initialize the Direct3D object.	
+	RETURN_MESSAGE_IF_FALSE( m_pDirect3D->Initialize( ScreenWidth, ScreenHeight,
+		VSYNC_ENABLED, WinHandle, FULL_SCREEN ), L"Could not initialize Direct3D." );
+
+	// Create the Direct3D object.
+	m_pDirect2D.reset( new D2DGraphics );
+	RETURN_MESSAGE_IF_FALSE( m_pDirect3D != nullptr,
+		L"Could not allocate memory for Direct2D object." );
+
+	// Initialize the Direct3D object.	
+	RETURN_MESSAGE_IF_FALSE( 
+		m_pDirect2D->Initialize( *this, ScreenWidth, ScreenHeight ), 
+		L"Could not initialize Direct3D." );
 
 	return true;
 }
 
-bool Graphics::Frame()
+// Called at the beginning of each frame whenever we are going to draw a new 3D scene.
+// Initializes the buffers so they are blank and ready to be drawn to.
+void Graphics::BeginScene()
 {
-    bool result;
+	auto pContext = m_pDirect3D->m_pDeviceContext.Get();
+	auto pRenderTargetView = m_pDirect3D->m_pRenderTargetView.Get();
+	auto pDepthStencilView = m_pDirect3D->m_pDepthStencilView.Get();
 
-	// Render the graphics scene each frame.
-	result = Render();
-	
-	return result;
+	// Clear the back buffer.
+	pContext->ClearRenderTargetView( pRenderTargetView, m_backgroundColor );
+
+	// Clear the depth buffer.
+	pContext->ClearDepthStencilView( pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
 }
 
-bool Graphics::Render()
-{
-    // Clear the buffers to begin the scene.
-	m_pD3D->BeginScene(0.5f, 0.5f, 0.5f, 1.0f);
-
-	/*********************************************************************/
-	// This section should be after the D3D rendering
-	m_pD2D->BeginDraw();
-	// Renders the string using the default font (Arial)
-	auto positionAndSize = D2D1::RectF( 0.f, 0.f, 90.f, 24.f );
-	m_pD2D->DrawString( L"This is a sample string", *m_pFntLoader, positionAndSize );
-	// Finalize the 2D rendering
-	m_pD2D->EndDraw();
-	// Render overlay surface
-	m_pD2D->Render( *m_pD3D );
-
-	// TODO: Needs the Texture class and TextureShader classes to be finished
-	// Will need to set the overlay as the active shader resource before presenting
-	/*********************************************************************/
-	// Present the rendered scene to the screen.
-	m_pD3D->EndScene();
-
-	return true;
+// Tells the swap chain to display our 3D scene once all 
+// the drawing has completed at the end of each frame.
+void Graphics::EndScene()
+{	
+	// Present the back buffer to the screen since rendering is complete.
+	m_pDirect3D->m_pSwapChain->Present( m_pDirect3D->m_vsync_enabled ? 1 : 0, 0 );
 }
 
-void Graphics::Shutdown()
+void Graphics::BeginDraw2D()const
 {
+	m_pDirect2D->BeginDraw();
+}
 
-	return;
+void Graphics::EndDraw2D()const
+{
+	m_pDirect2D->EndDraw();
+}
+
+void Graphics::RenderString( const std::wstring & String, IDWriteTextFormat *pFont, const D2D1_RECT_F &PositionAndSize )const
+{
+	m_pDirect2D->m_pRenderTarget->DrawTextW( String.c_str(), String.size(), pFont, PositionAndSize,
+		m_pDirect2D->m_pBrush.Get() );
+}
+
+void Graphics::RenderModel( const Model &rModel )const
+{
+	// Set vertex buffer stride and offset.
+	auto indexCount = rModel.GetIndexCount();
+	unsigned int stride = rModel.GetStride();
+	unsigned int offset = 0;
+	auto pVertexBuffer = rModel.GetVertexBuffer();
+	auto pIndexBuffer = rModel.GetIndexBuffer();
+
+	// Set the vertex buffer to active in the input assembler so it can be rendered.
+	m_pDirect3D->m_pDeviceContext->IASetVertexBuffers( 0, 1, &pVertexBuffer, &stride, &offset );
+
+	// Set the index buffer to active in the input assembler so it can be rendered.
+	m_pDirect3D->m_pDeviceContext->IASetIndexBuffer( pIndexBuffer, DXGI_FORMAT_R32_UINT, 0 );
+
+	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
+	m_pDirect3D->m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+
+	m_pDirect3D->m_pDeviceContext->DrawIndexed( indexCount, 0, 0 );
+
+}
+
+void Graphics::SetBackgroundColor( float Red, float Green, float Blue, float Alpha )
+{
+	m_backgroundColor[ 0 ] = Red;
+	m_backgroundColor[ 1 ] = Green;
+	m_backgroundColor[ 2 ] = Blue;
+	m_backgroundColor[ 3 ] = Alpha;
+}
+
+D3DGraphics * Graphics::GetDirect3D() const
+{
+	return m_pDirect3D.get();
+}
+
+Wic * Graphics::GetWIC() const
+{
+	return m_pWic.get();
+}
+
+D2DGraphics * Graphics::GetDirect2D() const
+{
+	return m_pDirect2D.get();
 }

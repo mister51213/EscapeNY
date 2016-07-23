@@ -8,25 +8,30 @@
 *					  Direct2D														*
 *  Requirements		:																*
 *************************************************************************************/
-
-#include <string>
-#include <wincodec.h>
-#include <wrl.h>
-
-#pragma comment(lib, "windowscodecs.lib")
+#include "Includes.h"
+#include "Utilities.h"
+#include "Wic.h"
 
 using WicBitmapResult = std::pair<HRESULT, Microsoft::WRL::ComPtr<IWICBitmap>>;
 
 class ImageLoader
 {
+	struct TargaHeader
+	{
+		unsigned char data1[ 12 ];
+		unsigned short width;
+		unsigned short height;
+		unsigned char bpp;
+		unsigned char data2;
+	};
+
 public:
 	ImageLoader();
 	~ImageLoader();
 
-	bool Initialize();
-	WicBitmapResult  CreateBitmap( const std::wstring &Filename )const;
-	WicBitmapResult  CreateBitmap( const UINT Width, const UINT Height )const;
+	static WicBitmapResult CreateBitmap( const std::wstring &Filename, const Wic &crWic );
+	static WicBitmapResult CreateBitmap( const UINT Width, const UINT Height, const Wic &rcWic );
 private:
-	Microsoft::WRL::ComPtr<IWICImagingFactory> m_pFactory;
-};
+	static WicBitmapResult loadTarga( const std::wstring &Filename, const Wic &rcWic );
 
+};
