@@ -2,16 +2,6 @@
 // Filename: texture.ps
 ////////////////////////////////////////////////////////////////////////////////
 
-// Texture2D shaderTexture which is the texture resource, used for 
-// rendering the texture on the model.
-
-// The SamplerState SampleType allows us to modify how the pixels are
-// written to the polygon face when shaded.
-
-// For example, if there is a 256x256 pixel texture on a polygon, but 
-// the polygon is far away in the virtual space such that it only makes
-// up 8 pixels on screen, it will decide which pixels to draw from the original.
-
 /////////////
 // GLOBALS //
 /////////////
@@ -30,13 +20,13 @@ struct PixelInputType
 ////////////////////////////////////////////////////////////////////////////////
 // Pixel Shader
 ////////////////////////////////////////////////////////////////////////////////
-float4 TexturePixelShader(PixelInputType input) : SV_TARGET
+float4 main(PixelInputType input) : SV_TARGET
 {
     float4 textureColor;
-
 
     // Sample the pixel color from the texture using the sampler at this texture coordinate location.
     textureColor = shaderTexture.Sample(SampleType, input.tex);
 
     return textureColor;
 }
+

@@ -183,9 +183,9 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Color.ps" />
-    <None Include="Color.vs" />
-    <None Include="texture.vs" />
-    <None Include="texture.ps" />
+    <FxCompile Include="Shaders\Color_ps.hlsl" />
+    <FxCompile Include="Shaders\Color_vs.hlsl" />
+    <FxCompile Include="Shaders\texture_ps.hlsl" />
+    <FxCompile Include="Shaders\texture_vs.hlsl" />
   </ItemGroup>
 </Project>

@@ -29,7 +29,7 @@ bool Shader_Color::Initialize( ID3D11Device* device, HWND hwnd, const Model &crM
 	result = InitializeShader(
 		device,
 		hwnd,
-		L"Shaders/color.vs", L"Shaders/color.ps",
+		L"Shaders/color_vs.cso", L"Shaders/color_ps.cso",
 		crModel );
 	RETURN_IF_FALSE( result );
 
