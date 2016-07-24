@@ -127,6 +127,14 @@ bool Shader_Color::InitializeShader( ID3D11Device* device, HWND hwnd,
 	// Now we will use the buffers of compiled shader code to create 
 	// the shader objects themselves.
 
+
+
+
+
+
+
+
+
 	// Create the vertex shader from the buffer.
 	result = device->CreateVertexShader( 
 		vertexShaderBuffer->GetBufferPointer(),					// Shader byte-code

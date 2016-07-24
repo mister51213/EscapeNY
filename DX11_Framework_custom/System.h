@@ -31,7 +31,7 @@ class System
 {
 public:
 	System();
-	System( const System& ) = delete;
+	System( const System& ) = delete; // never creates the copy constructor
 	~System();
 
 	bool Initialize();

@@ -39,9 +39,11 @@ ID3D11Buffer * Model::GetIndexBuffer() const
 	return m_indexBuffer.Get();
 }
 
-//////////////////////////////////////////////
-// TODO: Explain this function better
-//////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+// Stride is the size of one unit of info in an array
+// for example one row in a pixel array representing the screen (pitch)
+// or one Vertex containing 3D COORDINATE and UV COORDINATE info
+///////////////////////////////////////////////////////////////////////
 UINT Model::GetStride() const
 {
 	return m_Stride;

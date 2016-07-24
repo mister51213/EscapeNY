@@ -18,7 +18,7 @@ const float SCREEN_NEAR = 0.1f;
 // Class name: Graphics
 ////////////////////////////////////////////////////////////////////////////////
 
-// FWD DECLARATION 
+// FWD DECLARATION (to avoid circular dependency; Model includes Graphics.h)
 class Model;
 
 class Graphics
