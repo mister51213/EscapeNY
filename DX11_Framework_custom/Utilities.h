@@ -43,7 +43,7 @@ struct VertexPositionColorType
 		std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
 		eDesc[ 0 ].SemanticName = "POSITION";
 		eDesc[ 0 ].SemanticIndex = 0;
-		eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		eDesc[ 0 ].InputSlot = 0;
 		eDesc[ 0 ].AlignedByteOffset = 0;
 		eDesc[ 0 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -73,7 +73,7 @@ struct VertexPositionUVType
 		std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
 		eDesc[ 0 ].SemanticName = "POSITION";
 		eDesc[ 0 ].SemanticIndex = 0;
-		eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		eDesc[ 0 ].InputSlot = 0;
 		eDesc[ 0 ].AlignedByteOffset = 0;
 		eDesc[ 0 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
