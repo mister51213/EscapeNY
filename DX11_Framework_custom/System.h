@@ -31,7 +31,7 @@ class System
 {
 public:
 	System();
-	System( const System& ) = delete;
+	System( const System& ) = delete; // never creates the copy constructor
 	~System();
 
 	bool Initialize();
@@ -50,10 +50,10 @@ private:
 	HINSTANCE m_hInstance;
 	HWND m_hwnd;
 
+    COMHandler comHandler;
 	std::unique_ptr<Input> m_Input;
 	std::unique_ptr<Graphics> m_Graphics;
 	std::unique_ptr<Game> m_pGame;
-    COMHandler comHandler;
 	bool done;
 };
 

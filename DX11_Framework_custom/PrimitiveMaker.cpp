@@ -69,7 +69,6 @@ void PrimitiveMaker::CreateTriangle(
 		auto rotatedVector = XMVector3TransformCoord( xmVector, reverseRotationMatrix );
 		XMStoreFloat3( &normal, rotatedVector );
 	}
-
 }
 
 void PrimitiveMaker::CreatePlane( 
@@ -80,7 +79,7 @@ void PrimitiveMaker::CreatePlane(
 	// There needs to be as many normals and uvs as there are vertices, 
 	// there can be more indices
 
-    // TODO: Better name this function
+    // Extent half is size of the object in each direction
     auto extentHalf = DirectX::XMFLOAT2( Extent.x * 0.5f, Extent.y * 0.5f );
 	// Create vertex list	
     vertices = 
@@ -150,61 +149,61 @@ void PrimitiveMaker::CreatePlane(
 
 void PrimitiveMaker::CreateCube( 
     const DirectX::XMFLOAT3 & Center, 
-    const DirectX::XMFLOAT3 & Extent, 
+    const DirectX::XMFLOAT3 & Size, 
     const DirectX::XMFLOAT3 & Orientation )
 {    
     // TODO: Better name this function
-    auto extentHalf = DirectX::XMFLOAT3( Extent.x * 0.5f, Extent.y * 0.5f, Extent.z * 0.5f );
+    auto extentHalf = DirectX::XMFLOAT3( Size.x * 0.5f, Size.y * 0.5f, Size.z * 0.5f );
 
 	vertices = 
 	{	
         // Left
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z - Extent.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
 
 		// Right
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z + Extent.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
 
 		// Bottom
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z + Extent.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
 
 		// Top
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z - Extent.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
 
 		// Front
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z - Extent.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
 
 		// Back
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z + Extent.z}
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z}
 	};
 
 	normals = 
