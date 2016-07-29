@@ -29,8 +29,14 @@ bool Shader_Texture::InitializeShader(
     WCHAR* psFilename,
 	const Model &crModel )
 {	
-    LPCWSTR VertexShaderFilename = vsFilename;
-    LPCWSTR PixelShaderFilename = psFilename;
+    // these were the old parameters that work; must match their format:
+    // const std::wstring &VertexShaderFilename, const std::wstring &PixelShaderFilename,
+
+    const std::wstring &VertexShaderFilename = vsFilename;
+    //LPCWSTR VertexShaderFilename = vsFilename;
+
+    const std::wstring &PixelShaderFilename = psFilename;
+    //LPCWSTR PixelShaderFilename = psFilename;
 
 	// Initialize the pointers this function will use to null.
 	comptr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer, pErrorMessage;
