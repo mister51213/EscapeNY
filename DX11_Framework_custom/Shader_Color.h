@@ -11,8 +11,7 @@
 //////////////
 // INCLUDES //
 //////////////
-#include "Includes.h"
-#include "Utilities.h"
+#include "Shader.h"
 
 using namespace DirectX;
 using namespace std;
@@ -24,15 +23,8 @@ class Model;
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: Shader_Color
 ////////////////////////////////////////////////////////////////////////////////
-class Shader_Color
+class Shader_Color:public Shader
 {
-private:
-	struct MatrixBufferType
-	{
-		XMMATRIX world;
-		XMMATRIX view;
-		XMMATRIX projection;
-	};
 
 public:
 	Shader_Color();
@@ -43,15 +35,21 @@ public:
 	bool Render( ID3D11DeviceContext*, XMMATRIX &, XMMATRIX &, XMMATRIX & );
 
 private:
-	bool InitializeShader( ID3D11Device*, HWND, WCHAR*, WCHAR*, const Model &crModel );
-	void OutputShaderErrorMessage( ID3D10Blob*, HWND, WCHAR* );
+	virtual bool InitializeShader( 
+        ID3D11Device*, 
+        HWND, 
+        WCHAR*, 
+        WCHAR*, 
+        const Model &crModel );
 
-	bool SetShaderParameters( ID3D11DeviceContext*, XMMATRIX &, XMMATRIX &, XMMATRIX & );
+	void OutputShaderErrorMessage( 
+        ID3D10Blob*, 
+        HWND, WCHAR* );
+
+	bool SetShaderParameters( 
+        ID3D11DeviceContext*, 
+        XMMATRIX &, 
+        XMMATRIX &, 
+        XMMATRIX & );
 	void RenderShader( ID3D11DeviceContext* );
-
-private:
-	comptr<ID3D11VertexShader> m_vertexShader;
-	comptr<ID3D11PixelShader> m_pixelShader;
-	comptr<ID3D11InputLayout> m_layout;
-	comptr<ID3D11Buffer> m_matrixBuffer;
 };

@@ -9,11 +9,11 @@
 #include "Shader_Texture.h"
 #include "Model.h"
 
-Shader_Texture::Shader_Texture()
+Shader_Texture::Shader_Texture():Shader(L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso")
 {
 }
 
-Shader_Texture::Shader_Texture( const Shader_Texture& other )
+Shader_Texture::Shader_Texture( const Shader_Texture& other ):Shader(L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso")
 {}
 
 Shader_Texture::~Shader_Texture()
@@ -22,7 +22,7 @@ Shader_Texture::~Shader_Texture()
 bool Shader_Texture::Initialize( ID3D11Device* pDevice, HWND WinHandle, const Model &crModel )
 {
 	// Initialize the vertex and pixel shaders.
-	bool result = initializeShader( 
+	bool result = InitializeShader( 
 		pDevice, 
 		WinHandle, 
 		L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso", 
@@ -45,8 +45,11 @@ bool Shader_Texture::Render( ID3D11DeviceContext* deviceContext, XMMATRIX worldM
 	return true;
 }
 
-bool Shader_Texture::initializeShader( ID3D11Device* pDevice, HWND WinHandle,
-	const std::wstring &VertexShaderFilename, const std::wstring &PixelShaderFilename,
+bool Shader_Texture::InitializeShader( 
+    ID3D11Device* pDevice, 
+    HWND WinHandle,
+	const std::wstring &VertexShaderFilename, 
+    const std::wstring &PixelShaderFilename,
 	const Model &crModel )
 {	
 	// Initialize the pointers this function will use to null.
@@ -162,8 +165,12 @@ void Shader_Texture::outputShaderErrorMessage( ID3D10Blob* pErrorMessage, HWND W
 	MessageBox( WinHandle, L"Error compiling shader.  Check shader-error.txt for message.", ShaderFilename.c_str(), MB_OK );
 }
 
-bool Shader_Texture::setShaderParameters( ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
-	XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture )
+bool Shader_Texture::setShaderParameters( 
+    ID3D11DeviceContext* deviceContext, 
+    XMMATRIX worldMatrix, 
+    XMMATRIX viewMatrix,
+	XMMATRIX projectionMatrix, 
+    ID3D11ShaderResourceView* texture )
 {
 	// Lock the constant buffer so it can be written to.
 	D3D11_MAPPED_SUBRESOURCE mappedResource{};

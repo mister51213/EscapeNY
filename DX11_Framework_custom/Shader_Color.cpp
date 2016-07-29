@@ -10,11 +10,10 @@
 
 // class constructor initializes all the private pointers in the class to null.
 
-Shader_Color::Shader_Color()
-{
-}
+Shader_Color::Shader_Color():Shader(L"Shaders/color_vs.cso",L"Shaders/color_ps.cso")
+{}
 
-Shader_Color::Shader_Color( const Shader_Color& other )
+Shader_Color::Shader_Color( const Shader_Color& other ):Shader(L"Shaders/color_vs.cso",L"Shaders/color_ps.cso")
 {}
 
 Shader_Color::~Shader_Color()
@@ -29,7 +28,8 @@ bool Shader_Color::Initialize( ID3D11Device* device, HWND hwnd, const Model &crM
 	result = InitializeShader(
 		device,
 		hwnd,
-		L"Shaders/color_vs.cso", L"Shaders/color_ps.cso",
+        m_vsFilename,
+        m_psFilename,
 		crModel );
 	RETURN_IF_FALSE( result );
 
@@ -61,8 +61,12 @@ bool Shader_Color::Render(
 // This function is what actually loads the shader files and 
 // makes it usable to DirectX and the GPU. 
 
-bool Shader_Color::InitializeShader( ID3D11Device* device, HWND hwnd, 
-	WCHAR* vsFilename, WCHAR* psFilename, const Model &crModel )
+bool Shader_Color::InitializeShader( 
+    ID3D11Device* device, 
+    HWND hwnd, 
+	WCHAR* vsFilename, 
+    WCHAR* psFilename, 
+    const Model &crModel )
 {
 	//  Compile the shader programs into buffers. We pass the name of the 
 	// shader file, the name of the shader, the shader version (5.0 in DirectX 11), 
@@ -126,14 +130,6 @@ bool Shader_Color::InitializeShader( ID3D11Device* device, HWND hwnd,
 
 	// Now we will use the buffers of compiled shader code to create 
 	// the shader objects themselves.
-
-
-
-
-
-
-
-
 
 	// Create the vertex shader from the buffer.
 	result = device->CreateVertexShader( 
