@@ -25,7 +25,8 @@ public:
 	Shader_Texture( const Shader_Texture& );
 	~Shader_Texture();
 
-	bool Render( ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView* );
+    // TODO: Why does color shader pass this as ref, but texture shader doesnt?
+	//bool Render
 
 	virtual bool InitializeShader( 
         ID3D11Device*, 
@@ -42,14 +43,12 @@ public:
         ID3DBlob **ppShaderBuffer, 
         ID3DBlob **ppErrorMessage );
 
-
-
 	void outputShaderErrorMessage( 
         ID3D10Blob* pErrorMessage, 
         HWND WinHandle, 
         const std::wstring &ShaderFilename );
 
-	virtual bool setShaderParameters( 
+	virtual bool SetShaderParameters( 
         ID3D11DeviceContext*, 
         XMMATRIX, 
         XMMATRIX, 

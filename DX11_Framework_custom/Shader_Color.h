@@ -31,11 +31,12 @@ public:
 	Shader_Color( const Shader_Color& );
 	~Shader_Color();
 
-	bool Render( 
-        ID3D11DeviceContext* deviceContext, 
-        XMMATRIX & worldMatrix, 
-        XMMATRIX & viewMatrix, 
-        XMMATRIX & projectionMatrix);
+    // TODO: Why does color shader pass this as ref, but texture shader doesnt?
+	//bool Render( 
+ //       ID3D11DeviceContext* deviceContext, 
+ //       XMMATRIX & worldMatrix, 
+ //       XMMATRIX & viewMatrix, 
+ //       XMMATRIX & projectionMatrix);
 
 	virtual bool InitializeShader( 
         ID3D11Device*, 

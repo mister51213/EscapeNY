@@ -18,40 +18,9 @@ Shader_Texture::Shader_Texture( const Shader_Texture& other ):Shader(L"Shaders/t
 Shader_Texture::~Shader_Texture()
 {}
 
-//bool Shader_Texture::Initialize( ID3D11Device* pDevice, HWND WinHandle, const Model &crModel )
-//{
-//	// Initialize the vertex and pixel shaders.
-//	bool result = InitializeShader( 
-//		pDevice, 
-//		WinHandle, 
-//		m_vsFilename, m_psFilename, 
-//		crModel );
-//	RETURN_IF_FALSE( result );
-//
-//	return true;
-//}
-
-bool Shader_Texture::Render( 
-    ID3D11DeviceContext* deviceContext, 
-    XMMATRIX worldMatrix, 
-    XMMATRIX viewMatrix,
-	XMMATRIX projectionMatrix, 
-    ID3D11ShaderResourceView* texture )
-{
-	// Set the shader parameters that it will use for rendering.
-	bool result = setShaderParameters( 
-        deviceContext, 
-        worldMatrix, 
-        viewMatrix, 
-        projectionMatrix, 
-        texture );
-	RETURN_IF_FALSE( result );
-
-	// Now render the prepared buffers with the shader.
-	renderShader( deviceContext );
-
-	return true;
-}
+//bool Shader_Texture::Initialize(
+// TODO: Why does color shader pass this as ref, but texture shader doesnt?
+//bool Shader_Texture::Render
 
 bool Shader_Texture::InitializeShader( 
     ID3D11Device* pDevice, 
@@ -175,7 +144,7 @@ void Shader_Texture::outputShaderErrorMessage( ID3D10Blob* pErrorMessage, HWND W
 	MessageBox( WinHandle, L"Error compiling shader.  Check shader-error.txt for message.", ShaderFilename.c_str(), MB_OK );
 }
 
-bool Shader_Texture::setShaderParameters( 
+bool Shader_Texture::SetShaderParameters( 
     ID3D11DeviceContext* deviceContext, 
     XMMATRIX worldMatrix, 
     XMMATRIX viewMatrix,

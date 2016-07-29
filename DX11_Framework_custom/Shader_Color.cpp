@@ -40,25 +40,26 @@ Shader_Color::~Shader_Color()
 // function. Once the parameters are set then call RenderShader to draw 
 // the green triangle using the HLSL shader.
 
-bool Shader_Color::Render( 
-    ID3D11DeviceContext* deviceContext,
-	XMMATRIX & worldMatrix,
-	XMMATRIX & viewMatrix,
-	XMMATRIX & projectionMatrix )
-{
-	// Set the shader parameters to use for rendering.
-	bool result = SetShaderParameters( 
-        deviceContext, 
-        worldMatrix, 
-        viewMatrix, 
-        projectionMatrix );
-	RETURN_IF_FALSE( result );
-
-	// Now render the prepared buffers with the shader.
-	RenderShader( deviceContext );
-
-	return true;
-}
+// TODO: Why does color shader pass this as ref, but texture shader doesnt?
+//bool Shader_Color::Render( 
+//    ID3D11DeviceContext* deviceContext,
+//	XMMATRIX & worldMatrix,
+//	XMMATRIX & viewMatrix,
+//	XMMATRIX & projectionMatrix )
+//{
+//	// Set the shader parameters to use for rendering.
+//	bool result = SetShaderParameters( 
+//        deviceContext, 
+//        worldMatrix, 
+//        viewMatrix, 
+//        projectionMatrix );
+//	RETURN_IF_FALSE( result );
+//
+//	// Now render the prepared buffers with the shader.
+//	RenderShader( deviceContext );
+//
+//	return true;
+//}
 
 // This function is what actually loads the shader files and 
 // makes it usable to DirectX and the GPU. 

@@ -50,20 +50,25 @@ public:
     }
 
     // TODO: Virtualize this function
-// **** Why does color version pass as ref, but texture version doesnt?
+    // TODO: Why does color shader pass this as ref, but texture shader doesnt?
 
+    // possible issue with passing params as references
     bool Render(
         ID3D11DeviceContext* deviceContext,
-        XMMATRIX & worldMatrix,
-        XMMATRIX & viewMatrix,
-        XMMATRIX & projectionMatrix)
+        XMMATRIX worldMatrix,
+        XMMATRIX viewMatrix,
+        XMMATRIX projectionMatrix,
+        ID3D11ShaderResourceView* texture = 0)
     {
-        	// Set the shader parameters to use for rendering.
+    // Set the shader parameters to use for rendering.
+
+    // NOTE: texture is NULL by default and will be set only in CHILD texture class.
 	bool result = SetShaderParameters( 
         deviceContext, 
         worldMatrix, 
         viewMatrix, 
-        projectionMatrix );
+        projectionMatrix,
+        texture); // this texture parameter is only passed to 
 	RETURN_IF_FALSE( result );
 
 	// Now render the prepared buffers with the shader.
@@ -72,13 +77,16 @@ public:
 	return true;
     }
 
-    virtual void RenderShader(ID3D11DeviceContext*) = 0;
+    virtual void RenderShader(ID3D11DeviceContext*) {}
 
+    // possible issue with passing params as references
     virtual bool SetShaderParameters(
         ID3D11DeviceContext*,
-        XMMATRIX &,
-        XMMATRIX &,
-        XMMATRIX &) = 0;
+        XMMATRIX,
+        XMMATRIX,
+        XMMATRIX,
+        ID3D11ShaderResourceView*) 
+    {return true;}
 
 public:
     virtual bool InitializeShader(
