@@ -20,21 +20,21 @@ Shader_Color::~Shader_Color()
 {}
 
 // Pass in the names of the HLSL shader files, color.vs and color.ps
-bool Shader_Color::Initialize( ID3D11Device* device, HWND hwnd, const Model &crModel )
-{
-	bool result;
-
-	// Initialize the vertex and pixel shaders.
-	result = InitializeShader(
-		device,
-		hwnd,
-        m_vsFilename,
-        m_psFilename,
-		crModel );
-	RETURN_IF_FALSE( result );
-
-	return true;
-}
+//bool Shader_Color::Initialize( ID3D11Device* device, HWND hwnd, const Model &crModel )
+//{
+//	bool result;
+//
+//	// Initialize the vertex and pixel shaders.
+//	result = InitializeShader(
+//		device,
+//		hwnd,
+//        m_vsFilename,
+//        m_psFilename,
+//		crModel );
+//	RETURN_IF_FALSE( result );
+//
+//	return true;
+//}
 
 // First set the parameters inside the shader using the SetShaderParameters 
 // function. Once the parameters are set then call RenderShader to draw 
@@ -66,7 +66,7 @@ bool Shader_Color::InitializeShader(
     HWND hwnd, 
 	WCHAR* vsFilename, 
     WCHAR* psFilename, 
-    const Model &crModel )
+    Model &crModel )
 {
 	//  Compile the shader programs into buffers. We pass the name of the 
 	// shader file, the name of the shader, the shader version (5.0 in DirectX 11), 

@@ -10,7 +10,10 @@
 using namespace DirectX;
 using namespace std;
 
-class Model;
+////////////////////////////////////////////////////////////////////////////////
+// Forward declaration(s)
+////////////////////////////////////////////////////////////////////////////////
+//class Model;
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: Shader_Texture
 ////////////////////////////////////////////////////////////////////////////////
@@ -22,10 +25,10 @@ public:
 	Shader_Texture( const Shader_Texture& );
 	~Shader_Texture();
 
-	bool Initialize( 
-        ID3D11Device* pDevice, 
-        HWND WinHandle, 
-        const Model &crModel );
+	//bool Initialize( 
+ //       ID3D11Device* pDevice, 
+ //       HWND WinHandle, 
+ //       const Model &crModel );
 
 	bool Render( ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView* );
 

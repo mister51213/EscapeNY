@@ -19,7 +19,7 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 // Forward declaration(s)
 ////////////////////////////////////////////////////////////////////////////////
-class Model;
+//class Model;
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: Shader_Color
 ////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ public:
 	Shader_Color( const Shader_Color& );
 	~Shader_Color();
 
-	bool Initialize( ID3D11Device*, HWND, const Model &crModel );
+	//bool Initialize( ID3D11Device*, HWND, const Model &crModel );
 	bool Render( ID3D11DeviceContext*, XMMATRIX &, XMMATRIX &, XMMATRIX & );
 
 private:
@@ -40,7 +40,7 @@ private:
         HWND, 
         WCHAR*, 
         WCHAR*, 
-        const Model &crModel );
+        Model &crModel );
 
 	void OutputShaderErrorMessage( 
         ID3D10Blob*, 

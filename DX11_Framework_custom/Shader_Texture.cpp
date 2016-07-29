@@ -10,8 +10,7 @@
 #include "Model.h"
 
 Shader_Texture::Shader_Texture():Shader(L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso")
-{
-}
+{}
 
 Shader_Texture::Shader_Texture( const Shader_Texture& other ):Shader(L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso")
 {}
@@ -19,18 +18,18 @@ Shader_Texture::Shader_Texture( const Shader_Texture& other ):Shader(L"Shaders/t
 Shader_Texture::~Shader_Texture()
 {}
 
-bool Shader_Texture::Initialize( ID3D11Device* pDevice, HWND WinHandle, const Model &crModel )
-{
-	// Initialize the vertex and pixel shaders.
-	bool result = InitializeShader( 
-		pDevice, 
-		WinHandle, 
-		L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso", 
-		crModel );
-	RETURN_IF_FALSE( result );
-
-	return true;
-}
+//bool Shader_Texture::Initialize( ID3D11Device* pDevice, HWND WinHandle, const Model &crModel )
+//{
+//	// Initialize the vertex and pixel shaders.
+//	bool result = InitializeShader( 
+//		pDevice, 
+//		WinHandle, 
+//		m_vsFilename, m_psFilename, 
+//		crModel );
+//	RETURN_IF_FALSE( result );
+//
+//	return true;
+//}
 
 bool Shader_Texture::Render( ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
 	XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture )
@@ -56,7 +55,9 @@ bool Shader_Texture::InitializeShader(
 	comptr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer, pErrorMessage;
 
 	// Compile the vertex shader code.
-	HRESULT hr = D3DReadFileToBlob( VertexShaderFilename.c_str(), pVertexShaderBuffer.GetAddressOf() );
+	HRESULT hr = D3DReadFileToBlob( 
+        VertexShaderFilename.c_str(), 
+        pVertexShaderBuffer.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 	/*bool result = compileShader( WinHandle, VertexShaderFilename, "TextureVertexShader", 
 		"vs_5_0", pVertexShaderBuffer.GetAddressOf(), pErrorMessage.GetAddressOf() );*/

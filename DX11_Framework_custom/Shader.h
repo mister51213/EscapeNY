@@ -11,6 +11,11 @@
 using namespace DirectX;
 using namespace std;
 
+////////////////////////////////////////////////////////////////////////////////
+// Forward declaration(s)
+////////////////////////////////////////////////////////////////////////////////
+class Model;
+
 class Shader 
 {
 public:
@@ -26,11 +31,11 @@ public:
 		XMMATRIX projection;
 	};
 
-protected:
+public:
     bool Initialize(
         ID3D11Device* pDevice, 
         HWND WinHandle, 
-        const Model &crModel) 
+        Model &crModel) 
     {
 	// Initialize the vertex and pixel shaders.
 	bool result = InitializeShader( 
@@ -44,16 +49,20 @@ protected:
 	return true;
     }
 
+public:
     virtual bool InitializeShader(
         ID3D11Device*,
         HWND, 
         WCHAR*,
         WCHAR*,
-        const Model &crModel) = 0;
+        Model &crModel)
+    {
+        return true;
+    }
 
 	//bool Render( ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView* );
 
-protected:
+public:
     comptr<ID3D11VertexShader> m_vertexShader;
 	comptr<ID3D11PixelShader> m_pixelShader;
 	comptr<ID3D11InputLayout> m_layout;
