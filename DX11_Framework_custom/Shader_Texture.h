@@ -50,9 +50,9 @@ public:
 
 	virtual bool SetShaderParameters( 
         ID3D11DeviceContext*, 
-        XMMATRIX, 
-        XMMATRIX, 
-        XMMATRIX, 
+        XMMATRIX &, 
+        XMMATRIX &, 
+        XMMATRIX &, 
         ID3D11ShaderResourceView* );
 	virtual void renderShader( ID3D11DeviceContext* );
 

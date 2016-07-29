@@ -146,9 +146,9 @@ void Shader_Texture::outputShaderErrorMessage( ID3D10Blob* pErrorMessage, HWND W
 
 bool Shader_Texture::SetShaderParameters( 
     ID3D11DeviceContext* deviceContext, 
-    XMMATRIX worldMatrix, 
-    XMMATRIX viewMatrix,
-	XMMATRIX projectionMatrix, 
+    XMMATRIX & worldMatrix, 
+    XMMATRIX & viewMatrix,
+	XMMATRIX & projectionMatrix, 
     ID3D11ShaderResourceView* texture )
 {
 	// Lock the constant buffer so it can be written to.

@@ -56,9 +56,9 @@ public:
     // possible issue with passing params as references
     bool Render(
         ID3D11DeviceContext* deviceContext,
-        XMMATRIX worldMatrix,
-        XMMATRIX viewMatrix,
-        XMMATRIX projectionMatrix,
+        XMMATRIX & worldMatrix,
+        XMMATRIX & viewMatrix,
+        XMMATRIX & projectionMatrix,
         ID3D11ShaderResourceView* texture = 0)
     {
     // Set the shader parameters to use for rendering.
@@ -83,9 +83,9 @@ public:
     // possible issue with passing params as references
     virtual bool SetShaderParameters(
         ID3D11DeviceContext*,
-        XMMATRIX,
-        XMMATRIX,
-        XMMATRIX,
+        XMMATRIX &,
+        XMMATRIX &,
+        XMMATRIX &,
         ID3D11ShaderResourceView*) 
     {return true;}
 
