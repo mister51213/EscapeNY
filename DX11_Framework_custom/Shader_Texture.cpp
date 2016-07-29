@@ -31,11 +31,20 @@ Shader_Texture::~Shader_Texture()
 //	return true;
 //}
 
-bool Shader_Texture::Render( ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
-	XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture )
+bool Shader_Texture::Render( 
+    ID3D11DeviceContext* deviceContext, 
+    XMMATRIX worldMatrix, 
+    XMMATRIX viewMatrix,
+	XMMATRIX projectionMatrix, 
+    ID3D11ShaderResourceView* texture )
 {
 	// Set the shader parameters that it will use for rendering.
-	bool result = setShaderParameters( deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture );
+	bool result = setShaderParameters( 
+        deviceContext, 
+        worldMatrix, 
+        viewMatrix, 
+        projectionMatrix, 
+        texture );
 	RETURN_IF_FALSE( result );
 
 	// Now render the prepared buffers with the shader.

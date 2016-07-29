@@ -46,10 +46,12 @@ bool Shader_Color::Render(
 	XMMATRIX & viewMatrix,
 	XMMATRIX & projectionMatrix )
 {
-	bool result;
-
 	// Set the shader parameters to use for rendering.
-	result = SetShaderParameters( deviceContext, worldMatrix, viewMatrix, projectionMatrix );
+	bool result = SetShaderParameters( 
+        deviceContext, 
+        worldMatrix, 
+        viewMatrix, 
+        projectionMatrix );
 	RETURN_IF_FALSE( result );
 
 	// Now render the prepared buffers with the shader.

@@ -31,10 +31,12 @@ public:
 	Shader_Color( const Shader_Color& );
 	~Shader_Color();
 
-	//bool Initialize( ID3D11Device*, HWND, const Model &crModel );
-	bool Render( ID3D11DeviceContext*, XMMATRIX &, XMMATRIX &, XMMATRIX & );
+	bool Render( 
+        ID3D11DeviceContext* deviceContext, 
+        XMMATRIX & worldMatrix, 
+        XMMATRIX & viewMatrix, 
+        XMMATRIX & projectionMatrix);
 
-private:
 	virtual bool InitializeShader( 
         ID3D11Device*, 
         HWND, 
@@ -46,10 +48,11 @@ private:
         ID3D10Blob*, 
         HWND, WCHAR* );
 
-	bool SetShaderParameters( 
+	virtual bool SetShaderParameters( 
         ID3D11DeviceContext*, 
         XMMATRIX &, 
         XMMATRIX &, 
         XMMATRIX & );
-	void RenderShader( ID3D11DeviceContext* );
+	
+    virtual void RenderShader( ID3D11DeviceContext* );
 };

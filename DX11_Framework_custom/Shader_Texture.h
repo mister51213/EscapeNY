@@ -25,14 +25,8 @@ public:
 	Shader_Texture( const Shader_Texture& );
 	~Shader_Texture();
 
-	//bool Initialize( 
- //       ID3D11Device* pDevice, 
- //       HWND WinHandle, 
- //       const Model &crModel );
-
 	bool Render( ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView* );
 
-private:
 	virtual bool InitializeShader( 
         ID3D11Device*, 
         HWND, 
@@ -55,13 +49,13 @@ private:
         HWND WinHandle, 
         const std::wstring &ShaderFilename );
 
-	bool setShaderParameters( 
+	virtual bool setShaderParameters( 
         ID3D11DeviceContext*, 
         XMMATRIX, 
         XMMATRIX, 
         XMMATRIX, 
         ID3D11ShaderResourceView* );
-	void renderShader( ID3D11DeviceContext* );
+	virtual void renderShader( ID3D11DeviceContext* );
 
 private:
 	comptr<ID3D11SamplerState> m_sampleState;

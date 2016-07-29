@@ -49,6 +49,37 @@ public:
 	return true;
     }
 
+    // TODO: Virtualize this function
+// **** Why does color version pass as ref, but texture version doesnt?
+
+    bool Render(
+        ID3D11DeviceContext* deviceContext,
+        XMMATRIX & worldMatrix,
+        XMMATRIX & viewMatrix,
+        XMMATRIX & projectionMatrix)
+    {
+        	// Set the shader parameters to use for rendering.
+	bool result = SetShaderParameters( 
+        deviceContext, 
+        worldMatrix, 
+        viewMatrix, 
+        projectionMatrix );
+	RETURN_IF_FALSE( result );
+
+	// Now render the prepared buffers with the shader.
+    RenderShader(deviceContext);
+
+	return true;
+    }
+
+    virtual void RenderShader(ID3D11DeviceContext*) = 0;
+
+    virtual bool SetShaderParameters(
+        ID3D11DeviceContext*,
+        XMMATRIX &,
+        XMMATRIX &,
+        XMMATRIX &) = 0;
+
 public:
     virtual bool InitializeShader(
         ID3D11Device*,
