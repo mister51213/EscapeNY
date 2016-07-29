@@ -19,11 +19,12 @@ class Model;
 class Shader 
 {
 public:
-    Shader(WCHAR* vs, WCHAR* ps):
-    m_vsFilename(vs),
-    m_psFilename(ps)
-    {}
-    protected:
+    Shader(WCHAR* vs, WCHAR* ps)
+    {
+        m_vsFilename = vs;
+        m_psFilename = ps;
+    }
+protected:
 	struct MatrixBufferType
 	{
 		XMMATRIX world;
