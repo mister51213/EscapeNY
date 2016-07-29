@@ -43,7 +43,15 @@ public:
         HWND, 
         WCHAR*, 
         WCHAR*, 
-        Model &crModel );
+        const Model &crModel );
+
+    // original signature:
+   	//bool InitializeShader( 
+    //    ID3D11Device*, 
+    //    HWND, 
+    //    WCHAR*, 
+    //    WCHAR*, 
+    //    const Model &crModel );
 
 	void OutputShaderErrorMessage( 
         ID3D10Blob*, 

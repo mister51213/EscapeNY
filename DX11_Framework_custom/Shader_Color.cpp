@@ -67,9 +67,9 @@ Shader_Color::~Shader_Color()
 bool Shader_Color::InitializeShader( 
     ID3D11Device* device, 
     HWND hwnd, 
-	WCHAR* vsFilename, // these aren't getting initialized for some reason
-    WCHAR* psFilename, // these aren't getting initialized for some reason
-    Model &crModel )
+	WCHAR* vsFilename,
+    WCHAR* psFilename,
+    const Model &crModel )
 {
 	//  Compile the shader programs into buffers. We pass the name of the 
 	// shader file, the name of the shader, the shader version (5.0 in DirectX 11), 

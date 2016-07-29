@@ -40,7 +40,14 @@ bool Game::Initialize( Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight,
 	result = m_pModel->Initialize( primMaker, *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
-	// Create the color shader object.
+    ///////////////////////////////////////////////////////////////////////////////
+    //
+    // ISSUE IS HERE - what is reset doing? 
+    // why is it trying to instantiate abstract parent class
+    // instead of child shader class?
+    //
+    //////////////////////////////////////////////////////////////////////////////
+
 	m_pShader_Texture.reset( new Shader_Texture );
 	result = m_pShader_Texture != nullptr;
 	RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Shader_Texture." );

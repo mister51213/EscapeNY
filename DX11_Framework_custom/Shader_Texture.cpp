@@ -25,10 +25,13 @@ Shader_Texture::~Shader_Texture()
 bool Shader_Texture::InitializeShader( 
     ID3D11Device* pDevice, 
     HWND WinHandle,
-	const std::wstring &VertexShaderFilename, 
-    const std::wstring &PixelShaderFilename,
+	WCHAR* vsFilename,
+    WCHAR* psFilename,
 	const Model &crModel )
 {	
+    LPCWSTR VertexShaderFilename = vsFilename;
+    LPCWSTR PixelShaderFilename = psFilename;
+
 	// Initialize the pointers this function will use to null.
 	comptr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer, pErrorMessage;
 

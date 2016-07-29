@@ -36,7 +36,7 @@ public:
     bool Initialize(
         ID3D11Device* pDevice, 
         HWND WinHandle, 
-        Model &crModel) 
+        const Model &crModel) 
     {
 	// Initialize the vertex and pixel shaders.
 	bool result = InitializeShader( 
@@ -92,13 +92,10 @@ public:
 public:
     virtual bool InitializeShader(
         ID3D11Device*,
-        HWND, 
+        HWND,
         WCHAR*,
         WCHAR*,
-        Model &crModel)
-    {
-        return true;
-    }
+        const Model &crModel) = 0;
 
 	//bool Render( ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView* );
 

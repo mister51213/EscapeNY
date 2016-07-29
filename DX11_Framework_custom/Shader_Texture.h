@@ -31,8 +31,8 @@ public:
 	virtual bool InitializeShader( 
         ID3D11Device*, 
         HWND, 
-		const std::wstring &VertexShaderFilename, 
-        const std::wstring &PixelShaderFilename, 
+		WCHAR*,
+        WCHAR*,
 		const Model &crModel );
 
 	bool compileShader( 
