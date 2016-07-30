@@ -57,7 +57,8 @@ public:
 
 	void OutputShaderErrorMessage( 
         ID3D10Blob*, 
-        HWND, WCHAR* );
+        HWND, 
+        const std::wstring & );
 
 	virtual bool SetShaderParameters( 
         ID3D11DeviceContext*, 

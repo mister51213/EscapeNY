@@ -64,18 +64,17 @@ Shader_Color::~Shader_Color()
 // This function is what actually loads the shader files and 
 // makes it usable to DirectX and the GPU. 
 
+// TODO: Change ALL WCHAR* params to const std::wstring &
+
 bool Shader_Color::InitializeShader( 
     ID3D11Device* device, 
     HWND hwnd, 
 //  WCHAR* vsFilename,
 //  WCHAR* psFilename,
-    const std::wstring & vsFile,
-    const std::wstring & psFile,
+    const std::wstring & vsStrFile,
+    const std::wstring & psStrFile,
     const Model &crModel )
 {
-    WCHAR* vsFilename = &(vsFile.c_str);
-    WCHAR* psFilename = &(psFile.c_str);
-
 	//  Compile the shader programs into buffers. We pass the name of the 
 	// shader file, the name of the shader, the shader version (5.0 in DirectX 11), 
 	// and the buffer to compile the shader into.
@@ -85,7 +84,7 @@ bool Shader_Color::InitializeShader(
 
 	// Compile the vertex shader code.
 	HRESULT result = D3DCompileFromFile(
-		vsFilename, 								// Shader filename
+		vsStrFile.c_str(), 								// Shader filename
 		nullptr,									// Pointer to D3D_SHADER_MACRO
 		nullptr,									// Pointer to ID3DInclude interface
 		"ColorVertexShader",						// Shader entry function name
@@ -99,12 +98,12 @@ bool Shader_Color::InitializeShader(
 		// If the shader failed to compile it should have writen something to the error message.
 		if( errorMessage )
 		{
-			OutputShaderErrorMessage( errorMessage.Get(), hwnd, vsFilename );
+			OutputShaderErrorMessage( errorMessage.Get(), hwnd, vsStrFile );
 		}
 		// If there was  nothing in the error message then it simply could not find the shader file itself.
 		else
 		{
-			MessageBox( hwnd, vsFilename, L"Missing Shader File", MB_OK );
+			MessageBox( hwnd, vsStrFile.c_str(), L"Missing Shader File", MB_OK );
 		}
 
 		return false;
@@ -112,7 +111,7 @@ bool Shader_Color::InitializeShader(
 
 	// Compile the pixel shader code.
 	result = D3DCompileFromFile( 
-		psFilename,										// Shader filename
+		psStrFile.c_str(),										// Shader filename
 		nullptr,										// Pointer to D3D_SHADER_MACRO
 		nullptr,										// Pointer to ID3DInclude interface
 		"ColorPixelShader",								// Shader entry function name
@@ -126,19 +125,17 @@ bool Shader_Color::InitializeShader(
 		// If the shader failed to compile it should have writen something to the error message.
 		if( errorMessage )
 		{
-			OutputShaderErrorMessage( errorMessage.Get(), hwnd, psFilename );
+			OutputShaderErrorMessage( errorMessage.Get(), hwnd, psStrFile );
 		}
 		// If there was nothing in the error message then it simply could not find the file itself.
 		else
 		{
-			MessageBox( hwnd, psFilename, L"Missing Shader File", MB_OK );
+			MessageBox( hwnd, psStrFile.c_str(), L"Missing Shader File", MB_OK );
 		}
 		return false;
 	}
 
-	// Now we will use the buffers of compiled shader code to create 
-	// the shader objects themselves.
-
+	// Now we will use the buffers of compiled shader code to create the shader objects themselves.
 	// Create the vertex shader from the buffer.
 	result = device->CreateVertexShader( 
 		vertexShaderBuffer->GetBufferPointer(),					// Shader byte-code
@@ -187,9 +184,10 @@ bool Shader_Color::InitializeShader(
 	return true;
 }
 
-void Shader_Color::OutputShaderErrorMessage( ID3D10Blob* errorMessage,
+void Shader_Color::OutputShaderErrorMessage( 
+    ID3D10Blob* errorMessage,
 	HWND hwnd,
-	WCHAR* shaderFilename )
+	const std::wstring & shaderFilename )
 {
 	// Get a pointer to the error message text buffer.
 	auto compileErrors = (char*)( errorMessage->GetBufferPointer() );
@@ -211,7 +209,7 @@ void Shader_Color::OutputShaderErrorMessage( ID3D10Blob* errorMessage,
 
 	// Pop a message up on the screen to notify the user to 
 	// check the text file for compile errors.
-	MessageBox( hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK );
+	MessageBox( hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename.c_str(), MB_OK );
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -220,6 +218,10 @@ void Shader_Color::OutputShaderErrorMessage( ID3D10Blob* errorMessage,
 // after which this function is called to send them from there into the vertex 
 // shader during the Render function call.
 //////////////////////////////////////////////////////////////////////////////////
+
+// Passing by reference in case we compile in 32 bit mode; if passed 
+// by value in 32 bit mode, it will copy the value into 32 bit format, 
+// and it will no longer be 16 byte aligned with simd register.
 
 bool Shader_Color::SetShaderParameters( 
     ID3D11DeviceContext* deviceContext,
