@@ -41,9 +41,11 @@ public:
 	virtual bool InitializeShader( 
         ID3D11Device*, 
         HWND, 
-        WCHAR*, 
-        WCHAR*, 
-        const Model &crModel );
+        //WCHAR*, 
+        //WCHAR*, 
+        const std::wstring &,
+        const std::wstring &,
+        const Model &crModel ) override;
 
     // original signature:
    	//bool InitializeShader( 
@@ -61,7 +63,8 @@ public:
         ID3D11DeviceContext*, 
         XMMATRIX &, 
         XMMATRIX &, 
-        XMMATRIX & );
+        XMMATRIX &, 
+        ID3D11ShaderResourceView* =0) override;
 	
     virtual void RenderShader( ID3D11DeviceContext* );
 };

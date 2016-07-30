@@ -31,9 +31,11 @@ public:
 	virtual bool InitializeShader( 
         ID3D11Device*, 
         HWND, 
-		WCHAR*,
-        WCHAR*,
-		const Model &crModel );
+//      WCHAR*,
+//      WCHAR*,
+        const std::wstring &,
+        const std::wstring &,
+		const Model &crModel ) override;
 
 	bool compileShader( 
         HWND WinHandle, 
@@ -53,7 +55,8 @@ public:
         XMMATRIX &, 
         XMMATRIX &, 
         XMMATRIX &, 
-        ID3D11ShaderResourceView* );
+        ID3D11ShaderResourceView* ) override;
+
 	virtual void renderShader( ID3D11DeviceContext* );
 
 private:

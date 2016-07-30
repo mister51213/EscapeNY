@@ -25,8 +25,10 @@ Shader_Texture::~Shader_Texture()
 bool Shader_Texture::InitializeShader( 
     ID3D11Device* pDevice, 
     HWND WinHandle,
-	WCHAR* vsFilename,
-    WCHAR* psFilename,
+//  WCHAR* vsFilename,
+//  WCHAR* psFilename,
+    const std::wstring & vsFilename,
+    const std::wstring & psFilename,
 	const Model &crModel )
 {	
     // these were the old parameters that work; must match their format:

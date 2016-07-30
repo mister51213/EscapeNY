@@ -67,10 +67,15 @@ Shader_Color::~Shader_Color()
 bool Shader_Color::InitializeShader( 
     ID3D11Device* device, 
     HWND hwnd, 
-	WCHAR* vsFilename,
-    WCHAR* psFilename,
+//  WCHAR* vsFilename,
+//  WCHAR* psFilename,
+    const std::wstring & vsFile,
+    const std::wstring & psFile,
     const Model &crModel )
 {
+    WCHAR* vsFilename = &(vsFile.c_str);
+    WCHAR* psFilename = &(psFile.c_str);
+
 	//  Compile the shader programs into buffers. We pass the name of the 
 	// shader file, the name of the shader, the shader version (5.0 in DirectX 11), 
 	// and the buffer to compile the shader into.
@@ -220,7 +225,8 @@ bool Shader_Color::SetShaderParameters(
     ID3D11DeviceContext* deviceContext,
 	XMMATRIX & worldMatrix, 
     XMMATRIX & viewMatrix, 
-    XMMATRIX & projectionMatrix )
+    XMMATRIX & projectionMatrix,
+    ID3D11ShaderResourceView*)
 {
 	// Lock the constant buffer so it can be written to.
 	D3D11_MAPPED_SUBRESOURCE mappedResource{};

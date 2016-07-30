@@ -69,7 +69,7 @@ public:
         worldMatrix, 
         viewMatrix, 
         projectionMatrix,
-        texture); // this texture parameter is only passed to 
+        texture);
 	RETURN_IF_FALSE( result );
 
 	// Now render the prepared buffers with the shader.
@@ -86,15 +86,17 @@ public:
         XMMATRIX &,
         XMMATRIX &,
         XMMATRIX &,
-        ID3D11ShaderResourceView*) 
-    {return true;}
+        ID3D11ShaderResourceView*) = 0;
+    //{return true;}
 
 public:
     virtual bool InitializeShader(
         ID3D11Device*,
         HWND,
-        WCHAR*,
-        WCHAR*,
+        //WCHAR*,
+        //WCHAR*,
+        const std::wstring &,
+        const std::wstring &,
         const Model &crModel) = 0;
 
 	//bool Render( ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView* );
