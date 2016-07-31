@@ -57,7 +57,7 @@ public:
         XMMATRIX &, 
         ID3D11ShaderResourceView* ) override;
 
-	virtual void renderShader( ID3D11DeviceContext* );
+	virtual void RenderShader( ID3D11DeviceContext* );
 
 private:
 	comptr<ID3D11SamplerState> m_sampleState;

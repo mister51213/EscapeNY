@@ -10,10 +10,13 @@
 
 // class constructor initializes all the private pointers in the class to null.
 
-Shader_Color::Shader_Color():Shader(L"Shaders/color_vs.cso",L"Shaders/color_ps.cso")
+Shader_Color::Shader_Color():
+    Shader(L"Shaders/color_vs.cso",L"Shaders/color_ps.cso")
 {}
 
-Shader_Color::Shader_Color( const Shader_Color& other ):Shader(L"Shaders/color_vs.cso",L"Shaders/color_ps.cso")
+// TODO: FIX COPY CONSTRUCTOR to initialize all variables.
+Shader_Color::Shader_Color( const Shader_Color& other ):
+    Shader(L"Shaders/color_vs.cso",L"Shaders/color_ps.cso")
 {}
 
 Shader_Color::~Shader_Color()
@@ -63,8 +66,6 @@ Shader_Color::~Shader_Color()
 
 // This function is what actually loads the shader files and 
 // makes it usable to DirectX and the GPU. 
-
-// TODO: Change ALL WCHAR* params to const std::wstring &
 
 bool Shader_Color::InitializeShader( 
     ID3D11Device* device, 

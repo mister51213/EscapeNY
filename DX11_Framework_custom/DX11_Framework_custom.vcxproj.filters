@@ -99,6 +99,9 @@
     <ClCompile Include="COMHandler.cpp">
       <Filter>Source Files\Utility Classes</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">

@@ -12,6 +12,7 @@
 Shader_Texture::Shader_Texture():Shader(L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso")
 {}
 
+// TODO: FIX COPY CONSTRUCTOR to initialize all variables.
 Shader_Texture::Shader_Texture( const Shader_Texture& other ):Shader(L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso")
 {}
 
@@ -192,7 +193,7 @@ bool Shader_Texture::SetShaderParameters(
 	return true;
 }
 
-void Shader_Texture::renderShader( ID3D11DeviceContext* deviceContext )
+void Shader_Texture::RenderShader( ID3D11DeviceContext* deviceContext )
 {
 	// Set the vertex input layout.
 	deviceContext->IASetInputLayout( m_layout.Get() );

@@ -19,11 +19,8 @@ class Model;
 class Shader 
 {
 public:
-    Shader(WCHAR* vs, WCHAR* ps)
-    {
-        m_vsFilename = vs;
-        m_psFilename = ps;
-    }
+    Shader(std::wstring vs, std::wstring ps);
+
 protected:
 	struct MatrixBufferType
 	{
@@ -34,24 +31,9 @@ protected:
 
 public:
     bool Initialize(
-        ID3D11Device* pDevice, 
-        HWND WinHandle, 
-        const Model &crModel) 
-    {
-	// Initialize the vertex and pixel shaders.
-	bool result = InitializeShader( 
-		pDevice, 
-		WinHandle, 
-	    m_vsFilename, 
-        m_psFilename, 
-		crModel );
-	RETURN_IF_FALSE( result );
-
-	return true;
-    }
-
-    // TODO: Virtualize this function
-    // TODO: Why does color shader pass this as ref, but texture shader doesnt?
+        ID3D11Device* pDevice,
+        HWND WinHandle,
+        const Model &crModel);
 
     // possible issue with passing params as references
     bool Render(
@@ -78,7 +60,7 @@ public:
 	return true;
     }
 
-    virtual void RenderShader(ID3D11DeviceContext*) {}
+    virtual void RenderShader(ID3D11DeviceContext*) = 0;
 
     // possible issue with passing params as references
     virtual bool SetShaderParameters(
@@ -107,6 +89,6 @@ public:
 	comptr<ID3D11InputLayout> m_layout;
 	comptr<ID3D11Buffer> m_matrixBuffer;
 	
-    WCHAR* m_vsFilename;
-    WCHAR* m_psFilename;
+    std::wstring m_vsFilename;
+    std::wstring m_psFilename;
 };
