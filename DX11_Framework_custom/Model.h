@@ -43,16 +43,16 @@ public:
         m_offset.x += Offset.x;
         m_offset.y += Offset.y;
         m_offset.z += Offset.z;
-        m_worldMatrix = XMMatrixTranslation(m_offset.x, m_offset.y, m_offset.z);
+        m_worldMatrix = DirectX::XMMatrixTranslation(m_offset.x, m_offset.y, m_offset.z);
     }
 
     void Rotate(XMFLOAT3 axis, float angle)
     {
-        m_rotateAxis.x += axis.x;
-        m_rotateAxis.y += axis.y;
-        m_rotateAxis.z += axis.z;
+        //m_rotateAxis.x += axis.x;
+        //m_rotateAxis.y += axis.y;
+        //m_rotateAxis.z += axis.z;
         m_rotateAngle += angle;
-        m_worldMatrix = XMMatrixRotationNormal({ m_rotateAxis.x, m_rotateAxis.y, m_rotateAxis.z }, angle);
+        m_worldMatrix = XMMatrixRotationX(m_rotateAngle);
     }
 
 protected:
@@ -112,7 +112,7 @@ protected:
     ///////////////////////////////////////////////////////////////////////
     XMFLOAT3 m_offset = { 1,0,0 };
     XMFLOAT3 m_rotateAxis;
-    float m_rotateAngle = 0;
+    float m_rotateAngle=.1f;
 
 	XMMATRIX m_worldMatrix;
 

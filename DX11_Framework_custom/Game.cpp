@@ -121,8 +121,14 @@ void Game::GetInput(std::shared_ptr<Input> pInput)
 
     if (pInput->IsKeyDown(VK_SPACE))
     {
-        m_pModel->Rotate({ 0.1f,0.1f,0.1f }, 0.1f);
-        m_pModel2->Rotate({ 0.1f,0.1f,0.1f}, 0.1f);
+        m_pModel->Rotate({ 0.1f,0.1f,0.1f }, -.05f);
+        m_pModel2->Rotate({ 0.1f,0.1f,0.1f}, .05f);
+    }
+
+        if (pInput->IsKeyDown(VK_CONTROL))
+    {
+        m_pModel->Rotate({ 0.1f,0.1f,0.1f }, 0.05f);
+        m_pModel2->Rotate({ 0.1f,0.1f,0.1f}, -.05f);
     }
 }
 
