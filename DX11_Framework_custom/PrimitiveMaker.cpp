@@ -84,12 +84,12 @@ void PrimitiveMaker::CreatePlane(
 	// Create vertex list	
     vertices = 
 	{
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z}
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z}
 	};
 	
 	// Create normals list

@@ -7,15 +7,18 @@ Overlay::Overlay()
 Overlay::~Overlay()
 {}
 
-bool Overlay::Initialize( const Graphics &Gfx )
+bool Overlay::Initialize( const Graphics &Gfx, UINT ScreenWidth, UINT ScreenHeight)
 {
 	m_pRenderSurface = Gfx.GetDirect2D()->GetRenderSurface();
 	
 	bool result = m_texture.Initialize( Gfx, m_pRenderSurface );
 	RETURN_IF_FALSE( result );
-
+	
 	PrimitiveMaker primMaker;
-	primMaker.CreatePlane( {0.f,300.f,0.f}, {200.f,20.f} );
+	primMaker.CreatePlane({ 0.f,0.f,0.f }, {
+		static_cast<float>(ScreenWidth),
+		static_cast<float>(ScreenHeight)
+	});
 	result = m_Model_Textured.Initialize( primMaker, Gfx );
 
 	FontLoader fntLoader;
@@ -26,6 +29,19 @@ bool Overlay::Initialize( const Graphics &Gfx )
 	RETURN_IF_FALSE( m_Font != nullptr );
 	
 	return true;
+}
+
+DirectX::XMMATRIX Overlay::GetWorldMatrix(const Camera & Cam) const
+{
+	auto overlayPosition = Cam.GetPosition();
+	overlayPosition.z += 0.5f;
+	auto overlayOrientation = Cam.GetRotation();
+	
+	return XMMatrixRotationRollPitchYaw(
+		XMConvertToRadians(overlayOrientation.x),
+		XMConvertToRadians(overlayOrientation.y),
+		XMConvertToRadians(overlayOrientation.z)) *
+		XMMatrixTranslation(overlayPosition.x, overlayPosition.y, overlayPosition.z);
 }
 
 ID3D11ShaderResourceView * Overlay::GetResourceView()
@@ -92,18 +108,7 @@ bool Overlay::fillTexture( BYTE *const Pixels )const
 	hr = lock->GetDataPointer( &bufferSize, &data );
 	RETURN_IF_FAILED( hr );
 
-	/*for( int y = 0; y < height; ++y )
-	{
-		for( int x = 0; x < width; ++x )
-		{
-			int idx = x + ( y * width );
-			auto pixel = data[ idx ];
-			if( pixel != 0 )
-			{
-				int a = 0;
-			}
-		}
-	}*/
+
 	// Copy by row to correctly align the image
 	for( UINT y = 0; y < height; ++y )
 	{
