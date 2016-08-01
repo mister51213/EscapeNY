@@ -20,6 +20,7 @@ public:
 
 	bool Initialize( Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, HWND WinHandle );
     void GetInput(std::shared_ptr<Input> input);
+
 	bool Frame();
 private:
 	bool render();
@@ -45,9 +46,11 @@ private:
 	std::unique_ptr<Texture> m_pStoneTexture;
 	Overlay m_Overlay;
 
-// later add this to game object:
+// later add this to GameObjects
 
     XMFLOAT3 m_modelOffset = { 0,0,0 };
+    XMFLOAT3 m_camPos = { -0.0f, 8.0f, -16.0f };
+    XMFLOAT3 m_camRotation = { 25.f, -5.f, 0.f };
 
 // Input
     std::shared_ptr<Input> m_pInput;

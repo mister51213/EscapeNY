@@ -14,7 +14,7 @@ Game::~Game()
 bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, HWND WinHandle)
 {
     // Initialize input; clear key array - redundant?
-    m_pInput->Initialize();
+    //m_pInput->Initialize();
 
     // Take a copy of the graphics and direct3d pointers
     m_pGraphics = pGraphics;
@@ -27,8 +27,8 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
 
     // Set the initial position of the camera.
     result = m_pCamera->Initialize(
-    { -0.0f, 8.0f, -16.0f },					// Position		
-    { 25.f, -5.f, 0.f }, 						// Rotation
+    m_camPos,					                // Position		
+    m_camRotation, 						        // Rotation
     { ScreenWidth, ScreenHeight },				// Screen size
     { SCREEN_DEPTH, SCREEN_NEAR } 				// Screen clip depths
     );
@@ -94,7 +94,20 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
 
 void Game::GetInput(std::shared_ptr<Input> pInput)
 {
-        // Update World Matrix Position
+    // rotate objects
+    if (pInput->IsKeyDown(VK_SPACE))
+    {
+        m_pModel->Rotate({ 0.1f,0.1f,0.1f }, -.05f);
+        m_pModel2->Rotate({ 0.1f,0.1f,0.1f }, .05f);
+    }
+
+    if (pInput->IsKeyDown(VK_CONTROL))
+    {
+        m_pModel->Rotate({ 0.1f,0.1f,0.1f }, 0.05f);
+        m_pModel2->Rotate({ 0.1f,0.1f,0.1f }, -.05f);
+    }
+
+    // move objects
     if (pInput->IsKeyDown(VK_RIGHT))
     {
         m_pModel->Move({ .1f,0.f,0.f });
@@ -119,17 +132,39 @@ void Game::GetInput(std::shared_ptr<Input> pInput)
         m_pModel2->Move({ 0.f,-.2f,0.f });
     }
 
-    if (pInput->IsKeyDown(VK_SPACE))
+    // move camera (FPS view)
+    if (pInput->IsKeyDown(0x41)) // Left - A
     {
-        m_pModel->Rotate({ 0.1f,0.1f,0.1f }, -.05f);
-        m_pModel2->Rotate({ 0.1f,0.1f,0.1f}, .05f);
+        m_pCamera->Move({ -1, 0, 0 });
     }
 
-        if (pInput->IsKeyDown(VK_CONTROL))
+    if (pInput->IsKeyDown(0x53)) // Back - S
     {
-        m_pModel->Rotate({ 0.1f,0.1f,0.1f }, 0.05f);
-        m_pModel2->Rotate({ 0.1f,0.1f,0.1f}, -.05f);
+        m_pCamera->Move({ 0, 0, -1 });
     }
+
+    if (pInput->IsKeyDown(0x57)) // Fwd - W
+    {
+        m_pCamera->Move({ 0, 0, 1 });
+    }
+
+    if (pInput->IsKeyDown(0x44)) // Right - D
+    {
+        m_pCamera->Move({ 1, 0, 0 });
+    }
+
+    // rotate camera
+        if (pInput->IsKeyDown(0x51)) // Left - Q
+    {
+        m_pCamera->Rotate({ 0, -1, 0 });
+    }
+
+    if (pInput->IsKeyDown(0x45)) // Right - E
+    {
+        m_pCamera->Rotate({ 0, 1, 0 });
+    }
+
+
 }
 
 bool Game::Frame()

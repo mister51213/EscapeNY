@@ -34,7 +34,6 @@ void Input::Initialize()
 	return;
 }
 
-
 void Input::KeyDown(unsigned int input)
 {
 	// If a key is pressed then save that state in the key array.
