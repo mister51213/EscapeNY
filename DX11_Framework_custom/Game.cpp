@@ -22,8 +22,8 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
 
     // Set the initial position of the camera.
     result = m_pCamera->Initialize(
-    { 0.0f, 0.0f, -5.0f },						// Position		
-    { 0.f, 0.f, 0.f }, 							// Rotation
+    { -0.0f, 8.0f, -16.0f },					// Position		
+    { 25.f, -5.f, 0.f }, 						// Rotation
     { ScreenWidth, ScreenHeight },				// Screen size
     { SCREEN_DEPTH, SCREEN_NEAR } 				// Screen clip depths
     );
@@ -39,7 +39,12 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
     result = m_pModel2 != nullptr;
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
 
+    // TODO: Must unify Initialize and Render functions for model if we want
+    // to add responsive movement functionality in here
+
+    ////////////////////////////////////////
     // Initialize the model object.
+    ////////////////////////////////////////
     PrimitiveMaker primMaker;
     primMaker.CreateCube({ 1.f, 1.f, 1.f },{ 1.f, 1.f, 1.f });
 

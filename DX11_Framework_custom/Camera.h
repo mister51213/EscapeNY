@@ -52,5 +52,4 @@ public:
 private:
 	XMFLOAT3 m_Position, m_Rotation;
 	XMMATRIX m_ViewMatrix, m_ProjectionMatrix, m_OrthoMatrix;
-
 };

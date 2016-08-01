@@ -25,6 +25,9 @@ private:
 
 	// Camera, Model and ColorShader are created in Game, so has ownership
 	std::unique_ptr<Camera> m_pCamera;
+
+    // TODO: Individual objects shouldn't be held in a member pointer;
+    // should be passed as parameters to draw individual objects to a single rendering pipeline
 	std::unique_ptr<Model_Textured> m_pModel;
 
     // TODO: Add new model here as experiment
