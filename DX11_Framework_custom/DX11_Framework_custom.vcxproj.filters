@@ -179,6 +179,9 @@
     <ClInclude Include="Shader.h">
       <Filter>Header Files\Shader Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameObjects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Development Guidelines.txt">

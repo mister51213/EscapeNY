@@ -1,5 +1,8 @@
 #pragma once
 
+#include "GameObjects.h"
+
+// TODO: Move these includes into GameObjects.h
 #include "Camera.h"
 #include "Model.h"
 #include "Graphics.h"
@@ -28,6 +31,8 @@ private:
 
     // TODO: Individual objects shouldn't be held in a member pointer;
     // should be passed as parameters to draw individual objects to a single rendering pipeline
+    GameObjects m_objects;
+
 	std::unique_ptr<Model_Textured> m_pModel;
 
     // TODO: Add new model here as experiment

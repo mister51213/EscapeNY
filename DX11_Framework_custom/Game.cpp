@@ -43,20 +43,20 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
     // to add responsive movement functionality in here
 
     ////////////////////////////////////////
-    // Initialize the model object.
+    // Feed the Pimitive Maker w cube object
     ////////////////////////////////////////
     PrimitiveMaker primMaker;
     primMaker.CreateCube({ 1.f, 1.f, 1.f },{ 1.f, 1.f, 1.f });
 
-    // Initialize 2nd Model object
+    // Feed the Pimitive Maker 2 w cube object
     PrimitiveMaker primMaker2;
     primMaker2.CreateCube({ 3.f, 3.f, 3.f },{ 1.f, 1.f, 1.f });
 
-    //primMaker.CreatePlane({ 0.f,0.f,0.f }, { 2.f,2.f });
-
+    // Initialize model 1
 	result = m_pModel->Initialize( primMaker, *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
+    // Initialize model 2
 	result = m_pModel2->Initialize( primMaker2, *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
@@ -107,25 +107,23 @@ bool Game::render()
 		m_pCamera->GetProjectionMatrix(),
 		m_pStoneTexture->GetTextureView() );
 
-
-    // TODO: Point this at a DIFFERENT MODEL
+    // Render model 2 color
     	bool result2 = m_pShader_Texture->Render(
 		m_pDirect3D->GetDeviceContext(), 
 		m_pModel2->GetWorldMatrix(),
 		m_pCamera->GetViewMatrix(),
 		m_pCamera->GetProjectionMatrix(),
 		m_pStoneTexture->GetTextureView() );
-
+    
+    //////////////////////////////////////////////////////////////////////
     // TODO: Change functionality here to draw MORE THAN ONE MODEL
-	// Put the model vertex and index buffers on the graphics pipeline to
-	// prepare them for drawing.
+	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+    //////////////////////////////////////////////////////////////////////
 	m_pGraphics->RenderModel( *m_pModel );
+   	RETURN_IF_FALSE( result );
 
 // EXPERIMENT - render second model
     m_pGraphics->RenderModel( *m_pModel2 );
-
-	RETURN_IF_FALSE( result );
-
    	RETURN_IF_FALSE( result2 );
 
 	m_pShader_Texture->Render(

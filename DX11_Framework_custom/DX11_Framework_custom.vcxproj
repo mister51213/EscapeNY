@@ -167,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="GameObjects.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />

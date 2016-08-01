@@ -86,6 +86,14 @@ protected:
     }
     
 protected:
+    /////////////////////////////////////////////////////////////////////////
+    // position of object in world space; will determine 
+    // WHERE to render it in the world space coordinates
+    // so let the user adjust THESE values before initializing
+    // in order to move the model in world space
+    ///////////////////////////////////////////////////////////////////////
+    XMFLOAT3 m_position;
+
 	XMMATRIX m_worldMatrix;
 	comptr<ID3D11Buffer> m_vertexBuffer, m_indexBuffer;
 	int m_vertexCount, m_indexCount; // keep track of the size of each buffer

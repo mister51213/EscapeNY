@@ -1,10 +1,8 @@
 #include "Model_Textured.h"
 #include "PrimitiveMaker.h"
 
-
 Model_Textured::Model_Textured()
-{
-}
+{}
 
 Model_Textured::~Model_Textured()
 {}
@@ -14,10 +12,22 @@ bool Model_Textured::Initialize( const PrimitiveMaker &PrimMaker, const Graphics
 	// Set the stride for this model type
 	m_Stride = sizeof( VertexPositionUVType );
 
+    /////////////////////////////////////////////////////
+    // TODO: Add extra function here that ADDS 
+    // TODO: position offset to these values after getting vertices
+    /////////////////////////////////////////////////////
+
 	// Create the vertex array.
 	auto verts = PrimMaker.GetVertices();
 
-	// Set the number of vertices indices in the vertex array.
+    for each (XMFLOAT3 vertex in verts)
+    {
+        vertex.x += m_position.x;
+        vertex.y += m_position.y;
+        vertex.z += m_position.z;
+    }
+
+	// Set the number of verticex indices in the vertex array.
 	m_vertexCount = verts.size();
 	m_indexCount = verts.size();
 	m_Vertices.resize( m_vertexCount );
