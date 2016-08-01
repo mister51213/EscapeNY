@@ -51,7 +51,7 @@ private:
 	HWND m_hwnd;
 
     COMHandler comHandler;
-	std::unique_ptr<Input> m_Input;
+	std::shared_ptr<Input> m_Input;
 	std::unique_ptr<Graphics> m_Graphics;
 	std::unique_ptr<Game> m_pGame;
 	bool done;

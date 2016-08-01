@@ -65,21 +65,21 @@ public:
     bool RenderShapes()
     {
 	// Render the model using the color shader.
-	bool result = m_pShader_Texture->Render(
-		m_pDirect3D->GetDeviceContext(), 
-		m_pModel->GetWorldMatrix(),
-		m_pCamera->GetViewMatrix(),
-		m_pCamera->GetProjectionMatrix(),
-		m_pStoneTexture->GetTextureView() );
+	//bool result = m_pShader_Texture->Render(
+	//	m_pDirect3D->GetDeviceContext(), 
+	//	m_pModel->GetWorldMatrix(),
+	//	m_pCamera->GetViewMatrix(),
+	//	m_pCamera->GetProjectionMatrix(),
+	//	m_pStoneTexture->GetTextureView() );
 
-    // Render model 2 color
-    	bool result2 = m_pShader_Texture->Render(
-		m_pDirect3D->GetDeviceContext(), 
-		m_pModel2->GetWorldMatrix(),
-		m_pCamera->GetViewMatrix(),
-		m_pCamera->GetProjectionMatrix(),
-		m_pStoneTexture->GetTextureView() );    
-    }
+ //   // Render model 2 color
+ //   	bool result2 = m_pShader_Texture->Render(
+	//	m_pDirect3D->GetDeviceContext(), 
+	//	m_pModel2->GetWorldMatrix(),
+	//	m_pCamera->GetViewMatrix(),
+	//	m_pCamera->GetProjectionMatrix(),
+	//	m_pStoneTexture->GetTextureView() );    
+ //   }
 
 
 

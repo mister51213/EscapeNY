@@ -37,6 +37,11 @@ public:
 	ID3D11Buffer *GetIndexBuffer()const;
 	UINT GetStride()const;
 
+    void Move(XMFLOAT3 Offset)
+    {
+        m_worldMatrix = XMMatrixTranslation(Offset.x, Offset.y, Offset.z);
+    }
+
 protected:
 	template<class VertexType>
     bool initializeBuffers(VertexType *pVertexData, 
@@ -92,9 +97,10 @@ protected:
     // so let the user adjust THESE values before initializing
     // in order to move the model in world space
     ///////////////////////////////////////////////////////////////////////
-    XMFLOAT3 m_position;
+    XMFLOAT3 m_offset = { 0,0,0 };
 
 	XMMATRIX m_worldMatrix;
+
 	comptr<ID3D11Buffer> m_vertexBuffer, m_indexBuffer;
 	int m_vertexCount, m_indexCount; // keep track of the size of each buffer
 	UINT m_Stride;

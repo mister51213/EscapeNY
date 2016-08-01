@@ -82,7 +82,7 @@ bool System::Initialize()
 	RETURN_IF_FALSE( result );
 
 	// Create game object to handle assets and game logic
-	m_pGame.reset( new Game );
+	m_pGame.reset( new Game(m_Input));
 	result = m_pGame != nullptr;
 	RETURN_IF_FALSE( result );
 

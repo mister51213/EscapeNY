@@ -2,8 +2,10 @@
 
 using namespace DirectX;
 
-Game::Game()
-{}
+Game::Game(std::shared_ptr<Input> pInput)
+{
+    m_pInput = pInput;
+}
 
 Game::~Game()
 {
@@ -11,6 +13,9 @@ Game::~Game()
 
 bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, HWND WinHandle)
 {
+    // Initialize input; clear key array - redundant?
+    m_pInput->Initialize();
+
     // Take a copy of the graphics and direct3d pointers
     m_pGraphics = pGraphics;
     m_pDirect3D = pGraphics->GetDirect3D();
@@ -46,11 +51,15 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
     // Feed the Pimitive Maker w cube object
     ////////////////////////////////////////
     PrimitiveMaker primMaker;
-    primMaker.CreateCube({ 1.f, 1.f, 1.f },{ 1.f, 1.f, 1.f });
+    primMaker.CreateCube(m_modelPos,{ 2.f, 2.f, 2.f });
 
     // Feed the Pimitive Maker 2 w cube object
+    XMFLOAT3 mPos2 = m_modelPos;
+    mPos2.x += 3;
+    mPos2.y += 3;
+    mPos2.z += 3;
     PrimitiveMaker primMaker2;
-    primMaker2.CreateCube({ 3.f, 3.f, 3.f },{ 1.f, 1.f, 1.f });
+    primMaker2.CreateCube(mPos2,{ 2.f, 2.f, 2.f });
 
     // Initialize model 1
 	result = m_pModel->Initialize( primMaker, *m_pGraphics );
@@ -83,6 +92,34 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
 	return true;
 }
 
+void Game::GetInput(std::shared_ptr<Input> pInput)
+{
+        // Update World Matrix Position
+    if (pInput->IsKeyDown(VK_RIGHT))
+    {
+        m_pModel->Move({ 1.f,0.f,0.f });
+        m_pModel2->Move({ 1.f,0.f,0.f });
+    }
+
+    if (pInput->IsKeyDown(VK_LEFT))
+    {
+        m_pModel->Move({ 1.f,0.f,0.f });
+        m_pModel2->Move({ 1.f,0.f,0.f });
+    }
+
+    if (pInput->IsKeyDown(VK_UP))
+    {
+        m_pModel->Move({ 0.f,1.f,0.f });
+        m_pModel2->Move({ 0.f,1.f,0.f });
+    }
+
+    if (pInput->IsKeyDown(VK_DOWN))
+    {
+        m_pModel->Move({ 0.f,-1.f,0.f });
+        m_pModel2->Move({ 0.f,-1.f,0.f });
+    }
+}
+
 bool Game::Frame()
 {
 	m_pGraphics->BeginScene();
@@ -91,6 +128,10 @@ bool Game::Frame()
 	RETURN_IF_FALSE( result );
 
 	m_pGraphics->EndScene();
+
+    // Check input to modify object positioning.
+    GetInput(m_pInput);
+
 	return true;
 }
 

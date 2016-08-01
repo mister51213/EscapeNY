@@ -12,19 +12,21 @@ bool Model_Textured::Initialize( const PrimitiveMaker &PrimMaker, const Graphics
 	// Set the stride for this model type
 	m_Stride = sizeof( VertexPositionUVType );
 
-    /////////////////////////////////////////////////////
-    // TODO: Add extra function here that ADDS 
-    // TODO: position offset to these values after getting vertices
-    /////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    // TODO: / Add extra function here that ADDS position 
+    // TODO: / offset to these values after getting vertices
+    // TODO: / this function should not be in initialize, should
+    // TODO: / operate directly on instantaneous position.
+    //////////////////////////////////////////////////////////
 
 	// Create the vertex array.
 	auto verts = PrimMaker.GetVertices();
 
     for each (XMFLOAT3 vertex in verts)
     {
-        vertex.x += m_position.x;
-        vertex.y += m_position.y;
-        vertex.z += m_position.z;
+        vertex.x += m_offset.x;
+        vertex.y += m_offset.y;
+        vertex.z += m_offset.z;
     }
 
 	// Set the number of verticex indices in the vertex array.

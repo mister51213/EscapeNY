@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameObjects.h"
+//#include "GameObjects.h"
 
 // TODO: Move these includes into GameObjects.h
 #include "Camera.h"
@@ -10,14 +10,16 @@
 #include "Texture.h"
 #include "Shader_Texture.h"
 #include "Overlay.h"
+#include "Input.h"
 
 class Game
 {
 public:
-	Game();
+	Game(std::shared_ptr<Input> pInput);
 	~Game();
 
 	bool Initialize( Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, HWND WinHandle );
+    void GetInput(std::shared_ptr<Input> input);
 	bool Frame();
 private:
 	bool render();
@@ -31,7 +33,7 @@ private:
 
     // TODO: Individual objects shouldn't be held in a member pointer;
     // should be passed as parameters to draw individual objects to a single rendering pipeline
-    GameObjects m_objects;
+    //GameObjects m_objects;
 
 	std::unique_ptr<Model_Textured> m_pModel;
 
@@ -41,5 +43,13 @@ private:
     //std::unique_ptr<ColorShader> m_pColorShader;
 	std::unique_ptr<Shader_Texture> m_pShader_Texture;
 	std::unique_ptr<Texture> m_pStoneTexture;
-	Overlay m_Overlay;};
+	Overlay m_Overlay;
+
+// later add this to game object:
+
+    XMFLOAT3 m_modelPos = { 0,0,0 };
+
+// Input
+    std::shared_ptr<Input> m_pInput;
+};
 
