@@ -51,13 +51,13 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
     // Feed the Pimitive Maker w cube object
     ////////////////////////////////////////
     PrimitiveMaker primMaker;
-    primMaker.CreateCube(m_modelPos,{ 2.f, 2.f, 2.f });
+    primMaker.CreateCube(m_modelOffset,{ 4.f, 4.f, 4.f });
 
     // Feed the Pimitive Maker 2 w cube object
-    XMFLOAT3 mPos2 = m_modelPos;
-    mPos2.x += 3;
-    mPos2.y += 3;
-    mPos2.z += 3;
+    XMFLOAT3 mPos2 = m_modelOffset;
+    mPos2.x += 4;
+    mPos2.y += 2;
+    mPos2.z += 7;
     PrimitiveMaker primMaker2;
     primMaker2.CreateCube(mPos2,{ 2.f, 2.f, 2.f });
 
@@ -97,26 +97,32 @@ void Game::GetInput(std::shared_ptr<Input> pInput)
         // Update World Matrix Position
     if (pInput->IsKeyDown(VK_RIGHT))
     {
-        m_pModel->Move({ 1.f,0.f,0.f });
-        m_pModel2->Move({ 1.f,0.f,0.f });
+        m_pModel->Move({ .1f,0.f,0.f });
+        m_pModel2->Move({ .2f,0.f,0.f });
     }
 
     if (pInput->IsKeyDown(VK_LEFT))
     {
-        m_pModel->Move({ 1.f,0.f,0.f });
-        m_pModel2->Move({ 1.f,0.f,0.f });
+        m_pModel->Move({ -.1f,0.f,0.f });
+        m_pModel2->Move({ -.2f,0.f,0.f });
     }
 
     if (pInput->IsKeyDown(VK_UP))
     {
-        m_pModel->Move({ 0.f,1.f,0.f });
-        m_pModel2->Move({ 0.f,1.f,0.f });
+        m_pModel->Move({ 0.f,.1f,0.f });
+        m_pModel2->Move({ 0.f,.2f,0.f });
     }
 
     if (pInput->IsKeyDown(VK_DOWN))
     {
-        m_pModel->Move({ 0.f,-1.f,0.f });
-        m_pModel2->Move({ 0.f,-1.f,0.f });
+        m_pModel->Move({ 0.f,-.1f,0.f });
+        m_pModel2->Move({ 0.f,-.2f,0.f });
+    }
+
+    if (pInput->IsKeyDown(VK_SPACE))
+    {
+        m_pModel->Rotate({ 0.1f,0.1f,0.1f }, 0.1f);
+        m_pModel2->Rotate({ 0.1f,0.1f,0.1f}, 0.1f);
     }
 }
 

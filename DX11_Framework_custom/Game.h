@@ -47,7 +47,7 @@ private:
 
 // later add this to game object:
 
-    XMFLOAT3 m_modelPos = { 0,0,0 };
+    XMFLOAT3 m_modelOffset = { 0,0,0 };
 
 // Input
     std::shared_ptr<Input> m_pInput;

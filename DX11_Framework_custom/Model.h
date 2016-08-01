@@ -37,9 +37,22 @@ public:
 	ID3D11Buffer *GetIndexBuffer()const;
 	UINT GetStride()const;
 
+    // TODO: These shouldn't be inline
     void Move(XMFLOAT3 Offset)
     {
-        m_worldMatrix = XMMatrixTranslation(Offset.x, Offset.y, Offset.z);
+        m_offset.x += Offset.x;
+        m_offset.y += Offset.y;
+        m_offset.z += Offset.z;
+        m_worldMatrix = XMMatrixTranslation(m_offset.x, m_offset.y, m_offset.z);
+    }
+
+    void Rotate(XMFLOAT3 axis, float angle)
+    {
+        m_rotateAxis.x += axis.x;
+        m_rotateAxis.y += axis.y;
+        m_rotateAxis.z += axis.z;
+        m_rotateAngle += angle;
+        m_worldMatrix = XMMatrixRotationNormal({ m_rotateAxis.x, m_rotateAxis.y, m_rotateAxis.z }, angle);
     }
 
 protected:
@@ -97,7 +110,9 @@ protected:
     // so let the user adjust THESE values before initializing
     // in order to move the model in world space
     ///////////////////////////////////////////////////////////////////////
-    XMFLOAT3 m_offset = { 0,0,0 };
+    XMFLOAT3 m_offset = { 1,0,0 };
+    XMFLOAT3 m_rotateAxis;
+    float m_rotateAngle = 0;
 
 	XMMATRIX m_worldMatrix;
 
