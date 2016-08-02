@@ -39,17 +39,17 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
     result = m_pModel1 != nullptr;
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
 
-    // Create 2nd Model object
-    XMFLOAT3 offset2 = { m_modelOffset.x + 5, m_modelOffset.y + 5, m_modelOffset.z + 5 };
-    m_pModel2.reset(new Model_Textured(offset2));
-    result = m_pModel2 != nullptr;
-    RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-
-    // Make model 1
+        // Make model 1
     PrimitiveMaker primMaker;
     primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
 	result = m_pModel1->Initialize( primMaker, *m_pGraphics );
 	RETURN_IF_FALSE( result );
+
+    // Create 2nd Model object
+    XMFLOAT3 offset2 = { m_modelOffset.x + 15, m_modelOffset.y + 15, m_modelOffset.z + 5 };
+    m_pModel2.reset(new Model_Textured(offset2));
+    result = m_pModel2 != nullptr;
+    RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
 
     // Make model 2
     PrimitiveMaker primMaker2;
@@ -57,14 +57,11 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
 	result = m_pModel2->Initialize( primMaker2, *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
+   	// Initialize the texture shader object.
 	m_pShader_Texture.reset( new Shader_Texture );
 	result = m_pShader_Texture != nullptr;
 	RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Shader_Texture." );
-	//m_pColorShader.reset( new ColorShader );
-	//result = m_pColorShader != nullptr;
-	//RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for ColorShader." );
 
-	//// Initialize the color shader object.
 	result = m_pShader_Texture->Initialize( m_pDirect3D->GetDevice(), WinHandle, *m_pModel1 );
 	RETURN_IF_FALSE( result );
 
@@ -188,7 +185,7 @@ bool Game::render()
     // Render model 2
     	bool result2 = m_pShader_Texture->Render(
 		m_pDirect3D->GetDeviceContext(), 
-        GetWorldMatrix(m_pModel1->m_Position, m_pModel1->m_Orientation, m_pModel1->m_Scale),
+        GetWorldMatrix(m_pModel2->m_Position, m_pModel2->m_Orientation, m_pModel2->m_Scale),
 		m_pCamera->GetViewMatrix(),
 		m_pCamera->GetProjectionMatrix(),
 		m_pStoneTexture->GetTextureView() );

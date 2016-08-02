@@ -49,7 +49,7 @@ private:
 // later add this to GameObjects
 
     XMFLOAT3 m_modelOffset = { 0,0,0 };
-    XMFLOAT3 m_camPos = { -0.0f, 8.0f, -16.0f };
+    XMFLOAT3 m_camPos = { -0.0f, 16.0f, -30.0f };
     XMFLOAT3 m_camRotation = { 25.f, -5.f, 0.f };
 
 // Input

@@ -18,8 +18,7 @@ using namespace DirectX;
 // Class name: Model
 ////////////////////////
 class Model
-{
-    
+{    
 public:
     Model();
 	Model(XMFLOAT3 pos);
@@ -31,7 +30,6 @@ public:
 	virtual bool Initialize( const PrimitiveMaker &PrimMaker, const Graphics &Gfx ) = 0;
 	virtual std::vector<D3D11_INPUT_ELEMENT_DESC> GetInputElementDescriptions() const = 0;
 
-	XMMATRIX GetWorldMatrix()const;
 	DWORD GetVertexCount()const;
 	DWORD GetIndexCount()const;
 	ID3D11Buffer *GetVertexBuffer()const;
@@ -107,9 +105,9 @@ protected:
 public:
         // TODO: use these to get world matrix each step.
     // Model stores variables for position, orientation, and scale; will be passed to GetWorldMatrix()
-    XMFLOAT3 m_Position = { 1,0,0 }; // TODO: Set this initially in constructor
-    XMFLOAT3 m_Orientation = { 0,0,0 }; // TODO: Set this initially in constructor
-    XMFLOAT3 m_Scale = { 1,1,1 }; // TODO: Set this initially in constructor
+    XMFLOAT3 m_Position; // TODO: Set this initially in constructor
+    XMFLOAT3 m_Orientation; // TODO: Set this initially in constructor
+    XMFLOAT3 m_Scale; // TODO: Set this initially in constructor
 
 protected:
     /////////////////////////////////////////////////////////////////////////
