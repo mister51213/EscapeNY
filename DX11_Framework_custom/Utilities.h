@@ -2,6 +2,8 @@
 #include <vector>
 #include <DirectXMath.h>
 
+using namespace DirectX;
+
 // Permit me to be a little lazy :)
 // This is just an alias to shorten the amount of typing
 template<class T>
@@ -24,6 +26,36 @@ if(!(Result))\
 }\
 else int a = 0
 #define RETURN_IF_FAILED(Result) RETURN_IF_FALSE( SUCCEEDED( ( Result ) ) )
+
+////////////////////////////////////////////////////////////////
+// KEY FUNCTION FOR GETTING WORLD MATRIX
+// TODO: make it global; see which is faster
+////////////////////////////////////////////////////////////////
+
+inline DirectX::XMMATRIX GetWorldMatrix(const XMFLOAT3& translation, const XMFLOAT3& rotate, const XMFLOAT3& scale)
+{    
+    DirectX::XMMATRIX trans = XMMatrixTranslation(translation.x, translation.y, translation.z);
+    DirectX::XMMATRIX rot = XMMatrixRotationRollPitchYaw(rotate.x, rotate.y, rotate.z);
+    DirectX::XMMATRIX scal = XMMatrixScaling(scale.x, scale.y, scale.z);
+
+    // It matters what order you multiply the translation matrix in
+    return XMMatrixTranspose(rot*scal*trans); // Also transpose it in this step to make it easier for GPU to handle
+    // TODO: remove transponse world matrix from shader
+}
+
+// TODO: Make this global inline in Utilities
+// Transpose the matrices to prepare them for the shader.
+inline DirectX::XMMATRIX Transpose(std::vector<XMMATRIX> & matrices)
+{    
+    // TODO:  Figure out best way to do this; what's the fastest way,
+    // pass a list of matrices, or what?????
+
+	/*MatrixBufferType data;
+	data.world = XMMatrixTranspose( worldMatrix );
+	data.view = XMMatrixTranspose( viewMatrix );
+	data.projection = XMMatrixTranspose( projectionMatrix );*/
+    return XMMatrixIdentity();
+}
 
 // Common vertex buffer types and corresponding input element descriptions
 

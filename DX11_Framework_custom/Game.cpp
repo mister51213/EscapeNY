@@ -94,6 +94,7 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
 
 void Game::GetInput(std::shared_ptr<Input> pInput)
 {
+    // TODO: Use global GetWorldMatrix() function instead of member WorldMatrixes for each model.
     // rotate objects
     if (pInput->IsKeyDown(VK_SPACE))
     {
@@ -186,12 +187,15 @@ bool Game::render()
 	m_pCamera->Render();
 	
 	// Render the model using the color shader.
-	bool result = m_pShader_Texture->Render(
+	bool result = m_pShader_Texture->Render( // sets shader parameters
 		m_pDirect3D->GetDeviceContext(), 
 		m_pModel->GetWorldMatrix(),
 		m_pCamera->GetViewMatrix(),
 		m_pCamera->GetProjectionMatrix(),
 		m_pStoneTexture->GetTextureView() );
+
+   	m_pGraphics->RenderModel( *m_pModel );
+   	RETURN_IF_FALSE( result );
 
     // Render model 2
     	bool result2 = m_pShader_Texture->Render(
@@ -205,8 +209,6 @@ bool Game::render()
     // TODO: Change functionality here to draw MORE THAN ONE MODEL
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
     //////////////////////////////////////////////////////////////////////
-	m_pGraphics->RenderModel( *m_pModel );
-   	RETURN_IF_FALSE( result );
 
 // EXPERIMENT - render second model
     m_pGraphics->RenderModel( *m_pModel2 );

@@ -169,11 +169,19 @@ bool Shader_Texture::SetShaderParameters(
 		&mappedResource );
 	RETURN_IF_FAILED( result );
 
+    // TODO: Consolidate this into a common parent function
+    // TODO: Make this global inline in Utilities
 	// Transpose the matrices to prepare them for the shader.
 	MatrixBufferType data;
 	data.world = XMMatrixTranspose( worldMatrix );
+    // TODO: Implement global transpose and then change to this:
+    //data.world = worldMatrix;
 	data.view = XMMatrixTranspose( viewMatrix );
+    // TODO: Implement global transpose and then change to this:
+   	//data.view = viewMatrix;
 	data.projection = XMMatrixTranspose( projectionMatrix );
+    // TODO: Implement global transpose and then change to this:
+  	//data.projection = projectionMatrix;
 
 	// Copy the matrices into the constant buffer.
 	std::memmove( mappedResource.pData, &data, sizeof( MatrixBufferType ) );

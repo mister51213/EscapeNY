@@ -105,10 +105,8 @@ protected:
     
 protected:
     /////////////////////////////////////////////////////////////////////////
-    // position of object in world space; will determine 
-    // WHERE to render it in the world space coordinates
-    // so let the user adjust THESE values before initializing
-    // in order to move the model in world space
+    // The world matrix should only be created once per frame per model and 
+    // is a combination of the translation, rotation and scale matrices.
     ///////////////////////////////////////////////////////////////////////
     XMFLOAT3 m_offset = { 1,0,0 };
     XMFLOAT3 m_rotateAxis;

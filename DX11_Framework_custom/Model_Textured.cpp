@@ -13,10 +13,13 @@ bool Model_Textured::Initialize( const PrimitiveMaker &PrimMaker, const Graphics
 	m_Stride = sizeof( VertexPositionUVType );
 
     //////////////////////////////////////////////////////////
-    // TODO: / Add extra function here that ADDS position 
-    // TODO: / offset to these values after getting vertices
-    // TODO: / this function should not be in initialize, should
-    // TODO: / operate directly on instantaneous position.
+    // TODO: / WARNING WARNING
+    // This is translating the model in its OWN COORDINATES!!!!!!
+    // 1. can change it relative to its own coordinates by changing the Center
+    //    in the Model. CreatePlane() function
+    // 2. wrong way of moving the objects; if you want to move it in world
+    // space, then add its own isolated XMFLOAT3 worldPosition, then pass that
+    // to the global GetWorldMatrix function before it's rendered.
     //////////////////////////////////////////////////////////
 
 	// Create the vertex array.

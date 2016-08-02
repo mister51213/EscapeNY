@@ -241,7 +241,8 @@ bool Shader_Color::SetShaderParameters(
 		&mappedResource );										// Address of the mapped resource
 	RETURN_IF_FAILED( result );
 
-	// DirectX 11 requires transposing matrices before sending them into the shader
+    // TODO: Consolidate this into a common parent function
+    // DirectX 11 requires transposing matrices before sending them into the shader
 	MatrixBufferType matrixBuffer{
 		XMMatrixTranspose( worldMatrix ),
 		XMMatrixTranspose( viewMatrix ),
