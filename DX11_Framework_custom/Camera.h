@@ -37,8 +37,8 @@ public:
 	void SetPosition( const XMFLOAT3 &Position );
 	void SetRotation( const XMFLOAT3 &Rotation );
 
-	XMFLOAT3 GetPosition();
-	XMFLOAT3 GetRotation();
+	XMFLOAT3 GetPosition()const;
+	XMFLOAT3 GetRotation()const;
 
     void Move(XMFLOAT3 offset)
     {

@@ -72,12 +72,12 @@ void Camera::SetRotation( const XMFLOAT3 &Rotation )
 }
 
 // return the location and rotation of the camera to calling functions.
-XMFLOAT3 Camera::GetPosition()
+XMFLOAT3 Camera::GetPosition()const
 {
 	return m_Position;
 }
 
-XMFLOAT3 Camera::GetRotation()
+XMFLOAT3 Camera::GetRotation()const
 {
 	return m_Rotation;
 }

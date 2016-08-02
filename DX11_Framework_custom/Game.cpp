@@ -86,7 +86,7 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
 	result = m_pStoneTexture->Initialize( *m_pGraphics, L"Textures\\uncompressed_stone.tga" );
 	RETURN_IF_FALSE( result );
 
-	result = m_Overlay.Initialize( *m_pGraphics );
+	result = m_Overlay.Initialize( *m_pGraphics,ScreenWidth, ScreenHeight );
 	RETURN_IF_FALSE( result );
 
 	return true;
@@ -212,9 +212,12 @@ bool Game::render()
     m_pGraphics->RenderModel( *m_pModel2 );
    	RETURN_IF_FALSE( result2 );
 
+
+	auto overlayWorldMatrix = m_Overlay.GetWorldMatrix(*m_pCamera);
+
 	m_pShader_Texture->Render(
 		m_pDirect3D->GetDeviceContext(),
-		DirectX::XMMatrixIdentity(),
+		overlayWorldMatrix,
 		m_pCamera->GetViewMatrix(),
 		m_pCamera->GetOrthoMatrix(),
 		m_Overlay.GetResourceView()
