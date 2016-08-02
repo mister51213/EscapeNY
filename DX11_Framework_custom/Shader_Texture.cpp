@@ -173,9 +173,9 @@ bool Shader_Texture::SetShaderParameters(
     // TODO: Make this global inline in Utilities
 	// Transpose the matrices to prepare them for the shader.
 	MatrixBufferType data;
-	data.world = XMMatrixTranspose( worldMatrix );
+	//data.world = XMMatrixTranspose( worldMatrix );
     // TODO: Implement global transpose and then change to this:
-    //data.world = worldMatrix;
+    data.world = worldMatrix;
 	data.view = XMMatrixTranspose( viewMatrix );
     // TODO: Implement global transpose and then change to this:
    	//data.view = viewMatrix;

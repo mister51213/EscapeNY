@@ -39,21 +39,21 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
     result = m_pModel1 != nullptr;
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
 
-    XMFLOAT3 offset2 = { m_modelOffset.x + 2, m_modelOffset.y + 2, m_modelOffset.z + 3 };
     // Create 2nd Model object
+    XMFLOAT3 offset2 = { m_modelOffset.x + 1, m_modelOffset.y + 1, m_modelOffset.z + 1 };
     m_pModel2.reset(new Model_Textured(offset2));
     result = m_pModel2 != nullptr;
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
 
     // Make model 1
     PrimitiveMaker primMaker;
-    primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 3.f, 3.f, 3.f });
+    primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
 	result = m_pModel1->Initialize( primMaker, *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
     // Make model 2
     PrimitiveMaker primMaker2;
-    primMaker2.CreateCube({ 0.f, 0.f, 0.f }, { 3.f, 3.f, 3.f });
+    primMaker2.CreateCube({ 0.f, 0.f, 0.f }, { 8.f, 7.f, 3.f });
 	result = m_pModel2->Initialize( primMaker2, *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
@@ -99,26 +99,29 @@ void Game::GetInput(std::shared_ptr<Input> pInput)
     // move objects
     if (pInput->IsKeyDown(VK_RIGHT))
     {
+        m_pModel1->MoveAlt({ .1f,0.f,0.f });
         //m_pModel->Move({ .1f,0.f,0.f });
         m_pModel2->Move({ .2f,0.f,0.f });
-        m_pModel1->MoveAlt({ .1f,0.f,0.f });
     }
 
     if (pInput->IsKeyDown(VK_LEFT))
     {
-        m_pModel1->Move({ -.1f,0.f,0.f });
+        m_pModel1->MoveAlt({ -.1f,0.f,0.f });
+        //m_pModel1->Move({ -.1f,0.f,0.f });
         m_pModel2->Move({ -.2f,0.f,0.f });
     }
 
     if (pInput->IsKeyDown(VK_UP))
     {
-        m_pModel1->Move({ 0.f,.1f,0.f });
+        m_pModel1->MoveAlt({ 0.f,.1f,0.f });
+        //m_pModel1->Move({ 0.f,.1f,0.f });
         m_pModel2->Move({ 0.f,.2f,0.f });
     }
 
     if (pInput->IsKeyDown(VK_DOWN))
     {
-        m_pModel1->Move({ 0.f,-.1f,0.f });
+        m_pModel1->MoveAlt({ 0.f,-.1f,0.f });
+        //m_pModel1->Move({ 0.f,-.1f,0.f });
         m_pModel2->Move({ 0.f,-.2f,0.f });
     }
 

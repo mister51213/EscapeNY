@@ -119,9 +119,9 @@ protected:
 public:
         // TODO: use these to get world matrix each step.
     // Model stores variables for position, orientation, and scale; will be passed to GetWorldMatrix()
-    XMFLOAT3 m_Position; // TODO: Set this initially in constructor
-    XMFLOAT3 m_Orientation; // TODO: Set this initially in constructor
-    XMFLOAT3 m_Scale; // TODO: Set this initially in constructor
+    XMFLOAT3 m_Position = { 1,0,0 }; // TODO: Set this initially in constructor
+    XMFLOAT3 m_Orientation = { 0,0,0 }; // TODO: Set this initially in constructor
+    XMFLOAT3 m_Scale = { 1,0,0 }; // TODO: Set this initially in constructor
 
 protected:
     /////////////////////////////////////////////////////////////////////////
