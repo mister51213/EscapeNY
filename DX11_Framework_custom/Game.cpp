@@ -163,8 +163,6 @@ void Game::GetInput(std::shared_ptr<Input> pInput)
     {
         m_pCamera->Rotate({ 0, 1, 0 });
     }
-
-
 }
 
 bool Game::Frame()
@@ -195,7 +193,7 @@ bool Game::render()
 		m_pCamera->GetProjectionMatrix(),
 		m_pStoneTexture->GetTextureView() );
 
-    // Render model 2 color
+    // Render model 2
     	bool result2 = m_pShader_Texture->Render(
 		m_pDirect3D->GetDeviceContext(), 
 		m_pModel2->GetWorldMatrix(),

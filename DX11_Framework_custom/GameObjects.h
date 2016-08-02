@@ -30,7 +30,7 @@ public:
 
 
 
-    bool InitializeShapes()
+    bool InitializeAllModels()
     {
     bool result = true;
     ////////////////////////////////////////////////////////
@@ -85,8 +85,7 @@ public:
 private:
 
     // TODO: Add these to models list   
-    std::unique_ptr<Model_Textured> m_pModel;
-    std::unique_ptr<Model_Textured> m_pModel2;
+    std::unique_ptr<Model_Textured> m_pModel3;
 
     // store all game objects in a list
     vector<Model*> models;
