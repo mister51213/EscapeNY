@@ -40,7 +40,7 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
 
     // Create 2nd Model object
-    XMFLOAT3 offset2 = { m_modelOffset.x + 1, m_modelOffset.y + 1, m_modelOffset.z + 1 };
+    XMFLOAT3 offset2 = { m_modelOffset.x + 5, m_modelOffset.y + 5, m_modelOffset.z + 5 };
     m_pModel2.reset(new Model_Textured(offset2));
     result = m_pModel2 != nullptr;
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
@@ -53,7 +53,7 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
 
     // Make model 2
     PrimitiveMaker primMaker2;
-    primMaker2.CreateCube({ 0.f, 0.f, 0.f }, { 8.f, 7.f, 3.f });
+    primMaker2.CreateCube({ 0.f, 0.f, 0.f }, { 4.f, 4.f, 10.f });
 	result = m_pModel2->Initialize( primMaker2, *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
@@ -181,7 +181,7 @@ bool Game::render()
 // Model 1 - Drawn using global GetWorldMatrix function.
     bool result = m_pShader_Texture->Render( // sets shader parameters
         m_pDirect3D->GetDeviceContext(),
-        //m_pModel->GetWorldMatrix(),
+        //m_pModel1->GetWorldMatrix(),
         GetWorldMatrix(m_pModel1->m_Position, m_pModel1->m_Orientation, m_pModel1->m_Scale),
 		m_pCamera->GetViewMatrix(),
 		m_pCamera->GetProjectionMatrix(),

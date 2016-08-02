@@ -23,9 +23,9 @@ Model::Model(XMFLOAT3 pos)
 	// world space coordinates
 	m_worldMatrix = XMMatrixIdentity();
     m_Position = pos;
-    m_Position = { 1,0,0 }; 
-    m_Orientation = { 1,0,0 }; 
-    m_Scale = { 1,0,0 };
+    m_Position = { 0,0,0 }; 
+    m_Orientation = { 0,0,0 }; 
+    m_Scale = { 1,1,1 };
 }
 
 Model::Model(const Model& other)

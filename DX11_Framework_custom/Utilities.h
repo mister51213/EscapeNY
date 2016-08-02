@@ -53,14 +53,14 @@ else int a = 0
 // TODO: make it global; see which is faster
 ////////////////////////////////////////////////////////////////
 
-inline DirectX::XMMATRIX GetWorldMatrix(const XMFLOAT3& translation, const XMFLOAT3& rotate, const XMFLOAT3& scale)
+inline DirectX::XMMATRIX GetWorldMatrix(const XMFLOAT3& translate, const XMFLOAT3& rotate, const XMFLOAT3& scale)
 {    
-    DirectX::XMMATRIX trans = XMMatrixTranslation(translation.x, translation.y, translation.z);
+    DirectX::XMMATRIX trans = XMMatrixTranslation(translate.x, translate.y, translate.z);
     DirectX::XMMATRIX rot = XMMatrixRotationRollPitchYaw(rotate.x, rotate.y, rotate.z);
     DirectX::XMMATRIX scal = XMMatrixScaling(scale.x, scale.y, scale.z);
 
-    // It matters what order you multiply the translation matrix in
-    return XMMatrixTranspose(rot*scal*trans); // Also transpose it in this step to make it easier for GPU to handle
+    return rot*scal*trans;
+    //return XMMatrixTranspose(rot*scal*trans); // Also transpose it in this step to make it easier for GPU to handle
     // TODO: remove transponse world matrix from shader
 }
 
