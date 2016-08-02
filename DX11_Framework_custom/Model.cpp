@@ -12,12 +12,17 @@
 #include "model.h"
 #include "PrimitiveMaker.h"
 
-// initialize the vertex and index buffer pointers to null.
 Model::Model()
+{
+}
+
+// initialize the vertex and index buffer pointers to null.
+Model::Model(XMFLOAT3 pos)
 {
 	// This matrix transforms vertices from object space coordinates to
 	// world space coordinates
 	m_worldMatrix = XMMatrixIdentity();
+    m_Position = pos;
 }
 
 Model::Model(const Model& other)

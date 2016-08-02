@@ -31,13 +31,22 @@ else int a = 0
 // Vector Math Operator Overloads
 ///////////////////////////////////////////////////
 
-XMFLOAT3 operator += (XMFLOAT3 v1, XMFLOAT3 v2)
-{
-    v1.x += v2.x;
-    v1.y += v2.y;
-    v1.z += v2.z;
-    return v1;
-}
+//XMFLOAT3 operator += (XMFLOAT3& v1, XMFLOAT3& v2)
+//{
+//    v1.x += v2.x;
+//    v1.y += v2.y;
+//    v1.z += v2.z;
+//    return v1;
+//}
+
+// redundant?
+//XMFLOAT3 operator + (XMFLOAT3& v1, float cubeMod)
+//{
+//    v1.x += cubeMod;
+//    v1.y += cubeMod;
+//    v1.z += cubeMod;
+//    return v1;
+//}
 
 ////////////////////////////////////////////////////////////////
 // KEY FUNCTION FOR GETTING WORLD MATRIX

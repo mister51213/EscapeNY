@@ -3,7 +3,6 @@
 Overlay::Overlay()
 {}
 
-
 Overlay::~Overlay()
 {}
 

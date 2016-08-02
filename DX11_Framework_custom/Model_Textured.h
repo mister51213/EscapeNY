@@ -5,7 +5,8 @@
 class Model_Textured :public Model
 {
 public:
-	Model_Textured();
+    Model_Textured();
+	Model_Textured(XMFLOAT3 pos);
 	~Model_Textured();
 
 	bool Initialize( const PrimitiveMaker &PrimMaker, const Graphics &Gfx )override;

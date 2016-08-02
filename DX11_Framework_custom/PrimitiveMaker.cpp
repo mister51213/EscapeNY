@@ -148,7 +148,7 @@ void PrimitiveMaker::CreatePlane(
 }
 
 void PrimitiveMaker::CreateCube( 
-    const DirectX::XMFLOAT3 & Center, 
+    const DirectX::XMFLOAT3 & Center, // in MODEL space, not WORLD space!!!
     const DirectX::XMFLOAT3 & Size, 
     const DirectX::XMFLOAT3 & Orientation )
 {    

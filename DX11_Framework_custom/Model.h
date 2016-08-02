@@ -21,7 +21,8 @@ class Model
 {
     
 public:
-	Model();
+    Model();
+	Model(XMFLOAT3 pos);
 	Model(const Model&);
 	~Model();
 
@@ -51,7 +52,11 @@ public:
     // later in rendering pipeline each frame.
     void MoveAlt(XMFLOAT3 Offset)
     {
-        m_Position += Offset;
+        // Vector operator overloading won't work for some reason.
+        //m_Position += Offset;
+        m_Position.x += Offset.x;
+        m_Position.y += Offset.y;
+        m_Position.z += Offset.z;
     }
 
     void Rotate(XMFLOAT3 axis, float angle)
@@ -110,7 +115,14 @@ protected:
 
         return true;
     }
-    
+
+public:
+        // TODO: use these to get world matrix each step.
+    // Model stores variables for position, orientation, and scale; will be passed to GetWorldMatrix()
+    XMFLOAT3 m_Position; // TODO: Set this initially in constructor
+    XMFLOAT3 m_Orientation; // TODO: Set this initially in constructor
+    XMFLOAT3 m_Scale; // TODO: Set this initially in constructor
+
 protected:
     /////////////////////////////////////////////////////////////////////////
     // The world matrix should only be created once per frame per model and 
@@ -119,12 +131,6 @@ protected:
     XMFLOAT3 m_offset = { 1,0,0 };
     XMFLOAT3 m_rotateAxis;
     float m_rotateAngle=.1f;
-
-    // TODO: use these to get world matrix each step.
-    // Model stores variables for position, orientation, and scale; will be passed to GetWorldMatrix()
-    XMFLOAT3 m_Position; // TODO: Set this initially in constructor
-    XMFLOAT3 m_Orientation; // TODO: Set this initially in constructor
-    XMFLOAT3 m_Scale; // TODO: Set this initially in constructor
 
     // TODO: Remove this variable.
 	XMMATRIX m_worldMatrix;

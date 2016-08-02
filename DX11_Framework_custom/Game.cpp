@@ -35,37 +35,25 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
     RETURN_IF_FALSE(result);
 
     // Create the model object.
-    m_pModel.reset(new Model_Textured);
-    result = m_pModel != nullptr;
+    m_pModel1.reset(new Model_Textured(m_modelOffset));
+    result = m_pModel1 != nullptr;
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
 
+    XMFLOAT3 offset2 = { m_modelOffset.x + 2, m_modelOffset.y + 2, m_modelOffset.z + 3 };
     // Create 2nd Model object
-    m_pModel2.reset(new Model_Textured);
+    m_pModel2.reset(new Model_Textured(offset2));
     result = m_pModel2 != nullptr;
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
 
-    // TODO: Must unify Initialize and Render functions for model if we want
-    // to add responsive movement functionality in here
-
-    ////////////////////////////////////////
-    // Feed the Pimitive Maker w cube object
-    ////////////////////////////////////////
+    // Make model 1
     PrimitiveMaker primMaker;
-    primMaker.CreateCube(m_modelOffset,{ 4.f, 4.f, 4.f });
-
-    // Feed the Pimitive Maker 2 w cube object
-    XMFLOAT3 mPos2 = m_modelOffset;
-    mPos2.x += 4;
-    mPos2.y += 2;
-    mPos2.z += 7;
-    PrimitiveMaker primMaker2;
-    primMaker2.CreateCube(mPos2,{ 2.f, 2.f, 2.f });
-
-    // Initialize model 1
-	result = m_pModel->Initialize( primMaker, *m_pGraphics );
+    primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 3.f, 3.f, 3.f });
+	result = m_pModel1->Initialize( primMaker, *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
-    // Initialize model 2
+    // Make model 2
+    PrimitiveMaker primMaker2;
+    primMaker2.CreateCube({ 0.f, 0.f, 0.f }, { 3.f, 3.f, 3.f });
 	result = m_pModel2->Initialize( primMaker2, *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
@@ -77,7 +65,7 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
 	//RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for ColorShader." );
 
 	//// Initialize the color shader object.
-	result = m_pShader_Texture->Initialize( m_pDirect3D->GetDevice(), WinHandle, *m_pModel );
+	result = m_pShader_Texture->Initialize( m_pDirect3D->GetDevice(), WinHandle, *m_pModel1 );
 	RETURN_IF_FALSE( result );
 
 	m_pStoneTexture.reset( new Texture );
@@ -98,38 +86,39 @@ void Game::GetInput(std::shared_ptr<Input> pInput)
     // rotate objects
     if (pInput->IsKeyDown(VK_SPACE))
     {
-        m_pModel->Rotate({ 0.1f,0.1f,0.1f }, -.05f);
+        m_pModel1->Rotate({ 0.1f,0.1f,0.1f }, -.05f);
         m_pModel2->Rotate({ 0.1f,0.1f,0.1f }, .05f);
     }
 
     if (pInput->IsKeyDown(VK_CONTROL))
     {
-        m_pModel->Rotate({ 0.1f,0.1f,0.1f }, 0.05f);
+        m_pModel1->Rotate({ 0.1f,0.1f,0.1f }, 0.05f);
         m_pModel2->Rotate({ 0.1f,0.1f,0.1f }, -.05f);
     }
 
     // move objects
     if (pInput->IsKeyDown(VK_RIGHT))
     {
-        m_pModel->Move({ .1f,0.f,0.f });
+        //m_pModel->Move({ .1f,0.f,0.f });
         m_pModel2->Move({ .2f,0.f,0.f });
+        m_pModel1->MoveAlt({ .1f,0.f,0.f });
     }
 
     if (pInput->IsKeyDown(VK_LEFT))
     {
-        m_pModel->Move({ -.1f,0.f,0.f });
+        m_pModel1->Move({ -.1f,0.f,0.f });
         m_pModel2->Move({ -.2f,0.f,0.f });
     }
 
     if (pInput->IsKeyDown(VK_UP))
     {
-        m_pModel->Move({ 0.f,.1f,0.f });
+        m_pModel1->Move({ 0.f,.1f,0.f });
         m_pModel2->Move({ 0.f,.2f,0.f });
     }
 
     if (pInput->IsKeyDown(VK_DOWN))
     {
-        m_pModel->Move({ 0.f,-.1f,0.f });
+        m_pModel1->Move({ 0.f,-.1f,0.f });
         m_pModel2->Move({ 0.f,-.2f,0.f });
     }
 
@@ -186,15 +175,16 @@ bool Game::render()
 	// Generate the view matrix based on the camera's position.
 	m_pCamera->Render();
 	
-	// Render the model using the color shader.
-	bool result = m_pShader_Texture->Render( // sets shader parameters
-		m_pDirect3D->GetDeviceContext(), 
-		m_pModel->GetWorldMatrix(),
+// Model 1 - Drawn using global GetWorldMatrix function.
+    bool result = m_pShader_Texture->Render( // sets shader parameters
+        m_pDirect3D->GetDeviceContext(),
+        //m_pModel->GetWorldMatrix(),
+        GetWorldMatrix(m_pModel1->m_Position, m_pModel1->m_Orientation, m_pModel1->m_Scale),
 		m_pCamera->GetViewMatrix(),
 		m_pCamera->GetProjectionMatrix(),
 		m_pStoneTexture->GetTextureView() );
 
-   	m_pGraphics->RenderModel( *m_pModel );
+   	m_pGraphics->RenderModel( *m_pModel1 );
    	RETURN_IF_FALSE( result );
 
     // Render model 2

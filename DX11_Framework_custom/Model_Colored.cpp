@@ -1,9 +1,9 @@
 #include "Model_Colored.h"
 
+Model_Colored::Model_Colored() {}
 
-Model_Colored::Model_Colored()
-{
-}
+Model_Colored::Model_Colored(XMFLOAT3 pos):Model::Model(pos) // initialize base position)
+{}
 
 Model_Colored::~Model_Colored()
 {}

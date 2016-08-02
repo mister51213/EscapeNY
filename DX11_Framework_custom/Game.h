@@ -36,7 +36,7 @@ private:
     // should be passed as parameters to draw individual objects to a single rendering pipeline
     //GameObjects m_objects;
 
-	std::unique_ptr<Model_Textured> m_pModel;
+	std::unique_ptr<Model_Textured> m_pModel1;
 
     // TODO: Add new model here as experiment
     std::unique_ptr<Model_Textured> m_pModel2;
