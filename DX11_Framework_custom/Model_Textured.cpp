@@ -28,13 +28,6 @@ bool Model_Textured::Initialize( const PrimitiveMaker &PrimMaker, const Graphics
 	// Create the vertex array.
 	auto verts = PrimMaker.GetVertices();
 
-    for each (XMFLOAT3 vertex in verts)
-    {
-        vertex.x += m_offset.x;
-        vertex.y += m_offset.y;
-        vertex.z += m_offset.z;
-    }
-
 	// Set the number of verticex indices in the vertex array.
 	m_vertexCount = verts.size();
 	m_indexCount = verts.size();

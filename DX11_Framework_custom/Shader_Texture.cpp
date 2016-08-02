@@ -175,8 +175,8 @@ bool Shader_Texture::SetShaderParameters(
 	MatrixBufferType data;
 
     // TODO: Implement global transpose and then change to this:
-	data.world = XMMatrixTranspose( worldMatrix );
-    //data.world = worldMatrix;
+	//data.world = XMMatrixTranspose( worldMatrix );
+    data.world = worldMatrix;
 
 	data.view = XMMatrixTranspose( viewMatrix );
     // TODO: Implement global transpose and then change to this:

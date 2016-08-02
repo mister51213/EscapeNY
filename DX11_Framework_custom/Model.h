@@ -39,33 +39,21 @@ public:
 	UINT GetStride()const;
 
     // TODO: These shouldn't be inline
+    // Modulate position member; this will be reflected by global GetWorldMatrix()
     void Move(XMFLOAT3 Offset)
     {
-        m_offset.x += Offset.x;
-        m_offset.y += Offset.y;
-        m_offset.z += Offset.z;
-        m_worldMatrix = DirectX::XMMatrixTranslation(m_offset.x, m_offset.y, m_offset.z);
-    }
-
-    // Simply modulate position member of Model;
-    // this will be reflected by global GetWorldMatrix 
-    // later in rendering pipeline each frame.
-    void MoveAlt(XMFLOAT3 Offset)
-    {
-        // Vector operator overloading won't work for some reason.
-        //m_Position += Offset;
         m_Position.x += Offset.x;
         m_Position.y += Offset.y;
         m_Position.z += Offset.z;
     }
 
-    void Rotate(XMFLOAT3 axis, float angle)
+    void Rotate(XMFLOAT3 axis/*, float angle*/)
     {
-        //m_rotateAxis.x += axis.x;
-        //m_rotateAxis.y += axis.y;
-        //m_rotateAxis.z += axis.z;
-        m_rotateAngle += angle;
-        m_worldMatrix = XMMatrixRotationX(m_rotateAngle);
+        m_Orientation.x += axis.x;
+        m_Orientation.y += axis.y;
+        m_Orientation.z += axis.z;
+        /*m_rotateAngle += angle;
+        m_worldMatrix = XMMatrixRotationX(m_rotateAngle);*/
     }
 
 protected:
@@ -121,19 +109,19 @@ public:
     // Model stores variables for position, orientation, and scale; will be passed to GetWorldMatrix()
     XMFLOAT3 m_Position = { 1,0,0 }; // TODO: Set this initially in constructor
     XMFLOAT3 m_Orientation = { 0,0,0 }; // TODO: Set this initially in constructor
-    XMFLOAT3 m_Scale = { 1,0,0 }; // TODO: Set this initially in constructor
+    XMFLOAT3 m_Scale = { 1,1,1 }; // TODO: Set this initially in constructor
 
 protected:
     /////////////////////////////////////////////////////////////////////////
     // The world matrix should only be created once per frame per model and 
     // is a combination of the translation, rotation and scale matrices.
     ///////////////////////////////////////////////////////////////////////
-    XMFLOAT3 m_offset = { 1,0,0 };
-    XMFLOAT3 m_rotateAxis;
-    float m_rotateAngle=.1f;
+    //XMFLOAT3 m_offset = { 1,0,0 };
+    //XMFLOAT3 m_rotateAxis;
+    //float m_rotateAngle=.1f;
 
     // TODO: Remove this variable.
-	XMMATRIX m_worldMatrix;
+	//XMMATRIX m_worldMatrix;
 
 	comptr<ID3D11Buffer> m_vertexBuffer, m_indexBuffer;
 	int m_vertexCount, m_indexCount; // keep track of the size of each buffer

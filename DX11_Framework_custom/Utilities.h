@@ -59,8 +59,8 @@ inline DirectX::XMMATRIX GetWorldMatrix(const XMFLOAT3& translate, const XMFLOAT
     DirectX::XMMATRIX rot = XMMatrixRotationRollPitchYaw(rotate.x, rotate.y, rotate.z);
     DirectX::XMMATRIX scal = XMMatrixScaling(scale.x, scale.y, scale.z);
 
-    return rot*scal*trans;
-    //return XMMatrixTranspose(rot*scal*trans); // Also transpose it in this step to make it easier for GPU to handle
+    //return rot*scal*trans;
+    return XMMatrixTranspose(rot*scal*trans); // Also transpose it in this step to make it easier for GPU to handle
     // TODO: remove transponse world matrix from shader
 }
 

@@ -244,7 +244,7 @@ bool Shader_Color::SetShaderParameters(
     // TODO: Consolidate this into a common parent function
     // DirectX 11 requires transposing matrices before sending them into the shader
 	MatrixBufferType matrixBuffer{
-		XMMatrixTranspose( worldMatrix ),
+		worldMatrix,
 		XMMatrixTranspose( viewMatrix ),
 		XMMatrixTranspose( projectionMatrix )
 	};

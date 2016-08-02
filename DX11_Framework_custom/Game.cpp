@@ -86,43 +86,39 @@ void Game::GetInput(std::shared_ptr<Input> pInput)
     // rotate objects
     if (pInput->IsKeyDown(VK_SPACE))
     {
-        m_pModel1->Rotate({ 0.1f,0.1f,0.1f }, -.05f);
-        m_pModel2->Rotate({ 0.1f,0.1f,0.1f }, .05f);
+        m_pModel1->Rotate({ 0.001f,0.05f,0.05f });
+        m_pModel2->Rotate({ 0.05f,0.0f,0.05f });
     }
 
     if (pInput->IsKeyDown(VK_CONTROL))
     {
-        m_pModel1->Rotate({ 0.1f,0.1f,0.1f }, 0.05f);
-        m_pModel2->Rotate({ 0.1f,0.1f,0.1f }, -.05f);
+        m_pModel1->Rotate({ -0.001f,-0.05f,-0.05f });
+        m_pModel2->Rotate({ -0.05f,-0.0f,-0.05f });
     }
 
     // move objects
     if (pInput->IsKeyDown(VK_RIGHT))
     {
-        m_pModel1->MoveAlt({ .1f,0.f,0.f });
-        //m_pModel->Move({ .1f,0.f,0.f });
-        m_pModel2->Move({ .2f,0.f,0.f });
+        m_pModel1->Move({ .1f,0.f,0.f });
+        m_pModel2->Move({ .9f,0.f,0.f });
     }
 
     if (pInput->IsKeyDown(VK_LEFT))
     {
-        m_pModel1->MoveAlt({ -.1f,0.f,0.f });
-        //m_pModel1->Move({ -.1f,0.f,0.f });
-        m_pModel2->Move({ -.2f,0.f,0.f });
+        m_pModel1->Move({ -.1f,0.f,0.f });
+        m_pModel2->Move({ -.9f,0.f,0.f });
     }
 
     if (pInput->IsKeyDown(VK_UP))
     {
-        m_pModel1->MoveAlt({ 0.f,.1f,0.f });
-        //m_pModel1->Move({ 0.f,.1f,0.f });
-        m_pModel2->Move({ 0.f,.2f,0.f });
+        m_pModel1->Move({ 0.f,.1f,0.f });
+        m_pModel2->Move({ 0.f,.9f,0.f });
     }
 
     if (pInput->IsKeyDown(VK_DOWN))
     {
-        m_pModel1->MoveAlt({ 0.f,-.1f,0.f });
-        //m_pModel1->Move({ 0.f,-.1f,0.f });
-        m_pModel2->Move({ 0.f,-.2f,0.f });
+        m_pModel1->Move({ 0.f,-.1f,0.f });
+        m_pModel2->Move({ 0.f,-.9f,0.f });
     }
 
     // move camera (FPS view)
@@ -181,7 +177,6 @@ bool Game::render()
 // Model 1 - Drawn using global GetWorldMatrix function.
     bool result = m_pShader_Texture->Render( // sets shader parameters
         m_pDirect3D->GetDeviceContext(),
-        //m_pModel1->GetWorldMatrix(),
         GetWorldMatrix(m_pModel1->m_Position, m_pModel1->m_Orientation, m_pModel1->m_Scale),
 		m_pCamera->GetViewMatrix(),
 		m_pCamera->GetProjectionMatrix(),
@@ -193,7 +188,7 @@ bool Game::render()
     // Render model 2
     	bool result2 = m_pShader_Texture->Render(
 		m_pDirect3D->GetDeviceContext(), 
-		m_pModel2->GetWorldMatrix(),
+        GetWorldMatrix(m_pModel1->m_Position, m_pModel1->m_Orientation, m_pModel1->m_Scale),
 		m_pCamera->GetViewMatrix(),
 		m_pCamera->GetProjectionMatrix(),
 		m_pStoneTexture->GetTextureView() );
