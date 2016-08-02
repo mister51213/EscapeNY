@@ -46,6 +46,14 @@ public:
         m_worldMatrix = DirectX::XMMatrixTranslation(m_offset.x, m_offset.y, m_offset.z);
     }
 
+    // Simply modulate position member of Model;
+    // this will be reflected by global GetWorldMatrix 
+    // later in rendering pipeline each frame.
+    void MoveAlt(XMFLOAT3 Offset)
+    {
+        m_Position += Offset;
+    }
+
     void Rotate(XMFLOAT3 axis, float angle)
     {
         //m_rotateAxis.x += axis.x;
@@ -112,6 +120,13 @@ protected:
     XMFLOAT3 m_rotateAxis;
     float m_rotateAngle=.1f;
 
+    // TODO: use these to get world matrix each step.
+    // Model stores variables for position, orientation, and scale; will be passed to GetWorldMatrix()
+    XMFLOAT3 m_Position; // TODO: Set this initially in constructor
+    XMFLOAT3 m_Orientation; // TODO: Set this initially in constructor
+    XMFLOAT3 m_Scale; // TODO: Set this initially in constructor
+
+    // TODO: Remove this variable.
 	XMMATRIX m_worldMatrix;
 
 	comptr<ID3D11Buffer> m_vertexBuffer, m_indexBuffer;

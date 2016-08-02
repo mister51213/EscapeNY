@@ -5,6 +5,13 @@
 /////////////
 // GLOBALS //
 /////////////
+
+// This will be INITIALIZED differently for EACH OBJECT
+cbuffer WMatBuffer
+{
+    matrix objectWorldMatrix;
+};
+
 cbuffer MatrixBuffer
 {
     matrix worldMatrix;

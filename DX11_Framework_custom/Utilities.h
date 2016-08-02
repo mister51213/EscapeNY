@@ -27,6 +27,18 @@ if(!(Result))\
 else int a = 0
 #define RETURN_IF_FAILED(Result) RETURN_IF_FALSE( SUCCEEDED( ( Result ) ) )
 
+////////////////////////////////////////////////////
+// Vector Math Operator Overloads
+///////////////////////////////////////////////////
+
+XMFLOAT3 operator += (XMFLOAT3 v1, XMFLOAT3 v2)
+{
+    v1.x += v2.x;
+    v1.y += v2.y;
+    v1.z += v2.z;
+    return v1;
+}
+
 ////////////////////////////////////////////////////////////////
 // KEY FUNCTION FOR GETTING WORLD MATRIX
 // TODO: make it global; see which is faster
