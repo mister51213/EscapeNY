@@ -80,34 +80,46 @@ constexpr float TwoPI = 2.f * PI;
 constexpr float PIDivFour = PI / 4.f;
 // PIDivTwo is equal to 90 degrees
 constexpr float PIDivTwo = PI / 2.f;
-// Radian is 1 radian, multiply degrees by radian to convert 
+// Radian is 0.01745329238f radians, multiply degrees by radian to convert 
 // degrees to radians for rotation functions
 constexpr float radian = PI / 180.f;
 
+// Calculates the cross-product of two float3 vectors
 inline XMFLOAT3 CrossProduct(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
 {
-	return
+	return 
 	{
 		(V1.y * V2.z) - (V1.z * V2.y),
 		(V1.z * V2.x) - (V1.x * V2.z),
 		(V1.x * V2.y) - (V1.y * V2.x)
 	};
 }
+// Calculates the dot-product of two float3 vectors
 inline float DotProduct(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
 {
 	return (V1.x * V2.x) + (V1.y * V2.y) + (V1.z * V2.z);
 }
+// Calculates the magnitude of a float3 vector
 inline float Magnitude(const XMFLOAT3 &V)
 {
+	// The dot-product of an angle with itself is the same as
+	// the magnitude of the vector squared, to get the magnitude
+	// return the square root of the result.
 	return sqrtf(DotProduct(V, V));
 }
+// Calcualtes the length between two float3 point vectors
 inline float Length(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
 {
+	// Length between two points is the magnitude of the vector
+	// that starts at point1 and goes to point2
 	return Magnitude(V2 - V1);
 }
+// Normalizes a float3 vector
 inline XMFLOAT3 Normalize(const XMFLOAT3 &V)
 {
 	// Optimization
+	// Division is the slowest basic math operation, so getting
+	// the recipricol we can use multiplication instead, which is faster
 	float recipricalLength = 1.0f / Magnitude(V);
 	return V * recipricalLength;
 }
