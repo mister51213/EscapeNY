@@ -7,8 +7,11 @@ texture functionality for more detailed graphics.
 
 #include "Includes.h"
 
-static class PrimitiveFactory
+class PrimitiveFactory
 {
+    //// prevent making instances of this class
+    //PrimitiveFactory() = delete;
+
 public:
     // Take center, size, and orientation of primitive to be created
 	static void CreateTriangle( 
@@ -23,7 +26,7 @@ public:
         const DirectX::XMFLOAT3 &Center, 
         const DirectX::XMFLOAT3 &Extent,
 		const DirectX::XMFLOAT3 &Orientation = {0.f, 0.f, 0.f} );
-	void PrimitiveFactory::CreateColor( float R, float G, float B, float A );
+	static void PrimitiveFactory::CreateColor( float R, float G, float B, float A );
 
     // ACCESSOR FUNCTIONS
 	static std::vector<DirectX::XMFLOAT3> GetVertices();
@@ -35,7 +38,6 @@ public:
 private:
 	 static std::vector<DirectX::XMFLOAT3> vertices;
 	 static std::vector<DirectX::XMFLOAT3> normals;
-    // texture uv coordinates (x and y) 
 	 static std::vector<DirectX::XMFLOAT2> uvs; 
 	 static std::vector<DWORD> indices;
    	 static DirectX::XMFLOAT4 color;

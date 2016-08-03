@@ -5,6 +5,7 @@ texture functionality for more detailed graphics.
 
 ***************************************************************************************/
 #include "PrimitiveFactory.h"
+#include "Utilities.h"
 
 using namespace DirectX;
 
@@ -14,6 +15,7 @@ void PrimitiveFactory::CreateTriangle(
     const DirectX::XMFLOAT3 &Orientation )
 {
 	auto extentHalf = DirectX::XMFLOAT2( Extent.x * 0.5f, Extent.y * 0.5f );
+    PrimitiveFactory::vertices.clear();
 	PrimitiveFactory::vertices = 
 	{
 		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z},
@@ -21,13 +23,17 @@ void PrimitiveFactory::CreateTriangle(
 		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z}
 	};
 
+    // Must clear each time because this is static.
+    PrimitiveFactory::normals.clear();
 	PrimitiveFactory::normals = 
 	{
 		{0.f, 0.f, -1.f},
 		{0.f, 0.f, -1.f},
 		{0.f, 0.f, -1.f}
 	};
-
+ 
+    // Must clear each time because this is static.
+    PrimitiveFactory::uvs.clear();
 	PrimitiveFactory::uvs = 
 	{
 		{0.f, 1.f},
@@ -35,6 +41,9 @@ void PrimitiveFactory::CreateTriangle(
 		{1.f, 1.f}
 	};
 
+    // Must clear each time because this is static.
+    PrimitiveFactory::indices.clear();
+    // TODO: can resize() resize DOWN too; if so, don't need clear above
 	PrimitiveFactory::indices.resize( vertices.size() );
 	for( int i = 0; i < vertices.size(); ++i )
 	{
@@ -42,7 +51,7 @@ void PrimitiveFactory::CreateTriangle(
 	}
 
 	// Load the orienation into SIMD register and create the rotation matrix
-	auto rotationVector = XMLoadFloat3( &Orientation );
+	auto rotationVector = ConvertToRadians(XMLoadFloat3( &Orientation ));
 	auto rotationMatrix = XMMatrixRotationRollPitchYawFromVector( rotationVector );
 
 	// Rotate each vertex
@@ -56,7 +65,7 @@ void PrimitiveFactory::CreateTriangle(
 	// Load the reverse orientation into SIMD register and create the reverse rotation matrix
 	// for the normals. This makes sure that lights don't follow the direction of the 
 	// plane, but instead go in the opposite direction
-	auto reverseRotationMatrix = XMMatrixRotationRollPitchYawFromVector( -rotationVector );
+	auto reverseRotationMatrix = XMMatrixRotationRollPitchYawFromVector( rotationVector );
 	for( auto &normal : normals )
 	{
 		auto xmVector = XMLoadFloat3( &normal );
@@ -76,6 +85,7 @@ void PrimitiveFactory::CreatePlane(
     // Extent half is size of the object in each direction
     auto extentHalf = DirectX::XMFLOAT2( Extent.x * 0.5f, Extent.y * 0.5f );
 	// Create vertex list	
+    PrimitiveFactory::vertices.clear();
     PrimitiveFactory::vertices = 
 	{
 		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z},
@@ -87,6 +97,7 @@ void PrimitiveFactory::CreatePlane(
 	};
 	
 	// Create normals list
+    PrimitiveFactory::normals.clear();
 	PrimitiveFactory::normals =
 	{
 		{0.f,0.f,-1.f},
@@ -98,6 +109,7 @@ void PrimitiveFactory::CreatePlane(
 	};
 
 	// Create uv coordinate list
+    PrimitiveFactory::uvs.clear();
 	PrimitiveFactory::uvs = 
 	{ 
 		{0.f, 0.f}, 
@@ -110,6 +122,7 @@ void PrimitiveFactory::CreatePlane(
 
 	// This is for a D3D11_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, for a 
 	// D3D11_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP you would only need 0,1,2,3
+    PrimitiveFactory::indices.clear();
 	PrimitiveFactory::indices.resize( vertices.size() );
 	for( int i = 0; i < vertices.size(); ++i )
 	{
@@ -117,7 +130,7 @@ void PrimitiveFactory::CreatePlane(
 	}
 
 	// Load the orienation into SIMD register and create the rotation matrix
-	auto rotationVector = XMLoadFloat3( &Orientation );
+	auto rotationVector = ConvertToRadians(XMLoadFloat3( &Orientation ));
 	auto rotationMatrix = XMMatrixRotationRollPitchYawFromVector( rotationVector );
 
 	// Rotate each vertex
@@ -148,6 +161,7 @@ void PrimitiveFactory::CreateCube(
     // TODO: Better name this function
     auto extentHalf = DirectX::XMFLOAT3( Size.x * 0.5f, Size.y * 0.5f, Size.z * 0.5f );
 
+    PrimitiveFactory::vertices.clear();
 	PrimitiveFactory::vertices = 
 	{	
         // Left
@@ -199,6 +213,7 @@ void PrimitiveFactory::CreateCube(
 		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z}
 	};
 
+    PrimitiveFactory::normals.clear();
 	PrimitiveFactory::normals = 
 	{
 		// Left
@@ -250,6 +265,7 @@ void PrimitiveFactory::CreateCube(
 		{0.f, 0.f, 1.f}
 	};
 
+    PrimitiveFactory::uvs.clear();
 	PrimitiveFactory::uvs = 
 	{
 		// Left
@@ -296,6 +312,7 @@ void PrimitiveFactory::CreateCube(
 		{1.f, 1.f}
 	};
 
+    PrimitiveFactory::indices.clear();
 	PrimitiveFactory::indices.resize( vertices.size() );
 	for( int i = 0; i < vertices.size(); ++i )
 	{
@@ -303,7 +320,7 @@ void PrimitiveFactory::CreateCube(
 	}
 
 	// Load the orienation into SIMD register and create the rotation matrix
-	auto rotationVector = XMLoadFloat3( &Orientation );
+	auto rotationVector = ConvertToRadians(XMLoadFloat3( &Orientation ));
 	auto rotationMatrix = XMMatrixRotationRollPitchYawFromVector( rotationVector );
 
 	// Rotate each vertex
@@ -355,3 +372,9 @@ DirectX::XMFLOAT4 PrimitiveFactory::GetColor()
 {
 	return PrimitiveFactory::color;
 }
+
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::vertices;
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::normals;
+std::vector<DirectX::XMFLOAT2> PrimitiveFactory::uvs; 
+std::vector<DWORD> PrimitiveFactory::indices;
+DirectX::XMFLOAT4 PrimitiveFactory::color;

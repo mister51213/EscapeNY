@@ -87,9 +87,6 @@ private:
         return pModel;
     }
 
-
-
-
     bool InitShader()
     {
         bool result;
