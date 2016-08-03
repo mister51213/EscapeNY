@@ -74,12 +74,16 @@ inline XMFLOAT3 &operator/= (XMFLOAT3 &V, const float S)
 
 // PI is equal to 180 degrees
 constexpr float PI = 3.141592654f;
+
 // TwoPI is equal to 360 degrees
 constexpr float TwoPI = 2.f * PI;
+
 // PIDivFour is equal to 45 degrees
 constexpr float PIDivFour = PI / 4.f;
+
 // PIDivTwo is equal to 90 degrees
 constexpr float PIDivTwo = PI / 2.f;
+
 // Radian is 0.01745329238f radians, multiply degrees by radian to convert 
 // degrees to radians for rotation functions
 constexpr float radian = PI / 180.f;
@@ -94,11 +98,13 @@ inline XMFLOAT3 CrossProduct(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
 		(V1.x * V2.y) - (V1.y * V2.x)
 	};
 }
+
 // Calculates the dot-product of two float3 vectors
 inline float DotProduct(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
 {
 	return (V1.x * V2.x) + (V1.y * V2.y) + (V1.z * V2.z);
 }
+
 // Calculates the magnitude of a float3 vector
 inline float Magnitude(const XMFLOAT3 &V)
 {
@@ -107,6 +113,7 @@ inline float Magnitude(const XMFLOAT3 &V)
 	// return the square root of the result.
 	return sqrtf(DotProduct(V, V));
 }
+
 // Calcualtes the length between two float3 point vectors
 inline float Length(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
 {
@@ -114,6 +121,7 @@ inline float Length(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
 	// that starts at point1 and goes to point2
 	return Magnitude(V2 - V1);
 }
+
 // Normalizes a float3 vector
 inline XMFLOAT3 Normalize(const XMFLOAT3 &V)
 {
@@ -124,18 +132,18 @@ inline XMFLOAT3 Normalize(const XMFLOAT3 &V)
 	return V * recipricalLength;
 }
 
-
 inline XMVECTOR ConvertToRadians(const XMVECTOR& angleInDegrees)
 {
-    // use value of pi / 180 to convert units from degrees to radians
-    return angleInDegrees * XMVectorReplicate( 0.0174532925f ); 
+	// Use constexpr radian which is the result of PI / 180.f calculated
+	// at compile time.
+	return angleInDegrees * XMVectorReplicate( radian );
 }
 
 inline XMFLOAT3 ConvertToRadians(const XMFLOAT3& angleInDegrees)
 {
-    // TODO: change it after scaling * operator overload has been implemented.
-    // use value of pi / 180 to convert units from degrees to radians
-    return { angleInDegrees.x * 0.0174532925f, angleInDegrees.y * 0.0174532925f, angleInDegrees.z * 0.0174532925f };
+	// Use constexpr radian which is the result of PI / 180.f calculated
+	// at compile time.
+    return { angleInDegrees * radian };
 }
 
 
