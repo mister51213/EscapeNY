@@ -8,40 +8,34 @@ texture functionality for more detailed graphics.
 
 using namespace DirectX;
 
-PrimitiveFactory::PrimitiveFactory()
-{}
-
-PrimitiveFactory::~PrimitiveFactory()
-{}
-
 void PrimitiveFactory::CreateTriangle( 
     const DirectX::XMFLOAT3 & Center, 
 	const DirectX::XMFLOAT2 & Extent, 
     const DirectX::XMFLOAT3 &Orientation )
 {
 	auto extentHalf = DirectX::XMFLOAT2( Extent.x * 0.5f, Extent.y * 0.5f );
-	vertices = 
+	PrimitiveFactory::vertices = 
 	{
 		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z},
 		{Center.x, Center.y + extentHalf.y, Center.z},
 		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z}
 	};
 
-	normals = 
+	PrimitiveFactory::normals = 
 	{
 		{0.f, 0.f, -1.f},
 		{0.f, 0.f, -1.f},
 		{0.f, 0.f, -1.f}
 	};
 
-	uvs = 
+	PrimitiveFactory::uvs = 
 	{
 		{0.f, 1.f},
 		{0.5f, 0.f},
 		{1.f, 1.f}
 	};
 
-	indices.resize( vertices.size() );
+	PrimitiveFactory::indices.resize( vertices.size() );
 	for( int i = 0; i < vertices.size(); ++i )
 	{
 		indices[ i ] = i;
@@ -82,7 +76,7 @@ void PrimitiveFactory::CreatePlane(
     // Extent half is size of the object in each direction
     auto extentHalf = DirectX::XMFLOAT2( Extent.x * 0.5f, Extent.y * 0.5f );
 	// Create vertex list	
-    vertices = 
+    PrimitiveFactory::vertices = 
 	{
 		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z},
 		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z},
@@ -93,7 +87,7 @@ void PrimitiveFactory::CreatePlane(
 	};
 	
 	// Create normals list
-	normals =
+	PrimitiveFactory::normals =
 	{
 		{0.f,0.f,-1.f},
 		{0.f,0.f,-1.f}, 
@@ -104,7 +98,7 @@ void PrimitiveFactory::CreatePlane(
 	};
 
 	// Create uv coordinate list
-	uvs = 
+	PrimitiveFactory::uvs = 
 	{ 
 		{0.f, 0.f}, 
 		{1.f, 0.f}, 
@@ -116,7 +110,7 @@ void PrimitiveFactory::CreatePlane(
 
 	// This is for a D3D11_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, for a 
 	// D3D11_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP you would only need 0,1,2,3
-	indices.resize( vertices.size() );
+	PrimitiveFactory::indices.resize( vertices.size() );
 	for( int i = 0; i < vertices.size(); ++i )
 	{
 		indices[ i ] = i;
@@ -144,7 +138,6 @@ void PrimitiveFactory::CreatePlane(
 		auto rotatedVector = XMVector3TransformCoord( xmVector, reverseRotationMatrix );
 		XMStoreFloat3( &normal, rotatedVector );
 	}
-
 }
 
 void PrimitiveFactory::CreateCube( 
@@ -155,7 +148,7 @@ void PrimitiveFactory::CreateCube(
     // TODO: Better name this function
     auto extentHalf = DirectX::XMFLOAT3( Size.x * 0.5f, Size.y * 0.5f, Size.z * 0.5f );
 
-	vertices = 
+	PrimitiveFactory::vertices = 
 	{	
         // Left
 		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
@@ -206,7 +199,7 @@ void PrimitiveFactory::CreateCube(
 		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z}
 	};
 
-	normals = 
+	PrimitiveFactory::normals = 
 	{
 		// Left
 		{-1.f, 0.f, 0.f},
@@ -257,7 +250,7 @@ void PrimitiveFactory::CreateCube(
 		{0.f, 0.f, 1.f}
 	};
 
-	uvs = 
+	PrimitiveFactory::uvs = 
 	{
 		// Left
 		{0.f, 0.f},
@@ -303,7 +296,7 @@ void PrimitiveFactory::CreateCube(
 		{1.f, 1.f}
 	};
 
-	indices.resize( vertices.size() );
+	PrimitiveFactory::indices.resize( vertices.size() );
 	for( int i = 0; i < vertices.size(); ++i )
 	{
 		indices[ i ] = i;
@@ -338,27 +331,27 @@ void PrimitiveFactory::CreateColor( float R, float G, float B, float A )
 	color = DirectX::XMFLOAT4( R, G, B, A );
 }
 
-std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetVertices() const
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetVertices() 
 {
-	return vertices;
+	return PrimitiveFactory::vertices;
 }
 
-std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetNormals() const
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetNormals() 
 {
-	return normals;
+	return PrimitiveFactory::normals;
 }
 
-std::vector<DirectX::XMFLOAT2> PrimitiveFactory::GetUVs() const
+std::vector<DirectX::XMFLOAT2> PrimitiveFactory::GetUVs() 
 {
-	return uvs;
+	return PrimitiveFactory::uvs;
 }
 
-std::vector<DWORD> PrimitiveFactory::GetIndices() const
+std::vector<DWORD> PrimitiveFactory::GetIndices() 
 {
-	return indices;
+	return PrimitiveFactory::indices;
 }
 
-DirectX::XMFLOAT4 PrimitiveFactory::GetColor() const
+DirectX::XMFLOAT4 PrimitiveFactory::GetColor() 
 {
-	return color;
+	return PrimitiveFactory::color;
 }
