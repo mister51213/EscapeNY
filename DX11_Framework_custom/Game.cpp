@@ -5,6 +5,7 @@ using namespace DirectX;
 Game::Game(std::shared_ptr<Input> pInput)
 {
     m_pInput = pInput;
+    m_gObjects = GameObjects(2, m_pGraphics);
 }
 
 Game::~Game()
@@ -34,12 +35,10 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
     );
     RETURN_IF_FALSE(result);
 
-    // Create the model object.
+    // Make model 1
     m_pModel1.reset(new Model_Textured(m_modelOffset));
     result = m_pModel1 != nullptr;
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-
-        // Make model 1
     PrimitiveMaker primMaker;
     primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
 	result = m_pModel1->Initialize( primMaker, *m_pGraphics );
@@ -50,8 +49,6 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
     m_pModel2.reset(new Model_Textured(offset2));
     result = m_pModel2 != nullptr;
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-
-    // Make model 2
     PrimitiveMaker primMaker2;
     primMaker2.CreateCube({ 0.f, 0.f, 0.f }, { 4.f, 4.f, 10.f });
 	result = m_pModel2->Initialize( primMaker2, *m_pGraphics );
@@ -79,7 +76,8 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
 
 void Game::GetInput(std::shared_ptr<Input> pInput)
 {
-    // TODO: Use global GetWorldMatrix() function instead of member WorldMatrixes for each model.
+    // TODO: Use global GetWorldMatrix() function instead 
+    // TODO: of member WorldMatrixes for each model.
     // rotate objects
     if (pInput->IsKeyDown(VK_SPACE))
     {
