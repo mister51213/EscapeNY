@@ -88,7 +88,6 @@ void Camera::Render()
 {
 	// Load the rotation and make radian vectors.
 	XMVECTOR rotationVector = XMLoadFloat3( &m_Rotation );
-	XMVECTOR radianVector = XMVectorReplicate( 0.0174532925f );
 
 	// Setup the vector that points upwards.
 	XMVECTOR upVector = XMVectorSet( 0.f, 1.f, 0.f, 0.f );
@@ -101,7 +100,7 @@ void Camera::Render()
 
 	// Create the rotation matrix from the product of the rotation vector and the radian vector.
 	// This converts the rotations to radians before creating the rotation matrix
-	XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYawFromVector(rotationVector * radianVector);
+	XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYawFromVector(ConvertToRadians(rotationVector));
 
 	// Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
 	lookAtVector = XMVector3TransformCoord(lookAtVector, rotationMatrix);

@@ -81,8 +81,8 @@ void Game::GetInput(std::shared_ptr<Input> pInput)
     // rotate objects
     if (pInput->IsKeyDown(VK_SPACE))
     {
-        m_pModel1->Rotate({ 0.001f,0.05f,0.05f });
-        m_pModel2->Rotate({ 0.05f,0.0f,0.05f });
+        m_pModel1->Rotate({ 1.f,1.f,1.f });
+        m_pModel2->Rotate({ 1.f,1.f,1.f });
     }
 
     if (pInput->IsKeyDown(VK_CONTROL))
@@ -172,7 +172,7 @@ bool Game::render()
 // Model 1 - Drawn using global GetWorldMatrix function.
     bool result = m_pShader_Texture->Render( // sets shader parameters
         m_pDirect3D->GetDeviceContext(),
-        GetWorldMatrix(m_pModel1->m_Position, m_pModel1->m_Orientation, m_pModel1->m_Scale),
+        GetWorldMatrix(m_pModel1->m_Position, ConvertToRadians(m_pModel1->m_Orientation), m_pModel1->m_Scale),
 		m_pCamera->GetViewMatrix(),
 		m_pCamera->GetProjectionMatrix(),
 		m_pStoneTexture->GetTextureView() );
@@ -183,7 +183,7 @@ bool Game::render()
     // Render model 2
     	bool result2 = m_pShader_Texture->Render(
 		m_pDirect3D->GetDeviceContext(), 
-        GetWorldMatrix(m_pModel2->m_Position, m_pModel2->m_Orientation, m_pModel2->m_Scale),
+        GetWorldMatrix(m_pModel2->m_Position, ConvertToRadians(m_pModel2->m_Orientation), m_pModel2->m_Scale),
 		m_pCamera->GetViewMatrix(),
 		m_pCamera->GetProjectionMatrix(),
 		m_pStoneTexture->GetTextureView() );

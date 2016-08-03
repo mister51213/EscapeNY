@@ -24,7 +24,7 @@ struct ModelSpecs
     XMFLOAT3 position, orientation, scale;
 };
 
-enum eModType{Cube, CubeTextured, Plane, Sphere, Polygon};
+enum eModType{CUBE, CUBETEXTURED, PLANE, SPHERE, POLYGON};
 
 class GameObjects
 {
@@ -41,7 +41,7 @@ private:
     void PopulateModelList() {
         for (char i = 0; i < m_objectCount; i++)
         {
-            m_models.push_back(ModelFactory(m_modSpecList[i], CubeTextured));
+            m_models.push_back(ModelFactory(m_modSpecList[i], CUBETEXTURED));
         }
     }
 
@@ -63,26 +63,26 @@ private:
 
     bool InitShader()
     {
-        bool result;
-    // Initialize the texture shader object.
-	m_pShader_Texture.reset( new Shader_Texture );
-	result = m_pShader_Texture != nullptr;
-	RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Shader_Texture." );
+ //       bool result;
+ //   // Initialize the texture shader object.
+	//m_pShader_Texture.reset( new Shader_Texture );
+	//result = m_pShader_Texture != nullptr;
+	//RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Shader_Texture." );
 
-	result = m_pShader_Texture->Initialize( m_pD3D->GetDevice(), WinHandle, *m_models[0] );
-	RETURN_IF_FALSE( result );
-
-	m_pStoneTexture.reset( new Texture );
-	RETURN_MESSAGE_IF_FALSE( m_pStoneTexture != nullptr, L"Could not allocate memory for Texture." );
-
-	result = m_pStoneTexture->Initialize( *m_pGfx, L"Textures\\uncompressed_stone.tga" );
-	RETURN_IF_FALSE( result );
-
-    // TODO : Leaving overlay in main Game class for now until it is properly fixed.
-	//result = m_Overlay.Initialize( *m_pGfx,ScreenWidth, ScreenHeight );
+	//result = m_pShader_Texture->Initialize( m_pD3D->GetDevice(), WinHandle, *m_models[0] );
 	//RETURN_IF_FALSE( result );
 
-	return true;
+	//m_pStoneTexture.reset( new Texture );
+	//RETURN_MESSAGE_IF_FALSE( m_pStoneTexture != nullptr, L"Could not allocate memory for Texture." );
+
+	//result = m_pStoneTexture->Initialize( *m_pGfx, L"Textures\\uncompressed_stone.tga" );
+	//RETURN_IF_FALSE( result );
+
+ //   // TODO : Leaving overlay in main Game class for now until it is properly fixed.
+	////result = m_Overlay.Initialize( *m_pGfx,ScreenWidth, ScreenHeight );
+	////RETURN_IF_FALSE( result );
+
+	//return true;
     }
 
 

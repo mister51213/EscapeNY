@@ -48,8 +48,22 @@ else int a = 0
 //    return v1;
 //}
 
+inline XMVECTOR ConvertToRadians(const XMVECTOR& angleInDegrees)
+{
+    // use value of pi / 180 to convert units from degrees to radians
+    return angleInDegrees * XMVectorReplicate( 0.0174532925f ); 
+}
+
+inline XMFLOAT3 ConvertToRadians(const XMFLOAT3& angleInDegrees)
+{
+    // TODO: change it after scaling * operator overload has been implemented.
+    // use value of pi / 180 to convert units from degrees to radians
+    return { angleInDegrees.x * 0.0174532925f, angleInDegrees.y * 0.0174532925f, angleInDegrees.z * 0.0174532925f };
+}
+
+
 ////////////////////////////////////////////////////////////////
-// KEY FUNCTION FOR GETTING WORLD MATRIX
+// FUNCTION FOR GETTING WORLD MATRIX
 // TODO: make it global; see which is faster
 ////////////////////////////////////////////////////////////////
 

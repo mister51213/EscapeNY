@@ -50,6 +50,10 @@ private:
 
     XMFLOAT3 m_modelOffset = { 0,0,0 };
     XMFLOAT3 m_camPos = { -0.0f, 16.0f, -30.0f };
+
+    // 1 radian = pi/180
+    // There are 6.28 radians in ONE CIRCLE
+    // TODO: later add constants provided by Josh in Utility.h
     XMFLOAT3 m_camRotation = { 25.f, -5.f, 0.f };
 
 // Input
