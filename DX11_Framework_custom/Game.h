@@ -40,6 +40,8 @@ private:
 
 	std::unique_ptr<Model_Textured> m_pModel1;
     std::unique_ptr<Model_Textured> m_pModel2;
+    std::unique_ptr<Model_Textured> m_pModelTEST;
+
 
     //std::unique_ptr<ColorShader> m_pColorShader;
 	std::unique_ptr<Shader_Texture> m_pShader_Texture;

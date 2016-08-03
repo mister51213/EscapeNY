@@ -19,6 +19,7 @@
 
 using namespace std;
 
+// make a lightweight "skeletal" version of ModelSpecs analogous to actual Models
 struct ModelSpecs
 {
     XMFLOAT3 position, orientation, scale;
@@ -92,6 +93,7 @@ private:
 
         // store all game objects in a list for gameplay purposes
         vector<ModelSpecs> m_modSpecList;
+        // list of actual models for rendering purposes
         vector<std::shared_ptr<Model>> m_models;
         char m_objectCount;
 

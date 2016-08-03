@@ -12,7 +12,10 @@ Game::~Game()
 {
 }
 
-bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, HWND WinHandle)
+bool Game::Initialize(Graphics *pGraphics, 
+    UINT ScreenWidth, 
+    UINT ScreenHeight, 
+    HWND WinHandle)
 {
     // Initialize input; clear key array - redundant?
     //m_pInput->Initialize();
@@ -49,9 +52,18 @@ bool Game::Initialize(Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, 
     m_pModel2.reset(new Model_Textured(offset2));
     result = m_pModel2 != nullptr;
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-    PrimitiveMaker primMaker2;
-    primMaker2.CreateCube({ 0.f, 0.f, 0.f }, { 4.f, 4.f, 10.f });
-	result = m_pModel2->Initialize( primMaker2, *m_pGraphics );
+    //PrimitiveMaker primMaker2;
+    primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 4.f, 4.f, 10.f });
+	result = m_pModel2->Initialize( primMaker, *m_pGraphics );
+	RETURN_IF_FALSE( result );
+
+    // Create model 3 TEST
+    offset2 = { m_modelOffset.x - 5, m_modelOffset.y - 7, m_modelOffset.z -1 };
+    m_pModelTEST.reset(new Model_Textured(offset2));
+    result = m_pModelTEST != nullptr;
+    RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
+    primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 3.f, 5.f, 30.f });
+	result = m_pModelTEST->Initialize( primMaker, *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
    	// Initialize the texture shader object.
@@ -87,8 +99,8 @@ void Game::GetInput(std::shared_ptr<Input> pInput)
 
     if (pInput->IsKeyDown(VK_CONTROL))
     {
-        m_pModel1->Rotate({ -0.001f,-0.05f,-0.05f });
-        m_pModel2->Rotate({ -0.05f,-0.0f,-0.05f });
+        m_pModel1->Rotate({ -0.1f,-5.f,-5.f });
+        m_pModel2->Rotate({ -3.f,-0.3f,-5.f });
     }
 
     // move objects
@@ -187,15 +199,25 @@ bool Game::render()
 		m_pCamera->GetViewMatrix(),
 		m_pCamera->GetProjectionMatrix(),
 		m_pStoneTexture->GetTextureView() );
-    
+
+    // EXPERIMENT - render second model
+    m_pGraphics->RenderModel( *m_pModel2 );
+   	RETURN_IF_FALSE( result2 );
+
+   // Render model 3
+    	bool result3 = m_pShader_Texture->Render(
+		m_pDirect3D->GetDeviceContext(), 
+        GetWorldMatrix(m_pModelTEST->m_Position, ConvertToRadians(m_pModelTEST->m_Orientation), m_pModelTEST->m_Scale),
+		m_pCamera->GetViewMatrix(),
+		m_pCamera->GetProjectionMatrix(),
+		m_pStoneTexture->GetTextureView() );
+        m_pGraphics->RenderModel( *m_pModelTEST );
+       	RETURN_IF_FALSE( result3 );
+
     //////////////////////////////////////////////////////////////////////
     // TODO: Change functionality here to draw MORE THAN ONE MODEL
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
     //////////////////////////////////////////////////////////////////////
-
-// EXPERIMENT - render second model
-    m_pGraphics->RenderModel( *m_pModel2 );
-   	RETURN_IF_FALSE( result2 );
 
 
 	auto overlayWorldMatrix = m_Overlay.GetWorldMatrix(*m_pCamera);
