@@ -25,34 +25,26 @@ public:
 private:
 	bool render();
 private:
-	// m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
-	Graphics *m_pGraphics;
+	
+	Graphics *m_pGraphics; // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
 	D3DGraphics *m_pDirect3D;
+	std::shared_ptr<Camera> m_pCamera; // Camera, Model and ColorShader are created in Game, so has ownership
 
-	// Camera, Model and ColorShader are created in Game, so has ownership
-	std::unique_ptr<Camera> m_pCamera;
-
-    // TODO: Individual objects shouldn't be held in a member pointer;
-    // should be passed as parameters to draw individual objects to a single rendering pipeline
-    
     GameObjects m_gObjects;
     vector<ModelSpecs> m_modSpecList;
 
-	std::unique_ptr<Model_Textured> m_pModel1;
-    std::unique_ptr<Model_Textured> m_pModel2;
-
+	std::shared_ptr<Model_Textured> m_pModel1;
+    std::shared_ptr<Model_Textured> m_pModel2;
 
     //std::unique_ptr<ColorShader> m_pColorShader;
-	std::unique_ptr<Shader_Texture> m_pShader_Texture;
-	std::unique_ptr<Texture> m_pStoneTexture;
-	Overlay m_Overlay;
+	std::shared_ptr<Shader_Texture> m_pShader_Texture;
+	std::shared_ptr<Texture> m_pStoneTexture;
+    std::shared_ptr<Input> m_pInput;// Input
 
+	Overlay m_Overlay;
     XMFLOAT3 m_modelOffset = { 0,0,0 };
     XMFLOAT3 m_camPos = { -0.0f, 16.0f, -30.0f };
-// defined in degrees
-    XMFLOAT3 m_camRotation = { 25.f, -5.f, 0.f };
+    XMFLOAT3 m_camRotation = { 25.f, -5.f, 0.f }; // defined in degrees
 
-// Input
-    std::shared_ptr<Input> m_pInput;
 };
 
