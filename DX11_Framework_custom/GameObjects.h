@@ -1,3 +1,9 @@
+////////////////////////////////////////////////////////////////////////////////
+//  TODO:
+//  TODO:   Later separate this class into GameWorldObjects(for gameplay purposes)
+//  TODO:   and GameRenderObjects (for rendering purposes)
+///////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
 #include <vector>
@@ -11,86 +17,55 @@
 #include "Shader_Texture.h"
 #include "Overlay.h"
 
+using namespace std;
+
+struct ModelSpecs
+{
+    XMFLOAT3 position, orientation, scale;
+};
+
+enum eModType{Cube, CubeTextured, Plane, Sphere, Polygon};
 
 class GameObjects
 {
 public:
-    GameObjects() {}
+    GameObjects(){}
 
-    GameObjects(Model& mod)
+    GameObjects(char numObjects, Graphics* pGfx) 
     {
-        for each (auto model in models)
+        m_pGfx = pGfx;
+        m_objectCount = numObjects;
+        for (char i = 0; i < m_objectCount; i++)
         {
-            *model = mod;
-        }    
+            m_models.push_back(ModelFactory(m_modSpecList[i], CubeTextured));
+        }
     }
-
-    void CreateModels() {}
-
-
-
-
-    bool InitializeAllModels()
-    {
-    bool result = true;
-    ////////////////////////////////////////////////////////
-    // Create Model objects
-    ////////////////////////////////////////////////////////
-    m_pModel.reset(new Model_Textured);
-    result = m_pModel != nullptr;
-
-    RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-    m_pModel2.reset(new Model_Textured);
-    result = m_pModel2 != nullptr;
-    RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-
-    ////////////////////////////////////////
-    // Feed the Pimitive Maker w cube objects
-    ////////////////////////////////////////
-    PrimitiveMaker primMaker;
-    primMaker.CreateCube({ 1.f, 1.f, 1.f },{ 1.f, 1.f, 1.f });
-    PrimitiveMaker primMaker2;
-    primMaker2.CreateCube({ 3.f, 3.f, 3.f },{ 1.f, 1.f, 1.f });
-
-    // Initialize models
-	result = m_pModel->Initialize( primMaker, *m_pGfx );
-	RETURN_IF_FALSE( result );
-	result = m_pModel2->Initialize( primMaker2, *m_pGfx );
-	RETURN_IF_FALSE( result );
-
-
-    return true;
-    }
-
-    bool RenderShapes()
-    {
-	// Render the model using the color shader.
-	//bool result = m_pShader_Texture->Render(
-	//	m_pDirect3D->GetDeviceContext(), 
-	//	m_pModel->GetWorldMatrix(),
-	//	m_pCamera->GetViewMatrix(),
-	//	m_pCamera->GetProjectionMatrix(),
-	//	m_pStoneTexture->GetTextureView() );
-
- //   // Render model 2 color
- //   	bool result2 = m_pShader_Texture->Render(
-	//	m_pDirect3D->GetDeviceContext(), 
-	//	m_pModel2->GetWorldMatrix(),
-	//	m_pCamera->GetViewMatrix(),
-	//	m_pCamera->GetProjectionMatrix(),
-	//	m_pStoneTexture->GetTextureView() );    
- //   }
-
 
 private:
+    std::shared_ptr<Model> ModelFactory(ModelSpecs specs, eModType type)
+    {
+        bool result = true;
+        std::shared_ptr<Model_Textured> pModel;
+        pModel.reset(new Model_Textured(specs.position));
+        //result = pModel != nullptr;
+        //RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
 
-    // TODO: Add these to models list   
-    std::unique_ptr<Model_Textured> m_pModel3;
+        PrimitiveMaker primMaker;
+        primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
+	    result = pModel->Initialize( primMaker, *m_pGfx );
+	    //RETURN_IF_FALSE( result );
 
-    // store all game objects in a list
-    vector<Model*> models;
-    
-    // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
-	Graphics *m_pGfx;
-	D3DGraphics *m_pD3D;
+        return pModel;
+    }
+
+
+    private:
+        // store all game objects in a list for gameplay purposes
+        vector<ModelSpecs> m_modSpecList;
+        vector<std::shared_ptr<Model>> m_models;
+        char m_objectCount;
+
+        // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
+        Graphics *m_pGfx;
+        D3DGraphics *m_pD3D;
 };
