@@ -31,46 +31,39 @@ bool Game::Initialize(Graphics *pGraphics,
     { SCREEN_DEPTH, SCREEN_NEAR }); 		    // Screen clip depths
     RETURN_IF_FALSE(result);
 
-    // Model1
-    m_pModel1.reset(new Model_Textured(m_modelOffset));
-    result = m_pModel1 != nullptr;
-    RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-    PrimitiveFactory primMaker;
-    primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
-	result = m_pModel1->Initialize( primMaker, *m_pGraphics );
-	RETURN_IF_FALSE( result );
-    // Model2
-    XMFLOAT3 offset2 = { m_modelOffset.x + 15, m_modelOffset.y + 15, m_modelOffset.z + 5 };
-    m_pModel2.reset(new Model_Textured(offset2));
-    result = m_pModel2 != nullptr;
-    RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-    primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 4.f, 4.f, 10.f });
-	result = m_pModel2->Initialize( primMaker, *m_pGraphics );
-	RETURN_IF_FALSE( result );
-
+ //   // Model1
+ //   m_pModel1.reset(new Model_Textured(m_modelOffset));
+ //   result = m_pModel1 != nullptr;
+ //   RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
+ //   PrimitiveFactory primMaker;
+ //   primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
+	//result = m_pModel1->Initialize( primMaker, *m_pGraphics );
+	//RETURN_IF_FALSE( result );
+ //   // Model2
+ //   XMFLOAT3 offset2 = { m_modelOffset.x + 15, m_modelOffset.y + 15, m_modelOffset.z + 5 };
+ //   m_pModel2.reset(new Model_Textured(offset2));
+ //   result = m_pModel2 != nullptr;
+ //   RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
+ //   primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 4.f, 4.f, 10.f });
+	//result = m_pModel2->Initialize( primMaker, *m_pGraphics );
+	//RETURN_IF_FALSE( result );
     //////////////////////////////////
     // INITIALIZE TEXTURE SHADER
     //////////////////////////////////
-    m_pShader_Texture.reset( new Shader_Texture );
-	result = m_pShader_Texture != nullptr;
-	RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Shader_Texture." );
-
-	result = m_pShader_Texture->Initialize( m_pDirect3D->GetDevice(), WinHandle, *m_pModel1 );
-	RETURN_IF_FALSE( result );
-
-	m_pStoneTexture.reset( new Texture );
-	RETURN_MESSAGE_IF_FALSE( m_pStoneTexture != nullptr, L"Could not allocate memory for Texture." );
-
-	result = m_pStoneTexture->Initialize( *m_pGraphics, L"Textures\\uncompressed_stone.tga" );
-	RETURN_IF_FALSE( result );
-
+ //   m_pShader_Texture.reset( new Shader_Texture );
+	//result = m_pShader_Texture != nullptr;
+	//RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Shader_Texture." );
+	//result = m_pShader_Texture->Initialize( m_pDirect3D->GetDevice(), WinHandle, *m_pModel1 );
+	//RETURN_IF_FALSE( result );
+	//m_pStoneTexture.reset( new Texture );
+	//RETURN_MESSAGE_IF_FALSE( m_pStoneTexture != nullptr, L"Could not allocate memory for Texture." );
+	//result = m_pStoneTexture->Initialize( *m_pGraphics, L"Textures\\uncompressed_stone.tga" );
+	//RETURN_IF_FALSE( result );
 	//result = m_Overlay.Initialize( *m_pGraphics,ScreenWidth, ScreenHeight );
 	//RETURN_IF_FALSE( result );
 
     // Pass all member pointers to GameObjects class so it can draw with them
-    m_gObjects = GameObjects(1, m_pGraphics, m_pDirect3D, m_pCamera, m_pShader_Texture, m_pStoneTexture, WinHandle);
-
-
+    m_gObjects = GameObjects(10, m_pGraphics, m_pDirect3D, m_pCamera, m_pShader_Texture, m_pStoneTexture, WinHandle);
 	return true;
 }
 
@@ -165,32 +158,29 @@ bool Game::render()
     // Generate the view matrix based on the camera's position.
     m_pCamera->Render();
 
-    // MODEL1
-    bool result = m_pShader_Texture->Render( // sets shader parameters
-        m_pDirect3D->GetDeviceContext(),
-        GetWorldMatrix(m_pModel1->m_Position, ConvertToRadians(m_pModel1->m_Orientation), m_pModel1->m_Scale),
-        m_pCamera->GetViewMatrix(),
-        m_pCamera->GetProjectionMatrix(),
-        m_pStoneTexture->GetTextureView());
-    m_pGraphics->RenderModel(*m_pModel1);
-    RETURN_IF_FALSE(result);
+    //// MODEL1
+    //bool result = m_pShader_Texture->Render( // sets shader parameters
+    //    m_pDirect3D->GetDeviceContext(),
+    //    GetWorldMatrix(m_pModel1->m_Position, ConvertToRadians(m_pModel1->m_Orientation), m_pModel1->m_Scale),
+    //    m_pCamera->GetViewMatrix(),
+    //    m_pCamera->GetProjectionMatrix(),
+    //    m_pStoneTexture->GetTextureView());
+    //m_pGraphics->RenderModel(*m_pModel1);
+    //RETURN_IF_FALSE(result);
+    //// MODEL2
+    //bool result2 = m_pShader_Texture->Render(
+    //    m_pDirect3D->GetDeviceContext(),
+    //    GetWorldMatrix(m_pModel2->m_Position, ConvertToRadians(m_pModel2->m_Orientation), m_pModel2->m_Scale),
+    //    m_pCamera->GetViewMatrix(),
+    //    m_pCamera->GetProjectionMatrix(),
+    //    m_pStoneTexture->GetTextureView());
+    //m_pGraphics->RenderModel(*m_pModel2);
+    //RETURN_IF_FALSE(result2);
 
-    // MODEL2
-    bool result2 = m_pShader_Texture->Render(
-        m_pDirect3D->GetDeviceContext(),
-        GetWorldMatrix(m_pModel2->m_Position, ConvertToRadians(m_pModel2->m_Orientation), m_pModel2->m_Scale),
-        m_pCamera->GetViewMatrix(),
-        m_pCamera->GetProjectionMatrix(),
-        m_pStoneTexture->GetTextureView());
-    m_pGraphics->RenderModel(*m_pModel2);
-    RETURN_IF_FALSE(result2);
-
-    // MODEL3
-    m_gObjects.DrawModel({ 
-        m_modelOffset.x - 15, 
-        m_modelOffset.y - 15, 
-        m_modelOffset.z - 5 });
-
+    // MODEL3     
+    std::shared_ptr<Model> pModTest;
+    std::shared_ptr<Model> pMod = // TODO: currently a dummy ptr; not yet implemented!
+        m_gObjects.DrawModel({15, - 15, - 5 }, pModTest);
 
     ////////////
     // OVERLAY
