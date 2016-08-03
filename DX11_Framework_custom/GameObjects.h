@@ -35,13 +35,16 @@ public:
     {
         m_pGfx = pGfx;
         m_objectCount = numObjects;
+    }
+
+private:
+    void PopulateModelList() {
         for (char i = 0; i < m_objectCount; i++)
         {
             m_models.push_back(ModelFactory(m_modSpecList[i], CubeTextured));
         }
     }
 
-private:
     std::shared_ptr<Model> ModelFactory(ModelSpecs specs, eModType type)
     {
         bool result = true;
@@ -58,8 +61,35 @@ private:
         return pModel;
     }
 
+    bool InitShader()
+    {
+        bool result;
+    // Initialize the texture shader object.
+	m_pShader_Texture.reset( new Shader_Texture );
+	result = m_pShader_Texture != nullptr;
+	RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Shader_Texture." );
+
+	result = m_pShader_Texture->Initialize( m_pD3D->GetDevice(), WinHandle, *m_models[0] );
+	RETURN_IF_FALSE( result );
+
+	m_pStoneTexture.reset( new Texture );
+	RETURN_MESSAGE_IF_FALSE( m_pStoneTexture != nullptr, L"Could not allocate memory for Texture." );
+
+	result = m_pStoneTexture->Initialize( *m_pGfx, L"Textures\\uncompressed_stone.tga" );
+	RETURN_IF_FALSE( result );
+
+    // TODO : Leaving overlay in main Game class for now until it is properly fixed.
+	//result = m_Overlay.Initialize( *m_pGfx,ScreenWidth, ScreenHeight );
+	//RETURN_IF_FALSE( result );
+
+	return true;
+    }
+
 
     private:
+        std::unique_ptr<Shader_Texture> m_pShader_Texture;
+	    std::unique_ptr<Texture> m_pStoneTexture;
+
         // store all game objects in a list for gameplay purposes
         vector<ModelSpecs> m_modSpecList;
         vector<std::shared_ptr<Model>> m_models;
