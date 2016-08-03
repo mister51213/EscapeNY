@@ -13,7 +13,7 @@ bool Overlay::Initialize( const Graphics &Gfx, UINT ScreenWidth, UINT ScreenHeig
 	bool result = m_texture.Initialize( Gfx, m_pRenderSurface );
 	RETURN_IF_FALSE( result );
 	
-	PrimitiveMaker primMaker;
+	PrimitiveFactory primMaker;
 	primMaker.CreatePlane({ 0.f,0.f,0.f }, {
 		static_cast<float>(ScreenWidth),
 		static_cast<float>(ScreenHeight)

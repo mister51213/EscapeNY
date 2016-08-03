@@ -40,7 +40,6 @@ private:
 
 	std::unique_ptr<Model_Textured> m_pModel1;
     std::unique_ptr<Model_Textured> m_pModel2;
-    std::unique_ptr<Model_Textured> m_pModelTEST;
 
 
     //std::unique_ptr<ColorShader> m_pColorShader;
@@ -48,14 +47,9 @@ private:
 	std::unique_ptr<Texture> m_pStoneTexture;
 	Overlay m_Overlay;
 
-// later add this to GameObjects
-
     XMFLOAT3 m_modelOffset = { 0,0,0 };
     XMFLOAT3 m_camPos = { -0.0f, 16.0f, -30.0f };
-
-    // 1 radian = pi/180
-    // There are 6.28 radians in ONE CIRCLE
-    // TODO: later add constants provided by Josh in Utility.h
+// defined in degrees
     XMFLOAT3 m_camRotation = { 25.f, -5.f, 0.f };
 
 // Input

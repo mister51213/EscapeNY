@@ -42,7 +42,7 @@ bool Game::Initialize(Graphics *pGraphics,
     m_pModel1.reset(new Model_Textured(m_modelOffset));
     result = m_pModel1 != nullptr;
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-    PrimitiveMaker primMaker;
+    PrimitiveFactory primMaker;
     primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
 	result = m_pModel1->Initialize( primMaker, *m_pGraphics );
 	RETURN_IF_FALSE( result );
@@ -52,18 +52,8 @@ bool Game::Initialize(Graphics *pGraphics,
     m_pModel2.reset(new Model_Textured(offset2));
     result = m_pModel2 != nullptr;
     RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-    //PrimitiveMaker primMaker2;
     primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 4.f, 4.f, 10.f });
 	result = m_pModel2->Initialize( primMaker, *m_pGraphics );
-	RETURN_IF_FALSE( result );
-
-    // Create model 3 TEST
-    offset2 = { m_modelOffset.x - 5, m_modelOffset.y - 7, m_modelOffset.z -1 };
-    m_pModelTEST.reset(new Model_Textured(offset2));
-    result = m_pModelTEST != nullptr;
-    RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-    primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 3.f, 5.f, 30.f });
-	result = m_pModelTEST->Initialize( primMaker, *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
    	// Initialize the texture shader object.
@@ -178,59 +168,48 @@ bool Game::Frame()
 
 bool Game::render()
 {
-	// Generate the view matrix based on the camera's position.
-	m_pCamera->Render();
-	
-// Model 1 - Drawn using global GetWorldMatrix function.
+    // Generate the view matrix based on the camera's position.
+    m_pCamera->Render();
+
+    // Model 1 - Drawn using global GetWorldMatrix function.
     bool result = m_pShader_Texture->Render( // sets shader parameters
         m_pDirect3D->GetDeviceContext(),
         GetWorldMatrix(m_pModel1->m_Position, ConvertToRadians(m_pModel1->m_Orientation), m_pModel1->m_Scale),
-		m_pCamera->GetViewMatrix(),
-		m_pCamera->GetProjectionMatrix(),
-		m_pStoneTexture->GetTextureView() );
+        m_pCamera->GetViewMatrix(),
+        m_pCamera->GetProjectionMatrix(),
+        m_pStoneTexture->GetTextureView());
 
-   	m_pGraphics->RenderModel( *m_pModel1 );
-   	RETURN_IF_FALSE( result );
+    m_pGraphics->RenderModel(*m_pModel1);
+    RETURN_IF_FALSE(result);
 
     // Render model 2
-    	bool result2 = m_pShader_Texture->Render(
-		m_pDirect3D->GetDeviceContext(), 
+    bool result2 = m_pShader_Texture->Render(
+        m_pDirect3D->GetDeviceContext(),
         GetWorldMatrix(m_pModel2->m_Position, ConvertToRadians(m_pModel2->m_Orientation), m_pModel2->m_Scale),
-		m_pCamera->GetViewMatrix(),
-		m_pCamera->GetProjectionMatrix(),
-		m_pStoneTexture->GetTextureView() );
+        m_pCamera->GetViewMatrix(),
+        m_pCamera->GetProjectionMatrix(),
+        m_pStoneTexture->GetTextureView());
 
-    // EXPERIMENT - render second model
-    m_pGraphics->RenderModel( *m_pModel2 );
-   	RETURN_IF_FALSE( result2 );
-
-   // Render model 3
-    	bool result3 = m_pShader_Texture->Render(
-		m_pDirect3D->GetDeviceContext(), 
-        GetWorldMatrix(m_pModelTEST->m_Position, ConvertToRadians(m_pModelTEST->m_Orientation), m_pModelTEST->m_Scale),
-		m_pCamera->GetViewMatrix(),
-		m_pCamera->GetProjectionMatrix(),
-		m_pStoneTexture->GetTextureView() );
-        m_pGraphics->RenderModel( *m_pModelTEST );
-       	RETURN_IF_FALSE( result3 );
+    m_pGraphics->RenderModel(*m_pModel2);
+    RETURN_IF_FALSE(result2);
 
     //////////////////////////////////////////////////////////////////////
     // TODO: Change functionality here to draw MORE THAN ONE MODEL
-	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+    // Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
     //////////////////////////////////////////////////////////////////////
 
 
-	auto overlayWorldMatrix = m_Overlay.GetWorldMatrix(*m_pCamera);
+    auto overlayWorldMatrix = m_Overlay.GetWorldMatrix(*m_pCamera);
 
-	m_pShader_Texture->Render(
-		m_pDirect3D->GetDeviceContext(),
-		overlayWorldMatrix,
-		m_pCamera->GetViewMatrix(),
-		m_pCamera->GetOrthoMatrix(),
-		m_Overlay.GetResourceView()
-	);
+    m_pShader_Texture->Render(
+        m_pDirect3D->GetDeviceContext(),
+        overlayWorldMatrix,
+        m_pCamera->GetViewMatrix(),
+        m_pCamera->GetOrthoMatrix(),
+        m_Overlay.GetResourceView()
+    );
 
-	m_Overlay.Render( *m_pGraphics );
-	
-	return true;
+    m_Overlay.Render(*m_pGraphics);
+
+    return true;
 }

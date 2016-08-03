@@ -10,7 +10,7 @@
 // Filename: model.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "model.h"
-#include "PrimitiveMaker.h"
+#include "PrimitiveFactory.h"
 
 Model::Model()
 {

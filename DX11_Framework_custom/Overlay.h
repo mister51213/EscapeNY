@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PrimitiveMaker.h"
+#include "PrimitiveFactory.h"
 #include "Texture.h"
 #include "Includes.h"
 #include "Utilities.h"

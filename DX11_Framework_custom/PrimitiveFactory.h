@@ -1,5 +1,5 @@
 /***********************************************************************************
-File: PrimitiveMaker.cpp
+File: PrimitiveFactory.cpp
 Function: Create basic 3d primitives using vector math. Can be combined with 
 texture functionality for more detailed graphics.
 
@@ -7,11 +7,11 @@ texture functionality for more detailed graphics.
 
 #include "Includes.h"
 
-class PrimitiveMaker
+class PrimitiveFactory
 {
 public:
-	PrimitiveMaker();
-	~PrimitiveMaker();
+	PrimitiveFactory();
+	~PrimitiveFactory();
 
     // All of these functions take center, size, and orientation 
     // of the primitive to be created
@@ -27,7 +27,7 @@ public:
         const DirectX::XMFLOAT3 &Center, 
         const DirectX::XMFLOAT3 &Extent,
 		const DirectX::XMFLOAT3 &Orientation = {0.f, 0.f, 0.f} );
-	void PrimitiveMaker::CreateColor( float R, float G, float B, float A );
+	void PrimitiveFactory::CreateColor( float R, float G, float B, float A );
 
     // ACCESSOR FUNCTIONS
 	std::vector<DirectX::XMFLOAT3> GetVertices()const;

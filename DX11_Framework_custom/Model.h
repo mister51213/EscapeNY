@@ -11,7 +11,7 @@
 // INCLUDES //
 //////////////
 #include "Graphics.h"
-#include "PrimitiveMaker.h"
+#include "PrimitiveFactory.h"
 using namespace DirectX;
 
 ////////////////////////
@@ -27,7 +27,7 @@ public:
 
     // This pure virtual initializer takes into account different types of models
     // (textured and primitive, for example)
-	virtual bool Initialize( const PrimitiveMaker &PrimMaker, const Graphics &Gfx ) = 0;
+	virtual bool Initialize( const PrimitiveFactory &PrimMaker, const Graphics &Gfx ) = 0;
 	virtual std::vector<D3D11_INPUT_ELEMENT_DESC> GetInputElementDescriptions() const = 0;
 
 	DWORD GetVertexCount()const;

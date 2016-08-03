@@ -158,7 +158,7 @@
     <ClCompile Include="Model_Colored.cpp" />
     <ClCompile Include="Model_Textured.cpp" />
     <ClCompile Include="Overlay.cpp" />
-    <ClCompile Include="PrimitiveMaker.cpp" />
+    <ClCompile Include="PrimitiveFactory.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedPlane.cpp" />
@@ -183,7 +183,7 @@
     <ClInclude Include="Model_Colored.h" />
     <ClInclude Include="Model_Textured.h" />
     <ClInclude Include="Overlay.h" />
-    <ClInclude Include="PrimitiveMaker.h" />
+    <ClInclude Include="PrimitiveFactory.h" />
     <ClInclude Include="Shader_Texture.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Texture.h" />

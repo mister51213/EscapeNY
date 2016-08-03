@@ -9,7 +9,7 @@ public:
     Model_Colored(XMFLOAT3 pos); // initialize base position
 	~Model_Colored();
 
-	bool Initialize( const PrimitiveMaker &PrimMaker, const Graphics &Gfx )override;
+	bool Initialize( const PrimitiveFactory &PrimMaker, const Graphics &Gfx )override;
 	std::vector<D3D11_INPUT_ELEMENT_DESC> GetInputElementDescriptions() const override;
 
 private:

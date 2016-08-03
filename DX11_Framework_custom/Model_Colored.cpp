@@ -8,7 +8,7 @@ Model_Colored::Model_Colored(XMFLOAT3 pos):Model::Model(pos) // initialize base 
 Model_Colored::~Model_Colored()
 {}
 
-bool Model_Colored::Initialize( const PrimitiveMaker & PrimMaker, const Graphics & Gfx )
+bool Model_Colored::Initialize( const PrimitiveFactory & PrimMaker, const Graphics & Gfx )
 {
 	// Set the stride for this model type
 	m_Stride = sizeof( VertexPositionColorType );

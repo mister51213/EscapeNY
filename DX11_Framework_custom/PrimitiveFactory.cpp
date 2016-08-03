@@ -1,20 +1,20 @@
 /***********************************************************************************
-File: PrimitiveMaker.cpp
+File: PrimitiveFactory.cpp
 Function: Create basic 3d primitives using vector math. Can be combined with 
 texture functionality for more detailed graphics.
 
 ***************************************************************************************/
-#include "PrimitiveMaker.h"
+#include "PrimitiveFactory.h"
 
 using namespace DirectX;
 
-PrimitiveMaker::PrimitiveMaker()
+PrimitiveFactory::PrimitiveFactory()
 {}
 
-PrimitiveMaker::~PrimitiveMaker()
+PrimitiveFactory::~PrimitiveFactory()
 {}
 
-void PrimitiveMaker::CreateTriangle( 
+void PrimitiveFactory::CreateTriangle( 
     const DirectX::XMFLOAT3 & Center, 
 	const DirectX::XMFLOAT2 & Extent, 
     const DirectX::XMFLOAT3 &Orientation )
@@ -71,7 +71,7 @@ void PrimitiveMaker::CreateTriangle(
 	}
 }
 
-void PrimitiveMaker::CreatePlane( 
+void PrimitiveFactory::CreatePlane( 
     const DirectX::XMFLOAT3 & Center, 
     const DirectX::XMFLOAT2 & Extent, 
     const DirectX::XMFLOAT3 & Orientation )
@@ -147,7 +147,7 @@ void PrimitiveMaker::CreatePlane(
 
 }
 
-void PrimitiveMaker::CreateCube( 
+void PrimitiveFactory::CreateCube( 
     const DirectX::XMFLOAT3 & Center, // in MODEL space, not WORLD space!!!
     const DirectX::XMFLOAT3 & Size, 
     const DirectX::XMFLOAT3 & Orientation )
@@ -333,32 +333,32 @@ void PrimitiveMaker::CreateCube(
 	}
 }
 
-void PrimitiveMaker::CreateColor( float R, float G, float B, float A )
+void PrimitiveFactory::CreateColor( float R, float G, float B, float A )
 {
 	color = DirectX::XMFLOAT4( R, G, B, A );
 }
 
-std::vector<DirectX::XMFLOAT3> PrimitiveMaker::GetVertices() const
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetVertices() const
 {
 	return vertices;
 }
 
-std::vector<DirectX::XMFLOAT3> PrimitiveMaker::GetNormals() const
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetNormals() const
 {
 	return normals;
 }
 
-std::vector<DirectX::XMFLOAT2> PrimitiveMaker::GetUVs() const
+std::vector<DirectX::XMFLOAT2> PrimitiveFactory::GetUVs() const
 {
 	return uvs;
 }
 
-std::vector<DWORD> PrimitiveMaker::GetIndices() const
+std::vector<DWORD> PrimitiveFactory::GetIndices() const
 {
 	return indices;
 }
 
-DirectX::XMFLOAT4 PrimitiveMaker::GetColor() const
+DirectX::XMFLOAT4 PrimitiveFactory::GetColor() const
 {
 	return color;
 }
