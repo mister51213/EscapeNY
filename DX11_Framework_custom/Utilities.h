@@ -31,22 +31,99 @@ else int a = 0
 // Vector Math Operator Overloads
 ///////////////////////////////////////////////////
 
-//XMFLOAT3 operator += (XMFLOAT3& v1, XMFLOAT3& v2)
-//{
-//    v1.x += v2.x;
-//    v1.y += v2.y;
-//    v1.z += v2.z;
-//    return v1;
-//}
+// Keep operator overloads out of namespace so we can access them
+// without having to declare: using namespace
+inline XMFLOAT3 operator+(const XMFLOAT3 &V1, const XMFLOAT3& V2)
+{
+	return XMFLOAT3(V1.x + V2.x, V1.y + V2.y, V1.z + V2.z);
+}
+inline XMFLOAT3 operator-(const XMFLOAT3 &V1, const XMFLOAT3& V2)
+{
+	return XMFLOAT3(V1.x - V2.x, V1.y - V2.y, V1.z - V2.z);
+}
+inline XMFLOAT3 operator*(const XMFLOAT3 &V, const float S)
+{
+	return XMFLOAT3(V.x * S, V.y * S, V.z * S);
+}
+inline XMFLOAT3 operator/(const XMFLOAT3 &V, const float S)
+{
+	const float recipScalar = 1.f / S;
+	return XMFLOAT3(V.x * recipScalar, V.y * recipScalar, V.z * recipScalar);
+}
 
-// redundant?
-//XMFLOAT3 operator + (XMFLOAT3& v1, float cubeMod)
-//{
-//    v1.x += cubeMod;
-//    v1.y += cubeMod;
-//    v1.z += cubeMod;
-//    return v1;
-//}
+inline XMFLOAT3 &operator+= (XMFLOAT3& V1, const XMFLOAT3& V2)
+{
+	V1 = V2 + V1;
+	return V1;
+}
+inline XMFLOAT3 &operator-= (XMFLOAT3& V1, const XMFLOAT3& V2)
+{
+	V1 = V2 - V1;
+	return V1;
+}
+inline XMFLOAT3 &operator*= (XMFLOAT3 &V, const float S)
+{
+	V = V * S;
+	return V;
+}
+inline XMFLOAT3 &operator/= (XMFLOAT3 &V, const float S)
+{
+	V = V / S;
+	return V;
+}
+
+// PI is equal to 180 degrees
+constexpr float PI = 3.141592654f;
+// TwoPI is equal to 360 degrees
+constexpr float TwoPI = 2.f * PI;
+// PIDivFour is equal to 45 degrees
+constexpr float PIDivFour = PI / 4.f;
+// PIDivTwo is equal to 90 degrees
+constexpr float PIDivTwo = PI / 2.f;
+// Radian is 0.01745329238f radians, multiply degrees by radian to convert 
+// degrees to radians for rotation functions
+constexpr float radian = PI / 180.f;
+
+// Calculates the cross-product of two float3 vectors
+inline XMFLOAT3 CrossProduct(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
+{
+	return 
+	{
+		(V1.y * V2.z) - (V1.z * V2.y),
+		(V1.z * V2.x) - (V1.x * V2.z),
+		(V1.x * V2.y) - (V1.y * V2.x)
+	};
+}
+// Calculates the dot-product of two float3 vectors
+inline float DotProduct(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
+{
+	return (V1.x * V2.x) + (V1.y * V2.y) + (V1.z * V2.z);
+}
+// Calculates the magnitude of a float3 vector
+inline float Magnitude(const XMFLOAT3 &V)
+{
+	// The dot-product of an angle with itself is the same as
+	// the magnitude of the vector squared, to get the magnitude
+	// return the square root of the result.
+	return sqrtf(DotProduct(V, V));
+}
+// Calcualtes the length between two float3 point vectors
+inline float Length(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
+{
+	// Length between two points is the magnitude of the vector
+	// that starts at point1 and goes to point2
+	return Magnitude(V2 - V1);
+}
+// Normalizes a float3 vector
+inline XMFLOAT3 Normalize(const XMFLOAT3 &V)
+{
+	// Optimization
+	// Division is the slowest basic math operation, so getting
+	// the recipricol we can use multiplication instead, which is faster
+	float recipricalLength = 1.0f / Magnitude(V);
+	return V * recipricalLength;
+}
+
 
 inline XMVECTOR ConvertToRadians(const XMVECTOR& angleInDegrees)
 {
