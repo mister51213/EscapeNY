@@ -185,12 +185,15 @@ bool Game::render()
     //m_pGraphics->RenderModel(*m_pModel2);
     //RETURN_IF_FALSE(result2);
 
-    // MODEL3     
+    // TEST - draw several models w automated function
+    m_gObjects.CreatModGrid();
+    m_gObjects.MakeAllModels();
+    m_gObjects.DrawAllModels();
 
-    ModelSpecs_W worldSpecs = { {1.f, 1.f, 1.f }, {0.f,0.f,0.f},{1.f,1.f,1.f} };
-    std::shared_ptr<Model> pMod = 
-        m_gObjects.MakeModel(worldSpecs);
-    m_gObjects.DrawModel(pMod);
+    // MODEL3     
+    //ModelSpecs_W worldSpecs = { {1.f, 1.f, 1.f }, {0.f,0.f,0.f},{1.f,1.f,1.f} };
+    //std::shared_ptr<Model> pMod = m_gObjects.MakeModel(worldSpecs);
+    //m_gObjects.DrawModel(pMod);
 
     ////////////
     // OVERLAY
