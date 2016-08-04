@@ -7,8 +7,6 @@
 #pragma once
 
 #include <vector>
-#include "Model.h"
-#include "Graphics.h"
 
 struct ModelSpecs_W
 {

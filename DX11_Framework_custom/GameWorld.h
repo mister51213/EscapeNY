@@ -3,11 +3,11 @@
 //  TODO:   and GameRenderObjects (for rendering purposes)
 ///////////////////////////////////////////////////////////////////////////////////
 #pragma once
-//#include <vector>
+#include <vector>
 // includes from Game.h
 #include "Camera.h"
-//#include "Model.h"
-//#include "Graphics.h"
+#include "Model.h"
+#include "Graphics.h"
 #include "Shader_Color.h"
 #include "Texture.h"
 #include "Shader_Texture.h"

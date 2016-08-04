@@ -4,8 +4,8 @@
 
 // TODO: Move these includes into GameObjects.h after it's done
 #include "Camera.h"
-//#include "Model.h"
-//#include "Graphics.h"
+#include "Model.h"
+#include "Graphics.h"
 #include "Shader_Color.h"
 #include "Texture.h"
 #include "Shader_Texture.h"
