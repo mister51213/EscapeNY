@@ -24,7 +24,7 @@ struct ModelSpecs_W
 
 struct ModelSpecs_L
 {
-    XMFLOAT3 position, orientation, scale;
+    XMFLOAT3 center, size, orientation;
 };
 
 enum eModType{CUBE, CUBE_TEXTURED, PLANE, SPHERE, POLYGON};
@@ -57,13 +57,17 @@ public:
     // TODO: based on positions in modSpecList; therefore move functions will only operate on modSpecList,
     // TODO: and then we call Update() function every frame to render each model to its new position.
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::shared_ptr<Model> ModelFactory(ModelSpecs_L localSpecs, ModelSpecs_W worldSpecs, eModType type)
+    
+    
+    
+    // TODO: Integrate this into below DrawModel() function
+    std::shared_ptr<Model> ModelFactory(ModelSpecs_L localSpecs, ModelSpecs_W worldSpecs, eModType type)
     {
         std::shared_ptr<Model_Textured> pModel;
         pModel.reset(new Model_Textured(worldSpecs.position));
 
         PrimitiveFactory primMaker;
-        primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
+        primMaker.CreateCube(defaultSpecs.center, defaultSpecs.size, defaultSpecs.orientation);
 	    pModel->Initialize( primMaker, *m_pGfx );
 
         return pModel;
@@ -78,7 +82,7 @@ public:
         pModel.reset(new Model_Textured(worldPosition));
 
         PrimitiveFactory primMaker;
-        primMaker.CreateCube(defaultSpecs.position, defaultSpecs.scale, defaultSpecs.orientation);
+        primMaker.CreateCube(defaultSpecs.center, defaultSpecs.size, defaultSpecs.orientation);
         pModel->Initialize(primMaker, *m_pGfx);  
 
         //////////////////////////////////
@@ -107,7 +111,15 @@ public:
     }
 
 private:
-    void DrawAllModels()
+    void PopulateModels() {
+        for (char i = 0; i < m_objectCount; i++)
+        {
+            m_models.push_back(ModelFactory(m_modSpecs_L[i], m_modSpecs_W[i], CUBE_TEXTURED));
+            DrawModel(m_models[i]->m_Position);
+        }
+    }
+
+        void DrawAllModels()
     {
         for each (std::shared_ptr<Model> model in m_models)
         {
@@ -115,12 +127,6 @@ private:
         }
     }
 
-    void PopulateModelList() {
-        for (char i = 0; i < m_objectCount; i++)
-        {
-            m_models.push_back(ModelFactory(m_modSpecList[i], CUBE_TEXTURED));
-        }
-    }
 
     bool InitShader()
     {
@@ -148,29 +154,23 @@ private:
 
 
     private:
-
         HWND m_WinHandle;
-
-        std::unique_ptr<Model_Textured> m_pModelTEST;
-
-        std::shared_ptr<Shader_Texture> m_pShader_Texture;
-	    std::shared_ptr<Texture> m_pStoneTexture;
-
-        // LIST of Model position, orientation, scale info in WORLD SPACE
-        vector<ModelSpecs_W> m_modSpecList;
-
-        // list of actual models for rendering purposes
-        vector<std::shared_ptr<Model>> m_models;
-        char m_objectCount;
-
-        ModelSpecs_L defaultSpecs = { { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, {0.f,0.f,0.f} };
-
-
-
-
-
-        // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
         Graphics* m_pGfx;
         D3DGraphics* m_pD3D;
         std::shared_ptr<Camera> m_pCam;
+
+        std::unique_ptr<Model_Textured> m_pModelTEST;
+        std::shared_ptr<Shader_Texture> m_pShader_Texture;
+	    std::shared_ptr<Texture> m_pStoneTexture;
+
+        vector<ModelSpecs_L> m_modSpecs_L;// model specs list in LOCAL SPACE
+        vector<ModelSpecs_W> m_modSpecs_W;// model specs list in WORLD SPACE
+
+        vector<std::shared_ptr<Model>> m_models; // list of actual models for rendering purposes
+
+        char m_objectCount;
+        ModelSpecs_L defaultSpecs = { 
+            { 0.f, 0.f, 0.f }, 
+            { 5.f, 5.f, 5.f }, 
+            { 0.f, 0.f, 0.f } };
 };
