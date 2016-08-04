@@ -31,7 +31,7 @@ private:
 	std::shared_ptr<Camera> m_pCamera; // Camera, Model and ColorShader are created in Game, so has ownership
 
     GameObjects m_gObjects;
-    vector<ModelSpecs> m_modSpecList;
+    vector<ModelSpecs_W> m_modSpecList; // TODO: remove this later
 
 	std::shared_ptr<Model_Textured> m_pModel1;
     std::shared_ptr<Model_Textured> m_pModel2;

@@ -63,7 +63,15 @@ bool Game::Initialize( Graphics *pGraphics,
 	RETURN_IF_FALSE( result );
 
 	// Pass all member pointers to GameObjects class so it can draw with them
-	m_gObjects = GameObjects( 10, m_pGraphics, m_pDirect3D, m_pCamera, m_pShader_Texture, m_pStoneTexture, WinHandle );
+    m_gObjects = 
+        GameObjects(
+            10, 
+            m_pGraphics, 
+            m_pDirect3D, 
+            m_pCamera, 
+            m_pShader_Texture, 
+            m_pStoneTexture, 
+            WinHandle);
 	return true;
 }
 
@@ -179,9 +187,8 @@ bool Game::render()
 	//RETURN_IF_FALSE(result2);
 
 	// MODEL3     
-	//std::shared_ptr<Model> pModTest;
-	//std::shared_ptr<Model> pMod = // TODO: currently a dummy ptr; not yet implemented!
-	//	m_gObjects.DrawModel( { 15, -15, -5 }, pModTest );
+    std::shared_ptr<Model> pMod = 
+        m_gObjects.DrawModel({1, 1, 1 });
 
 	////////////
 	// OVERLAY
