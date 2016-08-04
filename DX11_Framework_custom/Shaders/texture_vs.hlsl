@@ -2,16 +2,25 @@
 // Filename: texture.vs
 ////////////////////////////////////////////////////////////////////////////////
 
-
 /////////////
 // GLOBALS //
 /////////////
+
+// This will be INITIALIZED differently for EACH OBJECT
+cbuffer WMatBuffer
+{
+    matrix objectWorldMatrix;
+};
+
+// this is only INITIALIZED once per frame (for the camera)
 cbuffer MatrixBuffer
 {
-    matrix worldMatrix;
+    matrix worldMatrix; // TODO: remove this after implementing above cbuffer
     matrix viewMatrix;
     matrix projectionMatrix;
 };
+
+
 
 //////////////
 // TYPEDEFS //
@@ -32,7 +41,7 @@ struct PixelInputType
 ////////////////////////////////////////////////////////////////////////////////
 // Vertex Shader
 ////////////////////////////////////////////////////////////////////////////////
-PixelInputType TextureVertexShader(VertexInputType input)
+PixelInputType main(VertexInputType input)
 {
     PixelInputType output;
     

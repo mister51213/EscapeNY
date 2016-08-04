@@ -1,23 +1,34 @@
 #include "Model_Textured.h"
-#include "PrimitiveMaker.h"
-
+#include "PrimitiveFactory.h"
 
 Model_Textured::Model_Textured()
-{
-}
+{}
+
+Model_Textured::Model_Textured(XMFLOAT3 pos):Model::Model(pos) // initialize base position
+{}
 
 Model_Textured::~Model_Textured()
 {}
 
-bool Model_Textured::Initialize( const PrimitiveMaker &PrimMaker, const Graphics & Gfx )
+bool Model_Textured::Initialize( const PrimitiveFactory &PrimMaker, const Graphics & Gfx )
 {
 	// Set the stride for this model type
 	m_Stride = sizeof( VertexPositionUVType );
 
+    //////////////////////////////////////////////////////////
+    // TODO: / WARNING WARNING
+    // This is translating the model in its OWN COORDINATES!!!!!!
+    // 1. can change it relative to its own coordinates by changing the Center
+    //    in the Model. CreatePlane() function
+    // 2. wrong way of moving the objects; if you want to move it in world
+    // space, then add its own isolated XMFLOAT3 worldPosition, then pass that
+    // to the global GetWorldMatrix function before it's rendered.
+    //////////////////////////////////////////////////////////
+
 	// Create the vertex array.
 	auto verts = PrimMaker.GetVertices();
 
-	// Set the number of vertices indices in the vertex array.
+	// Set the number of verticex indices in the vertex array.
 	m_vertexCount = verts.size();
 	m_indexCount = verts.size();
 	m_Vertices.resize( m_vertexCount );

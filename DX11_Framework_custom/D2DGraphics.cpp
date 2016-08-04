@@ -13,61 +13,53 @@ void D2DGraphics::BeginDraw()
 {	
     // Anything needed for the overlay should go between the begin and end
 	// draw calls
-	m_pRenderTarget->BeginDraw();
-   	m_pRenderTarget->Clear();
+	m_pContext->BeginDraw();
 }
 
 void D2DGraphics::EndDraw()
 {
-	m_pRenderTarget->EndDraw();
+	HRESULT hr = m_pContext->EndDraw();
 }
 
 bool D2DGraphics::Initialize( const Graphics &Gfx, const UINT ScreenWidth, const UINT ScreenHeight )
 {	
-	ID2D1Factory *pFactory = nullptr;
-	// Initialize the Direct2D factory
-	HRESULT hr = D2D1CreateFactory( D2D1_FACTORY_TYPE_SINGLE_THREADED, &pFactory );	
-	m_pFactory.Attach( pFactory );
+	// Get the D3D device and use it to create the D2D device
+	auto pDevice3D = Gfx.GetDirect3D()->GetDevice();
+	comptr<IDXGIDevice> pDxgiDevice;
+	
+	// Casts the D3D device pointer to a DXGIDevice pointer
+	HRESULT hr = pDevice3D->QueryInterface( pDxgiDevice.GetAddressOf() );
+	
+	// Creates the D2D1Device
+	hr = D2D1CreateDevice( pDxgiDevice.Get(), nullptr, m_pDevice.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 
-	// Use the image loader to create an empty texture buffer
-	auto bitmapResult = ImageLoader::CreateBitmap( ScreenWidth, ScreenHeight, *Gfx.GetWIC() );
-	hr = bitmapResult.first;
-	RETURN_IF_FAILED( hr );
-
-	// Use the texture buffer to create a render target 
-	// First, move the newly created empty bitmap to the bitmap member
-	m_pRenderSurface = std::move( bitmapResult.second );
-
-	// Create a pixel format for the render target
-	auto pixelFormat = D2D1::PixelFormat(
-		DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED
-	);
-
-	// Setup the render target properties
-	auto renderProperties = D2D1::RenderTargetProperties(
-		D2D1_RENDER_TARGET_TYPE_DEFAULT,
-		pixelFormat
-	);
-
-	// Create the render target using the bitmap member, pixel format 
-	// and render target properties	
-	hr = m_pFactory->CreateWicBitmapRenderTarget(
-		m_pRenderSurface.Get(),
-		renderProperties,
-		&m_pRenderTarget
+	// Use the D2D device to create the D2DDeviceContext
+	hr = m_pDevice->CreateDeviceContext(
+		D2D1_DEVICE_CONTEXT_OPTIONS_NONE, m_pContext.GetAddressOf()
 	);
 	RETURN_IF_FAILED( hr );
+
+	// Get the D3D render target (the back buffer) and convert to 
+	// an intermediate DXGI surface
+	auto pRenderTarget3D = Gfx.GetDirect3D()->GetRenderTarget();
+	IDXGISurface *pSurface = nullptr;
+	hr = pRenderTarget3D->QueryInterface( &pSurface );
+	RETURN_IF_FAILED( hr );
+
+	// Use the intermediate DXGI surface to create the D2D render target
+	hr = m_pContext->CreateBitmapFromDxgiSurface( 
+		pSurface,
+		nullptr, 
+		m_pRenderSurface.GetAddressOf() );
+	RETURN_IF_FAILED( hr );
+
+	m_pContext->SetTarget( m_pRenderSurface.Get() );
 
 	// Create a solid color brush for painting the fonts
 	D2D1::ColorF defaultColor( D2D1::ColorF::White );
-	hr = m_pRenderTarget->CreateSolidColorBrush( defaultColor, m_pBrush.GetAddressOf() );
+	hr = m_pContext->CreateSolidColorBrush( defaultColor, m_pBrush.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 
 	return true;
-}
-
-IWICBitmap * D2DGraphics::GetRenderSurface() const
-{
-	return m_pRenderSurface.Get();
 }

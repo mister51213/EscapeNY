@@ -10,14 +10,20 @@
 // Filename: model.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "model.h"
-#include "PrimitiveMaker.h"
+#include "PrimitiveFactory.h"
 
-// initialize the vertex and index buffer pointers to null.
 Model::Model()
 {
-	// This matrix transforms vertices from object space coordinates to
-	// world space coordinates
-	m_worldMatrix = XMMatrixIdentity();
+}
+
+// initialize the vertex and index buffer pointers to null.
+Model::Model(XMFLOAT3 pos)
+{
+	// This matrix transforms vertices from object space coordinates to world space coordinates
+	//m_worldMatrix = XMMatrixIdentity();
+    m_Position = pos;
+    m_Orientation = { 1,1,1 }; 
+    m_Scale = { 1,1,1 };
 }
 
 Model::Model(const Model& other)
@@ -39,9 +45,11 @@ ID3D11Buffer * Model::GetIndexBuffer() const
 	return m_indexBuffer.Get();
 }
 
-//////////////////////////////////////////////
-// TODO: Explain this function better
-//////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+// Stride is the size of one unit of info in an array
+// for example one row in a pixel array representing the screen (pitch)
+// or one Vertex containing 3D COORDINATE and UV COORDINATE info
+///////////////////////////////////////////////////////////////////////
 UINT Model::GetStride() const
 {
 	return m_Stride;
@@ -51,10 +59,10 @@ UINT Model::GetStride() const
 // TODO: Create mesh loader to load mesh files.               *
 //*************************************************************
 
-XMMATRIX Model::GetWorldMatrix()const
-{
-	return m_worldMatrix;
-}
+//XMMATRIX Model::GetWorldMatrix()const
+//{
+//	return m_worldMatrix;
+//}
 
 // Returns the number of indices in the model. The color shader will 
 // need this information to draw this model.

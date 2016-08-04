@@ -69,12 +69,6 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PrimitiveMaker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TexturedPlane.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -98,6 +92,15 @@
     </ClCompile>
     <ClCompile Include="COMHandler.cpp">
       <Filter>Source Files\Utility Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturedPlane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Shader Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -143,9 +146,6 @@
     <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PrimitiveMaker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TexturedPlane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -173,6 +173,18 @@
     <ClInclude Include="COMHandler.h">
       <Filter>Header Files\Utility Classes</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\Shader Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameWorld.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Development Guidelines.txt">
@@ -183,9 +195,9 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Color.ps" />
-    <None Include="Color.vs" />
-    <None Include="texture.vs" />
-    <None Include="texture.ps" />
+    <FxCompile Include="Shaders\Color_ps.hlsl" />
+    <FxCompile Include="Shaders\Color_vs.hlsl" />
+    <FxCompile Include="Shaders\texture_ps.hlsl" />
+    <FxCompile Include="Shaders\texture_vs.hlsl" />
   </ItemGroup>
 </Project>

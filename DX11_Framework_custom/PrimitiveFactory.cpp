@@ -1,54 +1,57 @@
 /***********************************************************************************
-File: PrimitiveMaker.cpp
+File: PrimitiveFactory.cpp
 Function: Create basic 3d primitives using vector math. Can be combined with 
 texture functionality for more detailed graphics.
 
 ***************************************************************************************/
-#include "PrimitiveMaker.h"
+#include "PrimitiveFactory.h"
+#include "Utilities.h"
 
 using namespace DirectX;
 
-PrimitiveMaker::PrimitiveMaker()
-{}
-
-PrimitiveMaker::~PrimitiveMaker()
-{}
-
-void PrimitiveMaker::CreateTriangle( 
+void PrimitiveFactory::CreateTriangle( 
     const DirectX::XMFLOAT3 & Center, 
 	const DirectX::XMFLOAT2 & Extent, 
     const DirectX::XMFLOAT3 &Orientation )
 {
 	auto extentHalf = DirectX::XMFLOAT2( Extent.x * 0.5f, Extent.y * 0.5f );
-	vertices = 
+    PrimitiveFactory::vertices.clear();
+	PrimitiveFactory::vertices = 
 	{
 		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z},
 		{Center.x, Center.y + extentHalf.y, Center.z},
 		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z}
 	};
 
-	normals = 
+    // Must clear each time because this is static.
+    PrimitiveFactory::normals.clear();
+	PrimitiveFactory::normals = 
 	{
 		{0.f, 0.f, -1.f},
 		{0.f, 0.f, -1.f},
 		{0.f, 0.f, -1.f}
 	};
-
-	uvs = 
+ 
+    // Must clear each time because this is static.
+    PrimitiveFactory::uvs.clear();
+	PrimitiveFactory::uvs = 
 	{
 		{0.f, 1.f},
 		{0.5f, 0.f},
 		{1.f, 1.f}
 	};
 
-	indices.resize( vertices.size() );
+    // Must clear each time because this is static.
+    PrimitiveFactory::indices.clear();
+    // TODO: can resize() resize DOWN too; if so, don't need clear above
+	PrimitiveFactory::indices.resize( vertices.size() );
 	for( int i = 0; i < vertices.size(); ++i )
 	{
 		indices[ i ] = i;
 	}
 
 	// Load the orienation into SIMD register and create the rotation matrix
-	auto rotationVector = XMLoadFloat3( &Orientation );
+	auto rotationVector = ConvertToRadians(XMLoadFloat3( &Orientation ));
 	auto rotationMatrix = XMMatrixRotationRollPitchYawFromVector( rotationVector );
 
 	// Rotate each vertex
@@ -62,17 +65,16 @@ void PrimitiveMaker::CreateTriangle(
 	// Load the reverse orientation into SIMD register and create the reverse rotation matrix
 	// for the normals. This makes sure that lights don't follow the direction of the 
 	// plane, but instead go in the opposite direction
-	auto reverseRotationMatrix = XMMatrixRotationRollPitchYawFromVector( -rotationVector );
+	auto reverseRotationMatrix = XMMatrixRotationRollPitchYawFromVector( rotationVector );
 	for( auto &normal : normals )
 	{
 		auto xmVector = XMLoadFloat3( &normal );
 		auto rotatedVector = XMVector3TransformCoord( xmVector, reverseRotationMatrix );
 		XMStoreFloat3( &normal, rotatedVector );
 	}
-
 }
 
-void PrimitiveMaker::CreatePlane( 
+void PrimitiveFactory::CreatePlane( 
     const DirectX::XMFLOAT3 & Center, 
     const DirectX::XMFLOAT2 & Extent, 
     const DirectX::XMFLOAT3 & Orientation )
@@ -80,21 +82,23 @@ void PrimitiveMaker::CreatePlane(
 	// There needs to be as many normals and uvs as there are vertices, 
 	// there can be more indices
 
-    // TODO: Better name this function
+    // Extent half is size of the object in each direction
     auto extentHalf = DirectX::XMFLOAT2( Extent.x * 0.5f, Extent.y * 0.5f );
 	// Create vertex list	
-    vertices = 
+    PrimitiveFactory::vertices.clear();
+    PrimitiveFactory::vertices = 
 	{
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z}
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z}
 	};
 	
 	// Create normals list
-	normals =
+    PrimitiveFactory::normals.clear();
+	PrimitiveFactory::normals =
 	{
 		{0.f,0.f,-1.f},
 		{0.f,0.f,-1.f}, 
@@ -105,7 +109,8 @@ void PrimitiveMaker::CreatePlane(
 	};
 
 	// Create uv coordinate list
-	uvs = 
+    PrimitiveFactory::uvs.clear();
+	PrimitiveFactory::uvs = 
 	{ 
 		{0.f, 0.f}, 
 		{1.f, 0.f}, 
@@ -117,14 +122,15 @@ void PrimitiveMaker::CreatePlane(
 
 	// This is for a D3D11_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, for a 
 	// D3D11_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP you would only need 0,1,2,3
-	indices.resize( vertices.size() );
+    PrimitiveFactory::indices.clear();
+	PrimitiveFactory::indices.resize( vertices.size() );
 	for( int i = 0; i < vertices.size(); ++i )
 	{
 		indices[ i ] = i;
 	}
 
 	// Load the orienation into SIMD register and create the rotation matrix
-	auto rotationVector = XMLoadFloat3( &Orientation );
+	auto rotationVector = ConvertToRadians(XMLoadFloat3( &Orientation ));
 	auto rotationMatrix = XMMatrixRotationRollPitchYawFromVector( rotationVector );
 
 	// Rotate each vertex
@@ -145,69 +151,70 @@ void PrimitiveMaker::CreatePlane(
 		auto rotatedVector = XMVector3TransformCoord( xmVector, reverseRotationMatrix );
 		XMStoreFloat3( &normal, rotatedVector );
 	}
-
 }
 
-void PrimitiveMaker::CreateCube( 
-    const DirectX::XMFLOAT3 & Center, 
-    const DirectX::XMFLOAT3 & Extent, 
+void PrimitiveFactory::CreateCube( 
+    const DirectX::XMFLOAT3 & Center, // in MODEL space, not WORLD space!!!
+    const DirectX::XMFLOAT3 & Size, 
     const DirectX::XMFLOAT3 & Orientation )
 {    
     // TODO: Better name this function
-    auto extentHalf = DirectX::XMFLOAT3( Extent.x * 0.5f, Extent.y * 0.5f, Extent.z * 0.5f );
+    auto extentHalf = DirectX::XMFLOAT3( Size.x * 0.5f, Size.y * 0.5f, Size.z * 0.5f );
 
-	vertices = 
+    PrimitiveFactory::vertices.clear();
+	PrimitiveFactory::vertices = 
 	{	
         // Left
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z - Extent.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
 
 		// Right
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z + Extent.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
 
 		// Bottom
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z + Extent.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
 
 		// Top
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z - Extent.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
 
 		// Front
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z - Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z - Extent.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z - extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z - extentHalf.z},
 
 		// Back
-		{Center.x + Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z + Extent.z},
-		{Center.x + Extent.x, Center.y - Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y + Extent.y, Center.z + Extent.z},
-		{Center.x - Extent.x, Center.y - Extent.y, Center.z + Extent.z}
+		{Center.x + extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
+		{Center.x + extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y + extentHalf.y, Center.z + extentHalf.z},
+		{Center.x - extentHalf.x, Center.y - extentHalf.y, Center.z + extentHalf.z}
 	};
 
-	normals = 
+    PrimitiveFactory::normals.clear();
+	PrimitiveFactory::normals = 
 	{
 		// Left
 		{-1.f, 0.f, 0.f},
@@ -258,7 +265,8 @@ void PrimitiveMaker::CreateCube(
 		{0.f, 0.f, 1.f}
 	};
 
-	uvs = 
+    PrimitiveFactory::uvs.clear();
+	PrimitiveFactory::uvs = 
 	{
 		// Left
 		{0.f, 0.f},
@@ -304,14 +312,15 @@ void PrimitiveMaker::CreateCube(
 		{1.f, 1.f}
 	};
 
-	indices.resize( vertices.size() );
+    PrimitiveFactory::indices.clear();
+	PrimitiveFactory::indices.resize( vertices.size() );
 	for( int i = 0; i < vertices.size(); ++i )
 	{
 		indices[ i ] = i;
 	}
 
 	// Load the orienation into SIMD register and create the rotation matrix
-	auto rotationVector = XMLoadFloat3( &Orientation );
+	auto rotationVector = ConvertToRadians(XMLoadFloat3( &Orientation ));
 	auto rotationMatrix = XMMatrixRotationRollPitchYawFromVector( rotationVector );
 
 	// Rotate each vertex
@@ -334,32 +343,38 @@ void PrimitiveMaker::CreateCube(
 	}
 }
 
-void PrimitiveMaker::CreateColor( float R, float G, float B, float A )
+void PrimitiveFactory::CreateColor( float R, float G, float B, float A )
 {
 	color = DirectX::XMFLOAT4( R, G, B, A );
 }
 
-std::vector<DirectX::XMFLOAT3> PrimitiveMaker::GetVertices() const
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetVertices() 
 {
-	return vertices;
+	return PrimitiveFactory::vertices;
 }
 
-std::vector<DirectX::XMFLOAT3> PrimitiveMaker::GetNormals() const
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetNormals() 
 {
-	return normals;
+	return PrimitiveFactory::normals;
 }
 
-std::vector<DirectX::XMFLOAT2> PrimitiveMaker::GetUVs() const
+std::vector<DirectX::XMFLOAT2> PrimitiveFactory::GetUVs() 
 {
-	return uvs;
+	return PrimitiveFactory::uvs;
 }
 
-std::vector<DWORD> PrimitiveMaker::GetIndices() const
+std::vector<DWORD> PrimitiveFactory::GetIndices() 
 {
-	return indices;
+	return PrimitiveFactory::indices;
 }
 
-DirectX::XMFLOAT4 PrimitiveMaker::GetColor() const
+DirectX::XMFLOAT4 PrimitiveFactory::GetColor() 
 {
-	return color;
+	return PrimitiveFactory::color;
 }
+
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::vertices;
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::normals;
+std::vector<DirectX::XMFLOAT2> PrimitiveFactory::uvs; 
+std::vector<DWORD> PrimitiveFactory::indices;
+DirectX::XMFLOAT4 PrimitiveFactory::color;

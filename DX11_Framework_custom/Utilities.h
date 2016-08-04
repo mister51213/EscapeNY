@@ -2,6 +2,8 @@
 #include <vector>
 #include <DirectXMath.h>
 
+using namespace DirectX;
+
 // Permit me to be a little lazy :)
 // This is just an alias to shorten the amount of typing
 template<class T>
@@ -25,6 +27,172 @@ if(!(Result))\
 else int a = 0
 #define RETURN_IF_FAILED(Result) RETURN_IF_FALSE( SUCCEEDED( ( Result ) ) )
 
+////////////////////////////////////////////////////
+// Vector Math Operator Overloads
+///////////////////////////////////////////////////
+
+// Keep operator overloads out of namespace so we can access them
+// without having to declare: using namespace
+inline XMFLOAT3 operator+(const XMFLOAT3 &V1, const XMFLOAT3& V2)
+{
+	return XMFLOAT3(V1.x + V2.x, V1.y + V2.y, V1.z + V2.z);
+}
+inline XMFLOAT3 operator-(const XMFLOAT3 &V1, const XMFLOAT3& V2)
+{
+	return XMFLOAT3(V1.x - V2.x, V1.y - V2.y, V1.z - V2.z);
+}
+inline XMFLOAT3 operator*(const XMFLOAT3 &V, const float S)
+{
+	return XMFLOAT3(V.x * S, V.y * S, V.z * S);
+}
+inline XMFLOAT3 operator/(const XMFLOAT3 &V, const float S)
+{
+	const float recipScalar = 1.f / S;
+	return XMFLOAT3(V.x * recipScalar, V.y * recipScalar, V.z * recipScalar);
+}
+
+inline XMFLOAT3 &operator+= (XMFLOAT3& V1, const XMFLOAT3& V2)
+{
+	V1 = V2 + V1;
+	return V1;
+}
+inline XMFLOAT3 &operator-= (XMFLOAT3& V1, const XMFLOAT3& V2)
+{
+	V1 = V2 - V1;
+	return V1;
+}
+inline XMFLOAT3 &operator*= (XMFLOAT3 &V, const float S)
+{
+	V = V * S;
+	return V;
+}
+inline XMFLOAT3 &operator/= (XMFLOAT3 &V, const float S)
+{
+	V = V / S;
+	return V;
+}
+
+// PI is equal to 180 degrees
+constexpr float PI = 3.141592654f;
+
+// TwoPI is equal to 360 degrees
+constexpr float TwoPI = 2.f * PI;
+
+// PIDivFour is equal to 45 degrees
+constexpr float PIDivFour = PI / 4.f;
+
+// PIDivTwo is equal to 90 degrees
+constexpr float PIDivTwo = PI / 2.f;
+
+// Radian is 0.01745329238f radians, multiply degrees by radian to convert 
+// degrees to radians for rotation functions
+constexpr float radian = PI / 180.f;
+
+// Calculates the cross-product of two float3 vectors
+inline XMFLOAT3 CrossProduct(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
+{
+	return 
+	{
+		(V1.y * V2.z) - (V1.z * V2.y),
+		(V1.z * V2.x) - (V1.x * V2.z),
+		(V1.x * V2.y) - (V1.y * V2.x)
+	};
+}
+
+// Calculates the dot-product of two float3 vectors
+inline float DotProduct(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
+{
+	return (V1.x * V2.x) + (V1.y * V2.y) + (V1.z * V2.z);
+}
+
+// Calculates the magnitude of a float3 vector
+inline float Magnitude(const XMFLOAT3 &V)
+{
+	// The dot-product of an angle with itself is the same as
+	// the magnitude of the vector squared, to get the magnitude
+	// return the square root of the result.
+	return sqrtf(DotProduct(V, V));
+}
+
+// Calcualtes the length between two float3 point vectors
+inline float Length(const XMFLOAT3 &V1, const XMFLOAT3 &V2)
+{
+	// Length between two points is the magnitude of the vector
+	// that starts at point1 and goes to point2
+	return Magnitude(V2 - V1);
+}
+
+// Normalizes a float3 vector
+inline XMFLOAT3 Normalize(const XMFLOAT3 &V)
+{
+	// Optimization
+	// Division is the slowest basic math operation, so getting
+	// the recipricol we can use multiplication instead, which is faster
+	float recipricalLength = 1.0f / Magnitude(V);
+	return V * recipricalLength;
+}
+
+inline XMVECTOR ConvertToRadians(const XMVECTOR& angleInDegrees)
+{
+	// Use constexpr radian which is the result of PI / 180.f calculated
+	// at compile time.
+	return angleInDegrees * XMVectorReplicate( radian );
+}
+
+inline XMFLOAT3 ConvertToRadians(const XMFLOAT3& angleInDegrees)
+{
+	// Use constexpr radian which is the result of PI / 180.f calculated
+	// at compile time.
+    return { angleInDegrees * radian };
+}
+
+////////////////////////////////////////////////////////////////
+// STRUCTS CONTAINING MODEL INFO for gameplay and rendering
+// TODO: make it global; see which is faster
+////////////////////////////////////////////////////////////////
+struct ModelSpecs_W
+{
+    XMFLOAT3 position, orientation, scale;
+};
+
+struct ModelSpecs_L
+{
+    XMFLOAT3 center, size, orientation;
+};
+
+enum eModType{CUBE, CUBE_TEXTURED, PLANE, SPHERE, POLYGON};
+
+////////////////////////////////////////////////////////////////
+// FUNCTION FOR GETTING WORLD MATRIX
+// TODO: make it global; see which is faster
+////////////////////////////////////////////////////////////////
+
+inline DirectX::XMMATRIX GetWorldMatrix(ModelSpecs_W modSpecs
+/*const XMFLOAT3& translate, const XMFLOAT3& rotate, const XMFLOAT3& scale*/){    
+    DirectX::XMMATRIX trans = XMMatrixTranslation(/*translate.x, translate.y, translate.z*/modSpecs.position.x, modSpecs.position.y, modSpecs.position.z);
+    auto rotation = ConvertToRadians(modSpecs.orientation);
+    DirectX::XMMATRIX rot = XMMatrixRotationRollPitchYaw(/*rotate.x, rotate.y, rotate.z*/rotation.x, rotation.y, rotation.z);
+    DirectX::XMMATRIX scal = XMMatrixScaling(/*scale.x, scale.y, scale.z*/modSpecs.scale.x, modSpecs.scale.y, modSpecs.scale.z);
+
+    //return rot*scal*trans;
+    return XMMatrixTranspose(rot*scal*trans); // Also transpose it in this step to make it easier for GPU to handle
+    // TODO: remove transponse world matrix from shader
+}
+
+// TODO: Make this global inline in Utilities
+// Transpose the matrices to prepare them for the shader.
+inline DirectX::XMMATRIX Transpose(std::vector<XMMATRIX> & matrices)
+{    
+    // TODO:  Figure out best way to do this; what's the fastest way,
+    // pass a list of matrices, or what?????
+
+	/*MatrixBufferType data;
+	data.world = XMMatrixTranspose( worldMatrix );
+	data.view = XMMatrixTranspose( viewMatrix );
+	data.projection = XMMatrixTranspose( projectionMatrix );*/
+    return XMMatrixIdentity();
+}
+
 // Common vertex buffer types and corresponding input element descriptions
 
 // Position and Color 
@@ -43,7 +211,7 @@ struct VertexPositionColorType
 		std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
 		eDesc[ 0 ].SemanticName = "POSITION";
 		eDesc[ 0 ].SemanticIndex = 0;
-		eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		eDesc[ 0 ].InputSlot = 0;
 		eDesc[ 0 ].AlignedByteOffset = 0;
 		eDesc[ 0 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -73,7 +241,7 @@ struct VertexPositionUVType
 		std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
 		eDesc[ 0 ].SemanticName = "POSITION";
 		eDesc[ 0 ].SemanticIndex = 0;
-		eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		eDesc[ 0 ].InputSlot = 0;
 		eDesc[ 0 ].AlignedByteOffset = 0;
 		eDesc[ 0 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;

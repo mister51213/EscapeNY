@@ -1,33 +1,43 @@
 #pragma once
 
-#include "Camera.h"
-#include "Model.h"
-#include "Graphics.h"
-#include "Shader_Color.h"
-#include "Texture.h"
-#include "Shader_Texture.h"
+#include "GameWorld.h"
 #include "Overlay.h"
+#include "Input.h"
+#include <algorithm>
 
 class Game
 {
 public:
-	Game();
+	Game(std::shared_ptr<Input> pInput);
 	~Game();
 
 	bool Initialize( Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, HWND WinHandle );
+    void GetInput(std::shared_ptr<Input> input);
+
 	bool Frame();
 private:
 	bool render();
-private:
-	// m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
-	Graphics *m_pGraphics;
-	D3DGraphics *m_pDirect3D;
 
-	// Camera, Model and ColorShader are created in Game, so has ownership
-	std::unique_ptr<Camera> m_pCamera;
-	std::unique_ptr<Model_Textured> m_pModel;
-	//std::unique_ptr<ColorShader> m_pColorShader;
-	std::unique_ptr<Shader_Texture> m_pShader_Texture;
-	std::unique_ptr<Texture> m_pStoneTexture;
-	Overlay m_Overlay;};
+    void makeAllActors(int numActors);
+
+private:
+	
+	Graphics *m_pGraphics; // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
+	D3DGraphics *m_pDirect3D;
+	std::shared_ptr<Camera> m_pCamera; // Camera, Model and ColorShader are created in Game, so has ownership
+
+    GameWorld m_gObjects;
+    int m_numRows, m_numColumns, m_numZ, m_numActors;
+
+	std::shared_ptr<Model_Textured> m_pModel1;
+    std::shared_ptr<Model_Textured> m_pModel2;
+
+    std::shared_ptr<Input> m_pInput;// Input
+
+	Overlay m_Overlay;
+    XMFLOAT3 m_camPos = { -0.0f, 16.0f, -30.0f };
+    XMFLOAT3 m_camRotation = { 25.f, -5.f, 0.f }; // defined in degrees
+
+    vector<std::shared_ptr<Actor>> m_actors;
+};
 

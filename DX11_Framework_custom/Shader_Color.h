@@ -1,3 +1,8 @@
+// 
+// TODO: Change shader functionality to using built-in shader header files instead of .cso
+// files that need to be packaged with the final .exe file (before we actually ship the game)
+//
+
 ////////////////////////////////////////////////////////////////////////////////
 // Filename: Shader_Color.h
 ////////////////////////////////////////////////////////////////////////////////
@@ -6,8 +11,7 @@
 //////////////
 // INCLUDES //
 //////////////
-#include "Includes.h"
-#include "Utilities.h"
+#include "Shader.h"
 
 using namespace DirectX;
 using namespace std;
@@ -15,38 +19,53 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 // Forward declaration(s)
 ////////////////////////////////////////////////////////////////////////////////
-class Model;
+//class Model;
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: Shader_Color
 ////////////////////////////////////////////////////////////////////////////////
-class Shader_Color
+class Shader_Color:public Shader
 {
-private:
-	struct MatrixBufferType
-	{
-		XMMATRIX world;
-		XMMATRIX view;
-		XMMATRIX projection;
-	};
 
 public:
 	Shader_Color();
 	Shader_Color( const Shader_Color& );
 	~Shader_Color();
 
-	bool Initialize( ID3D11Device*, HWND, const Model &crModel );
-	bool Render( ID3D11DeviceContext*, XMMATRIX &, XMMATRIX &, XMMATRIX & );
+    // TODO: Why does color shader pass this as ref, but texture shader doesnt?
+	//bool Render( 
+ //       ID3D11DeviceContext* deviceContext, 
+ //       XMMATRIX & worldMatrix, 
+ //       XMMATRIX & viewMatrix, 
+ //       XMMATRIX & projectionMatrix);
 
-private:
-	bool InitializeShader( ID3D11Device*, HWND, WCHAR*, WCHAR*, const Model &crModel );
-	void OutputShaderErrorMessage( ID3D10Blob*, HWND, WCHAR* );
+	virtual bool InitializeShader( 
+        ID3D11Device*, 
+        HWND, 
+        //WCHAR*, 
+        //WCHAR*, 
+        const std::wstring &,
+        const std::wstring &/*,
+        const Model &crModel */) override;
 
-	bool SetShaderParameters( ID3D11DeviceContext*, XMMATRIX &, XMMATRIX &, XMMATRIX & );
-	void RenderShader( ID3D11DeviceContext* );
+    // original signature:
+   	//bool InitializeShader( 
+    //    ID3D11Device*, 
+    //    HWND, 
+    //    WCHAR*, 
+    //    WCHAR*, 
+    //    const Model &crModel );
 
-private:
-	comptr<ID3D11VertexShader> m_vertexShader;
-	comptr<ID3D11PixelShader> m_pixelShader;
-	comptr<ID3D11InputLayout> m_layout;
-	comptr<ID3D11Buffer> m_matrixBuffer;
+	void OutputShaderErrorMessage( 
+        ID3D10Blob*, 
+        HWND, 
+        const std::wstring & );
+
+	virtual bool SetShaderParameters( 
+        ID3D11DeviceContext*, 
+        XMMATRIX &, 
+        XMMATRIX &, 
+        XMMATRIX &, 
+        ID3D11ShaderResourceView* =0) override;
+	
+    virtual void RenderShader( ID3D11DeviceContext* );
 };

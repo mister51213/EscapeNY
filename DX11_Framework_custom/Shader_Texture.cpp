@@ -1,54 +1,53 @@
+// 
+// TODO: Change shader functionality to using built-in shader header files instead of .cso
+// files that need to be packaged with the final .exe file (before we actually ship the game)
+//
+
 ////////////////////////////////////////////////////////////////////////////////
 // Filename: Shader_Texture.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "Shader_Texture.h"
 #include "Model.h"
 
-Shader_Texture::Shader_Texture()
-{
-}
+Shader_Texture::Shader_Texture():Shader(L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso")
+{}
 
-Shader_Texture::Shader_Texture( const Shader_Texture& other )
+// TODO: FIX COPY CONSTRUCTOR to initialize all variables.
+Shader_Texture::Shader_Texture( const Shader_Texture& other ):Shader(L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso")
 {}
 
 Shader_Texture::~Shader_Texture()
 {}
 
-bool Shader_Texture::Initialize( ID3D11Device* pDevice, HWND WinHandle, const Model &crModel )
-{
-	// Initialize the vertex and pixel shaders.
-	bool result = initializeShader( 
-		pDevice, 
-		WinHandle, 
-		L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso", 
-		crModel );
-	RETURN_IF_FALSE( result );
+//bool Shader_Texture::Initialize(
+// TODO: Why does color shader pass this as ref, but texture shader doesnt?
+//bool Shader_Texture::Render
 
-	return true;
-}
-
-bool Shader_Texture::Render( ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
-	XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture )
-{
-	// Set the shader parameters that it will use for rendering.
-	bool result = setShaderParameters( deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture );
-	RETURN_IF_FALSE( result );
-
-	// Now render the prepared buffers with the shader.
-	renderShader( deviceContext );
-
-	return true;
-}
-
-bool Shader_Texture::initializeShader( ID3D11Device* pDevice, HWND WinHandle,
-	const std::wstring &VertexShaderFilename, const std::wstring &PixelShaderFilename,
-	const Model &crModel )
+bool Shader_Texture::InitializeShader( 
+    ID3D11Device* pDevice, 
+    HWND WinHandle,
+//  WCHAR* vsFilename,
+//  WCHAR* psFilename,
+    const std::wstring & vsFilename,
+    const std::wstring & psFilename/*,
+	const Model &crModel */)
 {	
+    // these were the old parameters that work; must match their format:
+    // const std::wstring &VertexShaderFilename, const std::wstring &PixelShaderFilename,
+
+    const std::wstring &VertexShaderFilename = vsFilename;
+    //LPCWSTR VertexShaderFilename = vsFilename;
+
+    const std::wstring &PixelShaderFilename = psFilename;
+    //LPCWSTR PixelShaderFilename = psFilename;
+
 	// Initialize the pointers this function will use to null.
 	comptr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer, pErrorMessage;
 
 	// Compile the vertex shader code.
-	HRESULT hr = D3DReadFileToBlob( VertexShaderFilename.c_str(), pVertexShaderBuffer.GetAddressOf() );
+	HRESULT hr = D3DReadFileToBlob( 
+        VertexShaderFilename.c_str(), 
+        pVertexShaderBuffer.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 	/*bool result = compileShader( WinHandle, VertexShaderFilename, "TextureVertexShader", 
 		"vs_5_0", pVertexShaderBuffer.GetAddressOf(), pErrorMessage.GetAddressOf() );*/
@@ -72,7 +71,8 @@ bool Shader_Texture::initializeShader( ID3D11Device* pDevice, HWND WinHandle,
 
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
-	auto polygonLayout = crModel.GetInputElementDescriptions();
+	//auto polygonLayout = crModel.GetInputElementDescriptions();
+  	auto polygonLayout = VertexPositionUVType::CreateLayoutDescriptions();
 
 	// Create the vertex input layout.
 	hr = pDevice->CreateInputLayout( polygonLayout.data(), polygonLayout.size(),
@@ -157,8 +157,12 @@ void Shader_Texture::outputShaderErrorMessage( ID3D10Blob* pErrorMessage, HWND W
 	MessageBox( WinHandle, L"Error compiling shader.  Check shader-error.txt for message.", ShaderFilename.c_str(), MB_OK );
 }
 
-bool Shader_Texture::setShaderParameters( ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
-	XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture )
+bool Shader_Texture::SetShaderParameters( 
+    ID3D11DeviceContext* deviceContext, 
+    XMMATRIX & worldMatrix, 
+    XMMATRIX & viewMatrix,
+	XMMATRIX & projectionMatrix, 
+    ID3D11ShaderResourceView* texture )
 {
 	// Lock the constant buffer so it can be written to.
 	D3D11_MAPPED_SUBRESOURCE mappedResource{};
@@ -166,11 +170,21 @@ bool Shader_Texture::setShaderParameters( ID3D11DeviceContext* deviceContext, XM
 		&mappedResource );
 	RETURN_IF_FAILED( result );
 
+    // TODO: Consolidate this into a common parent function
+    // TODO: Make this global inline in Utilities
 	// Transpose the matrices to prepare them for the shader.
 	MatrixBufferType data;
-	data.world = XMMatrixTranspose( worldMatrix );
+
+    // TODO: Implement global transpose and then change to this:
+	//data.world = XMMatrixTranspose( worldMatrix );
+    data.world = worldMatrix;
+
 	data.view = XMMatrixTranspose( viewMatrix );
+    // TODO: Implement global transpose and then change to this:
+   	//data.view = viewMatrix;
 	data.projection = XMMatrixTranspose( projectionMatrix );
+    // TODO: Implement global transpose and then change to this:
+  	//data.projection = projectionMatrix;
 
 	// Copy the matrices into the constant buffer.
 	std::memmove( mappedResource.pData, &data, sizeof( MatrixBufferType ) );
@@ -190,7 +204,7 @@ bool Shader_Texture::setShaderParameters( ID3D11DeviceContext* deviceContext, XM
 	return true;
 }
 
-void Shader_Texture::renderShader( ID3D11DeviceContext* deviceContext )
+void Shader_Texture::RenderShader( ID3D11DeviceContext* deviceContext )
 {
 	// Set the vertex input layout.
 	deviceContext->IASetInputLayout( m_layout.Get() );

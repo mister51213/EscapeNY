@@ -15,6 +15,8 @@
 // INCLUDES //
 //////////////
 #include "Includes.h"
+#include "Utilities.h"
+
 using namespace DirectX;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -37,8 +39,22 @@ public:
 	void SetPosition( const XMFLOAT3 &Position );
 	void SetRotation( const XMFLOAT3 &Rotation );
 
-	XMFLOAT3 GetPosition();
-	XMFLOAT3 GetRotation();
+	XMFLOAT3 GetPosition()const;
+	XMFLOAT3 GetRotation()const;
+
+    void Move(XMFLOAT3 offset)
+    {
+        m_Position.x += offset.x;
+        m_Position.y += offset.y;
+        m_Position.z += offset.z;
+    }
+
+    void Rotate(XMFLOAT3 offset)
+    {
+        m_Rotation.x += offset.x;
+        m_Rotation.y += offset.y;
+        m_Rotation.z += offset.z;
+    }
 
     // create the view matrix based on the position and rotation of the camera. 
 	void Render();
@@ -52,5 +68,4 @@ public:
 private:
 	XMFLOAT3 m_Position, m_Rotation;
 	XMMATRIX m_ViewMatrix, m_ProjectionMatrix, m_OrthoMatrix;
-
 };

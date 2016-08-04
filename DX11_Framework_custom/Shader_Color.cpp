@@ -10,59 +10,71 @@
 
 // class constructor initializes all the private pointers in the class to null.
 
-Shader_Color::Shader_Color()
-{
-}
+Shader_Color::Shader_Color():
+    Shader(L"Shaders/color_vs.cso",L"Shaders/color_ps.cso")
+{}
 
-Shader_Color::Shader_Color( const Shader_Color& other )
+// TODO: FIX COPY CONSTRUCTOR to initialize all variables.
+Shader_Color::Shader_Color( const Shader_Color& other ):
+    Shader(L"Shaders/color_vs.cso",L"Shaders/color_ps.cso")
 {}
 
 Shader_Color::~Shader_Color()
 {}
 
 // Pass in the names of the HLSL shader files, color.vs and color.ps
-bool Shader_Color::Initialize( ID3D11Device* device, HWND hwnd, const Model &crModel )
-{
-	bool result;
-
-	// Initialize the vertex and pixel shaders.
-	result = InitializeShader(
-		device,
-		hwnd,
-		L"Shaders/color.vs", L"Shaders/color.ps",
-		crModel );
-	RETURN_IF_FALSE( result );
-
-	return true;
-}
+//bool Shader_Color::Initialize( ID3D11Device* device, HWND hwnd, const Model &crModel )
+//{
+//	bool result;
+//
+//	// Initialize the vertex and pixel shaders.
+//	result = InitializeShader(
+//		device,
+//		hwnd,
+//        m_vsFilename,
+//        m_psFilename,
+//		crModel );
+//	RETURN_IF_FALSE( result );
+//
+//	return true;
+//}
 
 // First set the parameters inside the shader using the SetShaderParameters 
 // function. Once the parameters are set then call RenderShader to draw 
 // the green triangle using the HLSL shader.
 
-bool Shader_Color::Render( 
-    ID3D11DeviceContext* deviceContext,
-	XMMATRIX & worldMatrix,
-	XMMATRIX & viewMatrix,
-	XMMATRIX & projectionMatrix )
-{
-	bool result;
-
-	// Set the shader parameters to use for rendering.
-	result = SetShaderParameters( deviceContext, worldMatrix, viewMatrix, projectionMatrix );
-	RETURN_IF_FALSE( result );
-
-	// Now render the prepared buffers with the shader.
-	RenderShader( deviceContext );
-
-	return true;
-}
+// TODO: Why does color shader pass this as ref, but texture shader doesnt?
+//bool Shader_Color::Render( 
+//    ID3D11DeviceContext* deviceContext,
+//	XMMATRIX & worldMatrix,
+//	XMMATRIX & viewMatrix,
+//	XMMATRIX & projectionMatrix )
+//{
+//	// Set the shader parameters to use for rendering.
+//	bool result = SetShaderParameters( 
+//        deviceContext, 
+//        worldMatrix, 
+//        viewMatrix, 
+//        projectionMatrix );
+//	RETURN_IF_FALSE( result );
+//
+//	// Now render the prepared buffers with the shader.
+//	RenderShader( deviceContext );
+//
+//	return true;
+//}
 
 // This function is what actually loads the shader files and 
 // makes it usable to DirectX and the GPU. 
 
-bool Shader_Color::InitializeShader( ID3D11Device* device, HWND hwnd, 
-	WCHAR* vsFilename, WCHAR* psFilename, const Model &crModel )
+bool Shader_Color::InitializeShader( 
+    ID3D11Device* device, 
+    HWND hwnd, 
+//  WCHAR* vsFilename,
+//  WCHAR* psFilename,
+    const std::wstring & vsStrFile,
+    const std::wstring & psStrFile/*,
+    const Model &crModel */)
 {
 	//  Compile the shader programs into buffers. We pass the name of the 
 	// shader file, the name of the shader, the shader version (5.0 in DirectX 11), 
@@ -73,7 +85,7 @@ bool Shader_Color::InitializeShader( ID3D11Device* device, HWND hwnd,
 
 	// Compile the vertex shader code.
 	HRESULT result = D3DCompileFromFile(
-		vsFilename, 								// Shader filename
+		vsStrFile.c_str(), 								// Shader filename
 		nullptr,									// Pointer to D3D_SHADER_MACRO
 		nullptr,									// Pointer to ID3DInclude interface
 		"ColorVertexShader",						// Shader entry function name
@@ -87,12 +99,12 @@ bool Shader_Color::InitializeShader( ID3D11Device* device, HWND hwnd,
 		// If the shader failed to compile it should have writen something to the error message.
 		if( errorMessage )
 		{
-			OutputShaderErrorMessage( errorMessage.Get(), hwnd, vsFilename );
+			OutputShaderErrorMessage( errorMessage.Get(), hwnd, vsStrFile );
 		}
 		// If there was  nothing in the error message then it simply could not find the shader file itself.
 		else
 		{
-			MessageBox( hwnd, vsFilename, L"Missing Shader File", MB_OK );
+			MessageBox( hwnd, vsStrFile.c_str(), L"Missing Shader File", MB_OK );
 		}
 
 		return false;
@@ -100,7 +112,7 @@ bool Shader_Color::InitializeShader( ID3D11Device* device, HWND hwnd,
 
 	// Compile the pixel shader code.
 	result = D3DCompileFromFile( 
-		psFilename,										// Shader filename
+		psStrFile.c_str(),										// Shader filename
 		nullptr,										// Pointer to D3D_SHADER_MACRO
 		nullptr,										// Pointer to ID3DInclude interface
 		"ColorPixelShader",								// Shader entry function name
@@ -114,19 +126,17 @@ bool Shader_Color::InitializeShader( ID3D11Device* device, HWND hwnd,
 		// If the shader failed to compile it should have writen something to the error message.
 		if( errorMessage )
 		{
-			OutputShaderErrorMessage( errorMessage.Get(), hwnd, psFilename );
+			OutputShaderErrorMessage( errorMessage.Get(), hwnd, psStrFile );
 		}
 		// If there was nothing in the error message then it simply could not find the file itself.
 		else
 		{
-			MessageBox( hwnd, psFilename, L"Missing Shader File", MB_OK );
+			MessageBox( hwnd, psStrFile.c_str(), L"Missing Shader File", MB_OK );
 		}
 		return false;
 	}
 
-	// Now we will use the buffers of compiled shader code to create 
-	// the shader objects themselves.
-
+	// Now we will use the buffers of compiled shader code to create the shader objects themselves.
 	// Create the vertex shader from the buffer.
 	result = device->CreateVertexShader( 
 		vertexShaderBuffer->GetBufferPointer(),					// Shader byte-code
@@ -145,7 +155,8 @@ bool Shader_Color::InitializeShader( ID3D11Device* device, HWND hwnd,
 
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the Model class and in the shader.
-	auto polygonLayout = crModel.GetInputElementDescriptions();
+	//auto polygonLayout = crModel.GetInputElementDescriptions();
+    auto polygonLayout = VertexPositionColorType::CreateLayoutDescriptions();
 
 	// Create the vertex input layout.
 	result = device->CreateInputLayout( 
@@ -175,9 +186,10 @@ bool Shader_Color::InitializeShader( ID3D11Device* device, HWND hwnd,
 	return true;
 }
 
-void Shader_Color::OutputShaderErrorMessage( ID3D10Blob* errorMessage,
+void Shader_Color::OutputShaderErrorMessage( 
+    ID3D10Blob* errorMessage,
 	HWND hwnd,
-	WCHAR* shaderFilename )
+	const std::wstring & shaderFilename )
 {
 	// Get a pointer to the error message text buffer.
 	auto compileErrors = (char*)( errorMessage->GetBufferPointer() );
@@ -199,7 +211,7 @@ void Shader_Color::OutputShaderErrorMessage( ID3D10Blob* errorMessage,
 
 	// Pop a message up on the screen to notify the user to 
 	// check the text file for compile errors.
-	MessageBox( hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK );
+	MessageBox( hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename.c_str(), MB_OK );
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -209,11 +221,16 @@ void Shader_Color::OutputShaderErrorMessage( ID3D10Blob* errorMessage,
 // shader during the Render function call.
 //////////////////////////////////////////////////////////////////////////////////
 
+// Passing by reference in case we compile in 32 bit mode; if passed 
+// by value in 32 bit mode, it will copy the value into 32 bit format, 
+// and it will no longer be 16 byte aligned with simd register.
+
 bool Shader_Color::SetShaderParameters( 
     ID3D11DeviceContext* deviceContext,
 	XMMATRIX & worldMatrix, 
     XMMATRIX & viewMatrix, 
-    XMMATRIX & projectionMatrix )
+    XMMATRIX & projectionMatrix,
+    ID3D11ShaderResourceView*)
 {
 	// Lock the constant buffer so it can be written to.
 	D3D11_MAPPED_SUBRESOURCE mappedResource{};
@@ -225,9 +242,10 @@ bool Shader_Color::SetShaderParameters(
 		&mappedResource );										// Address of the mapped resource
 	RETURN_IF_FAILED( result );
 
-	// DirectX 11 requires transposing matrices before sending them into the shader
+    // TODO: Consolidate this into a common parent function
+    // DirectX 11 requires transposing matrices before sending them into the shader
 	MatrixBufferType matrixBuffer{
-		XMMatrixTranspose( worldMatrix ),
+		worldMatrix,
 		XMMatrixTranspose( viewMatrix ),
 		XMMatrixTranspose( projectionMatrix )
 	};

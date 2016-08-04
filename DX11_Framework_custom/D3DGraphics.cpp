@@ -159,6 +159,13 @@ ID3D11DeviceContext* D3DGraphics::GetDeviceContext()const
 	return m_pDeviceContext.Get();
 }
 
+ID3D11Texture2D * D3DGraphics::GetRenderTarget() const
+{
+	ID3D11Texture2D *pTexture = nullptr;
+	m_pSwapChain->GetBuffer( 0, IID_PPV_ARGS( &pTexture ) );
+	return pTexture;
+}
+
 
 void D3DGraphics::GetVideoCardInfo( std::wstring &Description, int& Memory )
 {
@@ -402,7 +409,7 @@ bool D3DGraphics::initializeRasterizer()
 	rasterDesc.DepthBias = 0;
 	rasterDesc.DepthBiasClamp = 0.0f;
 	rasterDesc.DepthClipEnable = true;
-	rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
+	rasterDesc.FillMode = D3D11_FILL_SOLID;
 	rasterDesc.FrontCounterClockwise = false;
 	rasterDesc.MultisampleEnable = false;
 	rasterDesc.ScissorEnable = false;
