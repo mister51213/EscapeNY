@@ -166,8 +166,9 @@
     <ClCompile Include="Wic.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="GameObjects.h" />
+    <ClInclude Include="GameWorld.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />

@@ -1,16 +1,17 @@
 #pragma once
 
-#include "GameObjects.h"
+#include "GameWorld.h"
 
 // TODO: Move these includes into GameObjects.h after it's done
 #include "Camera.h"
-#include "Model.h"
-#include "Graphics.h"
+//#include "Model.h"
+//#include "Graphics.h"
 #include "Shader_Color.h"
 #include "Texture.h"
 #include "Shader_Texture.h"
 #include "Overlay.h"
 #include "Input.h"
+#include "Actor.h"
 
 class Game
 {
@@ -30,14 +31,11 @@ private:
 	D3DGraphics *m_pDirect3D;
 	std::shared_ptr<Camera> m_pCamera; // Camera, Model and ColorShader are created in Game, so has ownership
 
-    GameObjects m_gObjects;
-    vector<ModelSpecs_W> m_modSpecList; // TODO: remove this later
+    GameWorld m_gObjects;
 
 	std::shared_ptr<Model_Textured> m_pModel1;
     std::shared_ptr<Model_Textured> m_pModel2;
 
-	std::shared_ptr<Shader_Texture> m_pShader_Texture;
-	std::shared_ptr<Texture> m_pStoneTexture;
     std::shared_ptr<Input> m_pInput;// Input
 
 	Overlay m_Overlay;

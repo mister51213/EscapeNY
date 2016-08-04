@@ -3,43 +3,30 @@
 //  TODO:   and GameRenderObjects (for rendering purposes)
 ///////////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include <vector>
-
+//#include <vector>
 // includes from Game.h
 #include "Camera.h"
-#include "Model.h"
-#include "Graphics.h"
+//#include "Model.h"
+//#include "Graphics.h"
 #include "Shader_Color.h"
 #include "Texture.h"
 #include "Shader_Texture.h"
-#include "Overlay.h"
+#include "Actor.h"
 
 using namespace std;
 
-// make a lightweight "skeletal" version of ModelSpecs analogous to actual Models
-struct ModelSpecs_W
-{
-    XMFLOAT3 position, orientation, scale;
-};
+// TODO: Make new ACTOR class; this holds the WORLD_SPECS and REFERENCES a model, then combines
+// these two data types to allow itself to be rendered.
 
-struct ModelSpecs_L
-{
-    XMFLOAT3 center, size, orientation;
-};
-
-enum eModType{CUBE, CUBE_TEXTURED, PLANE, SPHERE, POLYGON};
-
-class GameObjects
+class GameWorld
 {
 public:
-    GameObjects(){}
-    GameObjects( // initialize all pointers
+    GameWorld(){}
+    GameWorld( // initialize all pointers
         char numObjects, 
         Graphics* pGfx, 
         D3DGraphics* pD3D,
         std::shared_ptr<Camera> pCam,
-        std::shared_ptr<Shader_Texture> pShader_Texture,
-   	    std::shared_ptr<Texture> pStoneTexture,
         HWND WinHandle) 
     {
         m_pGfx = pGfx;
@@ -47,8 +34,6 @@ public:
         m_objectCount = numObjects;
 
         m_pCam = pCam;
-        m_pShader_Texture = pShader_Texture;
-    	m_pStoneTexture = pStoneTexture;
         m_WinHandle = WinHandle;
     }
 
@@ -77,28 +62,56 @@ public:
             m_models.push_back(MakeModel(m_modSpecs_W[i])); 
         }
     }
+
+    //TODO: Implement this functionality AFTER implementing Actor class.
+    //void MakeAllGenericModels()
+    //{
+    //    // INITIALIZE ONE MODEL
+    //    PrimitiveFactory primMaker;
+    //    primMaker.CreateCube(localSpecs.center, localSpecs.size, localSpecs.orientation);        
+    //    
+    //    // MAKE MANY COPIES OF IT
+    //    for (char i = 0; i < m_objectCount; i++) {
+    //        m_models.push_back(MakeModel(m_modSpecs_W[i]));
+    //    }
+    //}
+
+    //    std::shared_ptr<Model> MakeModelGeneric( // for generics
+    //    ModelSpecs_W worldSpecs, 
+    //    ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f }, { 0.f, 0.f, 0.f } },
+    //    eModType = CUBE_TEXTURED) 
+    //{
+    //    std::shared_ptr<Model_Textured> pModel;
+    //    pModel.reset(new Model_Textured(worldSpecs.position));
+
+	   // pModel->Initialize( primMaker, *m_pGfx );
+    //    return pModel; 
+    //}
+
     void DrawAllModels() {
-        for each (std::shared_ptr<Model> model in m_models){
+        for each (const std::shared_ptr<Model>& model in m_models){
             DrawModel(model); 
         }
     }
 
-    void InitializeGameObjectsSystem()
+    // INITIALIZE TEXTURE SHADER //
+    void InitializeShader()
     {
-        // TODO: MOVE THIS INTO INITIALIZE FUNCTION
-        // INITIALIZE TEXTURE SHADER //
-        m_pShader_Texture.reset(new Shader_Texture);        // TODO: REMOVE pointer
+        m_pShader_Texture.reset(new Shader_Texture);
         m_pShader_Texture->Initialize(m_pD3D->GetDevice(), m_WinHandle/*, *pMod*/);
         m_pStoneTexture.reset(new Texture);
         m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\uncompressed_stone.tga");    
     }
 
-private:
-    std::shared_ptr<Model> pMod;
-    void Make(){pMod = MakeModel({{ 1.f, 1.f, 1.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f }});}
-    void Draw(){DrawModel(pMod);}
+    void InitializeGameObjectsSystem()
+    {
+        CreatModGrid();
+        InitializeShader();
+        MakeAllModels();
+    }
 
-    std::shared_ptr<Model> MakeModel( 
+private:
+    std::shared_ptr<Model> MakeModel( // foc custom models
         ModelSpecs_W worldSpecs, 
         ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f }, { 0.f, 0.f, 0.f } },
         eModType = CUBE_TEXTURED) 
@@ -112,18 +125,11 @@ private:
         return pModel; 
     }
 
-    void DrawModel( std::shared_ptr<Model> pMod ) 
+    void DrawModel( const std::shared_ptr<Model>& pMod ) 
     { 
-        //// TODO: MOVE THIS INTO INITIALIZE FUNCTION
-        //// INITIALIZE TEXTURE SHADER //
-        //m_pShader_Texture.reset(new Shader_Texture);        // TODO: REMOVE pointer
-        //m_pShader_Texture->Initialize(m_pD3D->GetDevice(), m_WinHandle/*, *pMod*/);
-        //m_pStoneTexture.reset(new Texture);
-        //m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\uncompressed_stone.tga");    
-        // RENDER MODEL //
         m_pShader_Texture->Render(
             m_pD3D->GetDeviceContext(),
-            GetWorldMatrix(
+            GetWorldMatrix( // TODO: take a ModelSpecs_W
                 pMod->m_Position, 
                 ConvertToRadians(pMod->m_Orientation), 
                 pMod->m_Scale),

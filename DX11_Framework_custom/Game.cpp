@@ -45,19 +45,14 @@ bool Game::Initialize( Graphics *pGraphics,
 
 	// Pass all member pointers to GameObjects class so it can draw with them
     m_gObjects = 
-        GameObjects(
+        GameWorld(
             10, 
             m_pGraphics, 
             m_pDirect3D, 
-            m_pCamera, 
-            m_pShader_Texture, 
-            m_pStoneTexture, 
+            m_pCamera,
             WinHandle);
 
-    // TODO: make an INITIALIZE function for GameObjects and encapsulate it there!   
-    m_gObjects.CreatModGrid(); // put in GameObjects initializer
     m_gObjects.InitializeGameObjectsSystem();
-    m_gObjects.MakeAllModels(); // put in GameObjects initializer
 
 	return true;
 }
@@ -137,6 +132,12 @@ void Game::GetInput( std::shared_ptr<Input> pInput )
 	}
 }
 
+// TODO: Make a list of Actor* ptrs, pass pointers to them to GameWorld.Update() function
+// TODO: This function will get the world specs, draw all objects based on necessary info
+
+// TODO: Use multiple inheritance for better efficiency 
+// Ex.) one parent has health, the other has position
+
 bool Game::Frame()
 {
 	m_pGraphics->BeginScene();
@@ -151,6 +152,7 @@ bool Game::Frame()
 
 bool Game::render()
 {
+    // TODO: maybe initialize this in GameObjectsClass instead.
 	// Generate the view matrix based on the camera's position.
 	m_pCamera->Render();
 
@@ -164,7 +166,6 @@ bool Game::render()
 	//m_pGraphics->RenderModel(*m_pModel1);
 	//RETURN_IF_FALSE(result);
 
-    // TEST - draw several models w automated function
     m_gObjects.DrawAllModels();
 	m_Overlay.Render( *m_pGraphics );
 
