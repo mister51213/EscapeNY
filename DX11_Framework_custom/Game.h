@@ -3,6 +3,7 @@
 #include "GameWorld.h"
 #include "Overlay.h"
 #include "Input.h"
+#include <algorithm>
 
 class Game
 {
@@ -17,7 +18,7 @@ public:
 private:
 	bool render();
 
-    void makeAllActors();
+    void makeAllActors(int numActors);
 
 private:
 	
@@ -26,7 +27,7 @@ private:
 	std::shared_ptr<Camera> m_pCamera; // Camera, Model and ColorShader are created in Game, so has ownership
 
     GameWorld m_gObjects;
-    int m_numActors = 0;
+    int m_numRows, m_numColumns, m_numZ, m_numActors;
 
 	std::shared_ptr<Model_Textured> m_pModel1;
     std::shared_ptr<Model_Textured> m_pModel2;

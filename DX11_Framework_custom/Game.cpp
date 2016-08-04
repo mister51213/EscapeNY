@@ -43,13 +43,16 @@ bool Game::Initialize( Graphics *pGraphics,
 	result = m_Overlay.Initialize( *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
-    m_numActors = 10;
-    makeAllActors();
+    m_numRows = 5;
+    m_numColumns = 5;
+    m_numZ = 5;
+    m_numActors = m_numRows * m_numColumns * m_numZ;
+    makeAllActors(m_numActors);
 
 	// Pass all member pointers to GameObjects class so it can draw with them
     m_gObjects = 
         GameWorld(
-            10, 
+            m_numActors, 
             m_pGraphics, 
             m_pDirect3D, 
             m_pCamera,
@@ -181,34 +184,45 @@ bool Game::render()
     // TODO: maybe initialize this in GameObjectsClass instead.
 	// Generate the view matrix based on the camera's position.
 	m_pCamera->Render();
-
-	//// MODEL1
-	//bool result = m_pShader_Texture->Render( // sets shader parameters
-	//    m_pDirect3D->GetDeviceContext(),
-	//    GetWorldMatrix(m_pModel1->m_Position, ConvertToRadians(m_pModel1->m_Orientation), m_pModel1->m_Scale),
-	//    m_pCamera->GetViewMatrix(),
-	//    m_pCamera->GetProjectionMatrix(),
-	//    m_pStoneTexture->GetTextureView());
-	//m_pGraphics->RenderModel(*m_pModel1);
-	//RETURN_IF_FALSE(result);
-
-     m_gObjects.UpdateView(m_actors); // TODO: implement this new function
+    m_gObjects.UpdateView(m_actors); // TODO: implement this new function
     //m_gObjects.DrawAllModels();
 	m_Overlay.Render( *m_pGraphics );
 
 	return true;
 }
 
-void Game::makeAllActors()
+void Game::makeAllActors(int numActors)
 {
     ModelSpecs_W specs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } };
-    for (int i = 0; i <= m_numActors; i++)
+    for (float i = 0; i <= m_numColumns; i++)
     {
-        std::shared_ptr<Actor> pActor;  // Is this really
-        pActor.reset(new Actor(specs)); // necessary???
-        m_actors.push_back(pActor);
-        specs.position.x += 3;
-        specs.position.y += 3;
-        specs.orientation.z += 10;
+        for (float j = 0; j <= m_numRows; j++)
+        {
+            for (float k = 0; k <= m_numZ; k++)
+            {
+                specs.position.x = i*10.f;
+                specs.position.y = j*10.f;
+                specs.position.z = k*10.f;
+                specs.scale.x += .01f;
+                specs.scale.y += .01f;
+                specs.scale.z += .01f;
+
+                std::shared_ptr<Actor> pActor;  // Is this really
+                pActor.reset(new Actor(specs)); // necessary???
+                m_actors.push_back(pActor);
+            }
+        }
     }
+
+    //ModelSpecs_W specs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } };
+    //for (float i = 0; i <= numActors; i++)
+    //{
+    //    std::shared_ptr<Actor> pActor;  // Is this really
+    //    pActor.reset(new Actor(specs)); // necessary???
+    //    m_actors.push_back(pActor);
+
+    //    specs.position.x++;
+    //    specs.position.y += specs.position.x*1.2;
+    //    specs.position.z += specs.position.x*1.2;
+    //}
 }
