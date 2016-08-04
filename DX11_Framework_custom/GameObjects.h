@@ -17,7 +17,12 @@
 using namespace std;
 
 // make a lightweight "skeletal" version of ModelSpecs analogous to actual Models
-struct ModelSpecs
+struct ModelSpecs_W
+{
+    XMFLOAT3 position, orientation, scale;
+};
+
+struct ModelSpecs_L
 {
     XMFLOAT3 position, orientation, scale;
 };
@@ -52,32 +57,33 @@ public:
     // TODO: based on positions in modSpecList; therefore move functions will only operate on modSpecList,
     // TODO: and then we call Update() function every frame to render each model to its new position.
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr<Model> DrawModel(XMFLOAT3 offset, std::shared_ptr<Model> pMod)
+        std::shared_ptr<Model> ModelFactory(ModelSpecs_L localSpecs, ModelSpecs_W worldSpecs, eModType type)
     {
-        PrimitiveFactory primMaker;
+        std::shared_ptr<Model_Textured> pModel;
+        pModel.reset(new Model_Textured(worldSpecs.position));
 
-        std::shared_ptr<Model> pModel = pMod;
+        PrimitiveFactory primMaker;
+        primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
+	    pModel->Initialize( primMaker, *m_pGfx );
+
+        return pModel;
+    }    
+    
+    std::shared_ptr<Model> DrawModel(XMFLOAT3 worldPosition)
+    {
         /////////////////////
         // INITIALIZE MODEL
         /////////////////////
-        //m_pModelTEST.reset(new Model_Textured(offset));
-        //primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 20.f, 50.f });
-        //m_pModelTEST->Initialize(primMaker, *m_pGfx);        
-        
-        // This version uses the passed pointer to render:
-        pModel.reset(new Model_Textured(offset));
-        primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 20.f, 50.f });
+        std::shared_ptr<Model> pModel;
+        pModel.reset(new Model_Textured(worldPosition));
+
+        PrimitiveFactory primMaker;
+        primMaker.CreateCube(defaultSpecs.position, defaultSpecs.scale, defaultSpecs.orientation);
         pModel->Initialize(primMaker, *m_pGfx);  
 
         //////////////////////////////////
         // INITIALIZE TEXTURE SHADER
         //////////////////////////////////
-        //m_pShader_Texture.reset(new Shader_Texture);        
-        //m_pShader_Texture->Initialize(m_pD3D->GetDevice(), m_WinHandle, *m_pModelTEST);
-        //m_pStoneTexture.reset(new Texture);
-        //m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\uncompressed_stone.tga");
-
-        // This version uses the passed pointer to render:
         m_pShader_Texture.reset(new Shader_Texture);        
         m_pShader_Texture->Initialize(m_pD3D->GetDevice(), m_WinHandle, *pModel);
         m_pStoneTexture.reset(new Texture);
@@ -86,24 +92,17 @@ public:
         ////////////////////////////////
         // RENDER MODEL using texture 
         ////////////////////////////////
-        /*m_pShader_Texture->Render(
-            m_pD3D->GetDeviceContext(),
-            GetWorldMatrix(m_pModelTEST->m_Position, ConvertToRadians(m_pModelTEST->m_Orientation), m_pModelTEST->m_Scale),
-            m_pCam->GetViewMatrix(),
-            m_pCam->GetProjectionMatrix(),
-            m_pStoneTexture->GetTextureView());
-        m_pGfx->RenderModel(*m_pModelTEST);*/
-
-        // This version uses the passed pointer to render:
         m_pShader_Texture->Render(
             m_pD3D->GetDeviceContext(),
-            GetWorldMatrix(pModel->m_Position, ConvertToRadians(pModel->m_Orientation), pModel->m_Scale),
+            GetWorldMatrix(
+                pModel->m_Position, 
+                ConvertToRadians(pModel->m_Orientation), 
+                pModel->m_Scale),
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
             m_pStoneTexture->GetTextureView());
         m_pGfx->RenderModel(*pModel);
 
-        // TODO: currently a dummy return value; implement it to use this pointer
         return pModel;
     }
 
@@ -112,7 +111,7 @@ private:
     {
         for each (std::shared_ptr<Model> model in m_models)
         {
-            DrawModel(model->m_Position, model);
+            DrawModel(model->m_Position);
         }
     }
 
@@ -121,22 +120,6 @@ private:
         {
             m_models.push_back(ModelFactory(m_modSpecList[i], CUBE_TEXTURED));
         }
-    }
-
-    std::shared_ptr<Model> ModelFactory(ModelSpecs specs, eModType type)
-    {
-        bool result = true;
-        std::shared_ptr<Model_Textured> pModel;
-        pModel.reset(new Model_Textured(specs.position));
-        //result = pModel != nullptr;
-        //RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-
-        PrimitiveFactory primMaker;
-        primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
-	    result = pModel->Initialize( primMaker, *m_pGfx );
-	    //RETURN_IF_FALSE( result );
-
-        return pModel;
     }
 
     bool InitShader()
@@ -173,11 +156,18 @@ private:
         std::shared_ptr<Shader_Texture> m_pShader_Texture;
 	    std::shared_ptr<Texture> m_pStoneTexture;
 
-        // store all game objects in a list for gameplay purposes
-        vector<ModelSpecs> m_modSpecList;
+        // LIST of Model position, orientation, scale info in WORLD SPACE
+        vector<ModelSpecs_W> m_modSpecList;
+
         // list of actual models for rendering purposes
         vector<std::shared_ptr<Model>> m_models;
         char m_objectCount;
+
+        ModelSpecs_L defaultSpecs = { { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, {0.f,0.f,0.f} };
+
+
+
+
 
         // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
         Graphics* m_pGfx;

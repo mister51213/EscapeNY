@@ -178,9 +178,8 @@ bool Game::render()
     //RETURN_IF_FALSE(result2);
 
     // MODEL3     
-    std::shared_ptr<Model> pModTest;
-    std::shared_ptr<Model> pMod = // TODO: currently a dummy ptr; not yet implemented!
-        m_gObjects.DrawModel({15, - 15, - 5 }, pModTest);
+    std::shared_ptr<Model> pMod = 
+        m_gObjects.DrawModel({15, - 15, - 5 });
 
     ////////////
     // OVERLAY
