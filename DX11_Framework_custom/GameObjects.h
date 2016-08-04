@@ -69,7 +69,6 @@ public:
         primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 20.f, 50.f });
         pModel->Initialize(primMaker, *m_pGfx);  
 
-
         //////////////////////////////////
         // INITIALIZE TEXTURE SHADER
         //////////////////////////////////
@@ -98,7 +97,7 @@ public:
         // This version uses the passed pointer to render:
         m_pShader_Texture->Render(
             m_pD3D->GetDeviceContext(),
-            GetWorldMatrix(pModel->m_Position, ConvertToRadians(pModel->m_Orientation), m_pModelTEST->m_Scale),
+            GetWorldMatrix(pModel->m_Position, ConvertToRadians(pModel->m_Orientation), pModel->m_Scale),
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
             m_pStoneTexture->GetTextureView());
