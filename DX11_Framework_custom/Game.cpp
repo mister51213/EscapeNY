@@ -186,8 +186,11 @@ bool Game::render()
     //RETURN_IF_FALSE(result2);
 
     // MODEL3     
+
+    ModelSpecs_W worldSpecs = { {1.f, 1.f, 1.f }, {0.f,0.f,0.f},{1.f,1.f,1.f} };
     std::shared_ptr<Model> pMod = 
-        m_gObjects.DrawModel({1, 1, 1 });
+        m_gObjects.MakeModel(worldSpecs);
+    m_gObjects.DrawModel(pMod);
 
     ////////////
     // OVERLAY

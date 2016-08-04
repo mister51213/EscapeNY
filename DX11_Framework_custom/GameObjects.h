@@ -60,72 +60,59 @@ public:
     
 public:
     vector<std::shared_ptr<Model>> MakeAllModels(){/*TODO: IMPLEMENT*/}
-private:
+    vector<std::shared_ptr<Model>> DrawAllModels(){/*TODO: IMPLEMENT*/}
+
+//private:
     std::shared_ptr<Model> MakeModel( 
         ModelSpecs_W worldSpecs, 
-        ModelSpecs_L localSpecs = defaultSpecs,
+        ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f }, { 0.f, 0.f, 0.f } },
         eModType = CUBE_TEXTURED) 
     {
         std::shared_ptr<Model_Textured> pModel;
+        // INITIALIZE MODEL //
         pModel.reset(new Model_Textured(worldSpecs.position));
         PrimitiveFactory primMaker;
         primMaker.CreateCube(localSpecs.center, localSpecs.size, localSpecs.orientation);
 	    pModel->Initialize( primMaker, *m_pGfx );
-        return pModel; }
-public:
-    vector<std::shared_ptr<Model>> DrawAllModels(){/*TODO: IMPLEMENT*/}
-private:
-    std::shared_ptr<Model> DrawModel( 
-        ModelSpecs_W worldSpecs, 
-        ModelSpecs_L localSpecs = defaultSpecs, 
-        eModType type = CUBE_TEXTURED) 
+        return pModel; 
+    }
+
+    void DrawModel( std::shared_ptr<Model> pMod ) 
     { 
-        // INITIALIZE MODEL
-        /////////////////////
-        std::shared_ptr<Model> pModel;
-        pModel.reset(new Model_Textured(worldSpecs.position));
-        PrimitiveFactory primMaker;
-        primMaker.CreateCube(defaultSpecs.center, defaultSpecs.size, defaultSpecs.orientation);
-        pModel->Initialize(primMaker, *m_pGfx);  
-
-        // INITIALIZE TEXTURE SHADER
-        //////////////////////////////////
+        // INITIALIZE TEXTURE SHADER //
         m_pShader_Texture.reset(new Shader_Texture);        
-        m_pShader_Texture->Initialize(m_pD3D->GetDevice(), m_WinHandle, *pModel);
+        m_pShader_Texture->Initialize(m_pD3D->GetDevice(), m_WinHandle, *pMod);
         m_pStoneTexture.reset(new Texture);
-        m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\uncompressed_stone.tga");
-
-        // RENDER MODEL using texture 
-        ////////////////////////////////
+        m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\uncompressed_stone.tga");    
+        // RENDER MODEL using texture //
         m_pShader_Texture->Render(
             m_pD3D->GetDeviceContext(),
             GetWorldMatrix(
-                pModel->m_Position, 
-                ConvertToRadians(pModel->m_Orientation), 
-                pModel->m_Scale),
+                pMod->m_Position, 
+                ConvertToRadians(pMod->m_Orientation), 
+                pMod->m_Scale),
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
             m_pStoneTexture->GetTextureView());
-        m_pGfx->RenderModel(*pModel);
-        return pModel; }
+        m_pGfx->RenderModel(*pMod);
+        //return pModel;        
+    }
 
 private:
-    void PopulateModels() {
-        for (char i = 0; i < m_objectCount; i++)
-        {
-            m_models.push_back(MakeModel(m_modSpecs_L[i], m_modSpecs_W[i], CUBE_TEXTURED));
-            DrawModel(m_models[i]->m_Position);
-        }
-    }
-
-        void DrawAllModels()
-    {
-        for each (std::shared_ptr<Model> model in m_models)
-        {
-            DrawModel(model->m_Position);
-        }
-    }
-
+    //void PopulateModels() {
+    //    for (char i = 0; i < m_objectCount; i++)
+    //    {
+    //        m_models.push_back(MakeModel(m_modSpecs_L[i], m_modSpecs_W[i], CUBE_TEXTURED));
+    //        DrawModel(m_models[i]->m_Position);
+    //    }
+    //}
+    //    void DrawAllModels()
+    //{
+    //    for each (std::shared_ptr<Model> model in m_models)
+    //    {
+    //        DrawModel(model->m_Position);
+    //    }
+    //}
 
  //   bool InitShader()
  //   {
@@ -134,20 +121,15 @@ private:
 	//m_pShader_Texture.reset( new Shader_Texture );
 	//result = m_pShader_Texture != nullptr;
 	//RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Shader_Texture." );
-
 	////result = m_pShader_Texture->Initialize( m_pD3D->GetDevice(), WinHandle, *m_models[0] );
 	//RETURN_IF_FALSE( result );
-
 	//m_pStoneTexture.reset( new Texture );
 	//RETURN_MESSAGE_IF_FALSE( m_pStoneTexture != nullptr, L"Could not allocate memory for Texture." );
-
 	//result = m_pStoneTexture->Initialize( *m_pGfx, L"Textures\\uncompressed_stone.tga" );
 	//RETURN_IF_FALSE( result );
-
- //   // TODO : Leaving overlay in main Game class for now until it is properly fixed.
+ // // TODO : Leaving overlay in main Game class for now until it is properly fixed.
 	////result = m_Overlay.Initialize( *m_pGfx,ScreenWidth, ScreenHeight );
 	////RETURN_IF_FALSE( result );
-
 	//return true;
  //   }
 
@@ -163,11 +145,6 @@ private:
 
         vector<ModelSpecs_W> m_modSpecs_W;// model specs list in WORLD SPACE
         vector<ModelSpecs_L> m_modSpecs_L;// model specs list in LOCAL SPACE
-        static ModelSpecs_L defaultSpecs = { 
-            { 0.f, 0.f, 0.f }, 
-            { 5.f, 5.f, 5.f }, 
-            { 0.f, 0.f, 0.f } };
-
         vector<std::shared_ptr<Model>> m_models; // list of actual models for rendering purposes
 
         char m_objectCount;
