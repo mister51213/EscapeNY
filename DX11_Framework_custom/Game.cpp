@@ -59,7 +59,7 @@ bool Game::Initialize( Graphics *pGraphics,
 	//RETURN_MESSAGE_IF_FALSE( m_pStoneTexture != nullptr, L"Could not allocate memory for Texture." );
 	//result = m_pStoneTexture->Initialize( *m_pGraphics, L"Textures\\uncompressed_stone.tga" );
 	//RETURN_IF_FALSE( result );
-	result = m_Overlay.Initialize( *m_pGraphics,ScreenWidth, ScreenHeight );
+	result = m_Overlay.Initialize( *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
 	// Pass all member pointers to GameObjects class so it can draw with them
@@ -186,9 +186,15 @@ bool Game::render()
 	//m_pGraphics->RenderModel(*m_pModel2);
 	//RETURN_IF_FALSE(result2);
 
+    // TEST - draw several models w automated function
+    m_gObjects.CreatModGrid();
+    m_gObjects.MakeAllModels();
+    m_gObjects.DrawAllModels();
+
 	// MODEL3     
-    std::shared_ptr<Model> pMod = 
-        m_gObjects.DrawModel({1, 1, 1 });
+    //ModelSpecs_W worldSpecs = { {1.f, 1.f, 1.f }, {0.f,0.f,0.f},{1.f,1.f,1.f} };
+    //std::shared_ptr<Model> pMod = m_gObjects.MakeModel(worldSpecs);
+    //m_gObjects.DrawModel(pMod);
 
 	////////////
 	// OVERLAY
