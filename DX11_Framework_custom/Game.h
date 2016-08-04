@@ -1,17 +1,8 @@
 #pragma once
 
 #include "GameWorld.h"
-
-// TODO: Move these includes into GameObjects.h after it's done
-#include "Camera.h"
-#include "Model.h"
-#include "Graphics.h"
-#include "Shader_Color.h"
-#include "Texture.h"
-#include "Shader_Texture.h"
 #include "Overlay.h"
 #include "Input.h"
-#include "Actor.h"
 
 class Game
 {
@@ -25,6 +16,9 @@ public:
 	bool Frame();
 private:
 	bool render();
+
+    void makeAllActors();
+
 private:
 	
 	Graphics *m_pGraphics; // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
@@ -32,6 +26,7 @@ private:
 	std::shared_ptr<Camera> m_pCamera; // Camera, Model and ColorShader are created in Game, so has ownership
 
     GameWorld m_gObjects;
+    int numActors;
 
 	std::shared_ptr<Model_Textured> m_pModel1;
     std::shared_ptr<Model_Textured> m_pModel2;
@@ -42,5 +37,6 @@ private:
     XMFLOAT3 m_camPos = { -0.0f, 16.0f, -30.0f };
     XMFLOAT3 m_camRotation = { 25.f, -5.f, 0.f }; // defined in degrees
 
+    vector<std::shared_ptr<Actor>> m_actors;
 };
 

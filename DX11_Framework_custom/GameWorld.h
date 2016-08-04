@@ -3,10 +3,9 @@
 //  TODO:   and GameRenderObjects (for rendering purposes)
 ///////////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include <vector>
-// includes from Game.h
+
 #include "Camera.h"
-#include "Model.h"
+#include "Model_Textured.h"
 #include "Graphics.h"
 #include "Shader_Color.h"
 #include "Texture.h"
@@ -44,8 +43,8 @@ public:
     // TODO: and then we call Update() function every frame to render each model to its new position.
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    // TODO: loop that creates a grid of models
 public:
+// TODO: move these into game class
     void CreatModGrid()
     {
         ModelSpecs_W specs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } };
@@ -88,6 +87,13 @@ public:
     //    return pModel; 
     //}
 
+    void UpdateView(vector<std::shared_ptr<Actor>> actors){
+        for each (auto pActor in actors)
+        {
+            m_models.push_back(MakeModel(pActor->GetWorldSpecs));
+        }
+    }
+
     void DrawAllModels() {
         for each (const std::shared_ptr<Model>& model in m_models){
             DrawModel(model); 
@@ -111,13 +117,12 @@ public:
     }
 
 private:
-    std::shared_ptr<Model> MakeModel( // foc custom models
+    std::shared_ptr<Model> MakeModel( // for custom models
         ModelSpecs_W worldSpecs, 
         ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f }, { 0.f, 0.f, 0.f } },
         eModType = CUBE_TEXTURED) 
     {
         std::shared_ptr<Model_Textured> pModel;
-        // INITIALIZE MODEL //
         pModel.reset(new Model_Textured(worldSpecs.position));
         PrimitiveFactory primMaker;
         primMaker.CreateCube(localSpecs.center, localSpecs.size, localSpecs.orientation);
@@ -149,7 +154,6 @@ private:
 	    std::shared_ptr<Texture> m_pStoneTexture;
 
         vector<ModelSpecs_W> m_modSpecs_W;// model specs list in WORLD SPACE
-        vector<ModelSpecs_L> m_modSpecs_L;// model specs list in LOCAL SPACE
         vector<std::shared_ptr<Model>> m_models; // list of actual models for rendering purposes
 
         char m_objectCount;

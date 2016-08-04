@@ -64,40 +64,64 @@ void Game::GetInput( std::shared_ptr<Input> pInput )
 	// rotate objects
 	if( pInput->IsKeyDown( VK_SPACE ) )
 	{
-		m_pModel1->Rotate( { 1.f,1.f,1.f } );
-		m_pModel2->Rotate( { 1.f,1.f,1.f } );
+		//m_pModel1->Rotate( { 1.f,1.f,1.f } );
+		//m_pModel2->Rotate( { 1.f,1.f,1.f } );
+        for each (auto pActor in m_actors)
+        {
+            pActor->Rotate({ 1.f,1.f,1.f });
+        }
 	}
 
 	if( pInput->IsKeyDown( VK_CONTROL ) )
 	{
-		m_pModel1->Rotate( { -0.1f,-5.f,-5.f } );
-		m_pModel2->Rotate( { -3.f,-0.3f,-5.f } );
+		//m_pModel1->Rotate( { -0.1f,-5.f,-5.f } );
+		//m_pModel2->Rotate( { -3.f,-0.3f,-5.f } );
+        for each (auto pActor in m_actors)
+        {
+            pActor->Rotate({ -1.f,-1.f,-1.f });
+        }
 	}
 
 	// move objects
 	if( pInput->IsKeyDown( VK_RIGHT ) )
 	{
-		m_pModel1->Move( { .1f,0.f,0.f } );
-		m_pModel2->Move( { .9f,0.f,0.f } );
+		//m_pModel1->Move( { .1f,0.f,0.f } );
+		//m_pModel2->Move( { .9f,0.f,0.f } );
+        for each (auto pActor in m_actors)
+        {
+            pActor->Move({.9f,0.f,0.f });
+        }
 	}
 
 	if( pInput->IsKeyDown( VK_LEFT ) )
 	{
-		m_pModel1->Move( { -.1f,0.f,0.f } );
-		m_pModel2->Move( { -.9f,0.f,0.f } );
+		//m_pModel1->Move( { -.1f,0.f,0.f } );
+		//m_pModel2->Move( { -.9f,0.f,0.f } );
+        for each (auto pActor in m_actors)
+        {
+            pActor->Move({-.9f,0.f,0.f });
+        }
 	}
 
 	if( pInput->IsKeyDown( VK_UP ) )
 	{
-		m_pModel1->Move( { 0.f,.1f,0.f } );
-		m_pModel2->Move( { 0.f,.9f,0.f } );
+		//m_pModel1->Move( { 0.f,.1f,0.f } );
+		//m_pModel2->Move( { 0.f,.9f,0.f } );
+        for each (auto pActor in m_actors)
+        {
+            pActor->Move({ 0.f,.9f,0.f });
+        }
 	}
 
 	if( pInput->IsKeyDown( VK_DOWN ) )
 	{
-		m_pModel1->Move( { 0.f,-.1f,0.f } );
-		m_pModel2->Move( { 0.f,-.9f,0.f } );
-	}
+		//m_pModel1->Move( { 0.f,-.1f,0.f } );
+		//m_pModel2->Move( { 0.f,-.9f,0.f } );
+        for each (auto pActor in m_actors)
+        {
+            pActor->Move({ 0.f,-.9f,0.f });
+        }
+    }
 
 	// move camera (FPS view)
 	if( pInput->IsKeyDown( 0x41 ) ) // Left - A
@@ -134,7 +158,6 @@ void Game::GetInput( std::shared_ptr<Input> pInput )
 
 // TODO: Make a list of Actor* ptrs, pass pointers to them to GameWorld.Update() function
 // TODO: This function will get the world specs, draw all objects based on necessary info
-
 // TODO: Use multiple inheritance for better efficiency 
 // Ex.) one parent has health, the other has position
 
@@ -166,8 +189,22 @@ bool Game::render()
 	//m_pGraphics->RenderModel(*m_pModel1);
 	//RETURN_IF_FALSE(result);
 
+    m_gObjects.UpdateView(m_actors); // TODO: implement this new function
     m_gObjects.DrawAllModels();
 	m_Overlay.Render( *m_pGraphics );
 
 	return true;
+}
+
+void Game::makeAllActors()
+{
+    ModelSpecs_W specs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } };
+    for (int i = 0; i < numActors; i++)
+    {
+        std::shared_ptr<Actor> pActor;
+        m_actors.push_back(pActor.reset(new Actor(specs)));
+        specs.position.x += 3;
+        specs.position.y += 3;
+        specs.orientation.z += 10;
+    }
 }

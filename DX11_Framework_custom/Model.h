@@ -36,7 +36,7 @@ public:
 	ID3D11Buffer *GetIndexBuffer()const;
 	UINT GetStride()const;
 
-    // TODO: These shouldn't be inline
+    // TODO: Move these into Actor
     // Modulate position member; this will be reflected by global GetWorldMatrix()
     void Move(XMFLOAT3 Offset)
     {
