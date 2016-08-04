@@ -12,16 +12,16 @@
 
     bool Shader::Initialize(
         ID3D11Device* pDevice, 
-        HWND WinHandle, 
-        const Model &crModel) 
+        HWND WinHandle/*, 
+        const Model &crModel*/) 
     {
 	// Initialize the vertex and pixel shaders.
 	bool result = InitializeShader( 
 		pDevice, 
 		WinHandle, 
 	    m_vsFilename, 
-        m_psFilename, 
-		crModel );
+        m_psFilename/*, 
+		crModel */);
 	RETURN_IF_FALSE( result );
 
 	return true;

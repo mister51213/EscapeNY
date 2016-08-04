@@ -72,12 +72,27 @@ public:
             specs.orientation.z += 10;
         }    
     }
-    void MakeAllModels(){
+    void MakeAllModels() {
         for (char i = 0; i < m_objectCount; i++){
-            m_models.push_back(MakeModel(m_modSpecs_W[i])); }}
-    void DrawAllModels(){
+            m_models.push_back(MakeModel(m_modSpecs_W[i])); 
+        }
+    }
+    void DrawAllModels() {
         for each (std::shared_ptr<Model> model in m_models){
-            DrawModel(model); }}
+            DrawModel(model); 
+        }
+    }
+
+    void InitializeGameObjectsSystem()
+    {
+        // TODO: MOVE THIS INTO INITIALIZE FUNCTION
+        // INITIALIZE TEXTURE SHADER //
+        m_pShader_Texture.reset(new Shader_Texture);        // TODO: REMOVE pointer
+        m_pShader_Texture->Initialize(m_pD3D->GetDevice(), m_WinHandle/*, *pMod*/);
+        m_pStoneTexture.reset(new Texture);
+        m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\uncompressed_stone.tga");    
+    }
+
 private:
     std::shared_ptr<Model> pMod;
     void Make(){pMod = MakeModel({{ 1.f, 1.f, 1.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f }});}
@@ -99,11 +114,12 @@ private:
 
     void DrawModel( std::shared_ptr<Model> pMod ) 
     { 
-        // INITIALIZE TEXTURE SHADER //
-        m_pShader_Texture.reset(new Shader_Texture);        
-        m_pShader_Texture->Initialize(m_pD3D->GetDevice(), m_WinHandle, *pMod);
-        m_pStoneTexture.reset(new Texture);
-        m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\uncompressed_stone.tga");    
+        //// TODO: MOVE THIS INTO INITIALIZE FUNCTION
+        //// INITIALIZE TEXTURE SHADER //
+        //m_pShader_Texture.reset(new Shader_Texture);        // TODO: REMOVE pointer
+        //m_pShader_Texture->Initialize(m_pD3D->GetDevice(), m_WinHandle/*, *pMod*/);
+        //m_pStoneTexture.reset(new Texture);
+        //m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\uncompressed_stone.tga");    
         // RENDER MODEL //
         m_pShader_Texture->Render(
             m_pD3D->GetDeviceContext(),

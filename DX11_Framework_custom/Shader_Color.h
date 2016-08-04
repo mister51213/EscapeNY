@@ -44,8 +44,8 @@ public:
         //WCHAR*, 
         //WCHAR*, 
         const std::wstring &,
-        const std::wstring &,
-        const Model &crModel ) override;
+        const std::wstring &/*,
+        const Model &crModel */) override;
 
     // original signature:
    	//bool InitializeShader( 

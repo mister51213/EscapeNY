@@ -29,8 +29,8 @@ bool Shader_Texture::InitializeShader(
 //  WCHAR* vsFilename,
 //  WCHAR* psFilename,
     const std::wstring & vsFilename,
-    const std::wstring & psFilename,
-	const Model &crModel )
+    const std::wstring & psFilename/*,
+	const Model &crModel */)
 {	
     // these were the old parameters that work; must match their format:
     // const std::wstring &VertexShaderFilename, const std::wstring &PixelShaderFilename,
@@ -71,7 +71,8 @@ bool Shader_Texture::InitializeShader(
 
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
-	auto polygonLayout = crModel.GetInputElementDescriptions();
+	//auto polygonLayout = crModel.GetInputElementDescriptions();
+  	auto polygonLayout = VertexPositionUVType::CreateLayoutDescriptions();
 
 	// Create the vertex input layout.
 	hr = pDevice->CreateInputLayout( polygonLayout.data(), polygonLayout.size(),

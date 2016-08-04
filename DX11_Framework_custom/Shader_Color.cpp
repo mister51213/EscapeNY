@@ -73,8 +73,8 @@ bool Shader_Color::InitializeShader(
 //  WCHAR* vsFilename,
 //  WCHAR* psFilename,
     const std::wstring & vsStrFile,
-    const std::wstring & psStrFile,
-    const Model &crModel )
+    const std::wstring & psStrFile/*,
+    const Model &crModel */)
 {
 	//  Compile the shader programs into buffers. We pass the name of the 
 	// shader file, the name of the shader, the shader version (5.0 in DirectX 11), 
@@ -155,7 +155,8 @@ bool Shader_Color::InitializeShader(
 
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the Model class and in the shader.
-	auto polygonLayout = crModel.GetInputElementDescriptions();
+	//auto polygonLayout = crModel.GetInputElementDescriptions();
+    auto polygonLayout = VertexPositionColorType::CreateLayoutDescriptions();
 
 	// Create the vertex input layout.
 	result = device->CreateInputLayout( 

@@ -39,26 +39,7 @@ bool Game::Initialize( Graphics *pGraphics,
 	//   primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
 	//result = m_pModel1->Initialize( primMaker, *m_pGraphics );
 	//RETURN_IF_FALSE( result );
-	//   // Model2
-	//   XMFLOAT3 offset2 = { m_modelOffset.x + 15, m_modelOffset.y + 15, m_modelOffset.z + 5 };
-	//   m_pModel2.reset(new Model_Textured(offset2));
-	//   result = m_pModel2 != nullptr;
-	//   RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-	//   primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 4.f, 4.f, 10.f });
-	//result = m_pModel2->Initialize( primMaker, *m_pGraphics );
-	//RETURN_IF_FALSE( result );
-	//////////////////////////////////
-	// INITIALIZE TEXTURE SHADER
-	//////////////////////////////////
-	//   m_pShader_Texture.reset( new Shader_Texture );
-	//result = m_pShader_Texture != nullptr;
-	//RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Shader_Texture." );
-	//result = m_pShader_Texture->Initialize( m_pDirect3D->GetDevice(), WinHandle, *m_pModel1 );
-	//RETURN_IF_FALSE( result );
-	//m_pStoneTexture.reset( new Texture );
-	//RETURN_MESSAGE_IF_FALSE( m_pStoneTexture != nullptr, L"Could not allocate memory for Texture." );
-	//result = m_pStoneTexture->Initialize( *m_pGraphics, L"Textures\\uncompressed_stone.tga" );
-	//RETURN_IF_FALSE( result );
+
 	result = m_Overlay.Initialize( *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
@@ -72,6 +53,12 @@ bool Game::Initialize( Graphics *pGraphics,
             m_pShader_Texture, 
             m_pStoneTexture, 
             WinHandle);
+
+    // TODO: make an INITIALIZE function for GameObjects and encapsulate it there!   
+    m_gObjects.CreatModGrid(); // put in GameObjects initializer
+    m_gObjects.InitializeGameObjectsSystem();
+    m_gObjects.MakeAllModels(); // put in GameObjects initializer
+
 	return true;
 }
 
@@ -176,37 +163,9 @@ bool Game::render()
 	//    m_pStoneTexture->GetTextureView());
 	//m_pGraphics->RenderModel(*m_pModel1);
 	//RETURN_IF_FALSE(result);
-	//// MODEL2
-	//bool result2 = m_pShader_Texture->Render(
-	//    m_pDirect3D->GetDeviceContext(),
-	//    GetWorldMatrix(m_pModel2->m_Position, ConvertToRadians(m_pModel2->m_Orientation), m_pModel2->m_Scale),
-	//    m_pCamera->GetViewMatrix(),
-	//    m_pCamera->GetProjectionMatrix(),
-	//    m_pStoneTexture->GetTextureView());
-	//m_pGraphics->RenderModel(*m_pModel2);
-	//RETURN_IF_FALSE(result2);
 
     // TEST - draw several models w automated function
-    m_gObjects.CreatModGrid();
-    m_gObjects.MakeAllModels();
     m_gObjects.DrawAllModels();
-
-	// MODEL3     
-    //ModelSpecs_W worldSpecs = { {1.f, 1.f, 1.f }, {0.f,0.f,0.f},{1.f,1.f,1.f} };
-    //std::shared_ptr<Model> pMod = m_gObjects.MakeModel(worldSpecs);
-    //m_gObjects.DrawModel(pMod);
-
-	////////////
-	// OVERLAY
-	////////////
-	//    auto overlayWorldMatrix = m_Overlay.GetWorldMatrix(*m_pCamera);
-	//m_pShader_Texture->Render(
-	//    m_pDirect3D->GetDeviceContext(),
-	//    overlayWorldMatrix,
-	//    m_pCamera->GetViewMatrix(),
-	//    m_pCamera->GetOrthoMatrix(),
-	//    m_Overlay.GetResourceView()
-	//);
 	m_Overlay.Render( *m_pGraphics );
 
 	return true;

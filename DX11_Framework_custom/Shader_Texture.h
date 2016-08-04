@@ -34,8 +34,8 @@ public:
 //      WCHAR*,
 //      WCHAR*,
         const std::wstring &,
-        const std::wstring &,
-		const Model &crModel ) override;
+        const std::wstring &/*,
+		const Model &crModel */) override;
 
 	bool compileShader( 
         HWND WinHandle, 

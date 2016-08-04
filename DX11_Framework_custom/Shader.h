@@ -32,8 +32,8 @@ protected:
 public:
     bool Initialize(
         ID3D11Device* pDevice,
-        HWND WinHandle,
-        const Model &crModel);
+        HWND WinHandle/*,
+        const Model &crModel*/);
 
     // possible issue with passing params as references
     bool Render(
@@ -78,8 +78,8 @@ public:
         //WCHAR*,
         //WCHAR*,
         const std::wstring &,
-        const std::wstring &,
-        const Model &crModel) = 0;
+        const std::wstring &/*,
+        const Model &crModel*/) = 0;
 
 	//bool Render( ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView* );
 
