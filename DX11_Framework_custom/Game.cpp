@@ -43,6 +43,9 @@ bool Game::Initialize( Graphics *pGraphics,
 	result = m_Overlay.Initialize( *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
+    m_numActors = 10;
+    makeAllActors();
+
 	// Pass all member pointers to GameObjects class so it can draw with them
     m_gObjects = 
         GameWorld(
@@ -52,7 +55,7 @@ bool Game::Initialize( Graphics *pGraphics,
             m_pCamera,
             WinHandle);
 
-    m_gObjects.InitializeGameObjectsSystem();
+    m_gObjects.InitializeGameObjectsSystem(m_actors);
 
 	return true;
 }
@@ -189,8 +192,8 @@ bool Game::render()
 	//m_pGraphics->RenderModel(*m_pModel1);
 	//RETURN_IF_FALSE(result);
 
-    m_gObjects.UpdateView(m_actors); // TODO: implement this new function
-    m_gObjects.DrawAllModels();
+     m_gObjects.UpdateView(m_actors); // TODO: implement this new function
+    //m_gObjects.DrawAllModels();
 	m_Overlay.Render( *m_pGraphics );
 
 	return true;
@@ -199,10 +202,11 @@ bool Game::render()
 void Game::makeAllActors()
 {
     ModelSpecs_W specs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } };
-    for (int i = 0; i < numActors; i++)
+    for (int i = 0; i <= m_numActors; i++)
     {
-        std::shared_ptr<Actor> pActor;
-        m_actors.push_back(pActor.reset(new Actor(specs)));
+        std::shared_ptr<Actor> pActor;  // Is this really
+        pActor.reset(new Actor(specs)); // necessary???
+        m_actors.push_back(pActor);
         specs.position.x += 3;
         specs.position.y += 3;
         specs.orientation.z += 10;

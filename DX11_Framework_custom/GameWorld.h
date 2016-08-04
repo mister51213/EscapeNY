@@ -6,6 +6,7 @@
 
 #include "Camera.h"
 #include "Model_Textured.h"
+#include "Model.h"
 #include "Graphics.h"
 #include "Shader_Color.h"
 #include "Texture.h"
@@ -30,8 +31,7 @@ public:
     {
         m_pGfx = pGfx;
         m_pD3D = pD3D;
-        m_objectCount = numObjects;
-
+        m_numModels = numObjects;
         m_pCam = pCam;
         m_WinHandle = WinHandle;
     }
@@ -43,9 +43,9 @@ public:
     // TODO: and then we call Update() function every frame to render each model to its new position.
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-public:
-// TODO: move these into game class
-    void CreatModGrid()
+
+    // TODO: move these into game class
+    /* void CreatModGrid()
     {
         ModelSpecs_W specs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } };
         for (int i = 0; i < m_objectCount; i++)
@@ -55,13 +55,12 @@ public:
             specs.position.y += 3;
             specs.orientation.z += 10;
         }    
-    }
-    void MakeAllModels() {
-        for (char i = 0; i < m_objectCount; i++){
-            m_models.push_back(MakeModel(m_modSpecs_W[i])); 
-        }
-    }
-
+    }*/
+    //void MakeAllModels() {
+    //    for (char i = 0; i < m_objectCount; i++){
+    //        m_models.push_back(MakeModel(m_modSpecs_W[i])); 
+    //    }
+    //}
     //TODO: Implement this functionality AFTER implementing Actor class.
     //void MakeAllGenericModels()
     //{
@@ -74,7 +73,6 @@ public:
     //        m_models.push_back(MakeModel(m_modSpecs_W[i]));
     //    }
     //}
-
     //    std::shared_ptr<Model> MakeModelGeneric( // for generics
     //    ModelSpecs_W worldSpecs, 
     //    ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f }, { 0.f, 0.f, 0.f } },
@@ -82,23 +80,9 @@ public:
     //{
     //    std::shared_ptr<Model_Textured> pModel;
     //    pModel.reset(new Model_Textured(worldSpecs.position));
-
-	   // pModel->Initialize( primMaker, *m_pGfx );
+	// pModel->Initialize( primMaker, *m_pGfx );
     //    return pModel; 
     //}
-
-    void UpdateView(vector<std::shared_ptr<Actor>> actors){
-        for each (auto pActor in actors)
-        {
-            m_models.push_back(MakeModel(pActor->GetWorldSpecs));
-        }
-    }
-
-    void DrawAllModels() {
-        for each (const std::shared_ptr<Model>& model in m_models){
-            DrawModel(model); 
-        }
-    }
 
     // INITIALIZE TEXTURE SHADER //
     void InitializeShader()
@@ -109,15 +93,7 @@ public:
         m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\uncompressed_stone.tga");    
     }
 
-    void InitializeGameObjectsSystem()
-    {
-        CreatModGrid();
-        InitializeShader();
-        MakeAllModels();
-    }
-
-private:
-    std::shared_ptr<Model> MakeModel( // for custom models
+        std::shared_ptr<Model> MakeModel( // for custom models
         ModelSpecs_W worldSpecs, 
         ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f }, { 0.f, 0.f, 0.f } },
         eModType = CUBE_TEXTURED) 
@@ -130,19 +106,41 @@ private:
         return pModel; 
     }
 
-    void DrawModel( const std::shared_ptr<Model>& pMod ) 
+        void ModelAllActors(const vector<std::shared_ptr<Actor>>& actors)
+    {
+        for each (auto pActor in actors)
+        {
+            m_models.push_back(MakeModel(pActor->GetWorldSpecs()));
+        }
+    }
+
+        void InitializeGameObjectsSystem( const vector<std::shared_ptr<Actor>>& actors)
+    {
+        //CreatModGrid();
+        InitializeShader();
+        //MakeAllModels();
+        ModelAllActors(actors);
+    }
+
+    void DrawModel( ModelSpecs_W worldSpecs, const std::shared_ptr<Model>& pMod ) 
     { 
         m_pShader_Texture->Render(
             m_pD3D->GetDeviceContext(),
-            GetWorldMatrix( // TODO: take a ModelSpecs_W
-                pMod->m_Position, 
-                ConvertToRadians(pMod->m_Orientation), 
-                pMod->m_Scale),
+            GetWorldMatrix(worldSpecs),            
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
             m_pStoneTexture->GetTextureView());
         m_pGfx->RenderModel(*pMod);
     }
+
+    /*DrawAllModels*/
+    void UpdateView(const vector<std::shared_ptr<Actor>>& actors) {
+        for (int i = 0; i <= m_numModels; i++)
+        {
+            DrawModel(actors[i]->GetWorldSpecs(), m_models[i]); 
+        }
+    }
+
     private:
         HWND m_WinHandle;
         Graphics* m_pGfx;
@@ -156,5 +154,5 @@ private:
         vector<ModelSpecs_W> m_modSpecs_W;// model specs list in WORLD SPACE
         vector<std::shared_ptr<Model>> m_models; // list of actual models for rendering purposes
 
-        char m_objectCount;
+        int m_numModels;
 };

@@ -26,7 +26,7 @@ private:
 	std::shared_ptr<Camera> m_pCamera; // Camera, Model and ColorShader are created in Game, so has ownership
 
     GameWorld m_gObjects;
-    int numActors;
+    int m_numActors = 0;
 
 	std::shared_ptr<Model_Textured> m_pModel1;
     std::shared_ptr<Model_Textured> m_pModel2;

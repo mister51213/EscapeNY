@@ -146,17 +146,33 @@ inline XMFLOAT3 ConvertToRadians(const XMFLOAT3& angleInDegrees)
     return { angleInDegrees * radian };
 }
 
+////////////////////////////////////////////////////////////////
+// STRUCTS CONTAINING MODEL INFO for gameplay and rendering
+// TODO: make it global; see which is faster
+////////////////////////////////////////////////////////////////
+struct ModelSpecs_W
+{
+    XMFLOAT3 position, orientation, scale;
+};
+
+struct ModelSpecs_L
+{
+    XMFLOAT3 center, size, orientation;
+};
+
+enum eModType{CUBE, CUBE_TEXTURED, PLANE, SPHERE, POLYGON};
 
 ////////////////////////////////////////////////////////////////
 // FUNCTION FOR GETTING WORLD MATRIX
 // TODO: make it global; see which is faster
 ////////////////////////////////////////////////////////////////
 
-inline DirectX::XMMATRIX GetWorldMatrix(const XMFLOAT3& translate, const XMFLOAT3& rotate, const XMFLOAT3& scale)
-{    
-    DirectX::XMMATRIX trans = XMMatrixTranslation(translate.x, translate.y, translate.z);
-    DirectX::XMMATRIX rot = XMMatrixRotationRollPitchYaw(rotate.x, rotate.y, rotate.z);
-    DirectX::XMMATRIX scal = XMMatrixScaling(scale.x, scale.y, scale.z);
+inline DirectX::XMMATRIX GetWorldMatrix(ModelSpecs_W modSpecs
+/*const XMFLOAT3& translate, const XMFLOAT3& rotate, const XMFLOAT3& scale*/){    
+    DirectX::XMMATRIX trans = XMMatrixTranslation(/*translate.x, translate.y, translate.z*/modSpecs.position.x, modSpecs.position.y, modSpecs.position.z);
+    auto rotation = ConvertToRadians(modSpecs.orientation);
+    DirectX::XMMATRIX rot = XMMatrixRotationRollPitchYaw(/*rotate.x, rotate.y, rotate.z*/rotation.x, rotation.y, rotation.z);
+    DirectX::XMMATRIX scal = XMMatrixScaling(/*scale.x, scale.y, scale.z*/modSpecs.scale.x, modSpecs.scale.y, modSpecs.scale.z);
 
     //return rot*scal*trans;
     return XMMatrixTranspose(rot*scal*trans); // Also transpose it in this step to make it easier for GPU to handle

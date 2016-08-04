@@ -9,23 +9,12 @@
 #include <vector>
 #include "Utilities.h"
 
-struct ModelSpecs_W
-{
-    XMFLOAT3 position, orientation, scale;
-};
-
-struct ModelSpecs_L
-{
-    XMFLOAT3 center, size, orientation;
-};
-
-enum eModType{CUBE, CUBE_TEXTURED, PLANE, SPHERE, POLYGON};
-
 class Actor {
 public:
     Actor(
         ModelSpecs_W worldSpecs, 
-        ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } }) {
+        ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } }) 
+    {
     m_worldSpecs = worldSpecs;
     m_localSpecs = localSpecs;
     }
