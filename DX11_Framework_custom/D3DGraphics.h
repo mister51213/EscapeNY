@@ -48,6 +48,7 @@ public:
 	
 	ID3D11Device* GetDevice()const;
 	ID3D11DeviceContext* GetDeviceContext()const;
+	ID3D11Texture2D *GetRenderTarget()const;
 	void GetVideoCardInfo(std::wstring &Description, int& Memory);
 
 private:

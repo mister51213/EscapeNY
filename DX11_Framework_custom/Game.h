@@ -36,7 +36,6 @@ private:
 	std::shared_ptr<Model_Textured> m_pModel1;
     std::shared_ptr<Model_Textured> m_pModel2;
 
-    //std::unique_ptr<ColorShader> m_pColorShader;
 	std::shared_ptr<Shader_Texture> m_pShader_Texture;
 	std::shared_ptr<Texture> m_pStoneTexture;
     std::shared_ptr<Input> m_pInput;// Input

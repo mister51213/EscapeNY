@@ -28,12 +28,10 @@ public:
 	void BeginDraw();
 	void EndDraw();
     bool Initialize(const Graphics &Gfx, const UINT Width, const UINT Height);
-	
-    IWICBitmap *GetRenderSurface()const;
     
 private:
-	comptr<ID2D1Factory> m_pFactory;
-	comptr<ID2D1RenderTarget> m_pRenderTarget;
+	comptr<ID2D1Device> m_pDevice;
+	comptr<ID2D1DeviceContext> m_pContext;
 	comptr<ID2D1SolidColorBrush> m_pBrush;
-	comptr<IWICBitmap> m_pRenderSurface;
+	comptr<ID2D1Bitmap1> m_pRenderSurface;
 };

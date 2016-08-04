@@ -94,7 +94,7 @@ void Graphics::EndDraw2D()const
 
 void Graphics::RenderString( const std::wstring & String, IDWriteTextFormat *pFont, const D2D1_RECT_F &PositionAndSize )const
 {
-	m_pDirect2D->m_pRenderTarget->DrawTextW( String.c_str(), String.size(), pFont, PositionAndSize,
+	m_pDirect2D->m_pContext->DrawTextW( String.c_str(), String.size(), pFont, PositionAndSize,
 		m_pDirect2D->m_pBrush.Get() );
 }
 

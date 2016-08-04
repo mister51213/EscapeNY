@@ -159,6 +159,13 @@ ID3D11DeviceContext* D3DGraphics::GetDeviceContext()const
 	return m_pDeviceContext.Get();
 }
 
+ID3D11Texture2D * D3DGraphics::GetRenderTarget() const
+{
+	ID3D11Texture2D *pTexture = nullptr;
+	m_pSwapChain->GetBuffer( 0, IID_PPV_ARGS( &pTexture ) );
+	return pTexture;
+}
+
 
 void D3DGraphics::GetVideoCardInfo( std::wstring &Description, int& Memory )
 {
