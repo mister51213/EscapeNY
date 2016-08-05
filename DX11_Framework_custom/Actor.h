@@ -43,7 +43,7 @@ public:
 
 private:
     eModType m_modType;
-    string m_name;
+    //string m_name;
     ModelSpecs_W m_worldSpecs;
     ModelSpecs_L m_localSpecs;
 };
