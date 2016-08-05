@@ -90,7 +90,12 @@ public:
         m_pShader_Texture.reset(new Shader_Texture);
         m_pShader_Texture->Initialize(m_pD3D->GetDevice(), m_WinHandle/*, *pMod*/);
         m_pStoneTexture.reset(new Texture);
-        m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\uncompressed_stone.tga");    
+        //m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\fresh-black-asphalt-texture.jpg");    
+        //m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\asphalt.tga");
+        //m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\old-asphalt-texture.jpg");
+        //m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\water3.jpg");
+        m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\sharkskin5.jpg");
+
     }
 
         std::shared_ptr<Model> MakeModel( // for custom models

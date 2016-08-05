@@ -202,12 +202,12 @@ bool Game::render()
 
 void Game::makeActorsMASTER()
 {
-    // LOAD SUB1
-    for (Actor& actor: m_actorsSUB1)
-    {
-        Actor* pActor = &actor;
-        m_pActorsMASTER.push_back(pActor);
-    }
+    //// LOAD SUB1
+    //for (Actor& actor: m_actorsSUB1)
+    //{
+    //    Actor* pActor = &actor;
+    //    m_pActorsMASTER.push_back(pActor);
+    //}
     // LOAD SUB2
     for (Actor& actor: m_actorsSUB2)
     {
