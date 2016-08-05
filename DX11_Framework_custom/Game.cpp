@@ -31,23 +31,8 @@ bool Game::Initialize( Graphics *pGraphics,
 		{ SCREEN_DEPTH, SCREEN_NEAR } ); 		    // Screen clip depths
 	RETURN_IF_FALSE( result );
 
-	//   // Model1
-	//   m_pModel1.reset(new Model_Textured(m_modelOffset));
-	//   result = m_pModel1 != nullptr;
-	//   RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-	//   PrimitiveFactory primMaker;
-	//   primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
-	//result = m_pModel1->Initialize( primMaker, *m_pGraphics );
-	//RETURN_IF_FALSE( result );
-
 	result = m_Overlay.Initialize( *m_pGraphics );
 	RETURN_IF_FALSE( result );
-
-    m_numRows = 5;
-    m_numColumns = 5;
-    m_numZ = 5;
-    m_numActors = m_numRows * m_numColumns * m_numZ;
-    makeAllActors(m_numActors);
 
 	// Pass all member pointers to GameObjects class so it can draw with them
     m_gObjects = 
@@ -58,8 +43,33 @@ bool Game::Initialize( Graphics *pGraphics,
             m_pCamera,
             WinHandle);
 
-    m_gObjects.InitializeGameObjectsSystem(m_actors);
+    m_gObjects.InitializeGameObjectsSystem(/*m_actors*/);
 
+	////////////////// Fill Actor and Model vectors //////////////////
+	// .375f, .375f, .375f, 1.f is the same as 
+	//    96,    96,    96, 255 for RGBA color range
+
+	////////////////////////////
+	// Initialize game board  //
+	////////////////////////////
+	XMFLOAT4 gray = { .375f, .375f, .375f, 1.f };
+	auto pModel = makeColoredModel( gray, &m_board, PLANE );
+
+	XMFLOAT4 red = { 1.f, 0.f,0.f,1.f };
+	Board::Cell dummyCell( { 0.f,0.f,0.f } );
+	auto pCellModel = makeColoredModel( red, &dummyCell, CUBE );
+
+	m_board.Initialize( 9, 9, pModel, pCellModel );
+	auto &cells = m_board.GetCellArray();
+	auto *pCell = &cells[ 0 ];
+
+	for( auto &cell : cells )
+	{
+		m_pActors.push_back( &cell );
+		m_pModels.push_back( cell.GetModel() );
+	}
+
+	////////////////////////////////////////////////////////////////// 
 	return true;
 }
 
@@ -184,11 +194,53 @@ bool Game::render()
     // TODO: maybe initialize this in GameObjectsClass instead.
 	// Generate the view matrix based on the camera's position.
 	m_pCamera->Render();
-    m_gObjects.UpdateView(m_actors); // TODO: implement this new function
+    m_gObjects.UpdateView(m_pActors); // TODO: implement this new function
     //m_gObjects.DrawAllModels();
 	m_Overlay.Render( *m_pGraphics );
 
 	return true;
+}
+
+std::shared_ptr<Model> Game::makeColoredModel( const XMFLOAT4 &Color, Actor * const pActor, eModType Type )
+{
+	Model *pModel = nullptr;
+	auto localSpecs = pActor->GetLocalSpecs();
+	PrimitiveFactory factory;
+	switch( Type )
+	{
+		case CUBE:
+		{
+			factory.CreateColor( Color.x, Color.y, Color.z, Color.w );
+			factory.CreateCube(
+				localSpecs.center,
+				localSpecs.size,
+				localSpecs.orientation
+			);
+			pModel = new Model_Colored;
+		}
+		case PLANE:
+		{
+			factory.CreateColor( Color.x, Color.y, Color.z, Color.w );
+			XMFLOAT2 size = { localSpecs.size.x, localSpecs.size.y };
+			factory.CreatePlane(
+				localSpecs.center,
+				size,
+				localSpecs.orientation
+			);
+			pModel = new Model_Colored;
+		}
+		case CUBE_TEXTURED:
+		{
+			factory.CreateCube(
+				localSpecs.center,
+				localSpecs.size,
+				localSpecs.orientation
+			);
+			pModel = new Model_Textured;
+		}
+	}
+	pModel->Initialize( factory, *m_pGraphics );
+	return std::shared_ptr<Model>( pModel );
 }
 
 void Game::makeAllActors(int numActors)

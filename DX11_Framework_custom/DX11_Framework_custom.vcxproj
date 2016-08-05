@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="MazeGenerator.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shader_Color.cpp" />
     <ClCompile Include="COMHandler.cpp" />
@@ -164,12 +165,14 @@
     <ClCompile Include="TexturedPlane.cpp" />
     <ClCompile Include="Shader_Texture.cpp" />
     <ClCompile Include="Wic.cpp" />
+    <ClCompile Include="Board.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GameWorld.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="MazeGenerator.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />
     <ClInclude Include="COMHandler.h" />
@@ -191,6 +194,7 @@
     <ClInclude Include="TexturedPlane.h" />
     <ClInclude Include="Utilities.h" />
     <ClInclude Include="Wic.h" />
+    <ClInclude Include="Board.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Development Guidelines.txt" />
