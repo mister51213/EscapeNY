@@ -160,7 +160,7 @@ struct ModelSpecs_L
     XMFLOAT3 center, size, orientation;
 };
 
-enum eModType{CUBE, CUBE_TEXTURED, PLANE, SPHERE, POLYGON};
+enum eModType{CUBE, CUBE_TEXTURED, PLANE, SPHERE, POLYGON, CUSTOM_MESH};
 
 ////////////////////////////////////////////////////////////////
 // FUNCTION FOR GETTING WORLD MATRIX

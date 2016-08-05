@@ -18,11 +18,11 @@ using namespace std;
 // TODO: Make new ACTOR class; this holds the WORLD_SPECS and REFERENCES a model, then combines
 // these two data types to allow itself to be rendered.
 
-class GameWorld
+class GameView
 {
 public:
-    GameWorld(){}
-    GameWorld( // initialize all pointers
+    GameView(){}
+    GameView( // initialize all pointers
         char numObjects, 
         Graphics* pGfx, 
         D3DGraphics* pD3D,
@@ -106,7 +106,7 @@ public:
         return pModel; 
     }
 
-        void ModelAllActors(const vector<std::shared_ptr<Actor>>& actors)
+        void ModelAllActors(const vector<Actor*>& actors)
     {
         for each (auto pActor in actors)
         {
@@ -114,7 +114,7 @@ public:
         }
     }
 
-        void InitializeGameObjectsSystem( const vector<std::shared_ptr<Actor>>& actors)
+        void InitializeGameObjectsSystem( const vector<Actor*>& actors)
     {
         //CreatModGrid();
         InitializeShader();
@@ -134,8 +134,8 @@ public:
     }
 
     /*DrawAllModels*/
-    void UpdateView(const vector<std::shared_ptr<Actor>>& actors) {
-        for (int i = 0; i <= m_numModels; i++)
+    void UpdateView(const vector<Actor*>& actors) {
+        for (int i = 0; i < m_numModels; i++)
         {
             DrawModel(actors[i]->GetWorldSpecs(), m_models[i]); 
         }

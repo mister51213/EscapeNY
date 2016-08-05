@@ -11,6 +11,8 @@
 
 class Actor {
 public:
+    Actor() {}
+
     Actor(
         ModelSpecs_W worldSpecs, 
         ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } }) 
@@ -29,7 +31,7 @@ public:
         return m_localSpecs;
     }
 
-        void Move(XMFLOAT3 offset)
+    void Move(XMFLOAT3 offset)
     {
         m_worldSpecs.position += offset;
     }
@@ -41,6 +43,7 @@ public:
 
 private:
     eModType m_modType;
+    string m_name;
     ModelSpecs_W m_worldSpecs;
     ModelSpecs_L m_localSpecs;
 };

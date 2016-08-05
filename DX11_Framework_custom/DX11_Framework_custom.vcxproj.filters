@@ -179,10 +179,10 @@
     <ClInclude Include="PrimitiveFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameWorld.h">
+    <ClInclude Include="Actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h">
+    <ClInclude Include="GameView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

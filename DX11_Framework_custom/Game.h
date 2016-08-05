@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameWorld.h"
+#include "GameView.h"
 #include "Overlay.h"
 #include "Input.h"
 #include <algorithm>
@@ -20,13 +20,12 @@ private:
 
     void makeAllActors(int numActors);
 
-private:
-	
+private:	
 	Graphics *m_pGraphics; // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
 	D3DGraphics *m_pDirect3D;
 	std::shared_ptr<Camera> m_pCamera; // Camera, Model and ColorShader are created in Game, so has ownership
 
-    GameWorld m_gObjects;
+    GameView m_gObjects;
     int m_numRows, m_numColumns, m_numZ, m_numActors;
 
 	std::shared_ptr<Model_Textured> m_pModel1;
@@ -38,6 +37,7 @@ private:
     XMFLOAT3 m_camPos = { -0.0f, 16.0f, -30.0f };
     XMFLOAT3 m_camRotation = { 25.f, -5.f, 0.f }; // defined in degrees
 
-    vector<std::shared_ptr<Actor>> m_actors;
+    vector<Actor> m_actorList; //* vector is destroyed before the list
+    vector<Actor*> m_pActors;
 };
 

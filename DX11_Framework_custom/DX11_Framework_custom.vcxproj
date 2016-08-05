@@ -168,7 +168,7 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="GameWorld.h" />
+    <ClInclude Include="GameView.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />
