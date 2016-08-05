@@ -4,7 +4,8 @@
 #include "Overlay.h"
 #include "Input.h"
 #include <algorithm>
-#include "DrawingAlgorithms.h"
+#include "Algorithm_Grid3D.h"
+#include "Algorithm_Spiral3D.h"
 
 class Game
 {
@@ -21,7 +22,7 @@ public:
 private:
 	bool render();
 
-    vector<Actor> makeActorSet(int numActors, DrawAlgorithm* algorithm);
+    vector<Actor> makeActorSet(int numActors, Algorithm* algorithm);
 
 private:	
 	Graphics *m_pGraphics; // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership

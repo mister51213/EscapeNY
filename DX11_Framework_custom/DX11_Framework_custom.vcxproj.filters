@@ -185,7 +185,13 @@
     <ClInclude Include="GameView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DrawingAlgorithms.h">
+    <ClInclude Include="Algorithm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithm_Grid3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithm_Spiral3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -42,13 +42,19 @@ bool Game::Initialize( Graphics *pGraphics,
 	result = m_Overlay.Initialize( *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
-
     ///////////////////////////////////////////////////
     // CODE FOR MAKING m_actorsSUB1 (ONE SUBSET OF ACTORS)
     m_numRows = 5; m_numColumns = 5; m_numZ = 5;
     m_numActors = m_numRows * m_numColumns * m_numZ;
-    DrawAlgorithm alg;
+    Algorithm_Grid3D alg;
     m_actorsSUB1 = makeActorSet(m_numActors, &alg);
+    ///////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////
+    // CODE FOR MAKING m_actorsSUB2 (ONE SUBSET OF ACTORS)
+    m_numActors = 100;
+    Algorithm_Spiral3D alg2(this);
+    m_actorsSUB2 = makeActorSet(m_numActors, &alg2);
     ///////////////////////////////////////////////////
 
     makeActorsMASTER();
@@ -76,7 +82,7 @@ void Game::GetInput( std::shared_ptr<Input> pInput )
 	{
 		//m_pModel1->Rotate( { 1.f,1.f,1.f } );
 		//m_pModel2->Rotate( { 1.f,1.f,1.f } );
-        for each (auto pActor in m_actorsSUB1)
+        for (auto& pActor: m_actorsSUB1)
         {
             pActor.Rotate({ 1.f,1.f,1.f });
         }
@@ -86,7 +92,7 @@ void Game::GetInput( std::shared_ptr<Input> pInput )
 	{
 		//m_pModel1->Rotate( { -0.1f,-5.f,-5.f } );
 		//m_pModel2->Rotate( { -3.f,-0.3f,-5.f } );
-        for each (auto pActor in m_actorsSUB1)
+        for (auto& pActor: m_actorsSUB1)
         {
             pActor.Rotate({ -1.f,-1.f,-1.f });
         }
@@ -97,7 +103,7 @@ void Game::GetInput( std::shared_ptr<Input> pInput )
 	{
 		//m_pModel1->Move( { .1f,0.f,0.f } );
 		//m_pModel2->Move( { .9f,0.f,0.f } );
-        for each (auto pActor in m_actorsSUB1)
+        for (auto& pActor: m_actorsSUB1)
         {
             pActor.Move({.9f,0.f,0.f });
         }
@@ -107,7 +113,7 @@ void Game::GetInput( std::shared_ptr<Input> pInput )
 	{
 		//m_pModel1->Move( { -.1f,0.f,0.f } );
 		//m_pModel2->Move( { -.9f,0.f,0.f } );
-        for each (auto pActor in m_actorsSUB1)
+        for (auto& pActor: m_actorsSUB1)
         {
             pActor.Move({-.9f,0.f,0.f });
         }
@@ -117,7 +123,7 @@ void Game::GetInput( std::shared_ptr<Input> pInput )
 	{
 		//m_pModel1->Move( { 0.f,.1f,0.f } );
 		//m_pModel2->Move( { 0.f,.9f,0.f } );
-        for each (auto pActor in m_actorsSUB1)
+        for (auto& pActor: m_actorsSUB1)
         {
             pActor.Move({ 0.f,.9f,0.f });
         }
@@ -127,7 +133,7 @@ void Game::GetInput( std::shared_ptr<Input> pInput )
 	{
 		//m_pModel1->Move( { 0.f,-.1f,0.f } );
 		//m_pModel2->Move( { 0.f,-.9f,0.f } );
-        for each (auto pActor in m_actorsSUB1)
+        for (auto& pActor: m_actorsSUB1)
         {
             pActor.Move({ 0.f,-.9f,0.f });
         }
@@ -189,15 +195,21 @@ bool Game::render()
 	// Generate the view matrix based on the camera's position.
 	m_pCamera->Render();
     m_gObjects.UpdateView(m_pActorsMASTER); // TODO: implement this new function
-    //m_gObjects.DrawAllModels();
-	m_Overlay.Render( *m_pGraphics );
+ 	m_Overlay.Render( *m_pGraphics );
 
 	return true;
 }
 
 void Game::makeActorsMASTER()
 {
+    // LOAD SUB1
     for (Actor& actor: m_actorsSUB1)
+    {
+        Actor* pActor = &actor;
+        m_pActorsMASTER.push_back(pActor);
+    }
+    // LOAD SUB2
+    for (Actor& actor: m_actorsSUB2)
     {
         Actor* pActor = &actor;
         m_pActorsMASTER.push_back(pActor);
@@ -205,53 +217,7 @@ void Game::makeActorsMASTER()
 }
 
 // Make a set of similar actors based on algorithm
-vector<Actor> Game::makeActorSet(int numActors, DrawAlgorithm* algorithm)
+vector<Actor> Game::makeActorSet(int numActors, Algorithm* algorithm)
 {
-    // INPUT
-    //  Pattern (DrawingAlgorithms), CustomPattern
-    // OUTPUT
-    //  m_ActorList, m_pActorList
-
     return algorithm->MakePattern(numActors);
-
-    //m_actorsSUB.reserve(numActors);
-    /*ModelSpecs_W specs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } };
-    for (float i = 0; i < m_numColumns; i++)
-    {
-        for (float j = 0; j < m_numRows; j++)
-        {
-            for (float k = 0; k < m_numZ; k++)
-            {
-                specs.position.x = i*15.f;
-                specs.position.y = j*15.f;
-                specs.position.z = k*15.f;
-                specs.scale.x += .01f;
-                specs.scale.y += .01f;
-                specs.scale.z += .01f;
-
-                int index = m_actorsSUB.size();
-                m_actorsSUB.push_back(Actor(specs));
-                m_pActorsMASTER.push_back(&m_actorsSUB[index]);
-            }
-        }
-    }*/
-
-    //ModelSpecs_W specs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } };
-    //for (float i = 0; i <= m_numColumns; i++)
-    //{
-    //    for (float j = 0; j <= m_numRows; j++)
-    //    {
-    //        for (float k = 0; k <= m_numZ; k++)
-    //        {
-    //            specs.position.x = i*10.f;
-    //            specs.position.y = j*10.f;
-    //            specs.position.z = k*10.f;
-    //            specs.scale.x += .01f;
-    //            specs.scale.y += .01f;
-    //            specs.scale.z += .01f;
-    //            
-    //            m_actors.push_back(std::shared_ptr<Actor>( new Actor( specs ) ) );
-    //        }
-    //    }
-    //}
 }
