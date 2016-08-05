@@ -1,10 +1,11 @@
 #pragma once
 
-#include "GameWorld.h"
+#include "GameView.h"
 #include "Overlay.h"
 #include "Input.h"
 #include <algorithm>
-#include "Board.h"
+#include "Algorithm_Grid3D.h"
+#include "Algorithm_Spiral3D.h"
 
 class Game
 {
@@ -15,23 +16,25 @@ public:
 	bool Initialize( Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, HWND WinHandle );
     void GetInput(std::shared_ptr<Input> input);
 
+    void Game::makeActorsMASTER();
+
 	bool Frame();
 private:
 	bool render();
-	std::shared_ptr<Model> makeColoredModel(
-		const XMFLOAT4 &Color, Actor *const pActor, eModType Type
-	);
-    void makeAllActors(int numActors);
 
-private:
-	
+    vector<Actor> makeActorSet(int numActors, Algorithm* algorithm);
+
+private:	
 	Graphics *m_pGraphics; // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
 	D3DGraphics *m_pDirect3D;
 	std::shared_ptr<Camera> m_pCamera; // Camera, Model and ColorShader are created in Game, so has ownership
 
-	Board m_board;
-    GameWorld m_gObjects;
+    GameView m_gObjects;
+
+    ////////////////////////////////////////////////////
+    // INITIALIZATION DATA FOR m_actorsSUB1
     int m_numRows, m_numColumns, m_numZ, m_numActors;
+    ////////////////////////////////////////////////////
 
 	std::shared_ptr<Model_Textured> m_pModel1;
     std::shared_ptr<Model_Textured> m_pModel2;
@@ -42,13 +45,13 @@ private:
     XMFLOAT3 m_camPos = { -0.0f, 16.0f, -30.0f };
     XMFLOAT3 m_camRotation = { 25.f, -5.f, 0.f }; // defined in degrees
 
-	// Not what I mean, should just be a vector<Actor *> because you
-	// are creating a concrete list of child actors, then storing their
-	// addresses.  If you use shared_ptr on stack allocated objects,
-	// the program will crash.
-    //vector<std::shared_ptr<Actor>> m_actors;
-	vector<Actor *> m_pActors;
-	vector<shared_ptr<Model>> m_pModels;
+    // sub list of actors for LIKE TYPES
+    vector<Actor> m_actorsSUB1; //* vector is destroyed before the list   
+    vector<Actor> m_actorsSUB2;
+    vector<Actor> m_actorsSUB3;
+    vector<Actor> m_actorsSUB4;
 
+    // MASTER DRAW list for all actors    
+    vector<Actor*> m_pActorsMASTER;
 };
 
