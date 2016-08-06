@@ -29,6 +29,9 @@ public:
     static DirectX::XMFLOAT4 GetColor();
 
 private:
+	static void Common( const ModelSpecs_L &Specs );
+	static void ClearAllBuffers();
+private:
 	 static std::vector<DirectX::XMFLOAT3> vertices;
 	 static std::vector<DirectX::XMFLOAT3> normals;
 	 static std::vector<DirectX::XMFLOAT2> uvs; 
