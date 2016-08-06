@@ -16,9 +16,12 @@ public:
 
     Actor(
         ModelSpecs_W worldSpecs,
-        ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } })
+        eTexture tex = SharkSkin,
+        ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } },
+        eModType modType = CUBE_TEXTURED)
     {
         m_worldSpecs = worldSpecs;
+        m_texIndex = tex;
     }
 
     ModelSpecs_W GetWorldSpecs() const

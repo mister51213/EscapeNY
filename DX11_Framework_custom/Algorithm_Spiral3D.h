@@ -20,6 +20,8 @@ public: Algorithm_Spiral3D(Game* pGame) :Algorithm(pGame)
             float z = 1;
 
             float increment = 100.f;
+
+            int tex = 0;
             for (int i = 0; i < numActors; i++)
             {
                 float angleStep = static_cast<float>(i)*spacing;
@@ -31,12 +33,16 @@ public: Algorithm_Spiral3D(Game* pGame) :Algorithm(pGame)
                 specs.position.x = x;
                 specs.position.y = y;
                 specs.position.z = z;
-
-                actorsSUB.push_back(Actor(specs));
+               
+                actorsSUB.push_back(Actor(specs, (eTexture)tex));
 
                 x = sin(angleStep*radian) * increment;
                 z = cos(angleStep*radian) * increment;
                 increment -= 20.f;
+
+                //tex++;
+                //tex %= 5;
+
             }
             return actorsSUB;
         }

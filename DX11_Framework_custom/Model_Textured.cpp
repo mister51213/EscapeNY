@@ -4,8 +4,8 @@
 Model_Textured::Model_Textured()
 {}
 
-Model_Textured::Model_Textured(XMFLOAT3 pos):Model::Model(pos) // initialize base position
-{}
+//Model_Textured::Model_Textured(XMFLOAT3 pos):Model::Model(pos) // initialize base position
+//{}
 
 Model_Textured::~Model_Textured()
 {}
