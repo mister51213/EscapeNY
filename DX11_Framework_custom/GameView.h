@@ -12,6 +12,7 @@
 #include "Texture.h"
 #include "Shader_Texture.h"
 #include "Actor.h"
+#include <string>
 
 using namespace std;
 
@@ -21,144 +22,118 @@ using namespace std;
 class GameView
 {
 public:
-	GameView() {}
-	GameView( // initialize all pointers
-		char numObjects,
-		Graphics* pGfx,
-		D3DGraphics* pD3D,
-		std::shared_ptr<Camera> pCam,
-		HWND WinHandle )
-	{
-		m_pGfx = pGfx;
-		m_pD3D = pD3D;
-		m_numModels = numObjects;
-		m_pCam = pCam;
-		m_WinHandle = WinHandle;
-	}
+    GameView() {}
+    GameView( // initialize all pointers
+        char numActors,
+        Graphics* pGfx,
+        D3DGraphics* pD3D,
+        std::shared_ptr<Camera> pCam,
+        HWND WinHandle)
+    {
+        m_pGfx = pGfx;
+        m_pD3D = pD3D;
+        m_numModels = numActors;
+        m_pCam = pCam;
+        m_WinHandle = WinHandle;
+    }
 
-	// we return these Model pointers to the list so that we can access them again and modify them based on input.
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// TODO: Add an update function that updates position of every Model in the pointer list
-	// TODO: based on positions in modSpecList; therefore move functions will only operate on modSpecList,
-	// TODO: and then we call Update() function every frame to render each model to its new position.
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+    void InitTexturePool()
+    {
+        const int numTextures = 5;
+        m_Textures.resize(numTextures);
+        m_Textures[AsphaltFresh].Initialize(*m_pGfx, L"Textures\\fresh-black-asphalt-texture.jpg");
+        m_Textures[AsphaltTGA].Initialize(*m_pGfx, L"Textures\\asphalt.tga");
+        m_Textures[AsphaltOld].Initialize(*m_pGfx, L"Textures\\old-asphalt-texture.jpg");
+        m_Textures[Water].Initialize(*m_pGfx, L"Textures\\water3.jpg");
+        m_Textures[SharkSkin].Initialize(*m_pGfx, L"Textures\\sharkskin1.jpg");
+    }
 
+    // INITIALIZE TEXTURE SHADER //
+    void InitializeShader()
+    {
+        m_pShader_Texture.reset(new Shader_Texture);
+        m_pShader_Texture->Initialize(m_pD3D->GetDevice(), m_WinHandle);
+    }
 
-	// TODO: move these into game class
-	/* void CreatModGrid()
-	{
-	ModelSpecs_W specs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } };
-	for (int i = 0; i < m_objectCount; i++)
-	{
-	m_modSpecs_W.push_back(specs);
-	specs.position.x += 3;
-	specs.position.y += 3;
-	specs.orientation.z += 10;
-	}
-	}*/
-	//void MakeAllModels() {
-	//    for (char i = 0; i < m_objectCount; i++){
-	//        m_models.push_back(MakeModel(m_modSpecs_W[i])); 
-	//    }
-	//}
-	//TODO: Implement this functionality AFTER implementing Actor class.
-	//void MakeAllGenericModels()
-	//{
-	//    // INITIALIZE ONE MODEL
-	//    PrimitiveFactory primMaker;
-	//    primMaker.CreateCube(localSpecs.center, localSpecs.size, localSpecs.orientation);        
-	//    
-	//    // MAKE MANY COPIES OF IT
-	//    for (char i = 0; i < m_objectCount; i++) {
-	//        m_models.push_back(MakeModel(m_modSpecs_W[i]));
-	//    }
-	//}
-	//    std::shared_ptr<Model> MakeModelGeneric( // for generics
-	//    ModelSpecs_W worldSpecs, 
-	//    ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f }, { 0.f, 0.f, 0.f } },
-	//    eModType = CUBE_TEXTURED) 
-	//{
-	//    std::shared_ptr<Model_Textured> pModel;
-	//    pModel.reset(new Model_Textured(worldSpecs.position));
-	// pModel->Initialize( primMaker, *m_pGfx );
-	//    return pModel; 
-	//}
+    // MAKE MODEL
+    std::shared_ptr<Model> 
+        MakeModel(
+            ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f }, { 0.f, 0.f, 0.f } },
+        eModType = CUBE_TEXTURED)
+    {
+        std::shared_ptr<Model_Textured> pModel;
+        pModel.reset(new Model_Textured);
+        PrimitiveFactory primMaker;
+        // TODO: Implement it so it can draw difft shapes based on eModType
+        primMaker.CreateCube(localSpecs.center, localSpecs.size, localSpecs.orientation);
+        pModel->Initialize(primMaker, *m_pGfx);
+        return pModel;
+    }
 
-	// INITIALIZE TEXTURE SHADER //
-	void InitializeShader()
-	{
-		m_pShader_Texture.reset( new Shader_Texture );
-		m_pShader_Texture->Initialize( m_pD3D->GetDevice(), m_WinHandle/*, *pMod*/ );
-		m_pStoneTexture.reset( new Texture );
-		//m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\fresh-black-asphalt-texture.jpg");    
-		//m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\asphalt.tga");
-		//m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\old-asphalt-texture.jpg");
-		//m_pStoneTexture->Initialize(*m_pGfx, L"Textures\\water3.jpg");
-		m_pStoneTexture->Initialize( *m_pGfx, L"Textures\\sharkskin5.jpg" );
+    void ModelAllActors(const vector<Actor*>& actors)
+    {
+        // TODO: Don't need this anymore, RIGHT??? 
+        // TODO: Because each actor holds the pointer to its model~!
+        //m_models.resize(actors.size());
+        //for each (auto pActor in actors)
+        //{
+        //    m_models.push_back(MakeModel(pActor->GetLocalSpecs()));
+        //}
+        for (int i = 0; i < actors.size()/*m_numModels*/; i++)
+        {
+            // DONT store the model in this member list, store it in each actor pointer!!!!!
+            //m_models[i] = MakeModel(actors[i]->GetLocalSpecs());
+            actors[i]->SetModel(MakeModel(actors[i]->GetLocalSpecs()));
+        }
+    }
 
-	}
+    void InitializeGameObjectsSystem(const vector<Actor*>& actors)
+    {
+        InitTexturePool();
+        InitializeShader();
+        ModelAllActors(actors);
+    }
 
-	std::shared_ptr<Model> MakeModel( // for custom models
-		ModelSpecs_W worldSpecs,
-		ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f },{ 5.f, 5.f, 5.f },{ 0.f, 0.f, 0.f } },
-		eModType = CUBE_TEXTURED )
-	{
-		std::shared_ptr<Model_Textured> pModel;
-		pModel.reset( new Model_Textured( worldSpecs.position ) );
-		PrimitiveFactory primMaker;
-		primMaker.CreateCube( localSpecs.center, localSpecs.size, localSpecs.orientation );
-		pModel->Initialize( primMaker, *m_pGfx );
-		return pModel;
-	}
+    void DrawModel(const Actor& actor, int index /*ModelSpecs_W worldSpecs, const std::shared_ptr<Model>& pMod */)
+    {
+        m_pShader_Texture->Render(
+            m_pD3D->GetDeviceContext(),
+            GetWorldMatrix(actor.GetWorldSpecs()),
+            m_pCam->GetViewMatrix(),
+            m_pCam->GetProjectionMatrix(),
+            //pActor.GetTexture()->GetTextureView());
+            (m_Textures[actor.GetTexIndex()]).GetTextureView());
+        // TODO: PROBLEM IS... 
+        // TODO: We didn't point the pointers in the Actors in actors at the MODELS!!!!
+        m_pGfx->RenderModel(*(actor.GetModel()));
+        //m_pGfx->RenderModel(*(m_models[index]));
 
-	void ModelAllActors( const vector<Actor*>& actors )
-	{
-		for each ( auto pActor in actors )
-		{
-			m_models.push_back( MakeModel( pActor->GetWorldSpecs() ) );
-		}
-	}
+    }
 
-	void InitializeGameObjectsSystem( const vector<Actor*>& actors )
-	{
-		//CreatModGrid();
-		InitializeShader();
-		//MakeAllModels();
-		ModelAllActors( actors );
-	}
-
-	void DrawModel( ModelSpecs_W worldSpecs, const std::shared_ptr<Model>& pMod )
-	{
-		m_pShader_Texture->Render(
-			m_pD3D->GetDeviceContext(),
-			GetWorldMatrix( worldSpecs ),
-			m_pCam->GetViewMatrix(),
-			m_pCam->GetProjectionMatrix(),
-			m_pStoneTexture->GetTextureView() );
-		m_pGfx->RenderModel( *pMod );
-	}
-
-	/*DrawAllModels*/
-	void UpdateView( const vector<Actor*>& actors )
-	{
-		for( int i = 0; i < actors.size(); i++ )
-		{
-			DrawModel( actors[ i ]->GetWorldSpecs(), m_models[ i ] );
-		}
-	}
+    //TODO: PROBLEM IS HERE!!!!
+    // Underlying Model objects in Actor object's pModel list are null - WHY????!
+    void UpdateView(const vector<Actor*>& actors) {
+        for (int i = 0; i < actors.size()/*m_numModels*/; i++)
+        {
+            DrawModel(*(actors[i]), i);
+        }
+    }
 
 private:
-	HWND m_WinHandle;
-	Graphics* m_pGfx;
-	D3DGraphics* m_pD3D;
-	std::shared_ptr<Camera> m_pCam;
+    HWND m_WinHandle;
+    Graphics* m_pGfx;
+    D3DGraphics* m_pD3D;
+    std::shared_ptr<Camera> m_pCam;
 
-	std::unique_ptr<Model_Textured> m_pModelTEST;
-	std::shared_ptr<Shader_Texture> m_pShader_Texture;
-	std::shared_ptr<Texture> m_pStoneTexture;
+    std::unique_ptr<Model_Textured> m_pModelTEST;
+    std::shared_ptr<Shader_Texture> m_pShader_Texture;
+    //std::shared_ptr<Texture> m_pStoneTexture;
 
-	vector<ModelSpecs_W> m_modSpecs_W;// model specs list in WORLD SPACE
-	vector<std::shared_ptr<Model>> m_models; // list of actual models for rendering purposes
+    // TODO: shouldnt need to use this anymore; contained in actor list
+    vector<ModelSpecs_W> m_modSpecs_W;// model specs list in WORLD SPACE
 
-	int m_numModels;
+    int m_numModels;
+    //vector<std::shared_ptr<Model>> m_models; // list of actual models for rendering purposes
+
+    vector<Texture> m_Textures;
 };

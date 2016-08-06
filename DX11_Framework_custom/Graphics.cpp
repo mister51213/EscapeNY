@@ -98,6 +98,7 @@ void Graphics::RenderString( const std::wstring & String, IDWriteTextFormat *pFo
 		m_pDirect2D->m_pBrush.Get() );
 }
 
+//TODO: why is this getting a null pointer now????
 void Graphics::RenderModel( const Model &rModel )const
 {
 	// Set vertex buffer stride and offset.

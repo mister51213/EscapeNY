@@ -5,8 +5,8 @@
 class Algorithm_Spiral3D : public Algorithm
 {
 public: Algorithm_Spiral3D(Game* pGame) :Algorithm(pGame)
-{}
-
+{
+}
         vector<Actor> MakePattern(int numActors) override
         {
             vector<Actor> actorsSUB;
@@ -19,6 +19,9 @@ public: Algorithm_Spiral3D(Game* pGame) :Algorithm(pGame)
             float y = -50;
             float z = 1;
 
+            float increment = 100.f;
+
+            int tex = 0;
             for (int i = 0; i < numActors; i++)
             {
                 float angleStep = static_cast<float>(i)*spacing;
@@ -30,8 +33,16 @@ public: Algorithm_Spiral3D(Game* pGame) :Algorithm(pGame)
                 specs.position.x = x;
                 specs.position.y = y;
                 specs.position.z = z;
+               
+                actorsSUB.push_back(Actor(specs, (eTexture)tex));
 
-                actorsSUB.push_back(Actor(specs));
+                x = sin(angleStep*radian) * increment;
+                z = cos(angleStep*radian) * increment;
+                increment -= 20.f;
+
+                //tex++;
+                //tex %= 5;
+
             }
             return actorsSUB;
         }

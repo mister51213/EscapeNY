@@ -12,39 +12,70 @@
 class Actor
 {
 public:
-	Actor() {}
+    Actor() {}
 
-	Actor(
-		ModelSpecs_W worldSpecs,
-		ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f },{ 5.f, 5.f, 5.f },{ 0.f, 0.f, 0.f } } )
-	{
-		m_worldSpecs = worldSpecs;
-		m_localSpecs = localSpecs;
-	}
+    Actor(
+        ModelSpecs_W worldSpecs,
+        eTexture tex = AsphaltOld,
+        ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } },
+        eModType modType = CUBE_TEXTURED)
+    {
+        m_worldSpecs = worldSpecs;
+        m_localSpecs = localSpecs;
+        m_texIndex = tex;
+        m_modType = modType;
 
-	ModelSpecs_W GetWorldSpecs()
-	{
-		return m_worldSpecs;
-	}
+    }
 
-	ModelSpecs_L GetLocalSpecs()
-	{
-		return m_localSpecs;
-	}
+    ModelSpecs_W GetWorldSpecs() const
+    {
+        return m_worldSpecs;
+    }
 
-	void Move( XMFLOAT3 offset )
-	{
-		m_worldSpecs.position += offset;
-	}
+    ModelSpecs_L GetLocalSpecs() const
+    {
+        return m_localSpecs;
+    }
 
-	void Rotate( XMFLOAT3 rotation )
-	{
-		m_worldSpecs.orientation += rotation;
-	}
+    void Move(XMFLOAT3 offset)
+    {
+        m_worldSpecs.position += offset;
+    }
+
+    void Rotate(XMFLOAT3 rotation)
+    {
+        m_worldSpecs.orientation += rotation;
+    }
+
+    //std::shared_ptr<Texture> GetTexture() const
+    //{
+    //    return m_pTexture;
+    //}
+
+    eTexture GetTexIndex() const
+    {
+        return m_texIndex;
+    }
+
+    std::shared_ptr<Model> GetModel() const
+    {
+        return m_pModel;
+    }
+    //TODO: add addressof here?
+    void SetModel(const std::shared_ptr<Model>& pMod)
+    {
+        m_pModel = pMod;
+    }
+
 
 private:
-	eModType m_modType;
-	//string m_name;
-	ModelSpecs_W m_worldSpecs;
-	ModelSpecs_L m_localSpecs;
+    eModType m_modType;
+    eTexture m_texIndex;
+
+    //string m_name;
+    ModelSpecs_W m_worldSpecs;
+    ModelSpecs_L m_localSpecs;
+
+    //std::shared_ptr<Texture> m_pTexture;
+    std::shared_ptr<Model> m_pModel;
 };
