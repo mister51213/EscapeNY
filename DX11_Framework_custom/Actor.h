@@ -21,7 +21,10 @@ public:
         eModType modType = CUBE_TEXTURED)
     {
         m_worldSpecs = worldSpecs;
+        m_localSpecs = localSpecs;
         m_texIndex = tex;
+        m_modType = modType;
+
     }
 
     ModelSpecs_W GetWorldSpecs() const
@@ -58,7 +61,8 @@ public:
     {
         return m_pModel;
     }
-    void SetModel(std::shared_ptr<Model> pMod)
+    //TODO: add addressof here?
+    void SetModel(const std::shared_ptr<Model>& pMod)
     {
         m_pModel = pMod;
     }

@@ -94,18 +94,18 @@ public:
         ModelAllActors(actors);
     }
 
-    void DrawModel(const Actor& pActor, int index /*ModelSpecs_W worldSpecs, const std::shared_ptr<Model>& pMod */)
+    void DrawModel(const Actor& actor, int index /*ModelSpecs_W worldSpecs, const std::shared_ptr<Model>& pMod */)
     {
         m_pShader_Texture->Render(
             m_pD3D->GetDeviceContext(),
-            GetWorldMatrix(pActor.GetWorldSpecs()),
+            GetWorldMatrix(actor.GetWorldSpecs()),
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
             //pActor.GetTexture()->GetTextureView());
-            (m_Textures[pActor.GetTexIndex()]).GetTextureView());
+            (m_Textures[actor.GetTexIndex()]).GetTextureView());
         // TODO: PROBLEM IS... 
         // TODO: We didn't point the pointers in the Actors in actors at the MODELS!!!!
-        m_pGfx->RenderModel(*(pActor.GetModel()));
+        m_pGfx->RenderModel(*(actor.GetModel()));
         //m_pGfx->RenderModel(*(m_models[index]));
 
     }
