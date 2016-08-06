@@ -42,10 +42,10 @@ public:
         const int numTextures = 5;
         m_Textures.resize(numTextures);
         m_Textures[AsphaltFresh].Initialize(*m_pGfx, L"Textures\\fresh-black-asphalt-texture.jpg");
-        m_Textures[AsphaltTga].Initialize(*m_pGfx, L"textures\\asphalt.tga");
-        m_Textures[AsphaltOld].Initialize(*m_pGfx, L"textures\\old-asphalt-texture.jpg");
-        m_Textures[Water].Initialize(*m_pGfx, L"textures\\water3.jpg");
-        m_Textures[SharkSkin].Initialize(*m_pGfx, L"textures\\sharkskin5.jpg");
+        m_Textures[AsphaltTGA].Initialize(*m_pGfx, L"Textures\\asphalt.tga");
+        m_Textures[AsphaltOld].Initialize(*m_pGfx, L"Textures\\old-asphalt-texture.jpg");
+        m_Textures[Water].Initialize(*m_pGfx, L"Textures\\water3.jpg");
+        m_Textures[SharkSkin].Initialize(*m_pGfx, L"Textures\\sharkskin1.jpg");
     }
 
     // INITIALIZE TEXTURE SHADER //

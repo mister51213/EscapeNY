@@ -52,15 +52,15 @@ bool Game::Initialize( Graphics *pGraphics,
 
     ///////////////////////////////////////////////////
     // CODE FOR MAKING m_actorsSUB2 (ONE SUBSET OF ACTORS)
-    m_numAct2 = 100;
-    Algorithm_Spiral3D alg2(this);
-    m_actorsSUB2 = makeActorSet(m_numAct2, &alg2);
+    //m_numAct2 = 100;
+    //Algorithm_Spiral3D alg2(this);
+    //m_actorsSUB2 = makeActorSet(m_numAct2, &alg2);
     ///////////////////////////////////////////////////
 
     m_numActT = m_numAct1 + m_numAct2;
 
 	// Pass all member pointers to GameObjects class so it can draw with them
-    m_gObjects = 
+    m_GameView = 
         GameView(
             m_numActT, 
             m_pGraphics, 
@@ -70,7 +70,7 @@ bool Game::Initialize( Graphics *pGraphics,
 
     makeActorsMASTER();
 
-    m_gObjects.InitializeGameObjectsSystem(m_pActorsMASTER);
+    m_GameView.InitializeGameObjectsSystem(m_pActorsMASTER);
 
 	return true;
 }
@@ -195,8 +195,8 @@ bool Game::render()
 {
     // TODO: maybe initialize this in GameObjectsClass instead.
 	// Generate the view matrix based on the camera's position.
-	m_pCamera->Render();
-    m_gObjects.UpdateView(m_pActorsMASTER); // TODO: implement this new function
+	m_pCamera->Render(); // TODO: why is camera being rendered before objects???
+    m_GameView.UpdateView(m_pActorsMASTER); // TODO: implement this new function
  	m_Overlay.Render( *m_pGraphics );
 
 	return true;
@@ -210,13 +210,13 @@ void Game::makeActorsMASTER()
         Actor* pActor = &actor;
         m_pActorsMASTER.push_back(pActor);
     }
-    // LOAD SUB2
-    for (Actor& actor: m_actorsSUB2)
-    {
-        // TODO: resize this appropriately?
-        Actor* pActor = &actor;
-        m_pActorsMASTER.push_back(pActor);
-    }
+    //// LOAD SUB2
+    //for (Actor& actor: m_actorsSUB2)
+    //{
+    //    // TODO: resize this appropriately?
+    //    Actor* pActor = &actor;
+    //    m_pActorsMASTER.push_back(pActor);
+    //}
 }
 
 // Make a set of similar actors based on algorithm

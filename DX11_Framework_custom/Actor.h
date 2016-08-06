@@ -16,7 +16,7 @@ public:
 
     Actor(
         ModelSpecs_W worldSpecs,
-        eTexture tex = SharkSkin,
+        eTexture tex = AsphaltOld,
         ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } },
         eModType modType = CUBE_TEXTURED)
     {

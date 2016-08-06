@@ -29,7 +29,7 @@ private:
 	D3DGraphics *m_pDirect3D;
 	std::shared_ptr<Camera> m_pCamera; // Camera, Model and ColorShader are created in Game, so has ownership
 
-    GameView m_gObjects;
+    GameView m_GameView;
 
     ////////////////////////////////////////////////////
     // INITIALIZATION DATA FOR m_actorsSUB1
@@ -38,8 +38,7 @@ private:
     // INITIALIZATION DATA FOR m_actorsSUB2
     int m_numAct2;
     ////////////////////////////////////////////////////
-    int m_numActT;
-
+    int m_numActT; // total actors
 
 	std::shared_ptr<Model_Textured> m_pModel1;
     std::shared_ptr<Model_Textured> m_pModel2;
