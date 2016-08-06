@@ -9,24 +9,24 @@
 #include <vector>
 #include "Utilities.h"
 
-class Actor {
+class Actor
+{
 public:
     Actor() {}
 
     Actor(
-        ModelSpecs_W worldSpecs, 
-        ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } }) 
+        ModelSpecs_W worldSpecs,
+        ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } })
     {
-    m_worldSpecs = worldSpecs;
-    m_localSpecs = localSpecs;
+        m_worldSpecs = worldSpecs;
     }
 
-    ModelSpecs_W GetWorldSpecs()
+    ModelSpecs_W GetWorldSpecs() const
     {
         return m_worldSpecs;
     }
 
-    ModelSpecs_L GetLocalSpecs()
+    ModelSpecs_L GetLocalSpecs() const
     {
         return m_localSpecs;
     }
@@ -38,12 +38,33 @@ public:
 
     void Rotate(XMFLOAT3 rotation)
     {
-       m_worldSpecs.orientation += rotation;
+        m_worldSpecs.orientation += rotation;
     }
+
+    //std::shared_ptr<Texture> GetTexture() const
+    //{
+    //    return m_pTexture;
+    //}
+
+    eTexture GetTexIndex() const
+    {
+        return m_texIndex;
+    }
+
+    std::shared_ptr<Model> GetModel() const
+    {
+        return m_pModel;
+    }
+
 
 private:
     eModType m_modType;
+    eTexture m_texIndex;
+
     //string m_name;
     ModelSpecs_W m_worldSpecs;
     ModelSpecs_L m_localSpecs;
+
+    //std::shared_ptr<Texture> m_pTexture;
+    std::shared_ptr<Model> m_pModel;
 };

@@ -162,6 +162,15 @@ struct ModelSpecs_L
 
 enum eModType{CUBE, CUBE_TEXTURED, PLANE, SPHERE, POLYGON, CUSTOM_MESH};
 
+enum eTexture
+    {
+        AsphaltFresh = 0,
+        AsphaltTga = 1,
+        AsphaltOld = 2,
+        Water = 3,
+        SharkSkin = 4        
+    };
+
 ////////////////////////////////////////////////////////////////
 // FUNCTION FOR GETTING WORLD MATRIX
 // TODO: make it global; see which is faster
