@@ -2,7 +2,6 @@
 
 #include "Actor.h"
 #include "Model_Colored.h"
-#include "MazeGenerator.h"
 
 class Board :public Actor
 {
@@ -15,13 +14,14 @@ public:
 	class Cell :public Actor
 	{
 	public:
-		Cell(const DirectX::XMFLOAT3 &Position);
+		Cell(const ModelSpecs_W & Specs);
 
 		void Initialize( std::shared_ptr<Model> pModel );
 		const std::shared_ptr<Model> &GetModel()const;
 		void Visited();
 		void RemoveWall( const uint8_t Direction );
 		bool WasVisited()const;
+		uint8_t GetWall()const;
 	private:
 		uint8_t m_wall;
 		bool m_visited;
@@ -32,10 +32,7 @@ public:
 	~Board();
 	// Passing shared_ptr by value so the ref count DOES increment since Board
 	// does share ownership of the model.
-	bool Initialize( 
-		unsigned Width, unsigned Height, 
-		std::shared_ptr<Model> pModel,
-		std::shared_ptr<Model> pCellModel );
+	bool Initialize( unsigned Width, unsigned Height );
 	std::vector<Cell> &GetCellArray();
 	unsigned GetWidth()const;
 	unsigned GetHeight()const;

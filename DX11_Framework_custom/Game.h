@@ -6,6 +6,8 @@
 #include <algorithm>
 #include "Algorithm_Grid3D.h"
 #include "Algorithm_Spiral3D.h"
+#include "Board.h"
+#include "TestBoard.h"
 
 class Game
 {
@@ -15,13 +17,13 @@ public:
 
 	bool Initialize( Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, HWND WinHandle );
     void GetInput(std::shared_ptr<Input> input);
-
+	
     void Game::makeActorsMASTER();
-
+	TestBoard &GetBoard();
 	bool Frame();
 private:
 	bool render();
-
+	void RegenMap();
     vector<Actor> makeActorSet(int numActors, Algorithm* algorithm);
 
 private:	
@@ -43,7 +45,11 @@ private:
 
 	Overlay m_Overlay;
     XMFLOAT3 m_camPos = { -0.0f, 16.0f, -30.0f };
-    XMFLOAT3 m_camRotation = { 25.f, -5.f, 0.f }; // defined in degrees
+    XMFLOAT3 m_camRotation = { 90.f, 0.f, 0.f }; // defined in degrees
+
+	//Board m_board;
+	TestBoard m_board;
+	int m_startOfMazeIndexInMasterList = 0;
 
     // sub list of actors for LIKE TYPES
     vector<Actor> m_actorsSUB1; //* vector is destroyed before the list   

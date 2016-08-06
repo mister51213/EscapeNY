@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <DirectXMath.h>
+#include <wrl.h>
+#include <d3d11.h>
 
 using namespace DirectX;
 
@@ -157,7 +159,7 @@ struct ModelSpecs_W
 
 struct ModelSpecs_L
 {
-    XMFLOAT3 center, size, orientation;
+    XMFLOAT3 center, orientation, size;
 };
 
 enum eModType{CUBE, CUBE_TEXTURED, PLANE, SPHERE, POLYGON, CUSTOM_MESH};

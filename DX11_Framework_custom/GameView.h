@@ -140,7 +140,7 @@ public:
 
     /*DrawAllModels*/
     void UpdateView(const vector<Actor*>& actors) {
-        for (int i = 0; i < m_numModels; i++)
+        for (int i = 0; i < actors.size(); i++)
         {
             DrawModel(actors[i]->GetWorldSpecs(), m_models[i]); 
         }

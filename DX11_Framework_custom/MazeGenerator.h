@@ -2,6 +2,9 @@
 #include <stack>
 #include <vector>
 #include <assert.h>
+#include "Algorithm.h"
+#include "Board.h"
+
 
 struct Coord
 {
@@ -48,13 +51,19 @@ struct Size
 };
 
 
-class MazeGenerator
+class MazeGenerator :public Algorithm
 {
 public:
 	MazeGenerator();
+	MazeGenerator( class Game *pGame );
 	~MazeGenerator();
 
 	void Initialize( int Width, int Height );
+
+	vector<Actor> MakePattern( int numActors )override;
+	void SetData()override
+	{}
+
 	void Generate( std::vector<Board::Cell>&Cells );
 	Coord GetStart()const;
 	Coord GetEnd()const;
@@ -71,8 +80,19 @@ private:
 		std::vector<Board::Cell>&Cells );
 private:
 	// private member data
-	std::stack<class Board::Cell &> m_visitedCells;
+	std::stack<class Board::Cell> m_visitedCells;
 	Size m_size;
 	Coord m_start, m_end;
 };
 
+class Algorithm_Maze :public Algorithm
+{
+public:
+	Algorithm_Maze( class Game *pGame );
+	vector<Actor> MakePattern( int numActors )override;
+	void SetData()override
+	{}
+private:
+	std::stack<DirectX::XMUINT2> m_visitedCells;
+
+};

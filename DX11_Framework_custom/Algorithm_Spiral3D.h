@@ -13,7 +13,7 @@ public: Algorithm_Spiral3D(Game* pGame) :Algorithm(pGame)
             actorsSUB.reserve(numActors);
             ModelSpecs_W specs = { { 1.f, -30.f, 1.f }, { 0.f,0.f,0.f }, { 1.2f,0.5f,1.3f } };
 
-            float spacing = 1080 / numActors;
+            float spacing = 1080.f / numActors;
 
             float x = 1;
             float y = -50;

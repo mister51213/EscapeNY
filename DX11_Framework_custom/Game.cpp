@@ -1,10 +1,13 @@
 #include "Game.h"
+#include "MazeGenerator.h"
+#include <time.h>
 
 using namespace DirectX;
 
 Game::Game( std::shared_ptr<Input> pInput )
 {
 	m_pInput = pInput;
+	srand( static_cast<unsigned int>( time( nullptr ) ) );
 }
 
 Game::~Game() {}
@@ -28,20 +31,23 @@ bool Game::Initialize( Graphics *pGraphics,
 		m_camPos,					                // Position		
 		m_camRotation, 						        // Rotation
 		{ ScreenWidth, ScreenHeight },				// Screen size
-		{ SCREEN_DEPTH, SCREEN_NEAR } ); 		    // Screen clip depths
+		{ SCREEN_NEAR, SCREEN_DEPTH } ); 		    // Screen clip depths
 	RETURN_IF_FALSE( result );
 
-	//   // Model1
-	//   m_pModel1.reset(new Model_Textured(m_modelOffset));
-	//   result = m_pModel1 != nullptr;
-	//   RETURN_MESSAGE_IF_FALSE(result, L"Could not allocate memory for Model.");
-	//   PrimitiveFactory primMaker;
-	//   primMaker.CreateCube({ 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f });
-	//result = m_pModel1->Initialize( primMaker, *m_pGraphics );
-	//RETURN_IF_FALSE( result );
 	result = m_Overlay.Initialize( *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
+	m_board.Initialize( 9, 9 );
+	// Setting position of camera to the start cell to be centered
+	// over player
+	auto localSpecs = m_board.GetLocalSpecs();
+	auto startPos = m_board.GetStartPosition();
+	m_pCamera->SetPosition( 
+	{ 
+		static_cast<float>(startPos.x) + 0.5f, 
+		50.f, 
+		static_cast<float>(startPos.y) + 0.5f
+	} );
     ///////////////////////////////////////////////////
     // CODE FOR MAKING m_actorsSUB1 (ONE SUBSET OF ACTORS)
     m_numRows = 5; m_numColumns = 5; m_numZ = 5;
@@ -55,7 +61,13 @@ bool Game::Initialize( Graphics *pGraphics,
     m_numActors = 100;
     Algorithm_Spiral3D alg2(this);
     m_actorsSUB2 = makeActorSet(m_numActors, &alg2);
-    ///////////////////////////////////////////////////
+	///////////////////////////////////////////////////
+	///////////////////////////////////////////////////
+	// CODE FOR MAZE/LEVEL GEN
+	Algorithm_Maze gen( this );
+	m_actorsSUB3 = makeActorSet( 0, &gen );
+	///////////////////////////////////////////////////
+
 
     makeActorsMASTER();
 
@@ -78,6 +90,10 @@ void Game::GetInput( std::shared_ptr<Input> pInput )
 	// TODO: Use global GetWorldMatrix() function instead 
 	// TODO: of member WorldMatrixes for each model.
 	// rotate objects
+	if( pInput->IsKeyDown( VK_F3 ) )
+	{
+		RegenMap();
+	}
 	if( pInput->IsKeyDown( VK_SPACE ) )
 	{
 		//m_pModel1->Rotate( { 1.f,1.f,1.f } );
@@ -200,6 +216,20 @@ bool Game::render()
 	return true;
 }
 
+void Game::RegenMap()
+{
+	Algorithm_Maze gen( this );
+	m_actorsSUB3 = makeActorSet( 0, &gen );
+
+	int index = m_startOfMazeIndexInMasterList;
+	for( auto &actor : m_actorsSUB3 )
+	{
+		m_pActorsMASTER[ index ] = &actor;
+		++index;
+	}
+
+}
+
 void Game::makeActorsMASTER()
 {
     //// LOAD SUB1
@@ -209,11 +239,21 @@ void Game::makeActorsMASTER()
     //    m_pActorsMASTER.push_back(pActor);
     //}
     // LOAD SUB2
-    for (Actor& actor: m_actorsSUB2)
+    /*for (Actor& actor: m_actorsSUB2)
     {
         Actor* pActor = &actor;
         m_pActorsMASTER.push_back(pActor);
-    }
+    }*/
+	m_startOfMazeIndexInMasterList = m_pActorsMASTER.size();
+	for( auto &actor : m_actorsSUB3 )
+	{
+		m_pActorsMASTER.push_back( &actor );
+	}
+}
+
+TestBoard & Game::GetBoard()
+{
+	return m_board;
 }
 
 // Make a set of similar actors based on algorithm
