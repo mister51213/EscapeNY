@@ -6,6 +6,7 @@ texture functionality for more detailed graphics.
 ***************************************************************************************/#pragma once
 
 #include "Includes.h"
+#include "Utilities.h"
 
 class PrimitiveFactory
 {

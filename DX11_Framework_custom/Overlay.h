@@ -18,10 +18,13 @@ public:
 	bool Initialize( const Graphics &Gfx );
 	void Render(const Graphics &Gfx);
 	
+	void ResetGoalFlag();
+	void PlayerReachGoal();
 
 private:
 	D2D1_RECT_F m_SurfaceRect;
 	Model_Textured m_Model_Textured;
 	comptr<IDWriteTextFormat> m_Font;
-
+	std::wstring m_goalMessage;
+	bool m_reachedGoal = false;
 };

@@ -15,16 +15,21 @@ public:
 	Game(std::shared_ptr<Input> pInput);
 	~Game();
 
-	bool Initialize( Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, HWND WinHandle );
-    void GetInput(std::shared_ptr<Input> input);
+	bool Initialize(
+		Graphics *pGraphics, 
+		UINT ScreenWidth, 
+		UINT ScreenHeight, 
+		HWND WinHandle );
 	
-    void Game::makeActorsMASTER();
 	TestBoard &GetBoard();
 	bool Frame();
 private:
-	bool render();
-	void RegenMap();
+	void updateGameObjects();
+	void makeActorsMASTER();
+	void getInput( std::shared_ptr<Input> input );
+	void regenMap();
     vector<Actor> makeActorSet(int numActors, Algorithm* algorithm);
+	bool render();
 
 private:	
 	Graphics *m_pGraphics; // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
@@ -32,18 +37,6 @@ private:
 	std::shared_ptr<Camera> m_pCamera; // Camera, Model and ColorShader are created in Game, so has ownership
 
     GameView m_GameView;
-
-    ////////////////////////////////////////////////////
-    // INITIALIZATION DATA FOR m_actorsSUB1
-    int m_numRows, m_numColumns, m_numZ, m_numAct1;
-    ////////////////////////////////////////////////////
-    // INITIALIZATION DATA FOR m_actorsSUB2
-    int m_numAct2;
-    ////////////////////////////////////////////////////
-    int m_numActT; // total actors
-
-	std::shared_ptr<Model_Textured> m_pModel1;
-    std::shared_ptr<Model_Textured> m_pModel2;
 
     std::shared_ptr<Input> m_pInput;// Input
 

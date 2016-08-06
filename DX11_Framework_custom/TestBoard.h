@@ -16,14 +16,17 @@ public:
 	~TestBoard();
 
 	void Initialize( UINT Width, UINT Height );
-	DirectX::XMUINT2 GetStartPosition()const;
-	DirectX::XMUINT2 GetEndPosition()const;
+	DirectX::XMFLOAT3 GetStartPosition()const;
+	DirectX::XMFLOAT3 GetEndPosition()const;
 	UINT GetWidth()const;
 	UINT GetHeight()const;
-	std::vector<eTileType> &GetTiles();
+	void SetCells( std::vector<Actor> &&pCells );
+
+	const std::vector<Actor>& GetTiles()const;
+	
 private:
 	UINT m_width, m_height;
-	/*std::vector<eTileType> m_tileTypes;*/
+	std::vector<Actor> m_pCells;
 	DirectX::XMUINT2 m_startCell, m_endCell;
 };
 

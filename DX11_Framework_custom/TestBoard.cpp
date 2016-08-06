@@ -1,6 +1,6 @@
 #include "TestBoard.h"
 
-
+using namespace DirectX;
 
 TestBoard::TestBoard()
 	:
@@ -18,20 +18,28 @@ void TestBoard::Initialize( UINT Width, UINT Height )
 	m_width = Width;
 	m_height = Height;
 
-	//m_tileTypes.resize( m_width * m_height );
-
 	m_startCell =	{ rand() % m_width, m_height - 1 };
 	m_endCell =		{ rand() % m_width, 0 };
 }
 
-DirectX::XMUINT2 TestBoard::GetStartPosition() const
+DirectX::XMFLOAT3 TestBoard::GetStartPosition() const
 {
-	return m_startCell;
+	float multiplier = m_pCells[ 0 ].GetLocalSpecs().size.x;
+	XMFLOAT3 res;
+	res.x = static_cast<float>(m_startCell.x) * multiplier;
+	res.y = 1.f;
+	res.z = static_cast<float>(m_startCell.y) * multiplier;
+	return res;
 }
 
-DirectX::XMUINT2 TestBoard::GetEndPosition() const
+DirectX::XMFLOAT3 TestBoard::GetEndPosition() const
 {
-	return m_endCell;
+	float multiplier = m_pCells[ 0 ].GetLocalSpecs().size.x;
+	XMFLOAT3 res;
+	res.x = static_cast<float>( m_endCell.x ) * multiplier;
+	res.y = 1.f;
+	res.z = static_cast<float>( m_endCell.y ) * multiplier;
+	return res;
 }
 
 UINT TestBoard::GetWidth() const
@@ -44,7 +52,12 @@ UINT TestBoard::GetHeight() const
 	return m_height;
 }
 
-std::vector<eTileType>& TestBoard::GetTiles()
+void TestBoard::SetCells( std::vector<Actor>&& pCells )
 {
-	return std::vector<eTileType>();
+	m_pCells = std::move( pCells );
+}
+
+const std::vector<Actor>& TestBoard::GetTiles()const
+{
+	return m_pCells;
 }

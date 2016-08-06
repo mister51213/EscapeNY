@@ -6,166 +6,62 @@
 // Includes
 ////////////////////////////////////////////////////////////////////////////////
 #include "Shader_Color.h"
-#include "Model.h"
 
-// class constructor initializes all the private pointers in the class to null.
-
-Shader_Color::Shader_Color():
-    Shader(L"Shaders/color_vs.cso",L"Shaders/color_ps.cso")
-{}
-
-// TODO: FIX COPY CONSTRUCTOR to initialize all variables.
-Shader_Color::Shader_Color( const Shader_Color& other ):
+Shader_Color::Shader_Color()
+	:
     Shader(L"Shaders/color_vs.cso",L"Shaders/color_ps.cso")
 {}
 
 Shader_Color::~Shader_Color()
 {}
 
-// Pass in the names of the HLSL shader files, color.vs and color.ps
-//bool Shader_Color::Initialize( ID3D11Device* device, HWND hwnd, const Model &crModel )
-//{
-//	bool result;
-//
-//	// Initialize the vertex and pixel shaders.
-//	result = InitializeShader(
-//		device,
-//		hwnd,
-//        m_vsFilename,
-//        m_psFilename,
-//		crModel );
-//	RETURN_IF_FALSE( result );
-//
-//	return true;
-//}
-
-// First set the parameters inside the shader using the SetShaderParameters 
-// function. Once the parameters are set then call RenderShader to draw 
-// the green triangle using the HLSL shader.
-
-// TODO: Why does color shader pass this as ref, but texture shader doesnt?
-//bool Shader_Color::Render( 
-//    ID3D11DeviceContext* deviceContext,
-//	XMMATRIX & worldMatrix,
-//	XMMATRIX & viewMatrix,
-//	XMMATRIX & projectionMatrix )
-//{
-//	// Set the shader parameters to use for rendering.
-//	bool result = SetShaderParameters( 
-//        deviceContext, 
-//        worldMatrix, 
-//        viewMatrix, 
-//        projectionMatrix );
-//	RETURN_IF_FALSE( result );
-//
-//	// Now render the prepared buffers with the shader.
-//	RenderShader( deviceContext );
-//
-//	return true;
-//}
-
-// This function is what actually loads the shader files and 
-// makes it usable to DirectX and the GPU. 
-
 bool Shader_Color::InitializeShader( 
-    ID3D11Device* device, 
-    HWND hwnd, 
-//  WCHAR* vsFilename,
-//  WCHAR* psFilename,
-    const std::wstring & vsStrFile,
-    const std::wstring & psStrFile/*,
-    const Model &crModel */)
+    ID3D11Device* pDevice,
+    const std::wstring & vsFilename,
+    const std::wstring & psFilename )
 {
-	//  Compile the shader programs into buffers. We pass the name of the 
-	// shader file, the name of the shader, the shader version (5.0 in DirectX 11), 
-	// and the buffer to compile the shader into.
-
 	// Initialize the pointers this function will use to null.
-	comptr<ID3D10Blob> errorMessage, vertexShaderBuffer, pixelShaderBuffer;
+	comptr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer;
 
-	// Compile the vertex shader code.
-	HRESULT result = D3DCompileFromFile(
-		vsStrFile.c_str(), 								// Shader filename
-		nullptr,									// Pointer to D3D_SHADER_MACRO
-		nullptr,									// Pointer to ID3DInclude interface
-		"ColorVertexShader",						// Shader entry function name
-		"vs_5_0",									// Shader type and version
-		D3DCOMPILE_ENABLE_STRICTNESS,				// Shader flags 1
-		NULL,										// Shader flags 2
-		vertexShaderBuffer.GetAddressOf(),			// Address of shader blob
-		errorMessage.GetAddressOf() );				// Address of shader error blob
-	if( FAILED( result ) )
-	{
-		// If the shader failed to compile it should have writen something to the error message.
-		if( errorMessage )
-		{
-			OutputShaderErrorMessage( errorMessage.Get(), hwnd, vsStrFile );
-		}
-		// If there was  nothing in the error message then it simply could not find the shader file itself.
-		else
-		{
-			MessageBox( hwnd, vsStrFile.c_str(), L"Missing Shader File", MB_OK );
-		}
+	// Load the vertex shader code.
+	HRESULT hr = D3DReadFileToBlob(
+		vsFilename.c_str(),
+		pVertexShaderBuffer.GetAddressOf() );
+	RETURN_IF_FAILED( hr );
 
-		return false;
-	}
+	// Load the pixel shader code.
+	hr = D3DReadFileToBlob(
+		psFilename.c_str(),
+		pPixelShaderBuffer.GetAddressOf() );
 
-	// Compile the pixel shader code.
-	result = D3DCompileFromFile( 
-		psStrFile.c_str(),										// Shader filename
-		nullptr,										// Pointer to D3D_SHADER_MACRO
-		nullptr,										// Pointer to ID3DInclude interface
-		"ColorPixelShader",								// Shader entry function name
-		"ps_5_0",										// Shader type and version
-		D3DCOMPILE_ENABLE_STRICTNESS,					// Shader flags 1
-		NULL,											// Shader flags 2
-		pixelShaderBuffer.GetAddressOf(),				// Address of shader blob
-		errorMessage.GetAddressOf() );					// Address of shader error blob
-	if( FAILED( result ) )
-	{
-		// If the shader failed to compile it should have writen something to the error message.
-		if( errorMessage )
-		{
-			OutputShaderErrorMessage( errorMessage.Get(), hwnd, psStrFile );
-		}
-		// If there was nothing in the error message then it simply could not find the file itself.
-		else
-		{
-			MessageBox( hwnd, psStrFile.c_str(), L"Missing Shader File", MB_OK );
-		}
-		return false;
-	}
-
-	// Now we will use the buffers of compiled shader code to create the shader objects themselves.
 	// Create the vertex shader from the buffer.
-	result = device->CreateVertexShader( 
-		vertexShaderBuffer->GetBufferPointer(),					// Shader byte-code
-		vertexShaderBuffer->GetBufferSize(),					// Shader size
-		nullptr,												// ID3D11ClassLinkage interface pointer
-		m_vertexShader.GetAddressOf() );						// Address of the vertex shader
-	RETURN_IF_FAILED( result );
+	hr = pDevice->CreateVertexShader(
+		pVertexShaderBuffer->GetBufferPointer(),
+		pVertexShaderBuffer->GetBufferSize(), 
+		NULL, 
+		m_vertexShader.GetAddressOf() );
+	RETURN_IF_FAILED( hr );
 
 	// Create the pixel shader from the buffer.
-	result = device->CreatePixelShader( 
-		pixelShaderBuffer->GetBufferPointer(),					// Shader byte-code
-		pixelShaderBuffer->GetBufferSize(),						// Shader size
-		nullptr,												// ID3D11ClassLinkage interface pointer
-		m_pixelShader.GetAddressOf() );							// Address of the vertex shader
-	RETURN_IF_FAILED( result );
+	hr = pDevice->CreatePixelShader( 
+		pPixelShaderBuffer->GetBufferPointer(),
+		pPixelShaderBuffer->GetBufferSize(), 
+		NULL, 
+		m_pixelShader.GetAddressOf() );
+	RETURN_IF_FAILED( hr );
 
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the Model class and in the shader.
-	//auto polygonLayout = crModel.GetInputElementDescriptions();
     auto polygonLayout = VertexPositionColorType::CreateLayoutDescriptions();
 
 	// Create the vertex input layout.
-	result = device->CreateInputLayout( 
+	hr = pDevice->CreateInputLayout(
 		polygonLayout.data(),								// Input layout description array
 		polygonLayout.size(),								// Number of descrptions in array
-		vertexShaderBuffer->GetBufferPointer(),				// Vertex buffer byte-code 
-		vertexShaderBuffer->GetBufferSize(),				// Length of vertex buffer byte-code
+		pVertexShaderBuffer->GetBufferPointer(),				// Vertex buffer byte-code 
+		pVertexShaderBuffer->GetBufferSize(),				// Length of vertex buffer byte-code
 		m_layout.GetAddressOf() );							// Address of ID3D11InputLayout interface
-	RETURN_IF_FAILED( result );
+	RETURN_IF_FAILED( hr );
 
 	// setup constant buffer to interface with the shader.
 	// it will be updating every frame, so set buffer usage to dynamic.
@@ -180,38 +76,13 @@ bool Shader_Color::InitializeShader(
 	matrixBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	result = device->CreateBuffer( &matrixBufferDesc, NULL, m_matrixBuffer.GetAddressOf() );
-	RETURN_IF_FAILED( result );
+	hr = pDevice->CreateBuffer( 
+		&matrixBufferDesc, 
+		NULL, 
+		m_matrixBuffer.GetAddressOf() );
+	RETURN_IF_FAILED( hr );
 
 	return true;
-}
-
-void Shader_Color::OutputShaderErrorMessage( 
-    ID3D10Blob* errorMessage,
-	HWND hwnd,
-	const std::wstring & shaderFilename )
-{
-	// Get a pointer to the error message text buffer.
-	auto compileErrors = (char*)( errorMessage->GetBufferPointer() );
-
-	// Get the length of the message.
-	auto bufferSize = errorMessage->GetBufferSize();
-
-	// Open a file to write the error message to.
-	ofstream fout( "shader-error.txt" );
-
-	// Write out the error message.
-	for( SIZE_T i = 0; i < bufferSize; ++i )
-	{
-		fout << compileErrors[ i ];
-	}
-
-	// Close the file.
-	fout.close();
-
-	// Pop a message up on the screen to notify the user to 
-	// check the text file for compile errors.
-	MessageBox( hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename.c_str(), MB_OK );
 }
 
 //////////////////////////////////////////////////////////////////////////////////

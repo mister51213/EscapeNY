@@ -23,18 +23,14 @@ class GameView
 {
 public:
     GameView() {}
-    GameView( // initialize all pointers
-        char numActors,
+    GameView( 
         Graphics* pGfx,
         D3DGraphics* pD3D,
-        std::shared_ptr<Camera> pCam,
-        HWND WinHandle)
+        std::shared_ptr<Camera> pCam)
     {
         m_pGfx = pGfx;
         m_pD3D = pD3D;
-        m_numModels = numActors;
         m_pCam = pCam;
-        m_WinHandle = WinHandle;
     }
 
     void InitTexturePool()
@@ -68,7 +64,7 @@ public:
         pModel.reset(new Model_Textured);
         PrimitiveFactory primMaker;
         // TODO: Implement it so it can draw difft shapes based on eModType
-        primMaker.CreateCube(localSpecs.center, localSpecs.size, localSpecs.orientation);
+        primMaker.CreateCube(localSpecs);
         pModel->Initialize(primMaker, *m_pGfx);
         return pModel;
     }
@@ -108,9 +104,9 @@ public:
     }
 
 private:
-    HWND m_WinHandle;
     Graphics* m_pGfx;
     D3DGraphics* m_pD3D;
+
     std::shared_ptr<Camera> m_pCam;
 
     std::unique_ptr<Model_Textured> m_pModelTEST;

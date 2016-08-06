@@ -28,37 +28,12 @@ class Shader_Color:public Shader
 
 public:
 	Shader_Color();
-	Shader_Color( const Shader_Color& );
 	~Shader_Color();
-
-    // TODO: Why does color shader pass this as ref, but texture shader doesnt?
-	//bool Render( 
- //       ID3D11DeviceContext* deviceContext, 
- //       XMMATRIX & worldMatrix, 
- //       XMMATRIX & viewMatrix, 
- //       XMMATRIX & projectionMatrix);
 
 	virtual bool InitializeShader( 
         ID3D11Device*, 
-        HWND, 
-        //WCHAR*, 
-        //WCHAR*, 
         const std::wstring &,
-        const std::wstring &/*,
-        const Model &crModel */) override;
-
-    // original signature:
-   	//bool InitializeShader( 
-    //    ID3D11Device*, 
-    //    HWND, 
-    //    WCHAR*, 
-    //    WCHAR*, 
-    //    const Model &crModel );
-
-	void OutputShaderErrorMessage( 
-        ID3D10Blob*, 
-        HWND, 
-        const std::wstring & );
+        const std::wstring &) override;
 
 	virtual bool SetShaderParameters( 
         ID3D11DeviceContext*, 

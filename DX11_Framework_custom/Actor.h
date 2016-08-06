@@ -6,8 +6,9 @@
 /////////////////////////////////////////////////////////////////
 #pragma once
 
-#include <vector>
+#include "Includes.h"
 #include "Utilities.h"
+#include "Model.h"
 
 class Actor
 {
@@ -61,21 +62,19 @@ public:
     {
         return m_pModel;
     }
-    //TODO: add addressof here?
-    void SetModel(const std::shared_ptr<Model>& pMod)
+
+	void SetModel(const std::shared_ptr<Model>& pMod)
     {
         m_pModel = pMod;
     }
 
 
-private:
+protected:
     eModType m_modType;
     eTexture m_texIndex;
 
-    //string m_name;
-    ModelSpecs_W m_worldSpecs;
+	ModelSpecs_W m_worldSpecs;
     ModelSpecs_L m_localSpecs;
 
-    //std::shared_ptr<Texture> m_pTexture;
     std::shared_ptr<Model> m_pModel;
 };

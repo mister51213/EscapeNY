@@ -4,7 +4,7 @@
 
 Board::Board()
 	:
-	Actor( { { 0.f, 0.f, 0.f}, { 0.f, 0.f, 0.f }, { 1.f,1.f,1.f} }, { { 0.f, 0.f, 0.f },{ 9.f,9.f, 1.f } })
+	Actor( { { 0.f, 0.f, 0.f}, { 0.f, 0.f, 0.f }, { 1.f,1.f,1.f} }, eTexture::AsphaltFresh, { { 0.f, 0.f, 0.f },{ 9.f,9.f, 1.f } })
 {
 }
 

@@ -108,7 +108,8 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 	{
 		auto extentHalf = Specs.size * .5f;
 
-		return std::vector<DirectX::XMFLOAT3>{
+		return std::vector<DirectX::XMFLOAT3>
+		{
 			// Left
 			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
 			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },

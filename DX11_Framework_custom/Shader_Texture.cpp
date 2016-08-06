@@ -9,69 +9,51 @@
 #include "Shader_Texture.h"
 #include "Model.h"
 
-Shader_Texture::Shader_Texture():Shader(L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso")
-{}
-
-// TODO: FIX COPY CONSTRUCTOR to initialize all variables.
-Shader_Texture::Shader_Texture( const Shader_Texture& other ):Shader(L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso")
+Shader_Texture::Shader_Texture()
+	:
+	Shader(L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso")
 {}
 
 Shader_Texture::~Shader_Texture()
 {}
 
-//bool Shader_Texture::Initialize(
-// TODO: Why does color shader pass this as ref, but texture shader doesnt?
-//bool Shader_Texture::Render
-
 bool Shader_Texture::InitializeShader( 
     ID3D11Device* pDevice, 
-    HWND WinHandle,
-//  WCHAR* vsFilename,
-//  WCHAR* psFilename,
     const std::wstring & vsFilename,
-    const std::wstring & psFilename/*,
-	const Model &crModel */)
+    const std::wstring & psFilename)
 {	
-    // these were the old parameters that work; must match their format:
-    // const std::wstring &VertexShaderFilename, const std::wstring &PixelShaderFilename,
-
-    const std::wstring &VertexShaderFilename = vsFilename;
-    //LPCWSTR VertexShaderFilename = vsFilename;
-
-    const std::wstring &PixelShaderFilename = psFilename;
-    //LPCWSTR PixelShaderFilename = psFilename;
-
 	// Initialize the pointers this function will use to null.
-	comptr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer, pErrorMessage;
+	comptr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer;
 
 	// Compile the vertex shader code.
 	HRESULT hr = D3DReadFileToBlob( 
-        VertexShaderFilename.c_str(), 
+        vsFilename.c_str(), 
         pVertexShaderBuffer.GetAddressOf() );
-	RETURN_IF_FAILED( hr );
-	/*bool result = compileShader( WinHandle, VertexShaderFilename, "TextureVertexShader", 
-		"vs_5_0", pVertexShaderBuffer.GetAddressOf(), pErrorMessage.GetAddressOf() );*/
-
-	// Create the vertex shader from the buffer.
-	std::string vsCode( reinterpret_cast<char*>( pVertexShaderBuffer->GetBufferPointer() ) );
-	auto vsSize = pVertexShaderBuffer->GetBufferSize();
-	hr = pDevice->CreateVertexShader( pVertexShaderBuffer->GetBufferPointer(),
-		pVertexShaderBuffer->GetBufferSize(), NULL, m_vertexShader.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 
 	// Compile the pixel shader code.
-	hr = D3DReadFileToBlob( PixelShaderFilename.c_str(), pPixelShaderBuffer.GetAddressOf() );
-	/*result = compileShader( WinHandle, PixelShaderFilename, "TexturePixelShader",
-		"ps_5_0", pPixelShaderBuffer.GetAddressOf(), pErrorMessage.GetAddressOf() );*/
+	hr = D3DReadFileToBlob( 
+		psFilename.c_str(), 
+		pPixelShaderBuffer.GetAddressOf() );
 
-	// Create the pixel shader from the buffer.
-	hr = pDevice->CreatePixelShader( pPixelShaderBuffer->GetBufferPointer(),
-		pPixelShaderBuffer->GetBufferSize(), NULL, m_pixelShader.GetAddressOf() );
+	// Create the vertex shader from the buffer.
+	hr = pDevice->CreateVertexShader(
+		pVertexShaderBuffer->GetBufferPointer(),
+		pVertexShaderBuffer->GetBufferSize(),
+		NULL,
+		m_vertexShader.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 
+	// Create the pixel shader from the buffer.
+	hr = pDevice->CreatePixelShader(
+		pPixelShaderBuffer->GetBufferPointer(),
+		pPixelShaderBuffer->GetBufferSize(),
+		NULL,
+		m_pixelShader.GetAddressOf() );
+	RETURN_IF_FAILED( hr );
+	
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
-	//auto polygonLayout = crModel.GetInputElementDescriptions();
   	auto polygonLayout = VertexPositionUVType::CreateLayoutDescriptions();
 
 	// Create the vertex input layout.
@@ -114,47 +96,6 @@ bool Shader_Texture::InitializeShader(
 	RETURN_IF_FAILED( hr );
 
 	return true;
-}
-
-bool Shader_Texture::compileShader( HWND WinHandle, const std::wstring & ShaderFilename,
-	const std::string & ShaderEntryFunction, const std::string & ShaderModelVersion, 
-	ID3DBlob **ppShaderBuffer, ID3DBlob **ppErrorMessage )
-{
-	HRESULT result = D3DCompileFromFile( ShaderFilename.c_str(), NULL, NULL,
-		ShaderEntryFunction.c_str(), ShaderModelVersion.c_str(), D3D10_SHADER_ENABLE_STRICTNESS, 0,
-		ppShaderBuffer, ppErrorMessage );
-	if( FAILED( result ) )
-	{
-		// If the shader failed to compile it should have writen something to the error message.
-		if( *ppErrorMessage )
-		{
-			outputShaderErrorMessage( *ppErrorMessage, WinHandle, ShaderFilename );
-		}
-		// If there was nothing in the error message then it simply could not find the shader file itself.
-		else
-		{
-			MessageBox( WinHandle, ShaderFilename.c_str(), L"Missing Shader File", MB_OK );
-		}
-
-		return false;
-	}
-
-	return true;
-}
-
-void Shader_Texture::outputShaderErrorMessage( ID3D10Blob* pErrorMessage, HWND WinHandle, const std::wstring &ShaderFilename )
-{
-	// Open a file to write the error message to.
-	ofstream fout( "shader-error.txt" );
-
-	// Write out the error message.
-	fout << std::string( reinterpret_cast<char*>( pErrorMessage->GetBufferPointer() ) );
-
-	// Close the file.
-	fout.close();
-
-	// Pop a message up on the screen to notify the user to check the text file for compile errors.
-	MessageBox( WinHandle, L"Error compiling shader.  Check shader-error.txt for message.", ShaderFilename.c_str(), MB_OK );
 }
 
 bool Shader_Texture::SetShaderParameters( 
