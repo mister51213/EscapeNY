@@ -51,6 +51,11 @@ private:
 	TestBoard m_board;
 	int m_startOfMazeIndexInMasterList = 0;
 
+	//////////////////
+	// Test player //
+	//////////////////
+	Actor m_player;
+
     // sub list of actors for LIKE TYPES
     vector<Actor> m_actorsSUB1; //* vector is destroyed before the list   
     vector<Actor> m_actorsSUB2;

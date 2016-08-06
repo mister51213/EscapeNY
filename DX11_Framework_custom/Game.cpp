@@ -40,34 +40,42 @@ bool Game::Initialize( Graphics *pGraphics,
 	m_board.Initialize( 9, 9 );
 	// Setting position of camera to the start cell to be centered
 	// over player
+	ModelSpecs_W playerSpecs;
+	playerSpecs.position = { 0.f, 0.f, 0.f };
+	playerSpecs.orientation = { 0.f, 0.f, 0.f };
+	playerSpecs.scale = { .9f, .9f, .9f };
+	m_player = Actor( playerSpecs );
+
 	auto localSpecs = m_board.GetLocalSpecs();
+	auto halfSize = localSpecs.size * .5f;
+
 	auto startPos = m_board.GetStartPosition();
-	m_pCamera->SetPosition( 
-	{ 
-		static_cast<float>(startPos.x) + 0.5f, 
-		50.f, 
-		static_cast<float>(startPos.y) + 0.5f
-	} );
+	XMFLOAT3 offset( 
+		static_cast<float>(startPos.x) + halfSize.x, 1.f, 
+		static_cast<float>(startPos.y) + halfSize.z );
+	
+	m_player.Move( offset );
+	m_pCamera->SetPosition( offset );
     ///////////////////////////////////////////////////
     // CODE FOR MAKING m_actorsSUB1 (ONE SUBSET OF ACTORS)
-    m_numRows = 5; m_numColumns = 5; m_numZ = 5;
+    /*m_numRows = 5; m_numColumns = 5; m_numZ = 5;
     m_numActors = m_numRows * m_numColumns * m_numZ;
     Algorithm_Grid3D alg;
-    m_actorsSUB1 = makeActorSet(m_numActors, &alg);
+    m_actorsSUB1 = makeActorSet(m_numActors, &alg);*/
     ///////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////
     // CODE FOR MAKING m_actorsSUB2 (ONE SUBSET OF ACTORS)
-    m_numActors = 100;
+    /*m_numActors = 100;
     Algorithm_Spiral3D alg2(this);
-    m_actorsSUB2 = makeActorSet(m_numActors, &alg2);
+    m_actorsSUB2 = makeActorSet(m_numActors, &alg2);*/
 	///////////////////////////////////////////////////
 	///////////////////////////////////////////////////
 	// CODE FOR MAZE/LEVEL GEN
 	Algorithm_Maze gen( this );
 	m_actorsSUB3 = makeActorSet( 0, &gen );
 	///////////////////////////////////////////////////
-
+	m_pActorsMASTER.push_back( &m_player );
 
     makeActorsMASTER();
 

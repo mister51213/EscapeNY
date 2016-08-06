@@ -18,7 +18,7 @@ void TestBoard::Initialize( UINT Width, UINT Height )
 	m_width = Width;
 	m_height = Height;
 
-	m_tileTypes.resize( m_width * m_height );
+	//m_tileTypes.resize( m_width * m_height );
 
 	m_startCell =	{ rand() % m_width, m_height - 1 };
 	m_endCell =		{ rand() % m_width, 0 };
@@ -46,5 +46,5 @@ UINT TestBoard::GetHeight() const
 
 std::vector<eTileType>& TestBoard::GetTiles()
 {
-	return m_tileTypes;
+	return std::vector<eTileType>();
 }

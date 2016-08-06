@@ -9,41 +9,42 @@
 #include <vector>
 #include "Utilities.h"
 
-class Actor {
+class Actor
+{
 public:
-    Actor() {}
+	Actor() {}
 
-    Actor(
-        ModelSpecs_W worldSpecs, 
-        ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } }) 
-    {
-    m_worldSpecs = worldSpecs;
-    m_localSpecs = localSpecs;
-    }
+	Actor(
+		ModelSpecs_W worldSpecs,
+		ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f },{ 5.f, 5.f, 5.f },{ 0.f, 0.f, 0.f } } )
+	{
+		m_worldSpecs = worldSpecs;
+		m_localSpecs = localSpecs;
+	}
 
-    ModelSpecs_W GetWorldSpecs()
-    {
-        return m_worldSpecs;
-    }
+	ModelSpecs_W GetWorldSpecs()
+	{
+		return m_worldSpecs;
+	}
 
-    ModelSpecs_L GetLocalSpecs()
-    {
-        return m_localSpecs;
-    }
+	ModelSpecs_L GetLocalSpecs()
+	{
+		return m_localSpecs;
+	}
 
-    void Move(XMFLOAT3 offset)
-    {
-        m_worldSpecs.position += offset;
-    }
+	void Move( XMFLOAT3 offset )
+	{
+		m_worldSpecs.position += offset;
+	}
 
-    void Rotate(XMFLOAT3 rotation)
-    {
-       m_worldSpecs.orientation += rotation;
-    }
+	void Rotate( XMFLOAT3 rotation )
+	{
+		m_worldSpecs.orientation += rotation;
+	}
 
 private:
-    eModType m_modType;
-    //string m_name;
-    ModelSpecs_W m_worldSpecs;
-    ModelSpecs_L m_localSpecs;
+	eModType m_modType;
+	//string m_name;
+	ModelSpecs_W m_worldSpecs;
+	ModelSpecs_L m_localSpecs;
 };
