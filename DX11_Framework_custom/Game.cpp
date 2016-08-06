@@ -28,7 +28,7 @@ bool Game::Initialize( Graphics *pGraphics,
 		m_camPos,					                // Position		
 		m_camRotation, 						        // Rotation
 		{ ScreenWidth, ScreenHeight },				// Screen size
-		{ SCREEN_DEPTH, SCREEN_NEAR } ); 		    // Screen clip depths
+		{ SCREEN_NEAR, SCREEN_DEPTH } ); 		    // Screen clip depths
 	RETURN_IF_FALSE( result );
 
 	//   // Model1
@@ -45,28 +45,30 @@ bool Game::Initialize( Graphics *pGraphics,
     ///////////////////////////////////////////////////
     // CODE FOR MAKING m_actorsSUB1 (ONE SUBSET OF ACTORS)
     m_numRows = 5; m_numColumns = 5; m_numZ = 5;
-    m_numActors = m_numRows * m_numColumns * m_numZ;
+    m_numAct1 = m_numRows * m_numColumns * m_numZ;
     Algorithm_Grid3D alg;
-    m_actorsSUB1 = makeActorSet(m_numActors, &alg);
+    m_actorsSUB1 = makeActorSet(m_numAct1, &alg);
     ///////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////
     // CODE FOR MAKING m_actorsSUB2 (ONE SUBSET OF ACTORS)
-    m_numActors = 100;
+    m_numAct2 = 100;
     Algorithm_Spiral3D alg2(this);
-    m_actorsSUB2 = makeActorSet(m_numActors, &alg2);
+    m_actorsSUB2 = makeActorSet(m_numAct2, &alg2);
     ///////////////////////////////////////////////////
 
-    makeActorsMASTER();
+    m_numActT = m_numAct1 + m_numAct2;
 
 	// Pass all member pointers to GameObjects class so it can draw with them
     m_gObjects = 
         GameView(
-            m_numActors, 
+            m_numActT, 
             m_pGraphics, 
             m_pDirect3D, 
             m_pCamera,
             WinHandle);
+
+    makeActorsMASTER();
 
     m_gObjects.InitializeGameObjectsSystem(m_pActorsMASTER);
 
@@ -203,14 +205,15 @@ bool Game::render()
 void Game::makeActorsMASTER()
 {
     //// LOAD SUB1
-    //for (Actor& actor: m_actorsSUB1)
-    //{
-    //    Actor* pActor = &actor;
-    //    m_pActorsMASTER.push_back(pActor);
-    //}
+    for (Actor& actor: m_actorsSUB1)
+    {
+        Actor* pActor = &actor;
+        m_pActorsMASTER.push_back(pActor);
+    }
     // LOAD SUB2
     for (Actor& actor: m_actorsSUB2)
     {
+        // TODO: resize this appropriately?
         Actor* pActor = &actor;
         m_pActorsMASTER.push_back(pActor);
     }

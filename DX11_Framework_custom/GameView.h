@@ -55,8 +55,10 @@ public:
         m_pShader_Texture->Initialize(m_pD3D->GetDevice(), m_WinHandle);
     }
 
-    std::shared_ptr<Model> MakeModel( // for custom models
-        ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f }, { 0.f, 0.f, 0.f } },
+    // MAKE MODEL
+    std::shared_ptr<Model> 
+        MakeModel(
+            ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 5.f, 5.f, 5.f }, { 0.f, 0.f, 0.f } },
         eModType = CUBE_TEXTURED)
     {
         std::shared_ptr<Model_Textured> pModel;
@@ -70,10 +72,18 @@ public:
 
     void ModelAllActors(const vector<Actor*>& actors)
     {
-        m_models.reserve(m_numModels);
-        for each (auto pActor in actors)
+        // TODO: Don't need this anymore, RIGHT??? 
+        // TODO: Because each actor holds the pointer to its model~!
+        //m_models.resize(actors.size());
+        //for each (auto pActor in actors)
+        //{
+        //    m_models.push_back(MakeModel(pActor->GetLocalSpecs()));
+        //}
+        for (int i = 0; i < actors.size()/*m_numModels*/; i++)
         {
-            m_models.push_back(MakeModel(pActor->GetLocalSpecs()));
+            // DONT store the model in this member list, store it in each actor pointer!!!!!
+            //m_models[i] = MakeModel(actors[i]->GetLocalSpecs());
+            actors[i]->SetModel(MakeModel(actors[i]->GetLocalSpecs()));
         }
     }
 
@@ -84,7 +94,7 @@ public:
         ModelAllActors(actors);
     }
 
-    void DrawModel(const Actor& pActor /*ModelSpecs_W worldSpecs, const std::shared_ptr<Model>& pMod */)
+    void DrawModel(const Actor& pActor, int index /*ModelSpecs_W worldSpecs, const std::shared_ptr<Model>& pMod */)
     {
         m_pShader_Texture->Render(
             m_pD3D->GetDeviceContext(),
@@ -93,14 +103,19 @@ public:
             m_pCam->GetProjectionMatrix(),
             //pActor.GetTexture()->GetTextureView());
             (m_Textures[pActor.GetTexIndex()]).GetTextureView());
+        // TODO: PROBLEM IS... 
+        // TODO: We didn't point the pointers in the Actors in actors at the MODELS!!!!
         m_pGfx->RenderModel(*(pActor.GetModel()));
+        //m_pGfx->RenderModel(*(m_models[index]));
+
     }
 
-    /*DrawAllModels*/
+    //TODO: PROBLEM IS HERE!!!!
+    // Underlying Model objects in Actor object's pModel list are null - WHY????!
     void UpdateView(const vector<Actor*>& actors) {
-        for (int i = 0; i < m_numModels; i++)
+        for (int i = 0; i < actors.size()/*m_numModels*/; i++)
         {
-            DrawModel(*(actors[i]));
+            DrawModel(*(actors[i]), i);
         }
     }
 
@@ -114,9 +129,11 @@ private:
     std::shared_ptr<Shader_Texture> m_pShader_Texture;
     //std::shared_ptr<Texture> m_pStoneTexture;
 
+    // TODO: shouldnt need to use this anymore; contained in actor list
     vector<ModelSpecs_W> m_modSpecs_W;// model specs list in WORLD SPACE
-    vector<std::shared_ptr<Model>> m_models; // list of actual models for rendering purposes
 
     int m_numModels;
+    //vector<std::shared_ptr<Model>> m_models; // list of actual models for rendering purposes
+
     vector<Texture> m_Textures;
 };

@@ -15,16 +15,6 @@ bool Model_Textured::Initialize( const PrimitiveFactory &PrimMaker, const Graphi
 	// Set the stride for this model type
 	m_Stride = sizeof( VertexPositionUVType );
 
-    //////////////////////////////////////////////////////////
-    // TODO: / WARNING WARNING
-    // This is translating the model in its OWN COORDINATES!!!!!!
-    // 1. can change it relative to its own coordinates by changing the Center
-    //    in the Model. CreatePlane() function
-    // 2. wrong way of moving the objects; if you want to move it in world
-    // space, then add its own isolated XMFLOAT3 worldPosition, then pass that
-    // to the global GetWorldMatrix function before it's rendered.
-    //////////////////////////////////////////////////////////
-
 	// Create the vertex array.
 	auto verts = PrimMaker.GetVertices();
 

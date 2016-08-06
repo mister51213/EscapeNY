@@ -58,6 +58,10 @@ public:
     {
         return m_pModel;
     }
+    void SetModel(std::shared_ptr<Model> pMod)
+    {
+        m_pModel = pMod;
+    }
 
 
 private:
