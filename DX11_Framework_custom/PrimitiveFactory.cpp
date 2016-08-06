@@ -9,12 +9,9 @@ texture functionality for more detailed graphics.
 
 using namespace DirectX;
 
-void PrimitiveFactory::CreateTriangle( 
-    const DirectX::XMFLOAT3 & Center, 
-	const DirectX::XMFLOAT2 & Extent, 
-    const DirectX::XMFLOAT3 &Orientation )
+void PrimitiveFactory::CreateTriangle( const ModelSpecs_L &Specs )
 {
-	auto extentHalf = DirectX::XMFLOAT2( Extent.x * 0.5f, Extent.y * 0.5f );
+	auto extentHalf = Specs.size * 0.5f;
     PrimitiveFactory::vertices.clear();
 	PrimitiveFactory::vertices = 
 	{
@@ -74,10 +71,7 @@ void PrimitiveFactory::CreateTriangle(
 	}
 }
 
-void PrimitiveFactory::CreatePlane( 
-    const DirectX::XMFLOAT3 & Center, 
-    const DirectX::XMFLOAT2 & Extent, 
-    const DirectX::XMFLOAT3 & Orientation )
+void PrimitiveFactory::CreatePlane( const ModelSpecs_L &Specs )
 {
 	// There needs to be as many normals and uvs as there are vertices, 
 	// there can be more indices
@@ -153,10 +147,7 @@ void PrimitiveFactory::CreatePlane(
 	}
 }
 
-void PrimitiveFactory::CreateCube( 
-    const DirectX::XMFLOAT3 & Center, // in MODEL space, not WORLD space!!!
-    const DirectX::XMFLOAT3 & Size, 
-    const DirectX::XMFLOAT3 & Orientation )
+void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 {    
     // TODO: Better name this function
     auto extentHalf = DirectX::XMFLOAT3( Size.x * 0.5f, Size.y * 0.5f, Size.z * 0.5f );

@@ -16,18 +16,9 @@ public:
 	// TODO: Should we keep as is, or use ModelSpecs_L struct instead to
 	// TODO: to initialize these primitives?
     // Take center, size, and orientation of primitive to be created
-	static void CreateTriangle( 
-        const DirectX::XMFLOAT3 &Center, 
-        const DirectX::XMFLOAT2 &Extent, 
-        const DirectX::XMFLOAT3 &Orientation = {0.f, 0.f, 0.f} );
-	static void CreatePlane( 
-        const DirectX::XMFLOAT3 &Center, 
-        const DirectX::XMFLOAT2 &Extent,
-		const DirectX::XMFLOAT3 &Orientation = {0.f, 0.f, 0.f} );
-	static void CreateCube( 
-        const DirectX::XMFLOAT3 &Center, 
-        const DirectX::XMFLOAT3 &Extent,
-		const DirectX::XMFLOAT3 &Orientation = {0.f, 0.f, 0.f} );
+	static void CreateTriangle( const ModelSpecs_L &Specs );
+	static void CreatePlane( const ModelSpecs_L &Specs );
+	static void CreateCube( const ModelSpecs_L &Specs );
 	static void PrimitiveFactory::CreateColor( float R, float G, float B, float A );
 
     // ACCESSOR FUNCTIONS
