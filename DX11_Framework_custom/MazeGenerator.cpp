@@ -227,7 +227,7 @@ Algorithm_Maze::Algorithm_Maze( Game * pGame )
 vector<Actor> Algorithm_Maze::MakePattern( int numActors )
 {
 	// Setup the algorithm
-	auto board = m_pGame->GetBoard();	
+	const auto &board = m_pGame->GetBoard();	
 	
 	auto startCell = board.GetStartCellCoord();
 	auto endCell = board.GetEndCellCoord();
@@ -260,6 +260,7 @@ vector<Actor> Algorithm_Maze::MakePattern( int numActors )
 			{ static_cast<int>( curCell.x ) + -2,static_cast<int>( curCell.y ) + 0 }
 		};
 
+		// Randomly choose a neighbor from available list
 		std::vector<XMINT2> availableNeighborList;
 		for( int i = 0; i < 4; ++i )
 		{
@@ -324,6 +325,8 @@ vector<Actor> Algorithm_Maze::MakePattern( int numActors )
 				tileTypes[ curIdx + width ] = PATH;
 			}
 		}
+
+		// Set next tile to PATH
 		tileTypes[ nextIdx ] = PATH;
 
 		// Push nextCell on stack

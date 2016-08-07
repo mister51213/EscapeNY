@@ -24,7 +24,7 @@ public:
 	 
 	void InitializeGameObjectsSystem( const vector<Actor*>& actors );
 	void UpdateView( const vector<Actor*>& actors );
-
+	void Reset( const vector<Actor *> &pActors );
 private:
 	void initTexturePool();
 	void initializeShader();

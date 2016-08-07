@@ -20,6 +20,7 @@ public:
 		UINT ScreenWidth, 
 		UINT ScreenHeight );
 	
+	const TestBoard &GetBoard();
 	bool Frame();
 private:
 	void reset();

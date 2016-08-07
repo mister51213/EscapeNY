@@ -163,6 +163,11 @@ void Game::getInput( std::shared_ptr<Input> pInput )
 // TODO: Use multiple inheritance for better efficiency 
 // Ex.) one parent has health, the other has position
 
+const TestBoard & Game::GetBoard()
+{
+	return m_board;
+}
+
 bool Game::Frame()
 {
 	updateGameObjects();
@@ -190,6 +195,7 @@ void Game::reset()
 	m_actorsSUB3.clear();
 	m_actorsSUB4.clear();
 	m_pActorsMASTER.clear();
+	m_endReached = false;
 
 	m_board.Initialize( 9, 9 );
 	m_player = Actor( {
@@ -224,9 +230,11 @@ void Game::reset()
 
 	makeActorsMASTER();
 
+	m_GameView.Reset( m_pActorsMASTER );
 	m_board.SetCells( std::move( m_actorsSUB3 ) );
 	auto startPos = m_board.GetStartPosition();
 	m_player.Move( startPos );
+
 }
 
 void Game::updateGameObjects()

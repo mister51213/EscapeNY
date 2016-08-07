@@ -19,7 +19,6 @@ void GameView::InitializeGameObjectsSystem( const vector<Actor*>& actors )
 {
 	initTexturePool();
 	initializeShader();
-	modelAllActors( actors );
 }
 
 void GameView::UpdateView( const vector<Actor*>& actors )
@@ -28,6 +27,11 @@ void GameView::UpdateView( const vector<Actor*>& actors )
 	{
 		drawModel( *actor );
 	}
+}
+
+void GameView::Reset( const vector<Actor*>& pActors )
+{
+	modelAllActors( pActors );
 }
 
 void GameView::initTexturePool()
