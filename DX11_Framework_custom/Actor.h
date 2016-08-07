@@ -27,6 +27,8 @@ public:
         m_modType = modType;
     }
 
+
+
     ///////////////
     // ACCESSORS //
     ///////////////

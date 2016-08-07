@@ -28,7 +28,7 @@ public: Algorithm_Grid3D(std::shared_ptr<Input> pInput):
             vector<Actor_NPC> actorsSUB;
             actorsSUB.reserve(numActors);
 
-            ModelSpecs_W specs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } };
+            ModelSpecs_W specs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { .3f,.4f,.5f } };
             for (float i = 0; i < m_numColumns; i++)
             {
                 for (float j = 0; j < m_numRows; j++)
@@ -39,8 +39,8 @@ public: Algorithm_Grid3D(std::shared_ptr<Input> pInput):
                         specs.position.y = j*15.f;
                         specs.position.z = k*15.f;
                         specs.scale.x += .01f;
-                        specs.scale.y += .01f;
-                        specs.scale.z += .01f;
+                        specs.scale.y += .015f;
+                        specs.scale.z += .02f;
 
                         int index = actorsSUB.size();
                         actorsSUB.push_back(Actor_NPC(m_pInput, specs, AsphaltFresh, ModelSpecs_L()));

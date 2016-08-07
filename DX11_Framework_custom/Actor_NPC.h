@@ -12,14 +12,14 @@ public:
         ModelSpecs_W worldSpecs,
         eTexture tex,
         ModelSpecs_L localSpecs,
-        eModType modType = CUBE_TEXTURED) :
-        Actor(worldSpecs, tex, localSpecs, modType = CUBE_TEXTURED), // base constructor
-        m_pInput(pInput)
+        eModType modType = CUBE_TEXTURED) /*:
+        Actor(worldSpecs, tex, localSpecs, modType = CUBE_TEXTURED)*/ // base constructor
     { 
-        //m_worldSpecs = worldSpecs;
-        //m_localSpecs = localSpecs;
-        //m_texIndex = tex;
-        //m_modType = modType;
+        m_pInput = pInput;
+        m_worldSpecs = worldSpecs;
+        m_localSpecs = localSpecs;
+        m_texIndex = tex;
+        m_modType = modType;
     }
 
 public:
