@@ -88,7 +88,7 @@ bool System::Initialize()
 
 	// Initialize the game object
 	result = m_pGame->Initialize( 
-        m_Graphics.get(), screenWidth, screenHeight, m_hwnd );
+        m_Graphics.get(), screenWidth, screenHeight);
 	RETURN_IF_FALSE( result );
 	return true;
 }

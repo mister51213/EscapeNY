@@ -143,6 +143,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="GameView.cpp" />
+    <ClCompile Include="MazeGenerator.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shader_Color.cpp" />
     <ClCompile Include="COMHandler.cpp" />
@@ -160,10 +162,12 @@
     <ClCompile Include="Overlay.cpp" />
     <ClCompile Include="PrimitiveFactory.cpp" />
     <ClCompile Include="System.cpp" />
+    <ClCompile Include="TestBoard.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedPlane.cpp" />
     <ClCompile Include="Shader_Texture.cpp" />
     <ClCompile Include="Wic.cpp" />
+    <ClCompile Include="Board.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
@@ -173,6 +177,7 @@
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="GameView.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="MazeGenerator.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />
     <ClInclude Include="COMHandler.h" />
@@ -190,10 +195,12 @@
     <ClInclude Include="PrimitiveFactory.h" />
     <ClInclude Include="Shader_Texture.h" />
     <ClInclude Include="System.h" />
+    <ClInclude Include="TestBoard.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TexturedPlane.h" />
     <ClInclude Include="Utilities.h" />
     <ClInclude Include="Wic.h" />
+    <ClInclude Include="Board.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Development Guidelines.txt" />

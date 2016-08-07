@@ -6,6 +6,8 @@
 #include <algorithm>
 #include "Algorithm_Grid3D.h"
 #include "Algorithm_Spiral3D.h"
+#include "Board.h"
+#include "TestBoard.h"
 
 class Game
 {
@@ -13,16 +15,20 @@ public:
 	Game(std::shared_ptr<Input> pInput);
 	~Game();
 
-	bool Initialize( Graphics *pGraphics, UINT ScreenWidth, UINT ScreenHeight, HWND WinHandle );
-    void GetInput(std::shared_ptr<Input> input);
-
-    void Game::makeActorsMASTER();
-
+	bool Initialize(
+		Graphics *pGraphics, 
+		UINT ScreenWidth, 
+		UINT ScreenHeight );
+	
+	const TestBoard &GetBoard();
 	bool Frame();
 private:
-	bool render();
-
+	void reset();
+	void updateGameObjects();
+	void makeActorsMASTER();
+	void getInput( std::shared_ptr<Input> input );
     vector<Actor> makeActorSet(int numActors, Algorithm* algorithm);
+	bool render();
 
 private:	
 	Graphics *m_pGraphics; // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
@@ -31,23 +37,26 @@ private:
 
     GameView m_GameView;
 
-    ////////////////////////////////////////////////////
-    // INITIALIZATION DATA FOR m_actorsSUB1
-    int m_numRows, m_numColumns, m_numZ, m_numAct1;
-    ////////////////////////////////////////////////////
-    // INITIALIZATION DATA FOR m_actorsSUB2
-    int m_numAct2;
-    ////////////////////////////////////////////////////
-    //int m_numActT; // total actors
-
-	std::shared_ptr<Model_Textured> m_pModel1;
-    std::shared_ptr<Model_Textured> m_pModel2;
-
     std::shared_ptr<Input> m_pInput;// Input
 
 	Overlay m_Overlay;
     XMFLOAT3 m_camPos = { -0.0f, 16.0f, -30.0f };
-    XMFLOAT3 m_camRotation = { 25.f, -5.f, 0.f }; // defined in degrees
+
+    // Camera is in top-down view for now; rotated 90 degrees on X axis
+    XMFLOAT3 m_camRotation = { 90.f, 0.f, 0.f }; // defined in degrees
+
+	//Board m_board;
+	TestBoard m_board;
+
+	//////////////////
+	// Test player //
+	//////////////////
+	Actor m_player;
+
+	////////////////////////////
+	// Maze game only members //
+	////////////////////////////
+	bool m_endReached = false;
 
     // sub list of actors for LIKE TYPES
     vector<Actor> m_actorsSUB1; //* vector is destroyed before the list   

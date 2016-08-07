@@ -6,8 +6,9 @@
 /////////////////////////////////////////////////////////////////
 #pragma once
 
-#include <vector>
+#include "Includes.h"
 #include "Utilities.h"
+#include "Model.h"
 
 class Actor
 {
@@ -16,8 +17,8 @@ public:
 
     Actor(
         ModelSpecs_W worldSpecs,
-        eTexture tex = AsphaltOld,
-        ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f }, { 0.f,0.f,0.f }, { 1.f,1.f,1.f } },
+        eTexture tex,
+        ModelSpecs_L localSpecs,
         eModType modType = CUBE_TEXTURED)
     {
         m_worldSpecs = worldSpecs;
@@ -47,11 +48,16 @@ public:
         m_worldSpecs.orientation += rotation;
     }
 
-    //std::shared_ptr<Texture> GetTexture() const
-    //{
-    //    return m_pTexture;
-    //}
+	const XMFLOAT3 &GetPosition()const
+	{
+		return m_worldSpecs.position;
+	}
 
+	const XMFLOAT3 &GetRotation()const
+	{
+		return m_worldSpecs.orientation;
+	}
+	
     eTexture GetTexIndex() const
     {
         return m_texIndex;
@@ -61,21 +67,19 @@ public:
     {
         return m_pModel;
     }
-    //TODO: add addressof here?
-    void SetModel(const std::shared_ptr<Model>& pMod)
+
+	void SetModel(const std::shared_ptr<Model>& pMod)
     {
         m_pModel = pMod;
     }
 
 
-private:
+protected:
     eModType m_modType;
     eTexture m_texIndex;
 
-    //string m_name;
-    ModelSpecs_W m_worldSpecs;
+	ModelSpecs_W m_worldSpecs;
     ModelSpecs_L m_localSpecs;
 
-    //std::shared_ptr<Texture> m_pTexture;
     std::shared_ptr<Model> m_pModel;
 };

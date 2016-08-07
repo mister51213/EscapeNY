@@ -42,7 +42,7 @@ public: Algorithm_Grid3D():Algorithm(nullptr){}
                         specs.scale.z += .01f;
 
                         int index = actorsSUB.size();
-                        actorsSUB.push_back(Actor(specs));
+                        actorsSUB.push_back(Actor(specs, AsphaltFresh, ModelSpecs_L()));
                     }
                 }
             }

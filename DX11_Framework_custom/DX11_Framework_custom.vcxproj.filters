@@ -28,8 +28,8 @@
     <Filter Include="Conventions">
       <UniqueIdentifier>{69f6d359-4809-4ea6-8303-406b16079cad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Algorithms">
-      <UniqueIdentifier>{85a94fb8-505c-47b2-9e82-c138a2899ed6}</UniqueIdentifier>
+    <Filter Include="Header Files\Actors">
+      <UniqueIdentifier>{299c9e5c-a8be-4233-b75a-47e7b9c02e44}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +105,18 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\Shader Files</Filter>
     </ClCompile>
+    <ClCompile Include="MazeGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Board.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestBoard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -179,23 +191,32 @@
     <ClInclude Include="PrimitiveFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Algorithm.h">
-      <Filter>Header Files\Algorithms</Filter>
-    </ClInclude>
-    <ClInclude Include="Algorithm_Spiral3D.h">
-      <Filter>Header Files\Algorithms</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Algorithm_Grid3D.h">
-      <Filter>Header Files\Algorithms</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithm_Spiral3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MazeGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Board.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestBoard.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utilities.h">
       <Filter>Header Files\Utility Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
