@@ -9,6 +9,7 @@
 #include "Includes.h"
 #include "Utilities.h"
 #include "Model.h"
+#include "Input.h"
 
 class Actor
 {
@@ -55,8 +56,29 @@ public:
     ////////////////
     // MOVE LOGIC //
     ////////////////
-    // TODO: take this OUT of parent
-    // (Some classes wont need to move, like walls)
+    void GetInput(std::shared_ptr<Input> pInput)
+    {
+        if (pInput->IsKeyDown(VK_RIGHT))
+        {
+            Move({ .6f, 0.f, 0.f });
+        }
+        else if (pInput->IsKeyDown(VK_LEFT))
+        {
+            Move({ -.6f, 0.f, 0.f });
+        }
+
+        if (pInput->IsKeyDown(VK_UP))
+        {
+            Move({ 0.f, 0.f, .6f });
+        }
+        else if (pInput->IsKeyDown(VK_DOWN))
+        {
+            Move({ 0.f, 0.f, -.6f });
+        }
+    }
+
+
+    // TODO: take this OUT of parent (Some classes wont need to move, like walls)
     virtual void Move(XMFLOAT3 offset)
             { m_worldSpecs.position += offset; } 
     virtual void Rotate(XMFLOAT3 rotation)
@@ -69,5 +91,5 @@ protected:
 	ModelSpecs_W m_worldSpecs;
     ModelSpecs_L m_localSpecs;
 
-    std::shared_ptr<Model> m_pModel;
+    std::shared_ptr<Model> m_pModel;  	
 };

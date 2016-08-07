@@ -1,6 +1,5 @@
 #pragma once
 #include "Actor.h"
-#include "Input.h"
 
 class Actor_Player : public Actor
 {
@@ -35,26 +34,26 @@ public:
     }
 
 public:
-    void GetInput(std::shared_ptr<Input> pInput)
-    {
-        if (pInput->IsKeyDown(VK_RIGHT))
-        {
-            Move({ playerSpeed, 0.f, 0.f });
-        }
-        else if (pInput->IsKeyDown(VK_LEFT))
-        {
-            Move({ -playerSpeed, 0.f, 0.f });
-        }
+    //void GetInput(std::shared_ptr<Input> pInput)
+    //{
+    //    if (pInput->IsKeyDown(VK_RIGHT))
+    //    {
+    //        Move({ playerSpeed, 0.f, 0.f });
+    //    }
+    //    else if (pInput->IsKeyDown(VK_LEFT))
+    //    {
+    //        Move({ -playerSpeed, 0.f, 0.f });
+    //    }
 
-        if (pInput->IsKeyDown(VK_UP))
-        {
-            Move({ 0.f, 0.f, playerSpeed });
-        }
-        else if (pInput->IsKeyDown(VK_DOWN))
-        {
-            Move({ 0.f, 0.f, -playerSpeed });
-        }
-    }
+    //    if (pInput->IsKeyDown(VK_UP))
+    //    {
+    //        Move({ 0.f, 0.f, playerSpeed });
+    //    }
+    //    else if (pInput->IsKeyDown(VK_DOWN))
+    //    {
+    //        Move({ 0.f, 0.f, -playerSpeed });
+    //    }
+    //}
 
 private:
     void Move(XMFLOAT3 offset) override

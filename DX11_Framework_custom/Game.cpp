@@ -46,7 +46,7 @@ bool Game::Initialize( Graphics *pGraphics,
 
 void Game::getInput( std::shared_ptr<Input> pInput )
 {
-    //m_player.GetInput(pInput);
+    m_player.GetInput(pInput);
 	// rotate objects
 	//if( pInput->IsKeyDown( VK_F3 ) )
 	//{
@@ -60,13 +60,13 @@ void Game::getInput( std::shared_ptr<Input> pInput )
  //       }
 	//}
 
-	//if( pInput->IsKeyDown( VK_CONTROL ) )
-	//{
- //       for (auto& pActor: m_actorsSUB1)
- //       {
- //           pActor.Rotate({ -1.f,-1.f,-1.f });
- //       }
-	//}
+	if( pInput->IsKeyDown( VK_CONTROL ) )
+	{
+        for (auto& pActor: m_actorsSUB1)
+        {
+            pActor.Rotate({ -1.f,-1.f,-1.f });
+        }
+	}
 
 	//const float playerSpeed = 0.2f;
 	//// move objects

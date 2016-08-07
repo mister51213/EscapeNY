@@ -1,6 +1,5 @@
 #pragma once
 #include "Actor.h"
-#include "Input.h"
 
 class Actor_NPC : public Actor
 {
