@@ -159,7 +159,9 @@ struct ModelSpecs_W
 
 struct ModelSpecs_L
 {
-	XMFLOAT3 center, size, orientation;
+	XMFLOAT3 center = { 0.f, 0.f, 0.f };
+	XMFLOAT3 size = { 5.f, 5.f, 5.f };
+	XMFLOAT3 orientation = { 0.f, 0.f, 0.f };
 };
 
 enum eModType { CUBE, CUBE_TEXTURED, PLANE, SPHERE, POLYGON, CUSTOM_MESH };

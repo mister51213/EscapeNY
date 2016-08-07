@@ -18,16 +18,14 @@ public:
 	bool Initialize(
 		Graphics *pGraphics, 
 		UINT ScreenWidth, 
-		UINT ScreenHeight, 
-		HWND WinHandle );
+		UINT ScreenHeight );
 	
-	TestBoard &GetBoard();
 	bool Frame();
 private:
+	void reset();
 	void updateGameObjects();
 	void makeActorsMASTER();
 	void getInput( std::shared_ptr<Input> input );
-	void regenMap();
     vector<Actor> makeActorSet(int numActors, Algorithm* algorithm);
 	bool render();
 
@@ -46,12 +44,16 @@ private:
 
 	//Board m_board;
 	TestBoard m_board;
-	int m_startOfMazeIndexInMasterList = 0;
 
 	//////////////////
 	// Test player //
 	//////////////////
 	Actor m_player;
+
+	////////////////////////////
+	// Maze game only members //
+	////////////////////////////
+	bool m_endReached = false;
 
     // sub list of actors for LIKE TYPES
     vector<Actor> m_actorsSUB1; //* vector is destroyed before the list   

@@ -229,11 +229,11 @@ vector<Actor> Algorithm_Maze::MakePattern( int numActors )
 	// Setup the algorithm
 	auto board = m_pGame->GetBoard();	
 	
-	auto startCell = board.GetStartPosition();
-	auto endCell = board.GetEndPosition();
+	auto startCell = board.GetStartCellCoord();
+	auto endCell = board.GetEndCellCoord();
 	auto width = board.GetWidth();
 	auto height = board.GetHeight();
-	//auto tileTypes = board.GetTiles();
+
 	std::vector<eTileType> tileTypes( width * height );
 
 	const UINT startIndex = startCell.x + ( startCell.y * width );
@@ -340,9 +340,9 @@ vector<Actor> Algorithm_Maze::MakePattern( int numActors )
 			ModelSpecs_W specs{};
 			if( tileTypes[ idx ] == WALL )
 			{
-				specs.position.x = static_cast<float>(x) * 5.f;
+				specs.position.x = static_cast<float>( x ) * 5.f;
 				specs.position.y = 1.f;
-				specs.position.z = static_cast<float>(z) * 5.f;
+				specs.position.z = static_cast<float>( z ) * 5.f;
 
 				specs.scale = { 1.f, 1.f, 1.f };
 

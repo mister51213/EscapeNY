@@ -48,11 +48,16 @@ public:
         m_worldSpecs.orientation += rotation;
     }
 
-    //std::shared_ptr<Texture> GetTexture() const
-    //{
-    //    return m_pTexture;
-    //}
+	const XMFLOAT3 &GetPosition()const
+	{
+		return m_worldSpecs.position;
+	}
 
+	const XMFLOAT3 &GetRotation()const
+	{
+		return m_worldSpecs.orientation;
+	}
+	
     eTexture GetTexIndex() const
     {
         return m_texIndex;

@@ -14,8 +14,7 @@ Game::~Game() {}
 
 bool Game::Initialize( Graphics *pGraphics,
 	UINT ScreenWidth,
-	UINT ScreenHeight,
-	HWND WinHandle )
+	UINT ScreenHeight)
 {
 	// Take a copy of the graphics and direct3d pointers
 	m_pGraphics = pGraphics;
@@ -37,51 +36,11 @@ bool Game::Initialize( Graphics *pGraphics,
 	result = m_Overlay.Initialize( *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
-	m_board.Initialize( 9, 9 );
-	m_player = Actor( {
-		{ 0.f, 0.f, 0.f },
-		{ 0.f, 0.f, 0.f },
-		{ .5f, .5f, .5f }
-	}, eTexture::SharkSkin );
-
-	
-	auto startPos = m_board.GetStartPosition();
-		
-	m_player.Move( startPos );
-
-    ///////////////////////////////////////////////////
-    // CODE FOR MAKING m_actorsSUB1 (ONE SUBSET OF ACTORS)
-	// These can be locally defined
-    /*const int numRows = 5, numColumns = 5, numZ = 5;
-    const int numActors = numRows * numColumns * numZ;
-    Algorithm_Grid3D alg;
-    m_actorsSUB1 = makeActorSet(numActors, &alg);*/
-    ///////////////////////////////////////////////////
-
-    ///////////////////////////////////////////////////
-    // CODE FOR MAKING m_actorsSUB2 (ONE SUBSET OF ACTORS)
-	// This can be locally defined, count will be stored in m_actorsSUB2.size()
-    /*const int numActors = 100;
-    Algorithm_Spiral3D alg2(this);
-    m_actorsSUB2 = makeActorSet(numActors, &alg2);*/
-	///////////////////////////////////////////////////
-
-	///////////////////////////////////////////////////
-	// CODE FOR MAZE/LEVEL GEN
-	Algorithm_Maze gen( this );
-	m_actorsSUB3 = makeActorSet( 0, &gen );
-	///////////////////////////////////////////////////
-	m_pActorsMASTER.push_back( &m_player );
-
-    makeActorsMASTER();
-
-	m_board.SetCells( std::move( m_actorsSUB3 ) );
-
 	// Pass all member pointers to GameObjects class so it can draw with them
 	m_GameView = GameView( m_pGraphics, m_pDirect3D, m_pCamera );
+	m_GameView.InitializeGameObjectsSystem( m_pActorsMASTER );
 
-	m_GameView.InitializeGameObjectsSystem(m_pActorsMASTER);
-
+	reset();
 	return true;
 }
 
@@ -92,7 +51,7 @@ void Game::getInput( std::shared_ptr<Input> pInput )
 	// rotate objects
 	if( pInput->IsKeyDown( VK_F3 ) )
 	{
-		regenMap();
+		reset();
 	}
 	if( pInput->IsKeyDown( VK_SPACE ) )
 	{
@@ -158,6 +117,14 @@ void Game::getInput( std::shared_ptr<Input> pInput )
         }*/
     }
 
+	if( pInput->IsKeyDown( VK_NEXT ) )
+	{
+		m_pCamera->Rotate( { -1.f, 0.f, 0.f } );
+	}
+	else if( pInput->IsKeyDown( VK_PRIOR ) )
+	{
+		m_pCamera->Rotate( { 1.f, 0.f, 0.f } );
+	}
 	// move camera (FPS view)
 	//if( pInput->IsKeyDown( 0x41 ) ) // Left - A
 	//{
@@ -216,24 +183,50 @@ bool Game::render()
 
 	return true;
 }
-
-// TODO: Do we want this here in Game?
-// The only reason it's here is because when the maze is generated, it won't
-// necessarily have the same number of walls.  It probably own't matter once
-// we start working on the actual game, we can force a certain number of 
-// cars.
-void Game::regenMap()
+void Game::reset()
 {
+	m_actorsSUB1.clear();
+	m_actorsSUB2.clear();
+	m_actorsSUB3.clear();
+	m_actorsSUB4.clear();
+	m_pActorsMASTER.clear();
+
+	m_board.Initialize( 9, 9 );
+	m_player = Actor( {
+		{ 0.f, 0.f, 0.f },
+		{ 0.f, 0.f, 0.f },
+		{ .5f, .5f, .5f }
+	}, eTexture::SharkSkin );
+
+	///////////////////////////////////////////////////
+	// CODE FOR MAKING m_actorsSUB1 (ONE SUBSET OF ACTORS)
+	// These can be locally defined
+	/*const int numRows = 5, numColumns = 5, numZ = 5;
+	const int numActors = numRows * numColumns * numZ;
+	Algorithm_Grid3D alg;
+	m_actorsSUB1 = makeActorSet(numActors, &alg);*/
+	///////////////////////////////////////////////////
+
+	///////////////////////////////////////////////////
+	// CODE FOR MAKING m_actorsSUB2 (ONE SUBSET OF ACTORS)
+	// This can be locally defined, count will be stored in m_actorsSUB2.size()
+	/*const int numActors = 100;
+	Algorithm_Spiral3D alg2(this);
+	m_actorsSUB2 = makeActorSet(numActors, &alg2);*/
+	///////////////////////////////////////////////////
+
+	///////////////////////////////////////////////////
+	// CODE FOR MAZE/LEVEL GEN
 	Algorithm_Maze gen( this );
 	m_actorsSUB3 = makeActorSet( 0, &gen );
+	///////////////////////////////////////////////////
+	m_pActorsMASTER.push_back( &m_player );
 
-	int index = m_startOfMazeIndexInMasterList;
-	for( auto &actor : m_actorsSUB3 )
-	{
-		m_pActorsMASTER[ index ] = &actor;
-		++index;
-	}
+	makeActorsMASTER();
 
+	m_board.SetCells( std::move( m_actorsSUB3 ) );
+	auto startPos = m_board.GetStartPosition();
+	m_player.Move( startPos );
 }
 
 void Game::updateGameObjects()
@@ -244,9 +237,23 @@ void Game::updateGameObjects()
 	camOffset.y += 30.f;
 	m_pCamera->SetPosition( camOffset );
 
-	auto end = m_board.GetEndPosition();
-
-
+	m_Overlay.Update( *m_pInput );
+	bool goalReached = m_board.HasReachedEnd( m_player );
+	if( !m_endReached )
+	{
+		if( goalReached )
+		{
+			m_endReached = goalReached;
+			m_Overlay.PlayerReachGoal();
+		}
+	}
+	else
+	{
+		if( m_Overlay.WantsReset() )
+		{
+			reset();
+		}
+	}
 }
 
 void Game::makeActorsMASTER()
@@ -263,16 +270,11 @@ void Game::makeActorsMASTER()
         Actor* pActor = &actor;
         m_pActorsMASTER.push_back(pActor);
     }*/
-	m_startOfMazeIndexInMasterList = m_pActorsMASTER.size();
+
 	for( auto &actor : m_actorsSUB3 )
 	{
 		m_pActorsMASTER.push_back( &actor );
 	}
-}
-
-TestBoard & Game::GetBoard()
-{
-	return m_board;
 }
 
 // Make a set of similar actors based on algorithm

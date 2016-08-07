@@ -15,7 +15,7 @@ bool Overlay::Initialize( const Graphics &Gfx )
 	m_Font = fntLoader.MakeFont( L"Arial",24.f );
 	RETURN_IF_FALSE( m_Font != nullptr );
 	
-	m_goalMessage = L"Congratulations!!! \nYou've reached the end of the maze.  \nWould you like to load another one? \n";
+	m_goalMessage = L"Congratulations!!! \nYou've reached the end of the maze.  \nWould you like to load another one? \nPress Y to regenerate the maze, ESC to close program.\n";
 	return true;
 }
 
@@ -31,10 +31,14 @@ void Overlay::Render( const Graphics &Gfx )
 
 	if( m_reachedGoal )
 	{
+		float left = 100.f;
+		float top = 100.f;
+		float right = left + 450.f;
+		float bottom = top + 40.f;
 		Gfx.RenderString(
 			m_goalMessage,
 			m_Font.Get(),
-			{ 40.f, 40.f, 120.f, 40.f } 
+			{ left, top, right, bottom } 
 		);
 	}
 	// The rect is where to draw the text and when to either wrap the text or cut it off		
@@ -42,6 +46,18 @@ void Overlay::Render( const Graphics &Gfx )
 	
 	// Signal direct2d that we are done drawing
 	Gfx.EndDraw2D();
+}
+
+void Overlay::Update( Input & User )
+{
+	if( m_reachedGoal )
+	{
+		if( User.IsKeyDown( 'Y' ) )
+		{
+			m_wantsReset = true;
+			ResetGoalFlag();
+		}
+	}
 }
 
 void Overlay::ResetGoalFlag()
@@ -52,4 +68,11 @@ void Overlay::ResetGoalFlag()
 void Overlay::PlayerReachGoal()
 {
 	m_reachedGoal = true;
+}
+
+bool Overlay::WantsReset()
+{
+	bool reset = m_wantsReset;
+	m_wantsReset = false;
+	return reset;
 }

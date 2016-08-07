@@ -28,9 +28,6 @@
     <Filter Include="Conventions">
       <UniqueIdentifier>{69f6d359-4809-4ea6-8303-406b16079cad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Algorithms">
-      <UniqueIdentifier>{85a94fb8-505c-47b2-9e82-c138a2899ed6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -114,6 +111,9 @@
     <ClCompile Include="TestBoard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -147,6 +147,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Includes.h">
@@ -195,16 +198,13 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Algorithm.h">
-      <Filter>Header Files\Algorithms</Filter>
-    </ClInclude>
-    <ClInclude Include="Algorithm_Spiral3D.h">
-      <Filter>Header Files\Algorithms</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Algorithm_Grid3D.h">
-      <Filter>Header Files\Algorithms</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities.h">
-      <Filter>Header Files\Utility Classes</Filter>
+    <ClInclude Include="Algorithm_Spiral3D.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MazeGenerator.h">
       <Filter>Header Files</Filter>
