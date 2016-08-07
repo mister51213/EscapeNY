@@ -6,8 +6,8 @@
 #include <algorithm>
 #include "Algorithm_Grid3D.h"
 #include "Algorithm_Spiral3D.h"
-#include "Board.h"
-#include "TestBoard.h"
+//#include "Board.h"
+//#include "TestBoard.h"
 
 class Game
 {
@@ -20,7 +20,7 @@ public:
 		UINT ScreenWidth, 
 		UINT ScreenHeight );
 	
-	const TestBoard &GetBoard();
+	//const TestBoard &GetBoard();
 	bool Frame();
 private:
 	void reset();
@@ -45,8 +45,8 @@ private:
     // Camera is in top-down view for now; rotated 90 degrees on X axis
     XMFLOAT3 m_camRotation = { 90.f, 0.f, 0.f }; // defined in degrees
 
-	Board m_board;
-	TestBoard m_board;
+	//Board m_board;
+	//TestBoard m_board;
 
 	/////////////////
 	// Test player //
@@ -56,7 +56,7 @@ private:
 	////////////////////////////
 	// Maze game only members //
 	////////////////////////////
-	bool m_endReached = false;
+	//bool m_endReached = false;
 
     // sub list of actors for LIKE TYPES
     vector<Actor_NPC> m_actorsSUB1; //* vector is destroyed before the list   

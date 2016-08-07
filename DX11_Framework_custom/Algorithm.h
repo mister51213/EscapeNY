@@ -19,8 +19,8 @@ public:
     }
 
     // TODO: Still make it pure virtual or just overload it instead because of difft return values?
-    virtual vector<Actor> MakePattern(int numActors) = 0;
-    virtual void SetData() = 0;
+    virtual vector<Actor> MakePattern(int numActors) { return vector<Actor>(); }
+    virtual void SetData() {}
 
 protected:
     Game* m_pGame;

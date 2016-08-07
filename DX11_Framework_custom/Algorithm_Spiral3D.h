@@ -8,7 +8,7 @@ public: Algorithm_Spiral3D(Game* pGame, std::shared_ptr<Input> pInput):
     Algorithm(pGame, pInput)
 {}
 
-        vector<Actor> MakePattern(int numActors) override
+        vector<Actor_NPC> MakePatternNPC(int numActors)
         {
             vector<Actor_NPC> actorsSUB;
             actorsSUB.reserve(numActors);
@@ -52,12 +52,14 @@ public: Algorithm_Spiral3D(Game* pGame, std::shared_ptr<Input> pInput):
             }
 
             // Cast child actors to parent in order to return polymorphically
-             vector<Actor> actorsSub_Casted;
-            for each (Actor_NPC npc in actorsSUB)
-            {
-                actorsSub_Casted.push_back(npc);
-            }
-            return actorsSub_Casted;
+            // vector<Actor> actorsSub_Casted;
+            //for each (Actor_NPC npc in actorsSUB)
+            //{
+            //    actorsSub_Casted.push_back(npc);
+            //}
+            //return actorsSub_Casted;
+            return actorsSUB;
         }
-        virtual void SetData() override {}
+
+        void SetData() {}
 };

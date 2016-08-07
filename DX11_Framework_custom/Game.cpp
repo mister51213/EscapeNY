@@ -151,10 +151,10 @@ void Game::getInput( std::shared_ptr<Input> pInput )
 // TODO: Use multiple inheritance for better efficiency 
 // Ex.) one parent has health, the other has position
 
-const TestBoard & Game::GetBoard()
-{
-	return m_board;
-}
+//const TestBoard & Game::GetBoard()
+//{
+//	return m_board;
+//}
 
 bool Game::Frame()
 {
@@ -185,7 +185,7 @@ void Game::reset()
 	m_pActorsMASTER.clear();
 	//m_endReached = false;
 
-	m_board.Initialize( 9, 9 );
+	//m_board.Initialize( 9, 9 );
 	m_player = Actor_Player(
         m_pInput, 
         {{ 0.f, 0.f, 0.f },
@@ -200,7 +200,9 @@ void Game::reset()
 	const int numRows = 5, numColumns = 5, numZ = 5;
 	const int numActors = numRows * numColumns * numZ;
 	Algorithm_Grid3D alg(m_pInput);
-	m_actorsSUB1 = makeActorSet(numActors, &alg);
+    //m_actorsSUB1 = makeActorSet(numActors, &alg);
+    m_actorsSUB1 = alg.MakePatternNPC(numActors);
+
 	///////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////
@@ -208,8 +210,10 @@ void Game::reset()
 	// This can be locally defined, count will be stored in m_actorsSUB2.size()
 	const int numActors2 = 100;
 	Algorithm_Spiral3D alg2(this, m_pInput);
-	m_actorsSUB2 = makeActorSet(numActors2, &alg2);
-	///////////////////////////////////////////////////
+	//m_actorsSUB2 = makeActorSet(numActors2, &alg2);
+  	m_actorsSUB2 = alg2.MakePatternNPC(numActors);
+
+    ///////////////////////////////////////////////////
 
 	///////////////////////////////////////////////////
 	// CODE FOR MAZE/LEVEL GEN
