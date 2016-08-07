@@ -27,8 +27,6 @@ public:
         m_modType = modType;
     }
 
-
-
     ///////////////
     // ACCESSORS //
     ///////////////
@@ -59,8 +57,10 @@ public:
     ////////////////
     // TODO: take this OUT of parent
     // (Some classes wont need to move, like walls)
-    virtual void Move(XMFLOAT3 offset) = 0;
-    virtual void Rotate(XMFLOAT3 rotation) = 0;
+    virtual void Move(XMFLOAT3 offset)
+            { m_worldSpecs.position += offset; } 
+    virtual void Rotate(XMFLOAT3 rotation)
+            { m_worldSpecs.orientation += rotation; }
 
 protected:
     eModType m_modType;

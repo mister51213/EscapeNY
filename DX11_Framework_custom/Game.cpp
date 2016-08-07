@@ -46,7 +46,7 @@ bool Game::Initialize( Graphics *pGraphics,
 
 void Game::getInput( std::shared_ptr<Input> pInput )
 {
-    m_player.GetInput(pInput);
+    //m_player.GetInput(pInput);
 	// rotate objects
 	//if( pInput->IsKeyDown( VK_F3 ) )
 	//{
@@ -104,45 +104,45 @@ void Game::getInput( std::shared_ptr<Input> pInput )
  //       }
  //   }
 
-	//if( pInput->IsKeyDown( VK_NEXT ) )
-	//{
-	//	m_pCamera->Rotate( { -1.f, 0.f, 0.f } );
-	//}
-	//else if( pInput->IsKeyDown( VK_PRIOR ) )
-	//{
-	//	m_pCamera->Rotate( { 1.f, 0.f, 0.f } );
-	//}
-	// //move camera (FPS view)
-	//if( pInput->IsKeyDown( 0x41 ) ) // Left - A
-	//{
-	//	m_pCamera->Move( { -1, 0, 0 } );
-	//}
+	if( pInput->IsKeyDown( VK_NEXT ) )
+	{
+		m_pCamera->Rotate( { -1.f, 0.f, 0.f } );
+	}
+	else if( pInput->IsKeyDown( VK_PRIOR ) )
+	{
+		m_pCamera->Rotate( { 1.f, 0.f, 0.f } );
+	}
+	 //move camera (FPS view)
+	if( pInput->IsKeyDown( 0x41 ) ) // Left - A
+	{
+		m_pCamera->Move( { -1, 0, 0 } );
+	}
 
-	//if( pInput->IsKeyDown( 0x53 ) ) // Back - S
-	//{
-	//	m_pCamera->Move( { 0, 0, -1 } );
-	//}
+	if( pInput->IsKeyDown( 0x53 ) ) // Back - S
+	{
+		m_pCamera->Move( { 0, 0, -1 } );
+	}
 
-	//if( pInput->IsKeyDown( 0x57 ) ) // Fwd - W
-	//{
-	//	m_pCamera->Move( { 0, 0, 1 } );
-	//}
+	if( pInput->IsKeyDown( 0x57 ) ) // Fwd - W
+	{
+		m_pCamera->Move( { 0, 0, 1 } );
+	}
 
-	//if( pInput->IsKeyDown( 0x44 ) ) // Right - D
-	//{
-	//	m_pCamera->Move( { 1, 0, 0 } );
-	//}
+	if( pInput->IsKeyDown( 0x44 ) ) // Right - D
+	{
+		m_pCamera->Move( { 1, 0, 0 } );
+	}
 
-	//// rotate camera
-	//if( pInput->IsKeyDown( 0x51 ) ) // Left - Q
-	//{
-	//	m_pCamera->Rotate( { 0, -1, 0 } );
-	//}
+	// rotate camera
+	if( pInput->IsKeyDown( 0x51 ) ) // Left - Q
+	{
+		m_pCamera->Rotate( { 0, -1, 0 } );
+	}
 
-	//if( pInput->IsKeyDown( 0x45 ) ) // Right - E
-	//{
-	//	m_pCamera->Rotate( { 0, 1, 0 } );
-	//}
+	if( pInput->IsKeyDown( 0x45 ) ) // Right - E
+	{
+		m_pCamera->Rotate( { 0, 1, 0 } );
+	}
 }
 
 // TODO: Make a list of Actor* ptrs, pass pointers to them to GameWorld.Update() function
@@ -193,14 +193,13 @@ void Game::reset()
  //       eTexture::SharkSkin,
  //       ModelSpecs_L());
 
-    Actor_Player player(
+    m_player = Actor(
         //pInput, 
     { { 0.f, 0.f, 0.f },
     { 0.f, 0.f, 0.f },
     { .5f, .5f, .5f } },
         eTexture::SharkSkin,
         ModelSpecs_L());
-    m_player = player;
 
     ///////////////////////////////////////////////////////
     // MAKE m_actorsSUB1 (ONE SUBSET OF ACTORS)

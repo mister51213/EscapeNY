@@ -142,7 +142,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Actor_Player.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GameView.cpp" />
     <ClCompile Include="Shader.cpp" />

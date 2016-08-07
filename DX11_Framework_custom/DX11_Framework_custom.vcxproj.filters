@@ -111,9 +111,6 @@
     <ClCompile Include="GameView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Actor_Player.cpp">
-      <Filter>Header Files\Actors</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -197,12 +194,6 @@
     <ClInclude Include="Actor.h">
       <Filter>Header Files\Actors</Filter>
     </ClInclude>
-    <ClInclude Include="Actor_Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Actor_NPC.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Algorithm.h">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
@@ -211,6 +202,12 @@
     </ClInclude>
     <ClInclude Include="Algorithm_Spiral3D.h">
       <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_NPC.h">
+      <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_Player.h">
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
