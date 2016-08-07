@@ -21,7 +21,7 @@ void GameView::InitializeGameObjectsSystem( const vector<Actor*>& actors )
 	initializeShader();
 }
 
-void GameView::UpdateView( const vector<Actor*>& actors )
+void GameView::UpdateView( const vector<Actor*>& actors )const
 {
 	for( const auto *actor : actors )
 	{
@@ -69,7 +69,7 @@ std::shared_ptr<Model> GameView::makeModel( ModelSpecs_L localSpecs, eModType Ty
 	return pModel;
 }
 
-void GameView::drawModel( const Actor & actor )
+void GameView::drawModel( const Actor & actor )const
 {
 	m_shader_Texture.Render(
 		m_pD3D->GetDeviceContext(),

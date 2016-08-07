@@ -101,7 +101,7 @@ bool Shader_Color::SetShaderParameters(
 	XMMATRIX & worldMatrix, 
     XMMATRIX & viewMatrix, 
     XMMATRIX & projectionMatrix,
-    ID3D11ShaderResourceView*)
+    ID3D11ShaderResourceView*)const
 {
 	// Lock the constant buffer so it can be written to.
 	D3D11_MAPPED_SUBRESOURCE mappedResource{};
@@ -139,7 +139,7 @@ bool Shader_Color::SetShaderParameters(
 
 // Second function called in the Render function;
 // actually does the RENDERING.
-void Shader_Color::RenderShader( ID3D11DeviceContext* deviceContext )
+void Shader_Color::RenderShader( ID3D11DeviceContext* deviceContext )const
 {
 	// Set the vertex input layout.
 	deviceContext->IASetInputLayout( m_layout.Get() );

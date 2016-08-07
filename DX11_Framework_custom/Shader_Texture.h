@@ -29,14 +29,16 @@ public:
         const std::wstring &,
         const std::wstring &) override;
 
+	// CODE_CHANGE made function const
 	virtual bool SetShaderParameters( 
         ID3D11DeviceContext*, 
         XMMATRIX &, 
         XMMATRIX &, 
         XMMATRIX &, 
-        ID3D11ShaderResourceView* ) override;
+        ID3D11ShaderResourceView* )const override;
 
-	virtual void RenderShader( ID3D11DeviceContext* );
+	// CODE_CHANGE made function const and override
+	virtual void RenderShader( ID3D11DeviceContext* )const override;
 
 private:
 	comptr<ID3D11SamplerState> m_sampleState;

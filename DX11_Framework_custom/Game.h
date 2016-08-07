@@ -20,8 +20,8 @@ public:
 		UINT ScreenWidth, 
 		UINT ScreenHeight );
 	
-	const TestBoard &GetBoard();
 	bool Frame();
+	GameView &GetGameView();
 private:
 	void reset();
 	void updateGameObjects();
@@ -39,24 +39,12 @@ private:
 
     std::shared_ptr<Input> m_pInput;// Input
 
-	Overlay m_Overlay;
     XMFLOAT3 m_camPos = { -0.0f, 16.0f, -30.0f };
 
     // Camera is in top-down view for now; rotated 90 degrees on X axis
     XMFLOAT3 m_camRotation = { 90.f, 0.f, 0.f }; // defined in degrees
 
-	//Board m_board;
-	TestBoard m_board;
-
-	//////////////////
-	// Test player //
-	//////////////////
 	Actor m_player;
-
-	////////////////////////////
-	// Maze game only members //
-	////////////////////////////
-	bool m_endReached = false;
 
     // sub list of actors for LIKE TYPES
     vector<Actor> m_actorsSUB1; //* vector is destroyed before the list   

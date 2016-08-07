@@ -32,13 +32,13 @@ protected:
 public:
 	bool Initialize( ID3D11Device* pDevice );
 
-	// possible issue with passing params as references
+	// CODE_CHANGE: made function const
 	bool Render(
 		ID3D11DeviceContext* deviceContext,
 		XMMATRIX & worldMatrix,
 		XMMATRIX & viewMatrix,
 		XMMATRIX & projectionMatrix,
-		ID3D11ShaderResourceView* texture = nullptr )
+		ID3D11ShaderResourceView* texture = nullptr )const
 	{
 		// Set the shader parameters to use for rendering.
 
@@ -57,15 +57,16 @@ public:
 		return true;
 	}
 
-	virtual void RenderShader( ID3D11DeviceContext* ) = 0;
+	// CODE_CHANGE: made function const
+	virtual void RenderShader( ID3D11DeviceContext* )const = 0;
 
-	// possible issue with passing params as references
+	// CODE_CHANGE: made function const
 	virtual bool SetShaderParameters(
 		ID3D11DeviceContext*,
 		XMMATRIX &,
 		XMMATRIX &,
 		XMMATRIX &,
-		ID3D11ShaderResourceView* ) = 0;
+		ID3D11ShaderResourceView* )const = 0;
 
 public:
 	virtual bool InitializeShader(

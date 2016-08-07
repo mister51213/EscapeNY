@@ -98,12 +98,13 @@ bool Shader_Texture::InitializeShader(
 	return true;
 }
 
-bool Shader_Texture::SetShaderParameters( 
+// CODE_CHANGE: made function const
+bool Shader_Texture::SetShaderParameters(
     ID3D11DeviceContext* deviceContext, 
     XMMATRIX & worldMatrix, 
     XMMATRIX & viewMatrix,
 	XMMATRIX & projectionMatrix, 
-    ID3D11ShaderResourceView* texture )
+    ID3D11ShaderResourceView* texture )const
 {
 	// Lock the constant buffer so it can be written to.
 	D3D11_MAPPED_SUBRESOURCE mappedResource{};
@@ -145,7 +146,8 @@ bool Shader_Texture::SetShaderParameters(
 	return true;
 }
 
-void Shader_Texture::RenderShader( ID3D11DeviceContext* deviceContext )
+// CODE_CHANGE: made function const
+void Shader_Texture::RenderShader( ID3D11DeviceContext* deviceContext )const
 {
 	// Set the vertex input layout.
 	deviceContext->IASetInputLayout( m_layout.Get() );

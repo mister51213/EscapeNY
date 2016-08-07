@@ -49,8 +49,8 @@ void Input::KeyUp(unsigned int input)
 	return;
 }
 
-
-bool Input::IsKeyDown(unsigned int key)
+// CODE_CHANGE: Made function const
+bool Input::IsKeyDown(unsigned int key)const
 {
 	// Return what state the key is in (pressed/not pressed).
 	return m_keys[key];

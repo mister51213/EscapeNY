@@ -48,7 +48,8 @@ void Overlay::Render( const Graphics &Gfx )
 	Gfx.EndDraw2D();
 }
 
-void Overlay::Update( Input & User )
+// CODE_CHANGE: Made function parameter const
+void Overlay::Update( const Input & User )
 {
 	if( m_reachedGoal )
 	{

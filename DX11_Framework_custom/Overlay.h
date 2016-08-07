@@ -15,7 +15,8 @@ public:
 	bool Initialize( const Graphics &Gfx );
 	void Render(const Graphics &Gfx);
 	
-	void Update(Input & User);
+	// CODE_CHANGE: Made function parameter const
+	void Update(const Input & User);
 	void ResetGoalFlag();
 	void PlayerReachGoal();
 	bool WantsReset();

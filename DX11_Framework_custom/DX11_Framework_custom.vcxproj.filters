@@ -102,9 +102,6 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\Shader Files</Filter>
     </ClCompile>
-    <ClCompile Include="MazeGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Board.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -112,6 +109,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Algorithm_Maze.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -203,9 +206,6 @@
     <ClInclude Include="Algorithm_Spiral3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MazeGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Board.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -216,6 +216,12 @@
       <Filter>Header Files\Utility Classes</Filter>
     </ClInclude>
     <ClInclude Include="ISubGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MazeGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithm_Maze.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

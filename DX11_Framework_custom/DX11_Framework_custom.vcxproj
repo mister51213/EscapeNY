@@ -144,7 +144,8 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GameView.cpp" />
-    <ClCompile Include="MazeGenerator.cpp" />
+    <ClCompile Include="MazeGame.cpp" />
+    <ClCompile Include="Algorithm_Maze.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shader_Color.cpp" />
     <ClCompile Include="COMHandler.cpp" />
@@ -178,7 +179,8 @@
     <ClInclude Include="GameView.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="ISubGame.h" />
-    <ClInclude Include="MazeGenerator.h" />
+    <ClInclude Include="MazeGame.h" />
+    <ClInclude Include="Algorithm_Maze.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />
     <ClInclude Include="COMHandler.h" />

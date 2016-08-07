@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "MazeGenerator.h"
 #include <time.h>
 
 using namespace DirectX;
@@ -31,9 +30,6 @@ bool Game::Initialize( Graphics *pGraphics,
 		m_camRotation, 						        // Rotation
 		{ ScreenWidth, ScreenHeight },				// Screen size
 		{ SCREEN_NEAR, SCREEN_DEPTH } ); 		    // Screen clip depths
-	RETURN_IF_FALSE( result );
-
-	result = m_Overlay.Initialize( *m_pGraphics );
 	RETURN_IF_FALSE( result );
 
 	// Pass all member pointers to GameObjects class so it can draw with them
@@ -163,11 +159,6 @@ void Game::getInput( std::shared_ptr<Input> pInput )
 // TODO: Use multiple inheritance for better efficiency 
 // Ex.) one parent has health, the other has position
 
-const TestBoard & Game::GetBoard()
-{
-	return m_board;
-}
-
 bool Game::Frame()
 {
 	updateGameObjects();
@@ -178,16 +169,20 @@ bool Game::Frame()
 	return true;
 }
 
+GameView & Game::GetGameView()
+{
+	return m_GameView;
+}
+
 bool Game::render()
 {
     // TODO: maybe initialize this in GameObjectsClass instead.
 	// Generate the view matrix based on the camera's position.
 	m_pCamera->Render();
-	m_GameView.UpdateView(m_pActorsMASTER); // TODO: implement this new function
- 	m_Overlay.Render( *m_pGraphics );
 
 	return true;
 }
+
 void Game::reset()
 {
 	m_actorsSUB1.clear();
@@ -195,15 +190,6 @@ void Game::reset()
 	m_actorsSUB3.clear();
 	m_actorsSUB4.clear();
 	m_pActorsMASTER.clear();
-	m_endReached = false;
-
-	m_board.Initialize( 9, 9 );
-	m_player = Actor( {
-		{ 0.f, 0.f, 0.f },
-		{ 0.f, 0.f, 0.f },
-		{ .5f, .5f, .5f }}, 
-        eTexture::SharkSkin,
-        ModelSpecs_L());
 
 	///////////////////////////////////////////////////////
 	// CODE FOR MAKING m_actorsSUB1 (ONE SUBSET OF ACTORS)
@@ -222,12 +208,6 @@ void Game::reset()
 	m_actorsSUB2 = makeActorSet(numActors, &alg2);*/
 	///////////////////////////////////////////////////
 
-	///////////////////////////////////////////////////
-	// CODE FOR MAZE/LEVEL GEN
-	Algorithm_Maze gen( this );
-	m_actorsSUB3 = makeActorSet( 0, &gen );
-	///////////////////////////////////////////////////
-
     ///////////////////////////////////////////////////
     ///////// FEED MASTER LIST of ACTORS //////////////
     ///////////////////////////////////////////////////
@@ -244,41 +224,12 @@ void Game::reset()
     ///////////////////////////////////////////////////
 	m_GameView.Reset( m_pActorsMASTER );
 
-    ///////////////////////////////////////////////////
-    //////////// MAZE FUNCTIONS ///////////////////////
-	m_board.SetCells( std::move( m_actorsSUB3 ) );
-	auto startPos = m_board.GetStartPosition();
-    // Move player to start position
-	m_player.Move( startPos ); 
 }
 
 void Game::updateGameObjects()
 {
 	getInput( m_pInput ); // Check input to modify object positioning.
 
-    // MAKE CAMERA FOLLOW THE PLAYER
-    // Get player position, offset camera, set camera position
-	auto camOffset = m_player.GetWorldSpecs().position;
-	camOffset.y += 30.f;
-	m_pCamera->SetPosition( camOffset );
-
-	m_Overlay.Update( *m_pInput );
-	bool goalReached = m_board.HasReachedEnd( m_player );
-	if( !m_endReached )
-	{
-		if( goalReached )
-		{
-			m_endReached = goalReached;
-			m_Overlay.PlayerReachGoal();
-		}
-	}
-	else
-	{
-		if( m_Overlay.WantsReset() )
-		{
-			reset();
-		}
-	}
 }
 
 void Game::makeActorsMASTER()

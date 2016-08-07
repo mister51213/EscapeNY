@@ -20,7 +20,8 @@ public:
 	void KeyDown(unsigned int);
 	void KeyUp(unsigned int);
 
-	bool IsKeyDown(unsigned int);
+	// CODE_CHANGE: Made function const
+	bool IsKeyDown(unsigned int)const;
 
 private:
 	bool m_keys[256];
