@@ -55,30 +55,24 @@ void Game::getInput( std::shared_ptr<Input> pInput )
 	}
 	if( pInput->IsKeyDown( VK_SPACE ) )
 	{
-		//m_pModel1->Rotate( { 1.f,1.f,1.f } );
-		//m_pModel2->Rotate( { 1.f,1.f,1.f } );
-       /* for (auto& pActor: m_actorsSUB1)
+        for (auto& pActor: m_actorsSUB1)
         {
             pActor.Rotate({ 1.f,1.f,1.f });
-        }*/
+        }
 	}
 
 	if( pInput->IsKeyDown( VK_CONTROL ) )
 	{
-		//m_pModel1->Rotate( { -0.1f,-5.f,-5.f } );
-		//m_pModel2->Rotate( { -3.f,-0.3f,-5.f } );
-        /*for (auto& pActor: m_actorsSUB1)
+        for (auto& pActor: m_actorsSUB1)
         {
             pActor.Rotate({ -1.f,-1.f,-1.f });
-        }*/
+        }
 	}
 
 	const float playerSpeed = 0.2f;
 	// move objects
 	if( pInput->IsKeyDown( VK_RIGHT ) )
 	{
-		//m_pModel1->Move( { .1f,0.f,0.f } );
-		//m_pModel2->Move( { .9f,0.f,0.f } );
         /*for (auto& pActor: m_actorsSUB1)
         {
             pActor.Move({.9f,0.f,0.f });
@@ -87,8 +81,6 @@ void Game::getInput( std::shared_ptr<Input> pInput )
 	}
 	else if( pInput->IsKeyDown( VK_LEFT ) )
 	{
-		//m_pModel1->Move( { -.1f,0.f,0.f } );
-		//m_pModel2->Move( { -.9f,0.f,0.f } );
        /* for (auto& pActor: m_actorsSUB1)
         {
             pActor.Move({-.9f,0.f,0.f });
@@ -98,8 +90,6 @@ void Game::getInput( std::shared_ptr<Input> pInput )
 
 	if( pInput->IsKeyDown( VK_UP ) )
 	{
-		//m_pModel1->Move( { 0.f,.1f,0.f } );
-		//m_pModel2->Move( { 0.f,.9f,0.f } );
        /* for (auto& pActor: m_actorsSUB1)
         {
             pActor.Move({ 0.f,.9f,0.f });
@@ -108,13 +98,11 @@ void Game::getInput( std::shared_ptr<Input> pInput )
 	}
 	else if( pInput->IsKeyDown( VK_DOWN ) )
 	{
-		//m_pModel1->Move( { 0.f,-.1f,0.f } );
-		//m_pModel2->Move( { 0.f,-.9f,0.f } );
 		m_player.Move( { 0.f, 0.f, -playerSpeed } );
-        /*for (auto& pActor: m_actorsSUB1)
+        for (auto& pActor: m_actorsSUB1)
         {
             pActor.Move({ 0.f,-.9f,0.f });
-        }*/
+        }
     }
 
 	if( pInput->IsKeyDown( VK_NEXT ) )
@@ -125,37 +113,37 @@ void Game::getInput( std::shared_ptr<Input> pInput )
 	{
 		m_pCamera->Rotate( { 1.f, 0.f, 0.f } );
 	}
-	// move camera (FPS view)
-	//if( pInput->IsKeyDown( 0x41 ) ) // Left - A
-	//{
-	//	m_pCamera->Move( { -1, 0, 0 } );
-	//}
+	 //move camera (FPS view)
+	if( pInput->IsKeyDown( 0x41 ) ) // Left - A
+	{
+		m_pCamera->Move( { -1, 0, 0 } );
+	}
 
-	//if( pInput->IsKeyDown( 0x53 ) ) // Back - S
-	//{
-	//	m_pCamera->Move( { 0, 0, -1 } );
-	//}
+	if( pInput->IsKeyDown( 0x53 ) ) // Back - S
+	{
+		m_pCamera->Move( { 0, 0, -1 } );
+	}
 
-	//if( pInput->IsKeyDown( 0x57 ) ) // Fwd - W
-	//{
-	//	m_pCamera->Move( { 0, 0, 1 } );
-	//}
+	if( pInput->IsKeyDown( 0x57 ) ) // Fwd - W
+	{
+		m_pCamera->Move( { 0, 0, 1 } );
+	}
 
-	//if( pInput->IsKeyDown( 0x44 ) ) // Right - D
-	//{
-	//	m_pCamera->Move( { 1, 0, 0 } );
-	//}
+	if( pInput->IsKeyDown( 0x44 ) ) // Right - D
+	{
+		m_pCamera->Move( { 1, 0, 0 } );
+	}
 
-	//// rotate camera
-	//if( pInput->IsKeyDown( 0x51 ) ) // Left - Q
-	//{
-	//	m_pCamera->Rotate( { 0, -1, 0 } );
-	//}
+	// rotate camera
+	if( pInput->IsKeyDown( 0x51 ) ) // Left - Q
+	{
+		m_pCamera->Rotate( { 0, -1, 0 } );
+	}
 
-	//if( pInput->IsKeyDown( 0x45 ) ) // Right - E
-	//{
-	//	m_pCamera->Rotate( { 0, 1, 0 } );
-	//}
+	if( pInput->IsKeyDown( 0x45 ) ) // Right - E
+	{
+		m_pCamera->Rotate( { 0, 1, 0 } );
+	}
 }
 
 // TODO: Make a list of Actor* ptrs, pass pointers to them to GameWorld.Update() function
@@ -206,26 +194,26 @@ void Game::reset()
         ModelSpecs_L());
 
 	///////////////////////////////////////////////////////
-	// CODE FOR MAKING m_actorsSUB1 (ONE SUBSET OF ACTORS)
+	// MAKE m_actorsSUB1 (ONE SUBSET OF ACTORS)
 	// These can be locally defined
-	/*const int numRows = 5, numColumns = 5, numZ = 5;
+	const int numRows = 5, numColumns = 5, numZ = 5;
 	const int numActors = numRows * numColumns * numZ;
 	Algorithm_Grid3D alg;
-	m_actorsSUB1 = makeActorSet(numActors, &alg);*/
+	m_actorsSUB1 = makeActorSet(numActors, &alg);
 	///////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////
-	// CODE FOR MAKING m_actorsSUB2 (ONE SUBSET OF ACTORS)
+	// MAKE m_actorsSUB2 (ONE SUBSET OF ACTORS)
 	// This can be locally defined, count will be stored in m_actorsSUB2.size()
-	/*const int numActors = 100;
+	const int numActors2 = 100;
 	Algorithm_Spiral3D alg2(this);
-	m_actorsSUB2 = makeActorSet(numActors, &alg2);*/
+	m_actorsSUB2 = makeActorSet(numActors2, &alg2);
 	///////////////////////////////////////////////////
 
 	///////////////////////////////////////////////////
 	// CODE FOR MAZE/LEVEL GEN
-	Algorithm_Maze gen( this );
-	m_actorsSUB3 = makeActorSet( 0, &gen );
+	/*Algorithm_Maze gen( this );
+	m_actorsSUB3 = makeActorSet( 0, &gen );*/
 	///////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////
@@ -246,10 +234,10 @@ void Game::reset()
 
     ///////////////////////////////////////////////////
     //////////// MAZE FUNCTIONS ///////////////////////
-	m_board.SetCells( std::move( m_actorsSUB3 ) );
-	auto startPos = m_board.GetStartPosition();
-    // Move player to start position
-	m_player.Move( startPos ); 
+	//m_board.SetCells( std::move( m_actorsSUB3 ) );
+	//auto startPos = m_board.GetStartPosition();
+ //   // Move player to start position
+	//m_player.Move( startPos ); 
 }
 
 void Game::updateGameObjects()
@@ -258,11 +246,12 @@ void Game::updateGameObjects()
 
     // MAKE CAMERA FOLLOW THE PLAYER
     // Get player position, offset camera, set camera position
-	auto camOffset = m_player.GetWorldSpecs().position;
+	/*auto camOffset = m_player.GetWorldSpecs().position;
 	camOffset.y += 30.f;
-	m_pCamera->SetPosition( camOffset );
+	m_pCamera->SetPosition( camOffset );*/
 
-	m_Overlay.Update( *m_pInput );
+    // CHECK IF PLAYER HAS REACHED GOAL and RESET if so
+	/*m_Overlay.Update( *m_pInput );
 	bool goalReached = m_board.HasReachedEnd( m_player );
 	if( !m_endReached )
 	{
@@ -278,28 +267,29 @@ void Game::updateGameObjects()
 		{
 			reset();
 		}
-	}
+	}*/
 }
 
 void Game::makeActorsMASTER()
 {
-    //// LOAD SUB1
-    //for (Actor& actor: m_actorsSUB1)
-    //{
-    //    Actor* pActor = &actor;
-    //    m_pActorsMASTER.push_back(pActor);
-    //}
-    // LOAD SUB2
-    /*for (Actor& actor: m_actorsSUB2)
+    // LOAD SUB1
+    for (Actor& actor: m_actorsSUB1)
     {
         Actor* pActor = &actor;
         m_pActorsMASTER.push_back(pActor);
-    }*/
+    }
+    //LOAD SUB2
+    for (Actor& actor: m_actorsSUB2)
+    {
+        Actor* pActor = &actor;
+        m_pActorsMASTER.push_back(pActor);
+    }
 
-	for( auto &actor : m_actorsSUB3 )
-	{
-		m_pActorsMASTER.push_back( &actor );
-	}
+    // ADD The FULL MAZE map to the master list
+	//for( auto &actor : m_actorsSUB3 )
+	//{
+	//	m_pActorsMASTER.push_back( &actor );
+	//}
 }
 
 // Make a set of similar actors based on algorithm
