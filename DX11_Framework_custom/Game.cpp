@@ -52,17 +52,17 @@ bool Game::Initialize( Graphics *pGraphics,
 
     ///////////////////////////////////////////////////
     // CODE FOR MAKING m_actorsSUB2 (ONE SUBSET OF ACTORS)
-    //m_numAct2 = 100;
-    //Algorithm_Spiral3D alg2(this);
-    //m_actorsSUB2 = makeActorSet(m_numAct2, &alg2);
+    m_numAct2 = 100;
+    Algorithm_Spiral3D alg2(this);
+    m_actorsSUB2 = makeActorSet(m_numAct2, &alg2);
     ///////////////////////////////////////////////////
 
-    m_numActT = m_numAct1 + m_numAct2;
+    //m_numActT = m_numAct1 + m_numAct2;
 
 	// Pass all member pointers to GameObjects class so it can draw with them
     m_GameView = 
         GameView(
-            m_numActT, 
+            /*m_numActT, */
             m_pGraphics, 
             m_pDirect3D, 
             m_pCamera,
@@ -204,19 +204,19 @@ bool Game::render()
 
 void Game::makeActorsMASTER()
 {
-    //// LOAD SUB1
+    ////// LOAD SUB1
     for (Actor& actor: m_actorsSUB1)
     {
         Actor* pActor = &actor;
         m_pActorsMASTER.push_back(pActor);
     }
-    //// LOAD SUB2
-    //for (Actor& actor: m_actorsSUB2)
-    //{
-    //    // TODO: resize this appropriately?
-    //    Actor* pActor = &actor;
-    //    m_pActorsMASTER.push_back(pActor);
-    //}
+    // LOAD SUB2
+    for (Actor& actor: m_actorsSUB2)
+    {
+        // TODO: resize this appropriately?
+        Actor* pActor = &actor;
+        m_pActorsMASTER.push_back(pActor);
+    }
 }
 
 // Make a set of similar actors based on algorithm

@@ -77,7 +77,7 @@ bool System::Initialize()
 	result = m_Graphics->Initialize(
 		screenWidth, screenHeight,					// Screen dimensions
 		m_hwnd,										// Window handle
-		0.f, 0.f, 0.f, 0.f							// Background color (R,G,B,A)
+		0.f, 255.f, 120.f, 0.f	    			// Background color (R,G,B,A)
 	);
 	RETURN_IF_FALSE( result );
 
@@ -212,7 +212,7 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
     wcex.hIcon = LoadIcon(NULL, IDI_WINLOGO);
     wcex.hIconSm       = wcex.hIcon;
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+    wcex.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = m_applicationName.c_str();
     wcex.cbSize = sizeof(WNDCLASSEX);

@@ -24,7 +24,7 @@ class GameView
 public:
     GameView() {}
     GameView( // initialize all pointers
-        char numActors,
+        //char numActors,
         Graphics* pGfx,
         D3DGraphics* pD3D,
         std::shared_ptr<Camera> pCam,
@@ -32,7 +32,7 @@ public:
     {
         m_pGfx = pGfx;
         m_pD3D = pD3D;
-        m_numModels = numActors;
+        //m_numModels = numActors;
         m_pCam = pCam;
         m_WinHandle = WinHandle;
     }
@@ -132,7 +132,7 @@ private:
     // TODO: shouldnt need to use this anymore; contained in actor list
     vector<ModelSpecs_W> m_modSpecs_W;// model specs list in WORLD SPACE
 
-    int m_numModels;
+    //int m_numModels;
     //vector<std::shared_ptr<Model>> m_models; // list of actual models for rendering purposes
 
     vector<Texture> m_Textures;

@@ -40,9 +40,14 @@ public: Algorithm_Spiral3D(Game* pGame) :Algorithm(pGame)
                 z = cos(angleStep*radian) * increment;
                 increment -= 20.f;
 
-                //tex++;
-                //tex %= 5;
-
+                if(tex<4)
+                {
+                    tex++;
+                }
+                else if (tex == 4)
+                {
+                    tex = 0;
+                }
             }
             return actorsSUB;
         }

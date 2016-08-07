@@ -38,7 +38,7 @@ private:
     // INITIALIZATION DATA FOR m_actorsSUB2
     int m_numAct2;
     ////////////////////////////////////////////////////
-    int m_numActT; // total actors
+    //int m_numActT; // total actors
 
 	std::shared_ptr<Model_Textured> m_pModel1;
     std::shared_ptr<Model_Textured> m_pModel2;
