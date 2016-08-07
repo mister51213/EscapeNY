@@ -45,13 +45,13 @@ private:
     // Camera is in top-down view for now; rotated 90 degrees on X axis
     XMFLOAT3 m_camRotation = { 90.f, 0.f, 0.f }; // defined in degrees
 
-	//Board m_board;
+	Board m_board;
 	TestBoard m_board;
 
-	//////////////////
+	/////////////////
 	// Test player //
-	//////////////////
-	Actor m_player;
+	/////////////////
+	Actor_Player m_player;
 
 	////////////////////////////
 	// Maze game only members //
@@ -59,10 +59,10 @@ private:
 	bool m_endReached = false;
 
     // sub list of actors for LIKE TYPES
-    vector<Actor> m_actorsSUB1; //* vector is destroyed before the list   
-    vector<Actor> m_actorsSUB2;
-    vector<Actor> m_actorsSUB3;
-    vector<Actor> m_actorsSUB4;
+    vector<Actor_NPC> m_actorsSUB1; //* vector is destroyed before the list   
+    vector<Actor_NPC> m_actorsSUB2;
+    vector<Actor_NPC> m_actorsSUB3;
+    vector<Actor_NPC> m_actorsSUB4;
 
     // MASTER DRAW list for all actors    
     vector<Actor*> m_pActorsMASTER;

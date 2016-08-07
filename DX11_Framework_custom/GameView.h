@@ -12,6 +12,8 @@
 #include "Texture.h"
 #include "Shader_Texture.h"
 #include "Actor.h"
+#include "Actor_Player.h"
+#include "Actor_NPC.h"
 #include <string>
 
 using namespace std;

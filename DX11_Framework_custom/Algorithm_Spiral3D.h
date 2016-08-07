@@ -4,12 +4,13 @@
 
 class Algorithm_Spiral3D : public Algorithm
 {
-public: Algorithm_Spiral3D(Game* pGame) :Algorithm(pGame)
-{
-}
+public: Algorithm_Spiral3D(Game* pGame, std::shared_ptr<Input> pInput):
+    Algorithm(pGame, pInput)
+{}
+
         vector<Actor> MakePattern(int numActors) override
         {
-            vector<Actor> actorsSUB;
+            vector<Actor_NPC> actorsSUB;
             actorsSUB.reserve(numActors);
             ModelSpecs_W specs = { { 1.f, -30.f, 1.f }, { 0.f,0.f,0.f }, { 1.2f,0.5f,1.3f } };
 
@@ -34,7 +35,7 @@ public: Algorithm_Spiral3D(Game* pGame) :Algorithm(pGame)
                 specs.position.y = y;
                 specs.position.z = z;
                
-                actorsSUB.push_back(Actor(specs, (eTexture)tex, ModelSpecs_L()));
+                actorsSUB.push_back(Actor_NPC(m_pInput, specs, (eTexture)tex, ModelSpecs_L()));
 
                 x = sin(angleStep*radian) * increment;
                 z = cos(angleStep*radian) * increment;
@@ -49,7 +50,14 @@ public: Algorithm_Spiral3D(Game* pGame) :Algorithm(pGame)
                     tex = 0;
                 }
             }
-            return actorsSUB;
+
+            // Cast child actors to parent in order to return polymorphically
+             vector<Actor> actorsSub_Casted;
+            for each (Actor_NPC npc in actorsSUB)
+            {
+                actorsSub_Casted.push_back(npc);
+            }
+            return actorsSub_Casted;
         }
         virtual void SetData() override {}
 };

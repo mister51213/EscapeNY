@@ -73,27 +73,27 @@ void Game::getInput( std::shared_ptr<Input> pInput )
 	// move objects
 	if( pInput->IsKeyDown( VK_RIGHT ) )
 	{
-        /*for (auto& pActor: m_actorsSUB1)
+        for (auto& pActor: m_actorsSUB1)
         {
             pActor.Move({.9f,0.f,0.f });
-        }*/
+        }
 		m_player.Move( { playerSpeed, 0.f, 0.f } );
 	}
 	else if( pInput->IsKeyDown( VK_LEFT ) )
 	{
-       /* for (auto& pActor: m_actorsSUB1)
+        for (auto& pActor: m_actorsSUB1)
         {
             pActor.Move({-.9f,0.f,0.f });
-        }*/
+        }
 		m_player.Move( { -playerSpeed, 0.f, 0.f } );
 	}
 
 	if( pInput->IsKeyDown( VK_UP ) )
 	{
-       /* for (auto& pActor: m_actorsSUB1)
+        for (auto& pActor: m_actorsSUB1)
         {
             pActor.Move({ 0.f,.9f,0.f });
-        }*/
+        }
 		m_player.Move( { 0.f, 0.f, playerSpeed } );
 	}
 	else if( pInput->IsKeyDown( VK_DOWN ) )
@@ -183,11 +183,12 @@ void Game::reset()
 	m_actorsSUB3.clear();
 	m_actorsSUB4.clear();
 	m_pActorsMASTER.clear();
-	m_endReached = false;
+	//m_endReached = false;
 
 	m_board.Initialize( 9, 9 );
-	m_player = Actor( {
-		{ 0.f, 0.f, 0.f },
+	m_player = Actor_Player(
+        m_pInput, 
+        {{ 0.f, 0.f, 0.f },
 		{ 0.f, 0.f, 0.f },
 		{ .5f, .5f, .5f }}, 
         eTexture::SharkSkin,
@@ -198,7 +199,7 @@ void Game::reset()
 	// These can be locally defined
 	const int numRows = 5, numColumns = 5, numZ = 5;
 	const int numActors = numRows * numColumns * numZ;
-	Algorithm_Grid3D alg;
+	Algorithm_Grid3D alg(m_pInput);
 	m_actorsSUB1 = makeActorSet(numActors, &alg);
 	///////////////////////////////////////////////////////
 
@@ -206,7 +207,7 @@ void Game::reset()
 	// MAKE m_actorsSUB2 (ONE SUBSET OF ACTORS)
 	// This can be locally defined, count will be stored in m_actorsSUB2.size()
 	const int numActors2 = 100;
-	Algorithm_Spiral3D alg2(this);
+	Algorithm_Spiral3D alg2(this, m_pInput);
 	m_actorsSUB2 = makeActorSet(numActors2, &alg2);
 	///////////////////////////////////////////////////
 
