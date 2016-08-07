@@ -177,6 +177,7 @@
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="GameView.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="ISubGame.h" />
     <ClInclude Include="MazeGenerator.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />

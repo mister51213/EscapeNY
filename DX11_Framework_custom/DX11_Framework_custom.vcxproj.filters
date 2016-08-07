@@ -28,9 +28,6 @@
     <Filter Include="Conventions">
       <UniqueIdentifier>{69f6d359-4809-4ea6-8303-406b16079cad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Actors">
-      <UniqueIdentifier>{299c9e5c-a8be-4233-b75a-47e7b9c02e44}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -191,6 +188,9 @@
     <ClInclude Include="PrimitiveFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="GameView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -215,8 +215,8 @@
     <ClInclude Include="Utilities.h">
       <Filter>Header Files\Utility Classes</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>Header Files\Actors</Filter>
+    <ClInclude Include="ISubGame.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
