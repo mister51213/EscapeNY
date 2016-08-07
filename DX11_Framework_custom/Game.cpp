@@ -45,7 +45,7 @@ bool Game::Initialize( Graphics *pGraphics,
 }
 
 void Game::getInput( std::shared_ptr<Input> pInput )
-{
+{//
 	// TODO: Use global GetWorldMatrix() function instead 
 	// TODO: of member WorldMatrixes for each model.
 	// rotate objects
