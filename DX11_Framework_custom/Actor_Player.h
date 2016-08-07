@@ -10,15 +10,9 @@ public:
         ModelSpecs_W worldSpecs,
         eTexture tex,
         ModelSpecs_L localSpecs,
-        eModType modType = CUBE_TEXTURED)/* :
-        Actor(worldSpecs, tex, localSpecs, modType = CUBE_TEXTURED)*/ // base constructor
-    { 
-        //m_pInput = pInput;
-        m_worldSpecs = worldSpecs;
-        m_localSpecs = localSpecs;
-        m_texIndex = tex;
-        m_modType = modType;
-    }
+        eModType modType = CUBE_TEXTURED) :
+        Actor(worldSpecs, tex, localSpecs, modType = CUBE_TEXTURED) // base constructor
+    { }
 
 public:
     void GetInput(std::shared_ptr<Input> pInput) override
@@ -27,7 +21,7 @@ public:
         {
             Move({ .6f, 0.f, 0.f });
         }
-        else if (pInput->IsKeyDown(VK_LEFT))
+        if (pInput->IsKeyDown(VK_LEFT))
         {
             Move({ -.6f, 0.f, 0.f });
         }
@@ -36,7 +30,7 @@ public:
         {
             Move({ 0.f, 0.f, .6f });
         }
-        else if (pInput->IsKeyDown(VK_DOWN))
+        if (pInput->IsKeyDown(VK_DOWN))
         {
             Move({ 0.f, 0.f, -.6f });
         }

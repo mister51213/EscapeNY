@@ -57,32 +57,13 @@ public:
     // MOVE LOGIC //
     ////////////////
     virtual void GetInput(std::shared_ptr<Input> pInput) = 0;
-    /*{
-        if (pInput->IsKeyDown(VK_RIGHT))
-        {
-            Move({ .6f, 0.f, 0.f });
-        }
-        else if (pInput->IsKeyDown(VK_LEFT))
-        {
-            Move({ -.6f, 0.f, 0.f });
-        }
-
-        if (pInput->IsKeyDown(VK_UP))
-        {
-            Move({ 0.f, 0.f, .6f });
-        }
-        else if (pInput->IsKeyDown(VK_DOWN))
-        {
-            Move({ 0.f, 0.f, -.6f });
-        }
-    }*/
 
 private:
     // TODO: take this OUT of parent (Some classes wont need to move, like walls)
-    virtual void Move(XMFLOAT3 offset)
-            { m_worldSpecs.position += offset; } 
-    virtual void Rotate(XMFLOAT3 rotation)
-            { m_worldSpecs.orientation += rotation; }
+    virtual void Move(XMFLOAT3 offset) = 0;
+            //{ m_worldSpecs.position += offset; } 
+    virtual void Rotate(XMFLOAT3 rotation) = 0;
+            //{ m_worldSpecs.orientation += rotation; }
 
 protected:
     eModType m_modType;

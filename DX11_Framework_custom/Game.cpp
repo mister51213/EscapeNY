@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "MazeGenerator.h"
+//#include "MazeGenerator.h"
 #include <time.h>
 
 using namespace DirectX;
@@ -44,106 +44,61 @@ bool Game::Initialize( Graphics *pGraphics,
 	return true;
 }
 
-void Game::getInput( std::shared_ptr<Input> pInput )
+void Game::getInput(std::shared_ptr<Input> pInput)
 {
+    // Player input
     m_player.GetInput(pInput);
 
-	// rotate objects
-	//if( pInput->IsKeyDown( VK_F3 ) )
-	//{
-	//	reset();
-	//}
-	//if( pInput->IsKeyDown( VK_SPACE ) )
-	//{
- //       for (auto& pActor: m_actorsSUB1)
- //       {
- //           pActor.Rotate({ 1.f,1.f,1.f });
- //       }
-	//}
+    // Actor sets input
+    for (auto& pActor : m_actorsSUB1)
+    {
+        pActor.GetInput(pInput);
+    }
+    for (auto& pActor : m_actorsSUB2)
+    {
+        pActor.GetInput(pInput);
+    }
 
-	/*if( pInput->IsKeyDown( VK_CONTROL ) )
-	{
-        for (auto& pActor: m_actorsSUB1)
-        {
-            pActor.Rotate({ -1.f,-1.f,-1.f });
-        }
-	}*/
+    // CAMERA INPUT
+    // Pan and tilt
+    if (pInput->IsKeyDown(0x51)) // Left - Q
+    {
+        m_pCamera->Rotate({ 0, -1, 0 });
+    }
 
-	//const float playerSpeed = 0.2f;
-	//// move objects
-	//if( pInput->IsKeyDown( VK_RIGHT ) )
-	//{
- //       for (auto& pActor: m_actorsSUB1)
- //       {
- //           pActor.Move({.9f,0.f,0.f });
- //       }
-	//	//m_player.Move( { playerSpeed, 0.f, 0.f } );
-	//}
-	//else if( pInput->IsKeyDown( VK_LEFT ) )
-	//{
- //       for (auto& pActor: m_actorsSUB1)
- //       {
- //           pActor.Move({-.9f,0.f,0.f });
- //       }
-	//	//m_player.Move( { -playerSpeed, 0.f, 0.f } );
-	//}
+    if (pInput->IsKeyDown(0x45)) // Right - E
+    {
+        m_pCamera->Rotate({ 0, 1, 0 });
+    }
 
-	//if( pInput->IsKeyDown( VK_UP ) )
-	//{
- //       for (auto& pActor: m_actorsSUB1)
- //       {
- //           pActor.Move({ 0.f,.9f,0.f });
- //       }
-	//	//m_player.Move( { 0.f, 0.f, playerSpeed } );
-	//}
-	//else if( pInput->IsKeyDown( VK_DOWN ) )
-	//{
-	//	//m_player.Move( { 0.f, 0.f, -playerSpeed } );
- //       for (auto& pActor: m_actorsSUB1)
- //       {
- //           pActor.Move({ 0.f,-.9f,0.f });
- //       }
- //   }
+    if (pInput->IsKeyDown(VK_NEXT))
+    {
+        m_pCamera->Rotate({ -1.f, 0.f, 0.f });
+    }
+    else if (pInput->IsKeyDown(VK_PRIOR))
+    {
+        m_pCamera->Rotate({ 1.f, 0.f, 0.f });
+    }
+    // FPS Move
+    if (pInput->IsKeyDown(0x41)) // Left - A
+    {
+        m_pCamera->Move({ -1, 0, 0 });
+    }
 
-	if( pInput->IsKeyDown( VK_NEXT ) )
-	{
-		m_pCamera->Rotate( { -1.f, 0.f, 0.f } );
-	}
-	else if( pInput->IsKeyDown( VK_PRIOR ) )
-	{
-		m_pCamera->Rotate( { 1.f, 0.f, 0.f } );
-	}
-	 //move camera (FPS view)
-	if( pInput->IsKeyDown( 0x41 ) ) // Left - A
-	{
-		m_pCamera->Move( { -1, 0, 0 } );
-	}
+    if (pInput->IsKeyDown(0x53)) // Back - S
+    {
+        m_pCamera->Move({ 0, 0, -1 });
+    }
 
-	if( pInput->IsKeyDown( 0x53 ) ) // Back - S
-	{
-		m_pCamera->Move( { 0, 0, -1 } );
-	}
+    if (pInput->IsKeyDown(0x57)) // Fwd - W
+    {
+        m_pCamera->Move({ 0, 0, 1 });
+    }
 
-	if( pInput->IsKeyDown( 0x57 ) ) // Fwd - W
-	{
-		m_pCamera->Move( { 0, 0, 1 } );
-	}
-
-	if( pInput->IsKeyDown( 0x44 ) ) // Right - D
-	{
-		m_pCamera->Move( { 1, 0, 0 } );
-	}
-
-	// rotate camera
-	if( pInput->IsKeyDown( 0x51 ) ) // Left - Q
-	{
-		m_pCamera->Rotate( { 0, -1, 0 } );
-	}
-
-	if( pInput->IsKeyDown( 0x45 ) ) // Right - E
-	{
-		m_pCamera->Rotate( { 0, 1, 0 } );
-	}
+    if (pInput->IsKeyDown(0x44)) // Right - D
+    {
+        m_pCamera->Move({ 1, 0, 0 });
+    }
 }
 
 // TODO: Make a list of Actor* ptrs, pass pointers to them to GameWorld.Update() function
@@ -186,15 +141,7 @@ void Game::reset()
     //m_endReached = false;
 
     //m_board.Initialize( 9, 9 );
-    //m_player = Actor_Player(
- //       m_pInput, 
- //       {{ 0.f, 0.f, 0.f },
-    //	{ 0.f, 0.f, 0.f },
-    //	{ .5f, .5f, .5f }}, 
- //       eTexture::SharkSkin,
- //       ModelSpecs_L());
 
-    //m_player = Actor(
     m_player = Actor_Player(
     { { 0.f, 0.f, 0.f },
     { 0.f, 0.f, 0.f },
@@ -259,10 +206,9 @@ void Game::updateGameObjects()
 
     // MAKE CAMERA FOLLOW THE PLAYER
     // Get player position, offset camera, set camera position
-	/*auto camOffset = m_player.GetWorldSpecs().position;
-	camOffset.y += 30.f;
-	m_pCamera->SetPosition( camOffset );*/
-
+	//auto camOffset = m_player.GetWorldSpecs().position;
+	//camOffset.y += 30.f;
+	//m_pCamera->SetPosition( camOffset );
     // CHECK IF PLAYER HAS REACHED GOAL and RESET if so
 	/*m_Overlay.Update( *m_pInput );
 	bool goalReached = m_board.HasReachedEnd( m_player );
