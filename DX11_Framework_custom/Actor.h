@@ -56,8 +56,8 @@ public:
     ////////////////
     // MOVE LOGIC //
     ////////////////
-    void GetInput(std::shared_ptr<Input> pInput)
-    {
+    virtual void GetInput(std::shared_ptr<Input> pInput) = 0;
+    /*{
         if (pInput->IsKeyDown(VK_RIGHT))
         {
             Move({ .6f, 0.f, 0.f });
@@ -75,9 +75,9 @@ public:
         {
             Move({ 0.f, 0.f, -.6f });
         }
-    }
+    }*/
 
-
+private:
     // TODO: take this OUT of parent (Some classes wont need to move, like walls)
     virtual void Move(XMFLOAT3 offset)
             { m_worldSpecs.position += offset; } 

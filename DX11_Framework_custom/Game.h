@@ -51,7 +51,8 @@ private:
 	/////////////////
 	// Test player //
 	/////////////////
-	Actor m_player;
+	//Actor m_player;
+    Actor_Player m_player;
 
 	////////////////////////////
 	// Maze game only members //

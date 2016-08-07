@@ -22,6 +22,27 @@ public:
     }
 
 public:
+    void GetInput(std::shared_ptr<Input> pInput) override
+    {
+        if (pInput->IsKeyDown(VK_RIGHT))
+        {
+            Move({ .6f, 0.f, 0.f });
+        }
+        else if (pInput->IsKeyDown(VK_LEFT))
+        {
+            Move({ -.6f, 0.f, 0.f });
+        }
+
+        if (pInput->IsKeyDown(VK_UP))
+        {
+            Move({ 0.f, 0.f, .6f });
+        }
+        else if (pInput->IsKeyDown(VK_DOWN))
+        {
+            Move({ 0.f, 0.f, -.6f });
+        }
+    }
+
     void Move(XMFLOAT3 offset) override
     { m_worldSpecs.position += offset; } 
 

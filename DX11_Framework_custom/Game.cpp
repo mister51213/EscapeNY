@@ -47,6 +47,7 @@ bool Game::Initialize( Graphics *pGraphics,
 void Game::getInput( std::shared_ptr<Input> pInput )
 {
     m_player.GetInput(pInput);
+
 	// rotate objects
 	//if( pInput->IsKeyDown( VK_F3 ) )
 	//{
@@ -60,13 +61,13 @@ void Game::getInput( std::shared_ptr<Input> pInput )
  //       }
 	//}
 
-	if( pInput->IsKeyDown( VK_CONTROL ) )
+	/*if( pInput->IsKeyDown( VK_CONTROL ) )
 	{
         for (auto& pActor: m_actorsSUB1)
         {
             pActor.Rotate({ -1.f,-1.f,-1.f });
         }
-	}
+	}*/
 
 	//const float playerSpeed = 0.2f;
 	//// move objects
@@ -193,8 +194,8 @@ void Game::reset()
  //       eTexture::SharkSkin,
  //       ModelSpecs_L());
 
-    m_player = Actor(
-        //pInput, 
+    //m_player = Actor(
+    m_player = Actor_Player(
     { { 0.f, 0.f, 0.f },
     { 0.f, 0.f, 0.f },
     { .5f, .5f, .5f } },
