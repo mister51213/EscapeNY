@@ -41,6 +41,8 @@ private:
 
 	Overlay m_Overlay;
     XMFLOAT3 m_camPos = { -0.0f, 16.0f, -30.0f };
+
+    // Camera is in top-down view for now; rotated 90 degrees on X axis
     XMFLOAT3 m_camRotation = { 90.f, 0.f, 0.f }; // defined in degrees
 
 	//Board m_board;

@@ -201,19 +201,20 @@ void Game::reset()
 	m_player = Actor( {
 		{ 0.f, 0.f, 0.f },
 		{ 0.f, 0.f, 0.f },
-		{ .5f, .5f, .5f }
-	}, eTexture::SharkSkin );
+		{ .5f, .5f, .5f }}, 
+        eTexture::SharkSkin,
+        ModelSpecs_L());
 
-	///////////////////////////////////////////////////
+	///////////////////////////////////////////////////////
 	// CODE FOR MAKING m_actorsSUB1 (ONE SUBSET OF ACTORS)
 	// These can be locally defined
 	/*const int numRows = 5, numColumns = 5, numZ = 5;
 	const int numActors = numRows * numColumns * numZ;
 	Algorithm_Grid3D alg;
 	m_actorsSUB1 = makeActorSet(numActors, &alg);*/
-	///////////////////////////////////////////////////
+	///////////////////////////////////////////////////////
 
-	///////////////////////////////////////////////////
+	////////////////////////////////////////////////////////
 	// CODE FOR MAKING m_actorsSUB2 (ONE SUBSET OF ACTORS)
 	// This can be locally defined, count will be stored in m_actorsSUB2.size()
 	/*const int numActors = 100;
@@ -226,21 +227,37 @@ void Game::reset()
 	Algorithm_Maze gen( this );
 	m_actorsSUB3 = makeActorSet( 0, &gen );
 	///////////////////////////////////////////////////
-	m_pActorsMASTER.push_back( &m_player );
 
-	makeActorsMASTER();
+    ///////////////////////////////////////////////////
+    ///////// FEED MASTER LIST of ACTORS //////////////
+    ///////////////////////////////////////////////////
+    // 1. Push a single PLAYER object into MASTER LIST
+    ///////////////////////////////////////////////////
+    m_pActorsMASTER.push_back( &m_player );
+	///////////////////////////////////////////////////
+    // 2. Push ALL Actor subsets to MASTER LIST
+    ///////////////////////////////////////////////////
+    makeActorsMASTER();
 
+    ///////////////////////////////////////////////////
+    //////////// RESET MASTER LIST //////////////////// 
+    ///////////////////////////////////////////////////
 	m_GameView.Reset( m_pActorsMASTER );
+
+    ///////////////////////////////////////////////////
+    //////////// MAZE FUNCTIONS ///////////////////////
 	m_board.SetCells( std::move( m_actorsSUB3 ) );
 	auto startPos = m_board.GetStartPosition();
-	m_player.Move( startPos );
-
+    // Move player to start position
+	m_player.Move( startPos ); 
 }
 
 void Game::updateGameObjects()
 {
 	getInput( m_pInput ); // Check input to modify object positioning.
 
+    // MAKE CAMERA FOLLOW THE PLAYER
+    // Get player position, offset camera, set camera position
 	auto camOffset = m_player.GetWorldSpecs().position;
 	camOffset.y += 30.f;
 	m_pCamera->SetPosition( camOffset );

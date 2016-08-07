@@ -34,7 +34,7 @@ public: Algorithm_Spiral3D(Game* pGame) :Algorithm(pGame)
                 specs.position.y = y;
                 specs.position.z = z;
                
-                actorsSUB.push_back(Actor(specs, (eTexture)tex));
+                actorsSUB.push_back(Actor(specs, (eTexture)tex, ModelSpecs_L()));
 
                 x = sin(angleStep*radian) * increment;
                 z = cos(angleStep*radian) * increment;

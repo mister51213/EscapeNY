@@ -17,8 +17,8 @@ public:
 
     Actor(
         ModelSpecs_W worldSpecs,
-        eTexture tex = AsphaltOld,
-        ModelSpecs_L localSpecs = { { 0.f, 0.f, 0.f },{ 5.f, 5.f, 5.f }},
+        eTexture tex,
+        ModelSpecs_L localSpecs,
         eModType modType = CUBE_TEXTURED)
     {
         m_worldSpecs = worldSpecs;

@@ -349,7 +349,7 @@ vector<Actor> Algorithm_Maze::MakePattern( int numActors )
 
 				specs.scale = { 1.f, 1.f, 1.f };
 
-				actorList.push_back( Actor( specs ) );
+				actorList.push_back( Actor( specs, AsphaltOld, ModelSpecs_L() ));
 			}
 		}
 	}

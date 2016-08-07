@@ -59,7 +59,7 @@ Board::Cell::Cell( const ModelSpecs_W & Specs )
 	:
 	m_wall( NORTHWALL | EASTWALL | SOUTHWALL | WESTWALL ),
 	m_visited( false ),
-	Actor( Specs )
+	Actor( Specs, AsphaltOld, ModelSpecs_L() )
 {
 }
 

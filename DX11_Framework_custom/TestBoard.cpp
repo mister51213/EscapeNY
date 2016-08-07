@@ -4,7 +4,7 @@ using namespace DirectX;
 
 TestBoard::TestBoard()
 	:
-	Actor( { { 0.f, 0.f, 0.f },{ 0.f, 0.f, 0.f },{ 10.f, 10.f, 10.f } } )
+	Actor( { { 0.f, 0.f, 0.f },{ 0.f, 0.f, 0.f },{ 10.f, 10.f, 10.f } }, AsphaltOld, ModelSpecs_L() )
 {
 }
 
