@@ -24,32 +24,32 @@ public:
         //float randNum = (rand()%50)/10.0f; // get random float from 0~10.0
         if (pInput->IsKeyDown(VK_RIGHT))
         {
-            if(randI == 0)
-            Move({ randF, randF, randF });
-            else
-            Move({ .1f, 0.f, 0.f });
+            //if(randI == 0)
+            //Move({ randF, randF, randF });
+            //else
+            Move({ .5f, 0.f, 0.f });
         }
         if (pInput->IsKeyDown(VK_LEFT))
         {
-            if(randI == 1)
-                Move({ -randF, -randF, -randF });
-            else
-            Move({ -.1f, 0.f, 0.f });
+            //if(randI == 1)
+            //    Move({ -randF, -randF, -randF });
+            //else
+            Move({ -.5f, 0.f, 0.f });
         }
 
         if (pInput->IsKeyDown(VK_UP))
         {
-            if(randI == 2)
-            Move({ randF, randF, randF });
-            else
-            Move({ 0.f, 0.f, .1f });
+            //if(randI == 2)
+            //Move({ randF, randF, randF });
+            //else
+            Move({ 0.f, 0.f, .5f });
         }
         if (pInput->IsKeyDown(VK_DOWN))
         {
-            if(randI == 3)
-            Move({ -randF, -randF, -randF });
-            else
-            Move({ 0.f, 0.f, -.1f });
+            //if(randI == 3)
+            //Move({ -randF, -randF, -randF });
+            //else
+            Move({ 0.f, 0.f, -.5f });
         }
 
         if (pInput->IsKeyDown(VK_SPACE))
