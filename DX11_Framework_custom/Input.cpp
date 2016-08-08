@@ -10,14 +10,7 @@
 Input::Input(HWND& hMainWnd):
     m_hMainWnd(hMainWnd),
     m_LastMousePos({ 0.f,0.f,0.f })
-{
-
-    // Is it needed?
-        // Convert Spherical to Cartesian coordinates.
-    float x = m_Radius*sinf(m_Phi)*cosf(m_Theta);
-    float z = m_Radius*sinf(m_Phi)*sinf(m_Theta);
-    float y = m_Radius*cosf(m_Phi);
-}
+{}
 
 Input::Input(const Input& other)
 {}
@@ -34,6 +27,11 @@ void Input::Initialize()
 	{
 		m_keys[i] = false;
 	}
+
+    // (Is this needed?) Convert Spherical to Cartesian coordinates.
+    float x = m_Radius*sinf(m_Phi)*cosf(m_Theta);
+    float z = m_Radius*sinf(m_Phi)*sinf(m_Theta);
+    float y = m_Radius*cosf(m_Phi);
 
 	return;
 }
@@ -85,7 +83,7 @@ void Input::OnMouseMove(WPARAM btnState, int x, int y)
         m_Radius = Clamp(m_Radius, 3.0f, 15.0f);
     }
 
-    // TODO: Comment
+    // TODO: Comment explaining this
     m_LastMousePos.x = x;
     m_LastMousePos.y = y;
 }

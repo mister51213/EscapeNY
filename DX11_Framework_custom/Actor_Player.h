@@ -34,6 +34,8 @@ public:
         {
             Move({ 0.f, 0.f, -.6f });
         }
+
+        m_worldSpecs.orientation = pInput->m_LastMousePos;
     } 
 
 private:

@@ -60,7 +60,7 @@ bool System::Initialize()
 	InitializeWindows( screenWidth, screenHeight );
 
     // Create input object for keyboard input.
-	m_Input.reset( new Input );
+	m_Input.reset( new Input(m_hwnd) );
 	bool result = m_Input != nullptr;
 	RETURN_IF_FALSE( result );
 
@@ -193,15 +193,19 @@ LRESULT CALLBACK System::MessageHandler(
    	case WM_LBUTTONDOWN:
 	case WM_MBUTTONDOWN:
 	case WM_RBUTTONDOWN:
-		m_Input->OnMouseDown(wparam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		m_Input->OnMouseDown(wparam, (int)(short)LOWORD(lparam), (int)(short)HIWORD(lparam));
 		return 0;
 	case WM_LBUTTONUP:
 	case WM_MBUTTONUP:
 	case WM_RBUTTONUP:
-		m_Input->OnMouseUp(wparam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+
+        // PASS MOUSE X and Y VALUES
+        // NOTE: the lowest word (byte) of the param will be the mouse X value, that's why we cast it here
+        // NOTE: the highest word (byte) of the param will be the mouse Y value, that's why we cast it here
+		m_Input->OnMouseUp(wparam, (int)(short)LOWORD(lparam), (int)(short)HIWORD(lparam));
 		return 0;
 	case WM_MOUSEMOVE:
-		m_Input->OnMouseMove(wparam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		m_Input->OnMouseMove(wparam, (int)(short)LOWORD(lparam), (int)(short)HIWORD(lparam));
 		return 0;
 
 #pragma endregion
