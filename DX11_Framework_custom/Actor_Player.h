@@ -15,7 +15,7 @@ public:
     { }
 
 public:
-    void GetInput(std::shared_ptr<Input> pInput) override
+    void GetInput(std::shared_ptr<Input> pInput, int randI=0, float randF=0) override
     {
         if (pInput->IsKeyDown(VK_RIGHT))
         {

@@ -22,8 +22,7 @@ System::System()
 	m_hInstance( GetModuleHandle( NULL ) ),
 	m_applicationName( L"DX11_Framework" ),
 	done(false)
-{    
-}
+{ }
 
 System::~System() 
 {
@@ -184,6 +183,28 @@ LRESULT CALLBACK System::MessageHandler(
 			m_Input->KeyUp( static_cast<unsigned int>( wparam ) );
 			return 0;
 		}
+
+//  WINDOWS CONVENTIONS - 
+// If a message takes a pointer, the pointer is usually passed in the LPARAM. 
+// If the message takes a handle or an integer, then it is passed in the WPARAM. 
+
+#pragma region ****************** MOUSE INPUT *******************
+        // TODO: ADD MOUSEDOWN Handlers, then make it send mousedown info to input object!
+   	case WM_LBUTTONDOWN:
+	case WM_MBUTTONDOWN:
+	case WM_RBUTTONDOWN:
+		m_Input->OnMouseDown(wparam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
+	case WM_LBUTTONUP:
+	case WM_MBUTTONUP:
+	case WM_RBUTTONUP:
+		m_Input->OnMouseUp(wparam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
+	case WM_MOUSEMOVE:
+		m_Input->OnMouseMove(wparam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
+
+#pragma endregion
 
 		// Any other messages send to the default message handler as our application won't make use of them.
 		default:

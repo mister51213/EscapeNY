@@ -52,7 +52,6 @@ inline XMFLOAT3 operator/( const XMFLOAT3 &V, const float S )
 	const float recipScalar = 1.f / S;
 	return XMFLOAT3( V.x * recipScalar, V.y * recipScalar, V.z * recipScalar );
 }
-
 inline XMFLOAT3 &operator+= ( XMFLOAT3& V1, const XMFLOAT3& V2 )
 {
 	V1 = V2 + V1;
@@ -147,6 +146,16 @@ inline XMFLOAT3 ConvertToRadians( const XMFLOAT3& angleInDegrees )
 	// at compile time.
 	return{ angleInDegrees * radian };
 }
+
+/////////////////////////////
+// CLAMP FUNCTION
+// (for clamping angles)
+/////////////////////////////
+template<typename T>
+	static T Clamp(const T& x, const T& low, const T& high)
+	{
+		return x < low ? low : (x > high ? high : x); 
+	}
 
 ////////////////////////////////////////////////////////////////
 // STRUCTS CONTAINING MODEL INFO for gameplay and rendering

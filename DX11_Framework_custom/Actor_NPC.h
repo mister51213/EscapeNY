@@ -17,38 +17,38 @@ public:
     { }
 
 public:
-    void GetInput(std::shared_ptr<Input> pInput) override
+    void GetInput(std::shared_ptr<Input> pInput, int randI, float randF) override
     {
         //srand( static_cast<unsigned int>( time( nullptr ) ) );
         //int dieRoll = rand() % 3;
         //float randNum = (rand()%50)/10.0f; // get random float from 0~10.0
         if (pInput->IsKeyDown(VK_RIGHT))
         {
-            //if(dieRoll == 0)
-            //Move({ randNum, randNum, randNum });
-            //else
+            if(randI == 0)
+            Move({ randF, randF, randF });
+            else
             Move({ .1f, 0.f, 0.f });
         }
         if (pInput->IsKeyDown(VK_LEFT))
         {
-            //if(dieRoll == 1)
-            //Move({ -(rand()%100)/10.0f, -(rand()%100)/10.0f, -(rand()%100)/10.0f });
-            //else
+            if(randI == 1)
+                Move({ -randF, -randF, -randF });
+            else
             Move({ -.1f, 0.f, 0.f });
         }
 
         if (pInput->IsKeyDown(VK_UP))
         {
-            //if(dieRoll == 2)
-            //Move({ randNum, randNum, randNum });
-            //else
+            if(randI == 2)
+            Move({ randF, randF, randF });
+            else
             Move({ 0.f, 0.f, .1f });
         }
         if (pInput->IsKeyDown(VK_DOWN))
         {
-            //if(dieRoll == 3)
-            //Move({ randNum, randNum, -randNum });
-            //else
+            if(randI == 3)
+            Move({ -randF, -randF, -randF });
+            else
             Move({ 0.f, 0.f, -.1f });
         }
 

@@ -46,17 +46,24 @@ bool Game::Initialize( Graphics *pGraphics,
 
 void Game::getInput(std::shared_ptr<Input> pInput)
 {
+    srand( static_cast<unsigned int>( time( nullptr ) ) );
+    int randInt = rand() % 3;
+    float randFloat = (rand()%50)/10.0f; // get random float from 0~10.0
+
     // Player input
     m_player.GetInput(pInput);
 
     // Actor sets input
     for (auto& pActor : m_actorsSUB1)
     {
-        pActor.GetInput(pInput);
+        pActor.GetInput(pInput, randInt, randFloat);
     }
+
+    randInt = rand() % 3;
+    randFloat = (rand()%50)/10.0f; // get random float from 0~10.0
     for (auto& pActor : m_actorsSUB2)
     {
-        pActor.GetInput(pInput);
+        pActor.GetInput(pInput, randInt, randFloat);
     }
 
     // CAMERA INPUT
