@@ -1,14 +1,14 @@
 #pragma once
 #include <stack>
-#include <vector>
-#include <assert.h>
+#include "Utilities.h"
 #include "Algorithm.h"
-#include "Board.h"
+#include "TestBoard.h"
+
 
 class Algorithm_Maze :public Algorithm
 {
 public:
-	Algorithm_Maze( class MazeGame *pGame );
+	Algorithm_Maze( ISubGame*const pGame );
 	vector<Actor> MakePattern( int numActors )override;
 	void SetData()override
 	{}

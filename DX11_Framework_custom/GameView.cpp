@@ -15,7 +15,8 @@ GameView::GameView( Graphics * pGfx, D3DGraphics * pD3D, std::shared_ptr<Camera>
 {
 }
 
-void GameView::InitializeGameObjectsSystem( const vector<Actor*>& actors )
+// CODE_CHANGE: Initialize function no longer needs vector of Actor pointers
+void GameView::InitializeGameObjectsSystem()
 {
 	initTexturePool();
 	initializeShader();
@@ -29,7 +30,10 @@ void GameView::UpdateView( const vector<Actor*>& actors )const
 	}
 }
 
-void GameView::Reset( const vector<Actor*>& pActors )
+// CODE_CHANGE: Renamed function to OnReset to be more clear of intent and
+// made const, none of the functions called from here change the 
+// state of GameView members.
+void GameView::OnReset( const vector<Actor*>& pActors )const
 {
 	modelAllActors( pActors );
 }
@@ -50,7 +54,8 @@ void GameView::initializeShader()
 	m_shader_Texture.Initialize( m_pD3D->GetDevice() );
 }
 
-void GameView::modelAllActors( const vector<Actor*>& actors )
+// CODE_CHANGE: Made const
+void GameView::modelAllActors( const vector<Actor*>& actors )const
 {
 	for( int i = 0; i < actors.size(); i++ )
 	{
@@ -58,7 +63,8 @@ void GameView::modelAllActors( const vector<Actor*>& actors )
 	}
 }
 
-std::shared_ptr<Model> GameView::makeModel( ModelSpecs_L localSpecs, eModType Type )
+// CODE_CHANGE: Made const
+std::shared_ptr<Model> GameView::makeModel( ModelSpecs_L localSpecs, eModType Type )const
 {
 	std::shared_ptr<Model_Textured> pModel;
 	pModel.reset( new Model_Textured );
