@@ -17,6 +17,7 @@ Camera::Camera()
 {
     m_lookAtVector = XMVectorSet( 0.f, 0.f, 1.f, 0.f );
     m_upV = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    m_positionV = XMVectorSet(0.f, 0.f, 0.f, 1.0f);
 }
 
 Camera::Camera(const Camera& other)
@@ -67,106 +68,52 @@ void Camera::SetPosition( const XMFLOAT3 &Position )
 {
 	m_Position = Position;
 }
-
 void Camera::SetRotation( const XMFLOAT3 &Rotation )
 {
 	m_Rotation = Rotation;
 }
-
 // return the location and rotation of the camera to calling functions.
 XMFLOAT3 Camera::GetPosition()const
 {
 	return m_Position;
 }
-
 XMFLOAT3 Camera::GetRotation()const
 {
 	return m_Rotation;
 }
-
 // Use the position and rotation of the camera to build and update the view matrix. 
-
 void Camera::GetInput(std::shared_ptr<Input> pInput)
 {
-    float radius = pInput->GetRadius();
-    float phi = pInput->GetPhi();
-    float theta = pInput->GetTheta();
-    // Convert Spherical to Cartesian coordinates.
-    // NOTE: This info is passed on to the camera POSITION in ShapeBuilder.cpp line 171~
-    float x = radius*sinf(phi)*cosf(theta);
-    float z = radius*sinf(phi)*sinf(theta);
-    float y = radius*cosf(phi);
+   /* m_radius = pInput->GetRadius();
+    m_phi = pInput->GetPhi();
+    m_theta = pInput->GetTheta();*/
 
-    // WRONG way to do it
-    //m_Position = { x,y,z };
-    // Using Frank luna lookat functionality
-    m_positionV = XMVectorSet(x, y, z, 1.0f);
-    m_lookAtVector = XMVectorZero();
-    //m_upV = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    m_lookAtVector = XMLoadFloat3( &pInput->m_LastMousePos);
 
-    // TODO: need to use this for lookat:
-    /* XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
-        > THEN stores this view as a member variable m_view
-        > THEN uses the m_view variable for rendering
-    */
-    // TODO: Integrate this into Game.cpp calculation of world, view, and projection matrixes
-    /* 
-     // Build the view matrix.
-    XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
-    XMVECTOR target = XMVectorZero();
-    XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-    XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
-    XMStoreFloat4x4(&mView, view);
-
-    XMMATRIX world = XMLoadFloat4x4(&mWorld);
-    XMMATRIX proj = XMLoadFloat4x4(&mProj);
-    XMMATRIX worldViewProj = world*view*proj;
-    */
-
+    // FPS motion implementation
+    if (pInput->IsKeyDown('d'))
+    {
+        Move({ .6f, 0.f, 0.f });
+    }
+    if (pInput->IsKeyDown('a'))
+    {
+        Move({ -.6f, 0.f, 0.f });
+    }
+    if (pInput->IsKeyDown('w'))
+    {
+        Move({ 0.f, 0.f, .6f });
+    }
+    if (pInput->IsKeyDown('s'))
+    {
+        Move({ 0.f, 0.f, -.6f });
+    }
 }
 
-// called EVERY FRAME
+// called EVERY FRAME - see ShapeBuilder.cpp line 171~
 void Camera::Render()
 {
-	// Load the rotation and make radian vectors.
-	XMVECTOR rotationVector = XMLoadFloat3( &m_Rotation );
-
-	// Setup the vector that points upwards.
-	XMVECTOR upVector = XMVectorSet( 0.f, 1.f, 0.f, 0.f );
-
-	// Load the position into an XMVECTOR structure.
-	XMVECTOR positionVector = XMLoadFloat3(&m_Position);
-
-	// Setup where the camera is looking by default.
-    // XMVECTOR lookAtVector = XMVectorSet( 0.f, 0.f, 1.f, 0.f );
-     m_lookAtVector = XMVectorSet( 0.f, 0.f, 1.f, 0.f );
-
-	// Create the rotation matrix from the product of the rotation vector and the radian vector.
-	// This converts the rotations to radians before creating the rotation matrix
-	XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYawFromVector(ConvertToRadians(rotationVector));
-
-	// Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
-    // TODO: DO IT THIS WAY: XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
-	//lookAtVector = XMVector3TransformCoord(lookAtVector, rotationMatrix);
-    // Incremental way but still wrong:
-    //m_lookAtVector = XMVector3TransformCoord(m_lookAtVector, rotationMatrix);
-    // RIGHT:
-    m_lookAtVector = XMVectorZero();
-
-    //TODO: NEED THIS?
-	upVector = XMVector3TransformCoord(upVector, rotationMatrix);
-    //TODO: NEED THIS?
-	// Translate the rotated camera position to the location of the viewer. 
-	//lookAtVector = XMVectorAdd(positionVector, lookAtVector);
-    m_lookAtVector = XMVectorAdd(positionVector, m_lookAtVector);
-
-	// Finally create the view matrix from the three updated vectors.
-	//m_ViewMatrix = XMMatrixLookAtLH(positionVector, lookAtVector, upVector);
-    // Incremental version:
-    //m_ViewMatrix = XMMatrixLookAtLH(positionVector, m_lookAtVector, upVector);
-    m_ViewMatrix = XMMatrixLookAtLH(m_positionV, m_lookAtVector, m_upV);
-
+    XMVECTOR positionV = XMLoadFloat3(&m_Position);
+    m_ViewMatrix = XMMatrixLookAtLH(positionV, m_lookAtVector, m_upV);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

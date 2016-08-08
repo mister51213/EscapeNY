@@ -58,6 +58,7 @@ void Input::OnMouseUp(WPARAM btnState, int x, int y)
 
 void Input::OnMouseMove(WPARAM btnState, int x, int y)
 {
+    // LEFT BUTTON - rotate the object
     if((btnState & MK_LBUTTON) != 0)
     {
         // Make each pixel correspond to a quarter of a degree.
@@ -71,6 +72,7 @@ void Input::OnMouseMove(WPARAM btnState, int x, int y)
         // Restrict the angle mPhi. 
         m_Phi = Clamp(m_Phi, 0.1f, PI - 0.1f);
     }
+    // RIGHT BUTTON - zoom in and out
     else if((btnState & MK_RBUTTON) != 0)
     {
         // Make each pixel correspond to 0.005 unit in the scene.

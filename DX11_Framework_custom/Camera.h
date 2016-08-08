@@ -48,6 +48,8 @@ public:
         m_Position.x += offset.x;
         m_Position.y += offset.y;
         m_Position.z += offset.z;
+        //XMVECTOR offsetV = XMLoadFloat3(&offset);
+        //m_positionV += offsetV;
     }
 
     void Rotate(XMFLOAT3 offset)
@@ -71,6 +73,9 @@ public:
 private:
 	XMFLOAT3 m_Position, m_Rotation;
     // USED TO CHANGE target the cam is looking at.
+    float m_theta = 1.5f*XM_PI;
+    float m_phi = XM_PIDIV4;
+    float m_radius = 5.0f;
     XMVECTOR m_lookAtVector;
     XMVECTOR m_upV; // Defines up
     XMVECTOR m_positionV;

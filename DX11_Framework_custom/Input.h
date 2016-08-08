@@ -30,6 +30,11 @@ public:
 
     XMFLOAT3 m_LastMousePos;
 
+    XMFLOAT3 GetCamOffset()
+    {
+        return m_camOffset;
+    }
+
     float GetTheta()
     {
         return m_Theta;
@@ -48,7 +53,8 @@ private:
     bool m_keys[256];
     HWND m_hMainWnd = nullptr;
 
-    // USED FOR MOUSE ROTATION FUNCTIONS from Luna
+    // Camera lookat and movement functions
+    XMFLOAT3 m_camOffset = { 0.f,0.f,0.f };
     float m_Theta = 1.5f*XM_PI;
     float m_Phi = XM_PIDIV4;
     float m_Radius = 5.0f;

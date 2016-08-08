@@ -123,7 +123,7 @@ void Game::getInput(std::shared_ptr<Input> pInput)
 
 bool Game::Frame()
 {
-	updateGameObjects();
+	updateGameObjects(); // also gets input
 
 	m_pGraphics->BeginScene();
 	bool result = render();

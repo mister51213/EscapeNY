@@ -35,7 +35,7 @@ public:
             Move({ 0.f, 0.f, -.6f });
         }
 
-        // NOTE: This info is passed in ShapeBuilder.cpp line 171~
+        // TEST: ShapeBuilder.cpp line 171~
         m_worldSpecs.orientation = pInput->m_LastMousePos;
     } 
 
