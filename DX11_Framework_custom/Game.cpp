@@ -46,8 +46,12 @@ bool Game::Initialize( Graphics *pGraphics,
 
 void Game::getInput(std::shared_ptr<Input> pInput)
 {
+	// NOTE: srand only needs to be called once, should be in Game constructor
     srand( static_cast<unsigned int>( time( nullptr ) ) );
     int randInt = rand() % 3;
+	// NOTE: If you need a float between 0.f and 10.f, shouldn't the line say:
+	// float randFloat = static_cast<float>(rand() % 100) / 10.f;
+	// TODO: Multiplying is faster than dividing, change ( / 10.f ) to ( * 0.1f ).
     float randFloat = (rand()%50)/10.0f; // get random float from 0~10.0
 
     // Camera input
