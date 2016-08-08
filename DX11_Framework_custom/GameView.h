@@ -22,15 +22,22 @@ public:
 	GameView();
 	GameView( Graphics* pGfx, D3DGraphics* pD3D, std::shared_ptr<Camera> &pCam );
 	 
-	void InitializeGameObjectsSystem( const vector<Actor*>& actors );
+	// CODE_CHANGE: Initialize function no longer needs vector of Actor pointers
+	void InitializeGameObjectsSystem();
 	void UpdateView( const vector<Actor*>& actors )const;
-	void Reset( const vector<Actor *> &pActors );
+
+	// CODE_CHANGE: Renamed function to OnReset to be more clear of intent and
+	// made const, none of the functions called from here change the 
+	// state of GameView members.
+	void OnReset( const vector<Actor *> &pActors )const;
 private:
 	void initTexturePool();
 	void initializeShader();
-	void modelAllActors( const vector<Actor*>& actors );
+	// CODE_CHANGE: Made const
+	void modelAllActors( const vector<Actor*>& actors )const;
+	// CODE_CHANGE: Made const
 	std::shared_ptr<Model>
-		makeModel(ModelSpecs_L localSpecs, eModType Type = CUBE_TEXTURED );
+		makeModel(ModelSpecs_L localSpecs, eModType Type = CUBE_TEXTURED )const;
 	void drawModel( const Actor& actor )const;
 
 private:

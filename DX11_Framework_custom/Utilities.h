@@ -90,6 +90,9 @@ constexpr float PIDivTwo = PI / 2.f;
 // degrees to radians for rotation functions
 constexpr float radian = PI / 180.f;
 
+// Radian to degree conversion
+constexpr float degree = 180.f / PI;
+
 // Calculates the cross-product of two float3 vectors
 inline XMFLOAT3 CrossProduct( const XMFLOAT3 &V1, const XMFLOAT3 &V2 )
 {
@@ -146,6 +149,41 @@ inline XMFLOAT3 ConvertToRadians( const XMFLOAT3& angleInDegrees )
 	// Use constexpr radian which is the result of PI / 180.f calculated
 	// at compile time.
 	return{ angleInDegrees * radian };
+}
+
+inline float CalculateYRotation( const float X, const float Z, float &RX, float &RZ )
+{
+	// If x or z is greater than 0.f, calculate new direction, otherwise
+	// skips calculations, uses trig function acos (arccosine) to convert
+	// vector direction to angle in radians, then to degrees.
+	float angle = -0.f;
+	if( ( fabsf( X ) > 0.f ) || ( fabsf( Z ) > 0.f ) )
+	{
+		// Normalize X and Z to get direction
+		// Get the recipricol magnitude of the 2D vector
+		float recipricolMagnitude = 1.f / sqrtf( pow( X, 2 ) + pow( Z, 2 ) );
+
+		// Use the recipricol magnitude to get the normalized 2D vector.
+		// Using the recipricol of the magnitude is faster, because multiplying
+		// is faster than dividing
+		RX = X * recipricolMagnitude;
+		RZ = Z * recipricolMagnitude;
+
+		// Get the angle in radians, depending on which you use, result
+		// could be positive or negative
+		float radx = acosf( RX );
+		float radz = asinf( RZ );
+
+		// Determine the sign (positive or negative) of the angle
+		// If both are positive, angle will be positive,
+		// if one is negative or both, then angle will be negative
+		float sgn = ( radx >= 0.f ) && ( radz >= 0.f ) ? 1.f : -1.f;
+
+		// Convert to degrees
+		angle = degree * (sgn * radx);
+	}
+
+	return angle;
 }
 
 ////////////////////////////////////////////////////////////////

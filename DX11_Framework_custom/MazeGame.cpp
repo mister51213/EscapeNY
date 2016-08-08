@@ -11,21 +11,35 @@ MazeGame::~MazeGame()
 {
 }
 
-void MazeGame::Initialize( Graphics *pGraphics, Game * const pGame )
+// Game and Camera are passed in as const pointer since we are wanting to 
+// make a separate copy and we aren't using the constructor to initialize
+// so can't use const &.  *const is kind of like a reference and const *const
+// would be like const &.  It assures that the pointers passed in won't be 
+// changed to point to something else, though the data that they point to 
+// can be changed unless you use at least const *.
+void MazeGame::Initialize( 
+	Graphics *pGraphics,
+	Game *const pGame,
+	Camera *const pCamera )
 {
 	m_pGame = pGame;
 	m_pGraphics = pGraphics;
+	m_pCamera = pCamera;
+	m_pCamera->SetRotation( { 90.f, 0.f, 0.f } );
 
 	m_Overlay.Initialize( *pGraphics );	
+	reset();
 }
 
-void MazeGame::UpdateFrame( const Input & InputRef, Camera *const pCamera )
+void MazeGame::UpdateFrame( const Input & InputRef )
 {
+	m_player.Update( InputRef );
+
 	// MAKE CAMERA FOLLOW THE PLAYER
 	// Get player position, offset camera, set camera position
 	auto camOffset = m_player.GetWorldSpecs().position;
 	camOffset.y += 30.f;
-	pCamera->SetPosition( camOffset );
+	m_pCamera->SetPosition( camOffset );
 
 	// Pass input to overlay to check if player wants to regenerate the maze
 	m_Overlay.Update( InputRef );
@@ -55,11 +69,15 @@ void MazeGame::UpdateFrame( const Input & InputRef, Camera *const pCamera )
 
 void MazeGame::reset()
 {
+	// Must clear draw list before using it during reset, 
+	// clearing it when already empty doesn't hurt anything
+	m_pActorDrawList.clear();
+
 	// Initialize the board object
 	m_board.Initialize( 9, 9 );
 
 	// Initialize the test player actor
-	m_player = Actor( {
+	m_player = Actor_Player_Alt( {
 		{ 0.f, 0.f, 0.f },
 		{ 0.f, 0.f, 0.f },
 		{ .5f, .5f, .5f } },
@@ -85,8 +103,7 @@ void MazeGame::reset()
 	}
 
 	// Load models for actors
-	auto &gameView = m_pGame->GetGameView();
-	gameView.Reset( m_pActorDrawList );
+	m_pGame->GetGameView().OnReset( m_pActorDrawList );
 
 	// Move list of actors to board object
 	m_board.SetCells( std::move( actorList ) );
@@ -101,9 +118,11 @@ void MazeGame::reset()
 
 void MazeGame::RenderFrame( const GameView & GameViewRef )
 {
-	m_Overlay.Render( *m_pGraphics );
-	GameViewRef.UpdateView( m_pActorsMASTER ); // TODO: implement this new function
+	GameViewRef.UpdateView( m_pActorDrawList );
 
+	// Overlay must be drawn last, since it draws directly to 
+	// back buffer
+	m_Overlay.Render( *m_pGraphics );
 }
 
 const TestBoard & MazeGame::GetBoard()

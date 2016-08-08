@@ -1,21 +1,28 @@
 #include "Algorithm_Maze.h"
 #include <random>
 #include "Board.h"
-#include "MazeGame.h"
+#include "Game.h"
 #include "TestBoard.h"
 
 using namespace DirectX;
 
-Algorithm_Maze::Algorithm_Maze( MazeGame* pGame )
+Algorithm_Maze::Algorithm_Maze( ISubGame*const pGame )
 	:
-	Algorithm(pGame)
+	Algorithm( pGame )
 {
 }
 
 vector<Actor> Algorithm_Maze::MakePattern( int numActors )
 {
 	// Retrieve the board from the game object
-	const auto &board = m_pGame->GetBoard();
+	// TODO: Try casting to child class of ISubGame
+	auto *pMazeGame = reinterpret_cast<MazeGame *>( m_pGame );
+
+	// Crash with error if cast didn't work, otherwise continue creating
+	// maze
+	assert( pMazeGame != nullptr );
+
+	const auto &board = pMazeGame->GetBoard();
 
 	// Generate maze
 	auto tileTypes = 

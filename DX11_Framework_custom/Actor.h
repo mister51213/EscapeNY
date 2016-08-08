@@ -16,10 +16,10 @@ public:
     Actor() {}
 
     Actor(
-        ModelSpecs_W worldSpecs,
-        eTexture tex,
-        ModelSpecs_L localSpecs,
-        eModType modType = CUBE_TEXTURED)
+		const ModelSpecs_W &worldSpecs,
+		eTexture tex,
+		const ModelSpecs_L &localSpecs,
+		eModType modType = CUBE_TEXTURED )
     {
         m_worldSpecs = worldSpecs;
         m_localSpecs = localSpecs;

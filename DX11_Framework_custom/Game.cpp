@@ -3,10 +3,26 @@
 
 using namespace DirectX;
 
+/*
+	Going to need a few more interface classes for different game 
+	components, like the overlay.  One overlay for each type of 
+	screen like menus or game types since the overlay will be 
+	handling specific interactions for the currently active game.
+
+	The game types is more for while we are testing things out, but 
+	the menus are a more important reason to do so.
+*/
+
+// To use a different game comment out the line with ( new MazeGame ) and 
+// initialize the m_pActiveGame object to a new child of
+// ISubGame; for example:
+// m_pActiveGame(new TestGame) 
 Game::Game( std::shared_ptr<Input> pInput )
+	:
+	m_pActiveGame(new MazeGame)
 {
 	m_pInput = pInput;
-	srand( static_cast<unsigned int>( time( nullptr ) ) );
+	srand( static_cast<unsigned int>( time( nullptr ) ) );	
 }
 
 Game::~Game() {}
@@ -25,92 +41,56 @@ bool Game::Initialize( Graphics *pGraphics,
 	m_pCamera.reset( new Camera );
 	bool result = m_pCamera != nullptr;
 	RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Camera." );
+
 	result = m_pCamera->Initialize(
-		m_camPos,					                // Position		
-		m_camRotation, 						        // Rotation
+		/*m_camPos*/{ 0.f,0.f,0.f },                // Position		
+		/*m_camRotation*/{ 0.f,0.f,0.f },	        // Rotation
 		{ ScreenWidth, ScreenHeight },				// Screen size
 		{ SCREEN_NEAR, SCREEN_DEPTH } ); 		    // Screen clip depths
 	RETURN_IF_FALSE( result );
 
 	// Pass all member pointers to GameObjects class so it can draw with them
 	m_GameView = GameView( m_pGraphics, m_pDirect3D, m_pCamera );
-	m_GameView.InitializeGameObjectsSystem( m_pActorsMASTER );
+	m_GameView.InitializeGameObjectsSystem();
+	
+	//////////////////////////////
+	// Initialize your sub-game //
+	//////////////////////////////
+	m_pActiveGame->Initialize( m_pGraphics, this, m_pCamera.get() );
 
-	reset();
+	// CODE_CHANGE: Implement reset() if needed in ISubGame children.
+	// It's not a virtual function of ISubGame, because it doesn't have
+	// to be.  It's a private function so will only ever be called by
+	// the child that implements it.  At least as far as I can tell.
+	//reset();
 	return true;
 }
 
 void Game::getInput( std::shared_ptr<Input> pInput )
-{//
-	// TODO: Use global GetWorldMatrix() function instead 
-	// TODO: of member WorldMatrixes for each model.
-	// rotate objects
-	if( pInput->IsKeyDown( VK_F3 ) )
+{
+	/*if( pInput->IsKeyDown( VK_F3 ) )
 	{
 		reset();
-	}
-	if( pInput->IsKeyDown( VK_SPACE ) )
-	{
-		//m_pModel1->Rotate( { 1.f,1.f,1.f } );
-		//m_pModel2->Rotate( { 1.f,1.f,1.f } );
-       /* for (auto& pActor: m_actorsSUB1)
-        {
-            pActor.Rotate({ 1.f,1.f,1.f });
-        }*/
-	}
+	}*/
 
-	if( pInput->IsKeyDown( VK_CONTROL ) )
-	{
-		//m_pModel1->Rotate( { -0.1f,-5.f,-5.f } );
-		//m_pModel2->Rotate( { -3.f,-0.3f,-5.f } );
-        /*for (auto& pActor: m_actorsSUB1)
-        {
-            pActor.Rotate({ -1.f,-1.f,-1.f });
-        }*/
-	}
-
-	const float playerSpeed = 0.2f;
+	//const float playerSpeed = 0.2f;
 	// move objects
-	if( pInput->IsKeyDown( VK_RIGHT ) )
+	/*if( pInput->IsKeyDown( VK_RIGHT ) )
 	{
-		//m_pModel1->Move( { .1f,0.f,0.f } );
-		//m_pModel2->Move( { .9f,0.f,0.f } );
-        /*for (auto& pActor: m_actorsSUB1)
-        {
-            pActor.Move({.9f,0.f,0.f });
-        }*/
 		m_player.Move( { playerSpeed, 0.f, 0.f } );
 	}
 	else if( pInput->IsKeyDown( VK_LEFT ) )
 	{
-		//m_pModel1->Move( { -.1f,0.f,0.f } );
-		//m_pModel2->Move( { -.9f,0.f,0.f } );
-       /* for (auto& pActor: m_actorsSUB1)
-        {
-            pActor.Move({-.9f,0.f,0.f });
-        }*/
 		m_player.Move( { -playerSpeed, 0.f, 0.f } );
 	}
 
 	if( pInput->IsKeyDown( VK_UP ) )
 	{
-		//m_pModel1->Move( { 0.f,.1f,0.f } );
-		//m_pModel2->Move( { 0.f,.9f,0.f } );
-       /* for (auto& pActor: m_actorsSUB1)
-        {
-            pActor.Move({ 0.f,.9f,0.f });
-        }*/
 		m_player.Move( { 0.f, 0.f, playerSpeed } );
 	}
 	else if( pInput->IsKeyDown( VK_DOWN ) )
 	{
-		//m_pModel1->Move( { 0.f,-.1f,0.f } );
-		//m_pModel2->Move( { 0.f,-.9f,0.f } );
 		m_player.Move( { 0.f, 0.f, -playerSpeed } );
-        /*for (auto& pActor: m_actorsSUB1)
-        {
-            pActor.Move({ 0.f,-.9f,0.f });
-        }*/
     }
 
 	if( pInput->IsKeyDown( VK_NEXT ) )
@@ -120,38 +100,7 @@ void Game::getInput( std::shared_ptr<Input> pInput )
 	else if( pInput->IsKeyDown( VK_PRIOR ) )
 	{
 		m_pCamera->Rotate( { 1.f, 0.f, 0.f } );
-	}
-	// move camera (FPS view)
-	//if( pInput->IsKeyDown( 0x41 ) ) // Left - A
-	//{
-	//	m_pCamera->Move( { -1, 0, 0 } );
-	//}
-
-	//if( pInput->IsKeyDown( 0x53 ) ) // Back - S
-	//{
-	//	m_pCamera->Move( { 0, 0, -1 } );
-	//}
-
-	//if( pInput->IsKeyDown( 0x57 ) ) // Fwd - W
-	//{
-	//	m_pCamera->Move( { 0, 0, 1 } );
-	//}
-
-	//if( pInput->IsKeyDown( 0x44 ) ) // Right - D
-	//{
-	//	m_pCamera->Move( { 1, 0, 0 } );
-	//}
-
-	//// rotate camera
-	//if( pInput->IsKeyDown( 0x51 ) ) // Left - Q
-	//{
-	//	m_pCamera->Rotate( { 0, -1, 0 } );
-	//}
-
-	//if( pInput->IsKeyDown( 0x45 ) ) // Right - E
-	//{
-	//	m_pCamera->Rotate( { 0, 1, 0 } );
-	//}
+	}	*/
 }
 
 // TODO: Make a list of Actor* ptrs, pass pointers to them to GameWorld.Update() function
@@ -164,12 +113,16 @@ bool Game::Frame()
 	updateGameObjects();
 
 	m_pGraphics->BeginScene();
-	bool result = render();
+	render();
 	m_pGraphics->EndScene();
 	return true;
 }
 
-GameView & Game::GetGameView()
+// If later we decide that the test games need to actually change the
+// state of GameView, we can remove the const declarations.  Or, we
+// can just store a copy of a GameView pointer in the the test game 
+// children.
+const GameView & Game::GetGameView()const
 {
 	return m_GameView;
 }
@@ -179,57 +132,58 @@ bool Game::render()
     // TODO: maybe initialize this in GameObjectsClass instead.
 	// Generate the view matrix based on the camera's position.
 	m_pCamera->Render();
+	m_pActiveGame->RenderFrame( m_GameView );
 
 	return true;
 }
 
-void Game::reset()
-{
-	m_actorsSUB1.clear();
-	m_actorsSUB2.clear();
-	m_actorsSUB3.clear();
-	m_actorsSUB4.clear();
-	m_pActorsMASTER.clear();
-
-	///////////////////////////////////////////////////////
-	// CODE FOR MAKING m_actorsSUB1 (ONE SUBSET OF ACTORS)
-	// These can be locally defined
-	/*const int numRows = 5, numColumns = 5, numZ = 5;
-	const int numActors = numRows * numColumns * numZ;
-	Algorithm_Grid3D alg;
-	m_actorsSUB1 = makeActorSet(numActors, &alg);*/
-	///////////////////////////////////////////////////////
-
-	////////////////////////////////////////////////////////
-	// CODE FOR MAKING m_actorsSUB2 (ONE SUBSET OF ACTORS)
-	// This can be locally defined, count will be stored in m_actorsSUB2.size()
-	/*const int numActors = 100;
-	Algorithm_Spiral3D alg2(this);
-	m_actorsSUB2 = makeActorSet(numActors, &alg2);*/
-	///////////////////////////////////////////////////
-
-    ///////////////////////////////////////////////////
-    ///////// FEED MASTER LIST of ACTORS //////////////
-    ///////////////////////////////////////////////////
-    // 1. Push a single PLAYER object into MASTER LIST
-    ///////////////////////////////////////////////////
-    m_pActorsMASTER.push_back( &m_player );
-	///////////////////////////////////////////////////
-    // 2. Push ALL Actor subsets to MASTER LIST
-    ///////////////////////////////////////////////////
-    makeActorsMASTER();
-
-    ///////////////////////////////////////////////////
-    //////////// RESET MASTER LIST //////////////////// 
-    ///////////////////////////////////////////////////
-	m_GameView.Reset( m_pActorsMASTER );
-
-}
+//void Game::reset()
+//{
+//	/*m_actorsSUB1.clear();
+//	m_actorsSUB2.clear();
+//	m_actorsSUB3.clear();
+//	m_actorsSUB4.clear();
+//	m_pActorsMASTER.clear();*/
+//
+//	///////////////////////////////////////////////////////
+//	// CODE FOR MAKING m_actorsSUB1 (ONE SUBSET OF ACTORS)
+//	// These can be locally defined
+//	/*const int numRows = 5, numColumns = 5, numZ = 5;
+//	const int numActors = numRows * numColumns * numZ;
+//	Algorithm_Grid3D alg;
+//	m_actorsSUB1 = makeActorSet(numActors, &alg);*/
+//	///////////////////////////////////////////////////////
+//
+//	////////////////////////////////////////////////////////
+//	// CODE FOR MAKING m_actorsSUB2 (ONE SUBSET OF ACTORS)
+//	// This can be locally defined, count will be stored in m_actorsSUB2.size()
+//	/*const int numActors = 100;
+//	Algorithm_Spiral3D alg2(this);
+//	m_actorsSUB2 = makeActorSet(numActors, &alg2);*/
+//	///////////////////////////////////////////////////
+//
+//    ///////////////////////////////////////////////////
+//    ///////// FEED MASTER LIST of ACTORS //////////////
+//    ///////////////////////////////////////////////////
+//    // 1. Push a single PLAYER object into MASTER LIST
+//    ///////////////////////////////////////////////////
+//    //m_pActorsMASTER.push_back( &m_player );
+//	///////////////////////////////////////////////////
+//    // 2. Push ALL Actor subsets to MASTER LIST
+//    ///////////////////////////////////////////////////
+//    //makeActorsMASTER();
+//
+//    ///////////////////////////////////////////////////
+//    //////////// RESET MASTER LIST //////////////////// 
+//    ///////////////////////////////////////////////////
+//	//m_GameView.Reset( m_pActorsMASTER );
+//
+//}
 
 void Game::updateGameObjects()
 {
 	getInput( m_pInput ); // Check input to modify object positioning.
-
+	m_pActiveGame->UpdateFrame( *m_pInput );
 }
 
 void Game::makeActorsMASTER()
@@ -247,10 +201,10 @@ void Game::makeActorsMASTER()
         m_pActorsMASTER.push_back(pActor);
     }*/
 
-	for( auto &actor : m_actorsSUB3 )
+	/*for( auto &actor : m_actorsSUB3 )
 	{
 		m_pActorsMASTER.push_back( &actor );
-	}
+	}*/
 }
 
 // Make a set of similar actors based on algorithm

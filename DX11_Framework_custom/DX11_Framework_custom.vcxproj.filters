@@ -117,6 +117,9 @@
     <ClCompile Include="Algorithm_Maze.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Actor_Player_Alt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -222,6 +225,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Algorithm_Maze.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_Player_Alt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
