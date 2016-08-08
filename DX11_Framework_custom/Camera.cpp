@@ -15,6 +15,7 @@ Camera::Camera()
 	m_Position( 0.f, 0.f, 0.f ),
 	m_Rotation( 0.f, 0.f, 0.f )
 {
+    m_lookAtVector = XMVectorSet( 0.f, 0.f, 1.f, 0.f );
 }
 
 Camera::Camera(const Camera& other)
@@ -120,6 +121,7 @@ void Camera::GetInput(std::shared_ptr<Input> pInput)
 
 }
 
+// called EVERY FRAME
 void Camera::Render()
 {
 	// Load the rotation and make radian vectors.
@@ -133,21 +135,25 @@ void Camera::Render()
 
     // TODO: MUST HAVE INPUT OPERATE ON THESE VALUES!!!!
 	// Setup where the camera is looking by default.
-	XMVECTOR lookAtVector = XMVectorSet( 0.f, 0.f, 1.f, 0.f );
+	//XMVECTOR lookAtVector = XMVectorSet( 0.f, 0.f, 1.f, 0.f );
+     m_lookAtVector = XMVectorSet( 0.f, 0.f, 1.f, 0.f );
 
 	// Create the rotation matrix from the product of the rotation vector and the radian vector.
 	// This converts the rotations to radians before creating the rotation matrix
 	XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYawFromVector(ConvertToRadians(rotationVector));
 
 	// Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
-	lookAtVector = XMVector3TransformCoord(lookAtVector, rotationMatrix);
+	//lookAtVector = XMVector3TransformCoord(lookAtVector, rotationMatrix);
+    m_lookAtVector = XMVector3TransformCoord(m_lookAtVector, rotationMatrix);
 	upVector = XMVector3TransformCoord(upVector, rotationMatrix);
 
 	// Translate the rotated camera position to the location of the viewer.
-	lookAtVector = XMVectorAdd(positionVector, lookAtVector);
+	//lookAtVector = XMVectorAdd(positionVector, lookAtVector);
+    m_lookAtVector = XMVectorAdd(positionVector, m_lookAtVector);
 
 	// Finally create the view matrix from the three updated vectors.
-	m_ViewMatrix = XMMatrixLookAtLH(positionVector, lookAtVector, upVector);
+	//m_ViewMatrix = XMMatrixLookAtLH(positionVector, lookAtVector, upVector);
+    m_ViewMatrix = XMMatrixLookAtLH(positionVector, m_lookAtVector, upVector);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

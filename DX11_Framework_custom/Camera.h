@@ -70,5 +70,7 @@ public:
 
 private:
 	XMFLOAT3 m_Position, m_Rotation;
+    // USED TO CHANGE target the cam is looking at.
+    XMVECTOR m_lookAtVector;
 	XMMATRIX m_ViewMatrix, m_ProjectionMatrix, m_OrthoMatrix;
 };
