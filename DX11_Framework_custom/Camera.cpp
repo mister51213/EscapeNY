@@ -84,6 +84,42 @@ XMFLOAT3 Camera::GetRotation()const
 
 // Use the position and rotation of the camera to build and update the view matrix. 
 
+void Camera::GetInput(std::shared_ptr<Input> pInput)
+{
+    float radius = pInput->GetRadius();
+    float phi = pInput->GetPhi();
+    float theta = pInput->GetTheta();
+    // Convert Spherical to Cartesian coordinates.
+    // NOTE: This info is passed on to the camera POSITION in ShapeBuilder.cpp line 171~
+    float x = radius*sinf(phi)*cosf(theta);
+    float z = radius*sinf(phi)*sinf(theta);
+    float y = radius*cosf(phi);
+
+    // TODO: this doesnt take target into account, is wrong!
+    m_Position = { x,y,z };
+
+    // TODO: need to use this for lookat:
+    /* XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
+        > THEN stores this view as a member variable m_view
+        > THEN uses the m_view variable for rendering
+    */
+    // TODO: Integrate this into Game.cpp calculation of world, view, and projection matrixes
+    /* 
+     // Build the view matrix.
+    XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
+    XMVECTOR target = XMVectorZero();
+    XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+    XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
+    XMStoreFloat4x4(&mView, view);
+
+    XMMATRIX world = XMLoadFloat4x4(&mWorld);
+    XMMATRIX proj = XMLoadFloat4x4(&mProj);
+    XMMATRIX worldViewProj = world*view*proj;
+    */
+
+}
+
 void Camera::Render()
 {
 	// Load the rotation and make radian vectors.
@@ -95,6 +131,7 @@ void Camera::Render()
 	// Load the position into an XMVECTOR structure.
 	XMVECTOR positionVector = XMLoadFloat3(&m_Position);
 
+    // TODO: MUST HAVE INPUT OPERATE ON THESE VALUES!!!!
 	// Setup where the camera is looking by default.
 	XMVECTOR lookAtVector = XMVectorSet( 0.f, 0.f, 1.f, 0.f );
 

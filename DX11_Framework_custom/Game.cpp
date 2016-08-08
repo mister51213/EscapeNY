@@ -50,6 +50,9 @@ void Game::getInput(std::shared_ptr<Input> pInput)
     int randInt = rand() % 3;
     float randFloat = (rand()%50)/10.0f; // get random float from 0~10.0
 
+    // Camera input
+    m_pCamera->GetInput(pInput);
+
     // Player input
     m_player.GetInput(pInput);
 

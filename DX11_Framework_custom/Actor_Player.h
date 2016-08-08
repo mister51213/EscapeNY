@@ -15,7 +15,7 @@ public:
     { }
 
 public:
-    void GetInput(std::shared_ptr<Input> pInput, int randI=0, float randF=0) override
+    void GetInput(std::shared_ptr<Input> pInput, int randI=0.f, float randF=0.f) override
     {
         if (pInput->IsKeyDown(VK_RIGHT))
         {
@@ -35,6 +35,7 @@ public:
             Move({ 0.f, 0.f, -.6f });
         }
 
+        // NOTE: This info is passed in ShapeBuilder.cpp line 171~
         m_worldSpecs.orientation = pInput->m_LastMousePos;
     } 
 

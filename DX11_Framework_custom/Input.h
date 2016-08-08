@@ -14,15 +14,15 @@ class Input
 {
 public:
     Input(HWND& hWnd);
-	Input(const Input&);
-	~Input();
+    Input(const Input&);
+    ~Input();
 
-	void Initialize();
+    void Initialize();
 
-	void KeyDown(unsigned int);
-	void KeyUp(unsigned int);
+    void KeyDown(unsigned int);
+    void KeyUp(unsigned int);
 
-	bool IsKeyDown(unsigned int);
+    bool IsKeyDown(unsigned int);
 
     void OnMouseDown(WPARAM btnState, int x, int y);
     void OnMouseUp(WPARAM btnState, int x, int y);
@@ -30,8 +30,22 @@ public:
 
     XMFLOAT3 m_LastMousePos;
 
+    float GetTheta()
+    {
+        return m_Theta;
+    }
+    float GetPhi()
+    {
+        return m_Phi;
+    }
+    float GetRadius()
+    {
+        return m_Radius;
+    }
+
+
 private:
-	bool m_keys[256];
+    bool m_keys[256];
     HWND m_hMainWnd = nullptr;
 
     // USED FOR MOUSE ROTATION FUNCTIONS from Luna

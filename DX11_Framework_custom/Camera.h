@@ -16,6 +16,7 @@
 //////////////
 #include "Includes.h"
 #include "Utilities.h"
+#include "Input.h"
 
 using namespace DirectX;
 
@@ -55,6 +56,8 @@ public:
         m_Rotation.y += offset.y;
         m_Rotation.z += offset.z;
     }
+
+    void GetInput(std::shared_ptr<Input> pInput);
 
     // create the view matrix based on the position and rotation of the camera. 
 	void Render();

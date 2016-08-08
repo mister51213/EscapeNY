@@ -32,6 +32,7 @@ void Input::Initialize()
     float x = m_Radius*sinf(m_Phi)*cosf(m_Theta);
     float z = m_Radius*sinf(m_Phi)*sinf(m_Theta);
     float y = m_Radius*cosf(m_Phi);
+    // NOTE: This info is passed on to the camera POSITION in ShapeBuilder.cpp line 171~
 
 	return;
 }
