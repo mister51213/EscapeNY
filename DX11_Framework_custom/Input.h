@@ -5,26 +5,20 @@
 //////////////////////////////////////////////////////////
 #pragma once
 
-#ifndef _INPUTCLASS_H_
-#define _INPUTCLASS_H_
-
 class Input
 {
 public:
-    Input();
-	Input(const Input&);
+	Input();
 	~Input();
 
 	void Initialize();
 
-	void KeyDown(unsigned int);
-	void KeyUp(unsigned int);
+	void KeyDown( unsigned int );
+	void KeyUp( unsigned int );
 
 	// CODE_CHANGE: Made function const
-	bool IsKeyDown(unsigned int)const;
+	bool IsKeyDown( unsigned int )const;
 
 private:
-	bool m_keys[256];
+	bool m_keys[ 256 ];
 };
-
-#endif
