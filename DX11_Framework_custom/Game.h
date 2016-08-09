@@ -6,8 +6,6 @@
 #include <algorithm>
 #include "Algorithm_Grid3D.h"
 #include "Algorithm_Spiral3D.h"
-//#include "Board.h"
-//#include "TestBoard.h"
 
 class Game
 {

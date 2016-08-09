@@ -27,57 +27,83 @@ class Camera
 {
 public:
 	Camera();
-	Camera(const Camera&);
 	~Camera();
+    // WORLD matrix can be decomposed into a rotation followed by a translation.
+    // W = R T, View = inverse of W
 
-	// Initialize the camera object
-	bool Initialize( 
-        const XMFLOAT3 &Position, 
-        const XMFLOAT3 &Rotation,
-		const XMUINT2 &ScreenSize, 
-        const XMFLOAT2 &ScreenClipDepth );
-    // set the position and rotation of the camera object. 
-	void SetPosition( const XMFLOAT3 &Position );
-	void SetRotation( const XMFLOAT3 &Rotation );
+void GetInput(std::shared_ptr<Input> pInput)
+{
+    const float time = 1.f;
+    const float camSpeed = 2.f;
+    float displacement = time*camSpeed;
 
-	XMFLOAT3 GetPosition()const;
-	XMFLOAT3 GetRotation()const;
-
-    void Move(XMFLOAT3 offset)
+    if (pInput->IsKeyDown('d'))
     {
-        m_Position.x += offset.x;
-        m_Position.y += offset.y;
-        m_Position.z += offset.z;
-        //XMVECTOR offsetV = XMLoadFloat3(&offset);
-        //m_positionV += offsetV;
+        Strafe(displacement);
+    }
+    if (pInput->IsKeyDown('a'))
+    {
+        Strafe(-displacement);
+    }
+    if (pInput->IsKeyDown('w'))
+    {
+        Walk(displacement);
+    }
+    if (pInput->IsKeyDown('s'))
+    {
+        Walk(-displacement);
+    }
+} 
+
+    // ROTATE camera on the X axis
+    void Pitch(float angle)
+    {
+    XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&m_RightDir), angle);
+	XMStoreFloat3(&m_UpDir,   XMVector3TransformNormal(XMLoadFloat3(&m_UpDir), RotationM));
+	XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
     }
 
-    void Rotate(XMFLOAT3 offset)
-    {
-        m_Rotation.x += offset.x;
-        m_Rotation.y += offset.y;
-        m_Rotation.z += offset.z;
+    // ROTATE camera on the Y axis
+    void Yaw(float angle)
+    {    
+    XMFLOAT3 upReset { 0.f,1.f,0.f }; // Reset up vector to avoid tilt
+    XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&upReset), angle);
+	XMStoreFloat3(&m_RightDir,   XMVector3TransformNormal(XMLoadFloat3(&m_RightDir), RotationM));
+	XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
     }
 
-    void GetInput(std::shared_ptr<Input> pInput);
+    // Translate camera position along the look vector
+    void Walk(float distance)
+    {
+    XMVECTOR distV = DirectX::XMVectorReplicate(distance);
+    XMVECTOR lookV = XMLoadFloat3(&m_LookDir);
+	XMVECTOR posV = XMLoadFloat3(&m_Position);
+    // Store product of 1st 2 vectors + 3rd vector in m_Position
+	XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, lookV, posV));
+    }
 
-    // create the view matrix based on the position and rotation of the camera. 
-	void Render();
+    // Translate camera position along the right vector
+    void Strafe(float distance)
+    {
+	XMVECTOR distV = DirectX::XMVectorReplicate(distance);
+    XMVECTOR rightV = XMLoadFloat3(&m_RightDir);
+	XMVECTOR posV = XMLoadFloat3(&m_Position);
+    // Store product of 1st 2 vectors + 3rd vector in m_Position
+	XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, rightV, posV));
+    }
 
-    // retrieve the view matrix from the camera object so that the 
-    // shaders can use it for rendering.
-	XMMATRIX GetViewMatrix()const;
-	XMMATRIX GetProjectionMatrix()const;
-	XMMATRIX GetOrthoMatrix()const;
+    void Render()
+    {
+
+
+        m_viewMatrix = XMMatrixIdentity();
+    }
 
 private:
-	XMFLOAT3 m_Position, m_Rotation;
-    // USED TO CHANGE target the cam is looking at.
-    float m_theta = 1.5f*XM_PI;
-    float m_phi = XM_PIDIV4;
-    float m_radius = 5.0f;
-    XMVECTOR m_lookAtVector;
-    XMVECTOR m_upV; // Defines up
-    XMVECTOR m_positionV;
-	XMMATRIX m_ViewMatrix, m_ProjectionMatrix, m_OrthoMatrix;
+    XMFLOAT3 m_Position = { 0.0f, 0.0f, 0.0f };
+    XMFLOAT3 m_Rotation = { 0.0f, 0.0f, 0.0f };
+    XMFLOAT3 m_RightDir = { 1.0f, 0.0f, 0.0f };
+    XMFLOAT3 m_UpDir = { 0.0f, 1.0f, 0.0f };
+    XMFLOAT3 m_LookDir = { 0.0f, 0.0f, 1.0f };
+    XMMATRIX m_viewMatrix;
 };

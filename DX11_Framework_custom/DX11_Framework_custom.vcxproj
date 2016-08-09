@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraOLD.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GameView.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -172,8 +173,9 @@
     <ClInclude Include="Actor_Player.h" />
     <ClInclude Include="Algorithm_Grid3D.h" />
     <ClInclude Include="Algorithm_Spiral3D.h" />
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraOLD.h" />
     <ClInclude Include="Algorithm.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="GameView.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Shader.h" />

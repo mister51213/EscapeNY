@@ -1,5 +1,4 @@
 #include "Game.h"
-//#include "MazeGenerator.h"
 #include <time.h>
 
 using namespace DirectX;
@@ -12,7 +11,8 @@ Game::Game( std::shared_ptr<Input> pInput )
 
 Game::~Game() {}
 
-bool Game::Initialize( Graphics *pGraphics,
+bool Game::Initialize( 
+    Graphics *pGraphics,
 	UINT ScreenWidth,
 	UINT ScreenHeight)
 {
@@ -21,7 +21,7 @@ bool Game::Initialize( Graphics *pGraphics,
 	m_pDirect3D = pGraphics->GetDirect3D();
 
 	//////////////////////////////////
-	// CREATE AND INITIALIZE CAMERA
+	// CREATE AND INITIALIZE CAMERA //
 	//////////////////////////////////
 	m_pCamera.reset( new Camera );
 	bool result = m_pCamera != nullptr;
@@ -46,8 +46,9 @@ bool Game::Initialize( Graphics *pGraphics,
 
 void Game::getInput(std::shared_ptr<Input> pInput)
 {
-	// NOTE: srand only needs to be called once, should be in Game constructor
-    srand( static_cast<unsigned int>( time( nullptr ) ) );
+    // Tried to make pInput a member variable but input doesnt work that way for some reason.
+    pInput->SetCam(m_pCamera);
+
     int randInt = rand() % 3;
 	// NOTE: If you need a float between 0.f and 10.f, shouldn't the line say:
 	// float randFloat = static_cast<float>(rand() % 100) / 10.f;

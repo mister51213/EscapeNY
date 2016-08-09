@@ -6,9 +6,9 @@
 
 #include "Input.h"
 
-
 Input::Input(HWND& hMainWnd):
     m_hMainWnd(hMainWnd),
+    m_pCamera(pCam),
     m_LastMousePos({ 0.f,0.f,0.f })
 {}
 
@@ -17,6 +17,11 @@ Input::Input(const Input& other)
 
 Input::~Input()
 {}
+
+void Input::SetCam(std::shared_ptr<Camera>& pCam)
+{
+    m_pCamera = pCam;
+}
 
 void Input::Initialize()
 {
@@ -47,8 +52,8 @@ void Input::Initialize()
 // NOTE: You don't use the WPARAM, why even pass it?
 void Input::OnMouseDown(WPARAM btnState, int x, int y)
 {
-    m_LastMousePos.x = x;
-    m_LastMousePos.y = y;
+    m_LastMousePos.x = y;
+    m_LastMousePos.y = x;
 
     SetCapture(m_hMainWnd);
 }
@@ -61,38 +66,16 @@ void Input::OnMouseUp(WPARAM btnState, int x, int y)
 
 void Input::OnMouseMove(WPARAM btnState, int x, int y)
 {
-	// NOTE: Function is specific to camera rotation, should be moved to 
-	//		 Camera::GetInput.  OnMouseMove, should update the position
-	//		 of the mouse.  The OnMouseDown and OnMouseUp should hold
-	//		 the button states.  The Set/Release capture should be set
-	//		 when mouse enters or extis the window...
-	//		 For game purposes, the mouse should probably be clamped to window.  
+    // Make each pixel correspond to a quarter of a degree.
+    float angleX = XMConvertToRadians(0.25f*static_cast<float>(x - m_LastMousePos.x));
+    float angleY = XMConvertToRadians(0.25f*static_cast<float>(y - m_LastMousePos.y));
 
-	// LEFT BUTTON - rotate the object
-    if((btnState & MK_LBUTTON) != 0)
-    {
+    // TODO: Change alt cam to main cam
+    m_pCamera->Pitch(angleX);
+    m_pCamera->Yaw(angleY);
+
     m_LastMousePos.x = x;
     m_LastMousePos.y = y;
-        // Make each pixel correspond to a quarter of a degree.
-        //float dx = XMConvertToRadians(0.25f*static_cast<float>(x - m_LastMousePos.x));
-        //float dy = XMConvertToRadians(0.25f*static_cast<float>(y - m_LastMousePos.y));
-        // Update angles based on input to orbit camera around box.
-        //m_Theta += dx;
-        //m_Phi += dy;
-        // Restrict the angle mPhi. 
-        //m_Phi = Clamp(m_Phi, 0.1f, PI - 0.1f);
-    }
-    // RIGHT BUTTON - zoom in and out
-    else if((btnState & MK_RBUTTON) != 0)
-    {
-        // Make each pixel correspond to 0.005 unit in the scene.
-        //float dx = 0.005f*static_cast<float>(x - m_LastMousePos.x);
-        //float dy = 0.005f*static_cast<float>(y - m_LastMousePos.y);
-        // Update the camera radius based on input.
-        //m_Radius += dx - dy;
-        // Restrict the radius.
-        //m_Radius = Clamp(m_Radius, 3.0f, 15.0f);
-    }
 }
 
 #pragma endregion

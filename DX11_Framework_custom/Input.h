@@ -6,6 +6,7 @@
 #pragma once
 
 #include "Utilities.h"
+#include "Camera.h"
 
 #ifndef _INPUTCLASS_H_
 #define _INPUTCLASS_H_
@@ -16,6 +17,8 @@ public:
     Input(HWND& hWnd);
     Input(const Input&);
     ~Input();
+
+    void SetCam(std::shared_ptr<Camera>& pCam);
 
     void Initialize();
 
@@ -58,6 +61,8 @@ private:
     float m_Theta = 1.5f*XM_PI;
     float m_Phi = XM_PIDIV4;
     float m_Radius = 5.0f;
+
+    std::shared_ptr<Camera> m_pCamera;
 };
 
 #endif
