@@ -189,7 +189,8 @@ public:
         // Load the position into an XMVECTOR structure.
     XMVECTOR positionVector = XMLoadFloat3(&m_Position);
         // Setup where the camera is looking by default.
-    XMVECTOR lookAtVector = XMVectorSet(0.f, 0.f, 1.f, 0.f);
+    //XMVECTOR lookAtVector = XMVectorSet(0.f, 0.f, 1.f, 0.f);
+    XMVECTOR lookAtVector = XMLoadFloat3(&m_LookDir);
         // Create the rotation matrix from the product of the rotation vector and the radian vector.
         // This converts the rotations to radians before creating the rotation matrix
     XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYawFromVector(ConvertToRadians(rotationVector));
