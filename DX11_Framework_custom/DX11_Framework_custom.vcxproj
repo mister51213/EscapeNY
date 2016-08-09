@@ -191,6 +191,7 @@
     <ClInclude Include="Overlay.h" />
     <ClInclude Include="PrimitiveFactory.h" />
     <ClInclude Include="Shader_Texture.h" />
+    <ClInclude Include="SPARE_CODE.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TexturedPlane.h" />

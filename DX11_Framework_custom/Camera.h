@@ -167,22 +167,39 @@ public:
 
     void Render()
     {
-        // Load rotation XMFLOAT3 into a vector after converting it to radians
-        XMVECTOR pos = XMLoadFloat3(&(ConvertToRadians(m_Position)));
+        //// Load rotation XMFLOAT3 into a vector after converting it to radians
+        //XMVECTOR pos = XMLoadFloat3(&(ConvertToRadians(m_Position)));
+        //// Load up and right into vectors & convert to radians
+        //XMVECTOR up = XMLoadFloat3(&(ConvertToRadians(m_UpDir)));
+        //XMVECTOR right = XMLoadFloat3(&(ConvertToRadians(m_UpDir)));
+        //// Rotate up and right vectors
+        //XMVECTOR rotation = XMLoadFloat3(&(ConvertToRadians(m_Rotation)));
+        //XMVECTOR upR = up/**rotation*/;
+        //XMVECTOR rightR = right/**rotation*/;
+        //// Cross product of rotated vectors
+        //XMVECTOR fwdR = XMVector3Cross(upR, rightR);
+        //// Calculate view matrix
+        //m_ViewMatrix = XMMatrixLookAtLH(pos, fwdR, upR);
 
-        // Load up and right into vectors & convert to radians
-        XMVECTOR up = XMLoadFloat3(&(ConvertToRadians(m_UpDir)));
-        XMVECTOR right = XMLoadFloat3(&(ConvertToRadians(m_UpDir)));
-        // Rotate up and right vectors
-        XMVECTOR rotation = XMLoadFloat3(&(ConvertToRadians(m_Rotation)));
-        XMVECTOR upR = up/**rotation*/;
-        XMVECTOR rightR = right/**rotation*/;
-
-        // Cross product of rotated vectors
-        XMVECTOR fwdR = XMVector3Cross(upR, rightR);
-
-        // Calculate view matrix
-        m_ViewMatrix = XMMatrixLookAtLH(pos, fwdR, upR);
+        // TODO: OLD WAY
+                // Load the rotation and make radian vectors.
+    XMVECTOR rotationVector = XMLoadFloat3(&m_Rotation);
+        // Setup the vector that points upwards.
+    XMVECTOR upVector = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+        // Load the position into an XMVECTOR structure.
+    XMVECTOR positionVector = XMLoadFloat3(&m_Position);
+        // Setup where the camera is looking by default.
+    XMVECTOR lookAtVector = XMVectorSet(0.f, 0.f, 1.f, 0.f);
+        // Create the rotation matrix from the product of the rotation vector and the radian vector.
+        // This converts the rotations to radians before creating the rotation matrix
+    XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYawFromVector(ConvertToRadians(rotationVector));
+        // Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
+    lookAtVector = XMVector3TransformCoord(lookAtVector, rotationMatrix);
+    upVector = XMVector3TransformCoord(upVector, rotationMatrix);
+        // Translate the rotated camera position to the location of the viewer.
+    lookAtVector = XMVectorAdd(positionVector, lookAtVector);
+        // Finally create the view matrix from the three updated vectors.
+    m_ViewMatrix = XMMatrixLookAtLH(positionVector, lookAtVector, upVector);
     }
 
 private:
