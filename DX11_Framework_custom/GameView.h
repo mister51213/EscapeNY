@@ -20,7 +20,7 @@ class GameView
 {
 public:
 	GameView();
-	GameView( Graphics* pGfx, D3DGraphics* pD3D, std::shared_ptr<Camera> &pCam );
+	GameView( Graphics* pGfx, D3DGraphics* pD3D, Camera* pCam );
 	 
 	// CODE_CHANGE: Initialize function no longer needs vector of Actor pointers
 	void InitializeGameObjectsSystem();
@@ -44,7 +44,7 @@ private:
     Graphics* m_pGfx;
     D3DGraphics* m_pD3D;
 
-    std::shared_ptr<Camera> m_pCam;
+	Camera *m_pCam;
 	Shader_Texture m_shader_Texture;
     vector<Texture> m_Textures;
 };

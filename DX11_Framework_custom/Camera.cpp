@@ -27,13 +27,9 @@ Camera::~Camera()
 
 // Set up the position and rotation of the camera.
 bool Camera::Initialize( 
-    const XMFLOAT3 &Position, 
-    const XMFLOAT3 &Rotation,
 	const XMUINT2 &ScreenSize, 
     const XMFLOAT2 &ScreenClipDepth )
 {
-	SetPosition( Position );
-	SetRotation( Rotation );
 	float screenWidth = static_cast<float>( ScreenSize.x );
 	float screenHeight = static_cast<float>( ScreenSize.y );
 
@@ -72,19 +68,33 @@ void Camera::SetRotation( const XMFLOAT3 &Rotation )
 }
 
 // return the location and rotation of the camera to calling functions.
-XMFLOAT3 Camera::GetPosition()const
+const XMFLOAT3 &Camera::GetPosition()const
 {
 	return m_Position;
 }
 
-XMFLOAT3 Camera::GetRotation()const
+const XMFLOAT3 &Camera::GetRotation()const
 {
 	return m_Rotation;
 }
 
+void Camera::Move( XMFLOAT3 offset )
+{
+	m_Position.x += offset.x;
+	m_Position.y += offset.y;
+	m_Position.z += offset.z;
+}
+
+void Camera::Rotate( XMFLOAT3 offset )
+{
+	m_Rotation.x += offset.x;
+	m_Rotation.y += offset.y;
+	m_Rotation.z += offset.z;
+}
+
 // Use the position and rotation of the camera to build and update the view matrix. 
 
-void Camera::Render()
+void Camera::Update()
 {
 	// Load the rotation and make radian vectors.
 	XMVECTOR rotationVector = XMLoadFloat3( &m_Rotation );
@@ -114,24 +124,22 @@ void Camera::Render()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// After the Render function has been called to create the view matrix we can//
+// After the Update function has been called to create the view matrix we can//
 // provide the updated view matrix to calling functions using this 			 //
 // GetViewMatrix function. The view matrix will be one of the three main 	 //
 // matrices used in the HLSL vertex shader.									 //
 ///////////////////////////////////////////////////////////////////////////////
-XMMATRIX Camera::GetViewMatrix()const
+const XMMATRIX &Camera::GetViewMatrix()const
 {
 	return m_ViewMatrix;
 }
 
-// Gives access to projection, world, orthographic matrices because
-// most shaders will need these matrices for rendering
-XMMATRIX Camera::GetProjectionMatrix()const
+const XMMATRIX &Camera::GetProjectionMatrix()const
 {
 	return m_ProjectionMatrix;
 }
 
-XMMATRIX Camera::GetOrthoMatrix()const
+const XMMATRIX &Camera::GetOrthoMatrix()const
 {
 	return m_OrthoMatrix;
 }

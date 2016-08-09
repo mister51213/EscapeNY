@@ -7,7 +7,7 @@ GameView::GameView()
 	m_pCam( nullptr )
 {}
 
-GameView::GameView( Graphics * pGfx, D3DGraphics * pD3D, std::shared_ptr<Camera>& pCam )
+GameView::GameView( Graphics* pGfx, D3DGraphics* pD3D, Camera* pCam )
 	:
 	m_pGfx( pGfx ),
 	m_pD3D( pD3D ),

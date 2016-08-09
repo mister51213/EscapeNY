@@ -101,9 +101,9 @@ bool Shader_Texture::InitializeShader(
 // CODE_CHANGE: made function const
 bool Shader_Texture::SetShaderParameters(
     ID3D11DeviceContext* deviceContext, 
-    XMMATRIX & worldMatrix, 
-    XMMATRIX & viewMatrix,
-	XMMATRIX & projectionMatrix, 
+	const XMMATRIX &worldMatrix,
+	const XMMATRIX &viewMatrix,
+	const XMMATRIX &projectionMatrix,
     ID3D11ShaderResourceView* texture )const
 {
 	// Lock the constant buffer so it can be written to.

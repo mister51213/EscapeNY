@@ -41,6 +41,9 @@ void MazeGame::UpdateFrame( const Input & InputRef )
 	camOffset.y += 30.f;
 	m_pCamera->SetPosition( camOffset );
 
+	// Update the camera to update the view matrix
+	m_pCamera->Update();
+
 	// Pass input to overlay to check if player wants to regenerate the maze
 	m_Overlay.Update( InputRef );
 

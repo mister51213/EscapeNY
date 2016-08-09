@@ -1,4 +1,5 @@
 #include "Overlay.h"
+#include "MessageBox_Goal.h"
 
 Overlay::Overlay()
 {}
@@ -15,7 +16,22 @@ bool Overlay::Initialize( const Graphics &Gfx )
 	m_Font = fntLoader.MakeFont( L"Arial",24.f );
 	RETURN_IF_FALSE( m_Font != nullptr );
 	
-	m_goalMessage = L"Congratulations!!! \nYou've reached the end of the maze.  \nWould you like to load another one? \nPress Y to regenerate the maze, ESC to close program.\n";
+	float left = 100.f;
+	float top = 100.f;
+	float right = left + 450.f;
+	float bottom = top + 40.f;
+	D2D1_RECT_F rect( D2D1::RectF( left, top, right, bottom ) );
+	// Multi-line strings have to use the \ at the end, and the spacing
+	// from the first column of the file it is declared in, is the offset
+	// it will have on screen.
+	std::wstring mesg( 
+		L"Congratulations!!!\n\
+You've reached the end of the maze.\n\
+Would you like to load another one? \n\
+Press Y to regenerate the maze, ESC to close program.\n" );
+
+	msg.reset( new MessageBox_Goal( mesg, rect ) );
+	
 	return true;
 }
 
@@ -31,18 +47,12 @@ void Overlay::Render( const Graphics &Gfx )
 
 	if( m_reachedGoal )
 	{
-		float left = 100.f;
-		float top = 100.f;
-		float right = left + 450.f;
-		float bottom = top + 40.f;
 		Gfx.RenderString(
-			m_goalMessage,
+			msg->GetString(),
 			m_Font.Get(),
-			{ left, top, right, bottom } 
+			msg->GetRect()
 		);
 	}
-	// The rect is where to draw the text and when to either wrap the text or cut it off		
-	Gfx.RenderString( L"Hello", m_Font.Get(), D2D1::RectF( 0.f, 0.f, 80.f, 60.f ) );
 	
 	// Signal direct2d that we are done drawing
 	Gfx.EndDraw2D();

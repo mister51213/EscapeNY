@@ -32,9 +32,9 @@ public:
 	// CODE_CHANGE made function const
 	virtual bool SetShaderParameters( 
         ID3D11DeviceContext*, 
-        XMMATRIX &, 
-        XMMATRIX &, 
-        XMMATRIX &, 
+		const XMMATRIX &,
+		const XMMATRIX &,
+		const XMMATRIX &,
         ID3D11ShaderResourceView* )const override;
 
 	// CODE_CHANGE made function const and override

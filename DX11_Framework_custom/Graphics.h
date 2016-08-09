@@ -13,6 +13,8 @@ const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = true;
 const float SCREEN_DEPTH = 1000.0f;
 const float SCREEN_NEAR = 0.1f;
+const UINT g_screenWidth = 800;
+const UINT g_screenHeight = 600;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: Graphics

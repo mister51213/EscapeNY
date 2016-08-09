@@ -37,9 +37,9 @@ public:
 
 	virtual bool SetShaderParameters( 
         ID3D11DeviceContext*, 
-        XMMATRIX &, 
-        XMMATRIX &, 
-        XMMATRIX &, 
+        const XMMATRIX &, 
+        const XMMATRIX &, 
+        const XMMATRIX &, 
         ID3D11ShaderResourceView* =0)const override;
 	
     virtual void RenderShader( ID3D11DeviceContext* )const override;

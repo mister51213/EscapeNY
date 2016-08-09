@@ -98,9 +98,9 @@ bool Shader_Color::InitializeShader(
 
 bool Shader_Color::SetShaderParameters( 
     ID3D11DeviceContext* deviceContext,
-	XMMATRIX & worldMatrix, 
-    XMMATRIX & viewMatrix, 
-    XMMATRIX & projectionMatrix,
+	const XMMATRIX &worldMatrix, 
+    const XMMATRIX &viewMatrix, 
+    const XMMATRIX &projectionMatrix,
     ID3D11ShaderResourceView*)const
 {
 	// Lock the constant buffer so it can be written to.

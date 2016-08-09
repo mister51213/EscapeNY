@@ -28,6 +28,9 @@
     <Filter Include="Conventions">
       <UniqueIdentifier>{69f6d359-4809-4ea6-8303-406b16079cad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Overlay">
+      <UniqueIdentifier>{430ac553-6859-4297-8064-375504c1d923}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -120,6 +123,18 @@
     <ClCompile Include="Actor_Player_Alt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MessageBox_Goal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Overlay_Title.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageBox_Title.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Overlay_Base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -165,9 +180,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Wic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Overlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Model_Colored.h">
@@ -229,6 +241,27 @@
     </ClInclude>
     <ClInclude Include="Actor_Player_Alt.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageBox_Goal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IGameState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IOverlay.h">
+      <Filter>Header Files\Overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="Overlay.h">
+      <Filter>Header Files\Overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="Overlay_Title.h">
+      <Filter>Header Files\Overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageBox_Title.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Overlay_Base.h">
+      <Filter>Header Files\Overlay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

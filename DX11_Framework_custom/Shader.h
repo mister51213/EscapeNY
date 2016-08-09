@@ -35,9 +35,9 @@ public:
 	// CODE_CHANGE: made function const
 	bool Render(
 		ID3D11DeviceContext* deviceContext,
-		XMMATRIX & worldMatrix,
-		XMMATRIX & viewMatrix,
-		XMMATRIX & projectionMatrix,
+		const XMMATRIX & worldMatrix,
+		const XMMATRIX & viewMatrix,
+		const XMMATRIX & projectionMatrix,
 		ID3D11ShaderResourceView* texture = nullptr )const
 	{
 		// Set the shader parameters to use for rendering.
@@ -63,9 +63,9 @@ public:
 	// CODE_CHANGE: made function const
 	virtual bool SetShaderParameters(
 		ID3D11DeviceContext*,
-		XMMATRIX &,
-		XMMATRIX &,
-		XMMATRIX &,
+		const XMMATRIX &,
+		const XMMATRIX &,
+		const XMMATRIX &,
 		ID3D11ShaderResourceView* )const = 0;
 
 public:

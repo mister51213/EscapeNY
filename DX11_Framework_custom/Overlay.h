@@ -3,27 +3,26 @@
 #include "Includes.h"
 #include "Utilities.h"
 #include "FontLoader.h"
-#include "Graphics.h"
+#include "IOverlay.h"
 #include "Input.h"
 
-class Overlay
+class Overlay :public IOverlay
 {
 public:
 	Overlay();
 	~Overlay();
 
-	bool Initialize( const Graphics &Gfx );
-	void Render(const Graphics &Gfx);
+	bool Initialize( const Graphics &Gfx )override;
+	void Render(const Graphics &Gfx)override;
 	
-	// CODE_CHANGE: Made function parameter const
 	void Update(const Input & User);
 	void ResetGoalFlag();
 	void PlayerReachGoal();
 	bool WantsReset();
 private:
-	D2D1_RECT_F m_goalMessageRect;
 	comptr<IDWriteTextFormat> m_Font;
-	std::wstring m_goalMessage;
+	std::unique_ptr< MessageBoxBase > msg;
+	
 	bool m_reachedGoal = false;
 	bool m_wantsReset = false;
 };

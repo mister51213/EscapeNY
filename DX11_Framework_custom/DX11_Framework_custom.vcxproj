@@ -147,6 +147,10 @@
     <ClCompile Include="GameView.cpp" />
     <ClCompile Include="MazeGame.cpp" />
     <ClCompile Include="Algorithm_Maze.cpp" />
+    <ClCompile Include="MessageBox_Goal.cpp" />
+    <ClCompile Include="MessageBox_Title.cpp" />
+    <ClCompile Include="Overlay_Base.cpp" />
+    <ClCompile Include="Overlay_Title.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shader_Color.cpp" />
     <ClCompile Include="COMHandler.cpp" />
@@ -179,10 +183,16 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="GameView.h" />
+    <ClInclude Include="IGameState.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="IOverlay.h" />
     <ClInclude Include="ISubGame.h" />
     <ClInclude Include="MazeGame.h" />
     <ClInclude Include="Algorithm_Maze.h" />
+    <ClInclude Include="MessageBox_Goal.h" />
+    <ClInclude Include="MessageBox_Title.h" />
+    <ClInclude Include="Overlay_Base.h" />
+    <ClInclude Include="Overlay_Title.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />
     <ClInclude Include="COMHandler.h" />
