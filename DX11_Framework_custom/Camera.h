@@ -93,7 +93,7 @@ public:
         const float camSpeed = 2.f;
         float displacement = time*camSpeed;
 
-        if (pInput->IsKeyDown('d'))
+        if (pInput->IsKeyDown(VK_RIGHT))
         {
             Strafe(displacement);
         }
