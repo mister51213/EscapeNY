@@ -112,7 +112,9 @@ void Camera::GetInput(std::shared_ptr<Input> pInput)
 // called EVERY FRAME - see ShapeBuilder.cpp line 171~
 void Camera::Render()
 {
+    // must reset lookat vector every time
     XMVECTOR positionV = XMLoadFloat3(&m_Position);
+    XMVECTOR fwdV = XMVectorSet (0.f, 0.f, 0.1f, 1.f);
     m_ViewMatrix = XMMatrixLookAtLH(positionV, m_lookAtVector, m_upV);
 }
 

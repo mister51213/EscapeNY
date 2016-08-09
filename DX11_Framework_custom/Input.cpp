@@ -61,34 +61,28 @@ void Input::OnMouseMove(WPARAM btnState, int x, int y)
     // LEFT BUTTON - rotate the object
     if((btnState & MK_LBUTTON) != 0)
     {
+    m_LastMousePos.x = x;
+    m_LastMousePos.y = y;
         // Make each pixel correspond to a quarter of a degree.
-        float dx = XMConvertToRadians(0.25f*static_cast<float>(x - m_LastMousePos.x));
-        float dy = XMConvertToRadians(0.25f*static_cast<float>(y - m_LastMousePos.y));
-
+        //float dx = XMConvertToRadians(0.25f*static_cast<float>(x - m_LastMousePos.x));
+        //float dy = XMConvertToRadians(0.25f*static_cast<float>(y - m_LastMousePos.y));
         // Update angles based on input to orbit camera around box.
-        m_Theta += dx;
-        m_Phi += dy;
-
+        //m_Theta += dx;
+        //m_Phi += dy;
         // Restrict the angle mPhi. 
-        m_Phi = Clamp(m_Phi, 0.1f, PI - 0.1f);
+        //m_Phi = Clamp(m_Phi, 0.1f, PI - 0.1f);
     }
     // RIGHT BUTTON - zoom in and out
     else if((btnState & MK_RBUTTON) != 0)
     {
         // Make each pixel correspond to 0.005 unit in the scene.
-        float dx = 0.005f*static_cast<float>(x - m_LastMousePos.x);
-        float dy = 0.005f*static_cast<float>(y - m_LastMousePos.y);
-
+        //float dx = 0.005f*static_cast<float>(x - m_LastMousePos.x);
+        //float dy = 0.005f*static_cast<float>(y - m_LastMousePos.y);
         // Update the camera radius based on input.
-        m_Radius += dx - dy;
-
+        //m_Radius += dx - dy;
         // Restrict the radius.
-        m_Radius = Clamp(m_Radius, 3.0f, 15.0f);
+        //m_Radius = Clamp(m_Radius, 3.0f, 15.0f);
     }
-
-    // TODO: Comment explaining this
-    m_LastMousePos.x = x;
-    m_LastMousePos.y = y;
 }
 
 #pragma endregion
