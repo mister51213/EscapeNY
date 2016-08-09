@@ -28,10 +28,12 @@ void Input::Initialize()
 		m_keys[i] = false;
 	}
 
+	// NOTE: You aren't doing anything with x,y,z; so why is this here?
     // (Is this needed?) Convert Spherical to Cartesian coordinates.
     float x = m_Radius*sinf(m_Phi)*cosf(m_Theta);
     float z = m_Radius*sinf(m_Phi)*sinf(m_Theta);
     float y = m_Radius*cosf(m_Phi);
+	// NOTE: This looks like it was a copy/paste of Luna's code, we don't have a ShapeBuilder class
     // NOTE: This info is passed on to the camera POSITION in ShapeBuilder.cpp line 171~
 
 	return;
@@ -42,7 +44,7 @@ void Input::Initialize()
 // If a message takes a pointer, the pointer is usually passed in the LPARAM. 
 // If the message takes a handle or an integer, then it is passed in the WPARAM. 
 
-
+// NOTE: You don't use the WPARAM, why even pass it?
 void Input::OnMouseDown(WPARAM btnState, int x, int y)
 {
     m_LastMousePos.x = x;
@@ -51,6 +53,7 @@ void Input::OnMouseDown(WPARAM btnState, int x, int y)
     SetCapture(m_hMainWnd);
 }
 
+// NOTE: You don't use the WPARAM, why even pass it?
 void Input::OnMouseUp(WPARAM btnState, int x, int y)
 {
     ReleaseCapture();
@@ -58,7 +61,14 @@ void Input::OnMouseUp(WPARAM btnState, int x, int y)
 
 void Input::OnMouseMove(WPARAM btnState, int x, int y)
 {
-    // LEFT BUTTON - rotate the object
+	// NOTE: Function is specific to camera rotation, should be moved to 
+	//		 Camera::GetInput.  OnMouseMove, should update the position
+	//		 of the mouse.  The OnMouseDown and OnMouseUp should hold
+	//		 the button states.  The Set/Release capture should be set
+	//		 when mouse enters or extis the window...
+	//		 For game purposes, the mouse should probably be clamped to window.  
+
+	// LEFT BUTTON - rotate the object
     if((btnState & MK_LBUTTON) != 0)
     {
     m_LastMousePos.x = x;
