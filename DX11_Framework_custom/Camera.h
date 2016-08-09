@@ -134,6 +134,7 @@ public:
         //XMStoreFloat3(&m_UpDir, XMVector3TransformNormal(XMLoadFloat3(&m_UpDir), RotationM));
         //XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
         m_Orientation.x += angle; // will be converted to radians in render()
+        Clamp(m_Orientation.x, -80.f, 80.f);
     }
 
     // ROTATE camera on the Y axis
@@ -143,7 +144,7 @@ public:
         //XMFLOAT3 upReset{ 0.f,1.f,0.f }; // Reset up vector to avoid tilt
         //XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&upReset), angle);
         //XMStoreFloat3(&m_RightDir, XMVector3TransformNormal(XMLoadFloat3(&m_RightDir), RotationM));
-        //XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
+        //XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));        
         m_Orientation.y += angle; // will be converted to radians in render()
     }
 
@@ -153,7 +154,10 @@ public:
         XMVECTOR distV = DirectX::XMVectorReplicate(distance);
         XMVECTOR lookV = XMLoadFloat3(&m_LookDir);
         // Load up rotation matrix w current orientation
-        XMMATRIX rotMat = XMMatrixRotationRollPitchYaw(m_Orientation.x, m_Orientation.y, m_Orientation.z);
+        XMMATRIX rotMat = XMMatrixRotationRollPitchYaw(
+            XMConvertToRadians(m_Orientation.x), 
+            XMConvertToRadians(m_Orientation.y), 
+            XMConvertToRadians(m_Orientation.z));
         // Transform look vector by rotation matrix
         XMVECTOR lookV_Rotated = XMVector3Transform(lookV, rotMat);
 
@@ -170,7 +174,10 @@ public:
 
         XMVECTOR rightV = XMLoadFloat3(&m_RightDir);
         // Load up rotation matrix w current orientation
-        XMMATRIX rotMat = XMMatrixRotationRollPitchYaw(m_Orientation.x, m_Orientation.y, m_Orientation.z);
+        XMMATRIX rotMat = XMMatrixRotationRollPitchYaw(
+                XMConvertToRadians(m_Orientation.x), 
+                XMConvertToRadians(m_Orientation.y), 
+                XMConvertToRadians(m_Orientation.z));
         // Transform look vector by rotation matrix
         XMVECTOR rightV_Rotated = XMVector3Transform(rightV, rotMat);
 
@@ -188,10 +195,8 @@ public:
             XMConvertToRadians(m_Orientation.y), 
             XMConvertToRadians(m_Orientation.z));
         // ORDER of multiplication matters here:
-        m_ViewMatrix = XMMatrixInverse(0, translationMat * rotationMat);
+        m_ViewMatrix = XMMatrixInverse(0, rotationMat*translationMat);
            
-
-
         /*
         http://www.3dgep.com/understanding-the-view-matrix/
         */
@@ -215,7 +220,6 @@ public:
     //        -DotProduct(xaxis, eye), -DotProduct(yaxis, eye), -DotProduct(zaxis, eye), 1.f};
     // 
     //m_ViewMatrix = viewMatrix;
-
 
         // OLD WAY OF RENDERING
     //            // Load the rotation and make radian vectors.
