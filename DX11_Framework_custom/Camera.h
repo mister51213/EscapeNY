@@ -48,7 +48,7 @@ public:
     }
     XMFLOAT3 GetRotation()const
     {
-        return m_Rotation;
+        return m_Orientation;
     }
     void SetPosition(const XMFLOAT3 &Position)
     {
@@ -56,7 +56,7 @@ public:
     }
     void SetRotation(const XMFLOAT3 &Rotation)
     {
-        m_Rotation = Rotation;
+        m_Orientation = Rotation;
     }
 #pragma endregion
 
@@ -114,10 +114,8 @@ public:
     void GetMouseInput(std::shared_ptr<Input> pInput)
     {
     // Get "angle" traveled by mouse since last position
-    float angleX = XMConvertToRadians(
-        0.25f*static_cast<float>(pInput->m_LastMousePos.x - m_LastMousePos.x));
-    float angleY = XMConvertToRadians(
-        0.25f*static_cast<float>(pInput->m_LastMousePos.y - m_LastMousePos.y));
+    float angleX = 0.25f*static_cast<float>(pInput->m_LastMousePos.y - m_LastMousePos.y);
+    float angleY = 0.25f*static_cast<float>(pInput->m_LastMousePos.x - m_LastMousePos.x);
 
     // Store current mouse position
     m_LastMousePos.x = pInput->m_LastMousePos.x;
@@ -131,20 +129,22 @@ public:
     // ROTATE camera on the X axis
     void Pitch(float angle)
     {
-        m_Pitch = angle;
-        XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&m_RightDir), angle);
-        XMStoreFloat3(&m_UpDir, XMVector3TransformNormal(XMLoadFloat3(&m_UpDir), RotationM));
-        XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
+        // Frank Luna version
+        //XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&m_RightDir), angle);
+        //XMStoreFloat3(&m_UpDir, XMVector3TransformNormal(XMLoadFloat3(&m_UpDir), RotationM));
+        //XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
+        m_Orientation.x += angle; // will be converted to radians in render()
     }
 
     // ROTATE camera on the Y axis
     void Yaw(float angle)
     {
-        m_Yaw = angle;
-        XMFLOAT3 upReset{ 0.f,1.f,0.f }; // Reset up vector to avoid tilt
-        XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&upReset), angle);
-        XMStoreFloat3(&m_RightDir, XMVector3TransformNormal(XMLoadFloat3(&m_RightDir), RotationM));
-        XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
+        // Frank Luna version
+        //XMFLOAT3 upReset{ 0.f,1.f,0.f }; // Reset up vector to avoid tilt
+        //XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&upReset), angle);
+        //XMStoreFloat3(&m_RightDir, XMVector3TransformNormal(XMLoadFloat3(&m_RightDir), RotationM));
+        //XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
+        m_Orientation.y += angle; // will be converted to radians in render()
     }
 
     // Translate camera position along the look vector
@@ -152,60 +152,69 @@ public:
     {
         XMVECTOR distV = DirectX::XMVectorReplicate(distance);
         XMVECTOR lookV = XMLoadFloat3(&m_LookDir);
+        // Load up rotation matrix w current orientation
+        XMMATRIX rotMat = XMMatrixRotationRollPitchYaw(m_Orientation.x, m_Orientation.y, m_Orientation.z);
+        // Transform look vector by rotation matrix
+        XMVECTOR lookV_Rotated = XMVector3Transform(lookV, rotMat);
+
         XMVECTOR posV = XMLoadFloat3(&m_Position);
         // Store product of 1st 2 vectors + 3rd vector in m_Position
-        XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, lookV, posV));
+        XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, lookV_Rotated, posV));
     }
 
     // Translate camera position along the right vector
     void Strafe(float distance)
     {
+        // create a vector to represent distance traveled
         XMVECTOR distV = DirectX::XMVectorReplicate(distance);
+
         XMVECTOR rightV = XMLoadFloat3(&m_RightDir);
+        // Load up rotation matrix w current orientation
+        XMMATRIX rotMat = XMMatrixRotationRollPitchYaw(m_Orientation.x, m_Orientation.y, m_Orientation.z);
+        // Transform look vector by rotation matrix
+        XMVECTOR rightV_Rotated = XMVector3Transform(rightV, rotMat);
+
         XMVECTOR posV = XMLoadFloat3(&m_Position);
         // Store product of 1st 2 vectors + 3rd vector in m_Position
-        XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, rightV, posV));
+        XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, rightV_Rotated, posV));
     }
 
     void Render()
     {
-        //// Load rotation XMFLOAT3 into a vector after converting it to radians
-        //XMVECTOR pos = XMLoadFloat3(&(ConvertToRadians(m_Position)));
-        //// Load up and right into vectors & convert to radians
-        //XMVECTOR up = XMLoadFloat3(&(ConvertToRadians(m_UpDir)));
-        //XMVECTOR right = XMLoadFloat3(&(ConvertToRadians(m_UpDir)));
-        //// Rotate up and right vectors
-        //XMVECTOR rotation = XMLoadFloat3(&(ConvertToRadians(m_Rotation)));
-        //XMVECTOR upR = up/**rotation*/;
-        //XMVECTOR rightR = right/**rotation*/;
-        //// Cross product of rotated vectors
-        //XMVECTOR fwdR = XMVector3Cross(upR, rightR);
-        //// Calculate view matrix
-        //m_ViewMatrix = XMMatrixLookAtLH(pos, fwdR, upR);
+        // Build view matrix from position and rotation
+        XMMATRIX translationMat = XMMatrixTranslation(m_Position.x, m_Position.y, m_Position.z);
+        XMMATRIX rotationMat = XMMatrixRotationRollPitchYaw(
+            XMConvertToRadians(m_Orientation.x), 
+            XMConvertToRadians(m_Orientation.y), 
+            XMConvertToRadians(m_Orientation.z));
+        // ORDER of multiplication matters here:
+        m_ViewMatrix = XMMatrixInverse(0, translationMat * rotationMat);
+           
+
 
         /*
         http://www.3dgep.com/understanding-the-view-matrix/
         */
-        // Pitch should be in the range of [-90 ... 90] degrees and yaw should be in the range of [0 ... 360] degrees.
-        XMFLOAT3 eye = m_Position;
-        // Here I assume the values are already converted to radians.
-        float cosPitch = cos(m_Pitch);
-        float sinPitch = sin(m_Pitch);
-        float cosYaw = cos(m_Yaw);
-        float sinYaw = sin(m_Yaw);
+    //    // Pitch should be in the range of [-90 ... 90] degrees and yaw should be in the range of [0 ... 360] degrees.
+    //    XMFLOAT3 eye = m_Position;
+    //    // Here I assume the values are already converted to radians.
+    //    float cosPitch = cos(m_Pitch);
+    //    float sinPitch = sin(m_Pitch);
+    //    float cosYaw = cos(m_Yaw);
+    //    float sinYaw = sin(m_Yaw);
 
-        XMFLOAT3 xaxis = { cosYaw, 0, -sinYaw };
-        XMFLOAT3 yaxis = { sinYaw * sinPitch, cosPitch, cosYaw * sinPitch };
-        XMFLOAT3 zaxis = { sinYaw * cosPitch, -sinPitch, cosPitch * cosYaw };
+    //    XMFLOAT3 xaxis = { cosYaw, 0, -sinYaw };
+    //    XMFLOAT3 yaxis = { sinYaw * sinPitch, cosPitch, cosYaw * sinPitch };
+    //    XMFLOAT3 zaxis = { sinYaw * cosPitch, -sinPitch, cosPitch * cosYaw };
 
-        // Create a 4x4 view matrix from the right, up, forward and eye position vectors
-        XMMATRIX viewMatrix = {
-            xaxis.x, yaxis.x, zaxis.x, 0.f,
-            xaxis.y, yaxis.y, zaxis.y, 0.f,
-            xaxis.z, yaxis.z, zaxis.z, 0.f,
-            -DotProduct(xaxis, eye), -DotProduct(yaxis, eye), -DotProduct(zaxis, eye), 1.f};
-     
-    m_ViewMatrix = viewMatrix;
+    //    // Create a 4x4 view matrix from the right, up, forward and eye position vectors
+    //    XMMATRIX viewMatrix = {
+    //        xaxis.x, yaxis.x, zaxis.x, 0.f,
+    //        xaxis.y, yaxis.y, zaxis.y, 0.f,
+    //        xaxis.z, yaxis.z, zaxis.z, 0.f,
+    //        -DotProduct(xaxis, eye), -DotProduct(yaxis, eye), -DotProduct(zaxis, eye), 1.f};
+    // 
+    //m_ViewMatrix = viewMatrix;
 
 
         // OLD WAY OF RENDERING
@@ -232,12 +241,15 @@ public:
 
 private:
     XMFLOAT3 m_Position = { 0.0f, 0.0f, 0.0f };
-    XMFLOAT3 m_Rotation = { 0.0f, 0.0f, 0.0f };
+    // How many degrees is it rotated on the x, y, z axes
+    // JUST a collection of three different angles
+    XMFLOAT3 m_Orientation = { 0.0f, 0.0f, 0.0f };
+    //XMFLOAT3 m_Rotation = { 0.0f, 0.0f, 0.0f };
     XMFLOAT3 m_RightDir = { 1.0f, 0.0f, 0.0f };
     XMFLOAT3 m_UpDir = { 0.0f, 1.0f, 0.0f };
     XMFLOAT3 m_LookDir = { 0.0f, 0.0f, 1.0f };
     XMMATRIX m_ViewMatrix, m_ProjectionMatrix, m_OrthoMatrix;;
     XMFLOAT3 m_LastMousePos = { 0.f,0.f,0.f };
 
-    float m_Pitch, m_Yaw;
+    //float m_Pitch, m_Yaw;
 };
