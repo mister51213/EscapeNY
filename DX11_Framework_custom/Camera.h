@@ -113,15 +113,15 @@ public:
 
     void GetMouseInput(std::shared_ptr<Input> pInput)
     {
-    // Store current mouse position
-    m_LastMousePos.x = pInput->m_LastMousePos.x;
-    m_LastMousePos.y = pInput->m_LastMousePos.y;
-
     // Get "angle" traveled by mouse since last position
     float angleX = XMConvertToRadians(
         0.25f*static_cast<float>(pInput->m_LastMousePos.x - m_LastMousePos.x));
     float angleY = XMConvertToRadians(
         0.25f*static_cast<float>(pInput->m_LastMousePos.y - m_LastMousePos.y));
+
+    // Store current mouse position
+    m_LastMousePos.x = pInput->m_LastMousePos.x;
+    m_LastMousePos.y = pInput->m_LastMousePos.y;
 
     // Re-rotate camera based on new position of mouse
     Pitch(angleX);
@@ -192,5 +192,5 @@ private:
     XMFLOAT3 m_UpDir = { 0.0f, 1.0f, 0.0f };
     XMFLOAT3 m_LookDir = { 0.0f, 0.0f, 1.0f };
     XMMATRIX m_ViewMatrix, m_ProjectionMatrix, m_OrthoMatrix;;
-    XMFLOAT3 m_LastMousePos;
+    XMFLOAT3 m_LastMousePos = { 0.f,0.f,0.f };
 };
