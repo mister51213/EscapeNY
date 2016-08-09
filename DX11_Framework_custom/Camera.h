@@ -93,19 +93,19 @@ public:
         const float camSpeed = 2.f;
         float displacement = time*camSpeed;
 
-        if (pInput->IsKeyDown(VK_RIGHT))
+        if (pInput->IsKeyDown('D'))
         {
             Strafe(displacement);
         }
-        if (pInput->IsKeyDown('a'))
+        if (pInput->IsKeyDown('A'))
         {
             Strafe(-displacement);
         }
-        if (pInput->IsKeyDown('w'))
+        if (pInput->IsKeyDown('W'))
         {
             Walk(displacement);
         }
-        if (pInput->IsKeyDown('s'))
+        if (pInput->IsKeyDown('S'))
         {
             Walk(-displacement);
         }
@@ -181,7 +181,7 @@ public:
         //// Calculate view matrix
         //m_ViewMatrix = XMMatrixLookAtLH(pos, fwdR, upR);
 
-        // TODO: OLD WAY
+        // OLD WAY OF RENDERING
                 // Load the rotation and make radian vectors.
     XMVECTOR rotationVector = XMLoadFloat3(&m_Rotation);
         // Setup the vector that points upwards.
