@@ -6,7 +6,8 @@
 #pragma once
 
 #include "Utilities.h"
-#include "Camera.h"
+
+//class Camera;
 
 #ifndef _INPUTCLASS_H_
 #define _INPUTCLASS_H_
@@ -18,7 +19,7 @@ public:
     Input(const Input&);
     ~Input();
 
-    void SetCam(std::shared_ptr<Camera>& pCam);
+    //void SetCam(std::shared_ptr<Camera>& pCam);
 
     void Initialize();
 
@@ -30,8 +31,6 @@ public:
     void OnMouseDown(WPARAM btnState, int x, int y);
     void OnMouseUp(WPARAM btnState, int x, int y);
     void OnMouseMove(WPARAM btnState, int x, int y);
-
-    XMFLOAT3 m_LastMousePos;
 
     XMFLOAT3 GetCamOffset()
     {
@@ -51,6 +50,7 @@ public:
         return m_Radius;
     }
 
+    XMFLOAT3 m_LastMousePos;
 
 private:
     bool m_keys[256];
@@ -62,7 +62,7 @@ private:
     float m_Phi = XM_PIDIV4;
     float m_Radius = 5.0f;
 
-    std::shared_ptr<Camera> m_pCamera;
+    //std::shared_ptr<Camera> m_pCamera;
 };
 
 #endif

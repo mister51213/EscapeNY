@@ -26,77 +26,163 @@ using namespace DirectX;
 class Camera
 {
 public:
-	Camera();
-	~Camera();
-    // WORLD matrix can be decomposed into a rotation followed by a translation.
-    // W = R T, View = inverse of W
+    Camera() {}
+    ~Camera() {}
 
-void GetInput(std::shared_ptr<Input> pInput)
-{
-    const float time = 1.f;
-    const float camSpeed = 2.f;
-    float displacement = time*camSpeed;
+#pragma region ACCESSORS
+    XMMATRIX GetViewMatrix()const
+    {
+        return m_ViewMatrix;
+    }
+    XMMATRIX GetProjectionMatrix()const
+    {
+        return m_ProjectionMatrix;
+    }
+    XMMATRIX GetOrthoMatrix()const
+    {
+        return m_OrthoMatrix;
+    }
+    XMFLOAT3 GetPosition()const
+    {
+        return m_Position;
+    }
+    XMFLOAT3 GetRotation()const
+    {
+        return m_Rotation;
+    }
+    void SetPosition(const XMFLOAT3 &Position)
+    {
+        m_Position = Position;
+    }
+    void SetRotation(const XMFLOAT3 &Rotation)
+    {
+        m_Rotation = Rotation;
+    }
+#pragma endregion
 
-    if (pInput->IsKeyDown('d'))
-    {
-        Strafe(displacement);
+    bool Initialize(
+        const XMFLOAT3 &Position,
+        const XMFLOAT3 &Rotation,
+        const XMUINT2 &ScreenSize,
+        const XMFLOAT2 &ScreenClipDepth) {
+        SetPosition(Position);
+        SetRotation(Rotation);
+        float screenWidth = static_cast<float>(ScreenSize.x);
+        float screenHeight = static_cast<float>(ScreenSize.y);
+        // Setup the projection matrix used to translate the 3D scene into the 2D viewport space
+        float fieldOfView = XM_PIDIV4;
+        float screenAspect = screenWidth / screenHeight;
+        // Create the projection matrix for 3D rendering.
+        m_ProjectionMatrix = XMMatrixPerspectiveFovLH(
+            fieldOfView,
+            screenAspect,
+            ScreenClipDepth.x,
+            ScreenClipDepth.y);
+        // Create an orthographic projection matrix for 2D rendering.
+        m_OrthoMatrix = XMMatrixOrthographicLH(
+            screenWidth,
+            screenHeight,
+            ScreenClipDepth.x,
+            ScreenClipDepth.y);
+        return true;
     }
-    if (pInput->IsKeyDown('a'))
+
+    void GetInput(std::shared_ptr<Input> pInput)
     {
-        Strafe(-displacement);
+        const float time = 1.f;
+        const float camSpeed = 2.f;
+        float displacement = time*camSpeed;
+
+        if (pInput->IsKeyDown('d'))
+        {
+            Strafe(displacement);
+        }
+        if (pInput->IsKeyDown('a'))
+        {
+            Strafe(-displacement);
+        }
+        if (pInput->IsKeyDown('w'))
+        {
+            Walk(displacement);
+        }
+        if (pInput->IsKeyDown('s'))
+        {
+            Walk(-displacement);
+        }
     }
-    if (pInput->IsKeyDown('w'))
+
+    void GetMouseInput(std::shared_ptr<Input> pInput)
     {
-        Walk(displacement);
+    // Store current mouse position
+    m_LastMousePos.x = pInput->m_LastMousePos.x;
+    m_LastMousePos.y = pInput->m_LastMousePos.y;
+
+    // Get "angle" traveled by mouse since last position
+    float angleX = XMConvertToRadians(
+        0.25f*static_cast<float>(pInput->m_LastMousePos.x - m_LastMousePos.x));
+    float angleY = XMConvertToRadians(
+        0.25f*static_cast<float>(pInput->m_LastMousePos.y - m_LastMousePos.y));
+
+    // Re-rotate camera based on new position of mouse
+    Pitch(angleX);
+    Yaw(angleY);
     }
-    if (pInput->IsKeyDown('s'))
-    {
-        Walk(-displacement);
-    }
-} 
 
     // ROTATE camera on the X axis
     void Pitch(float angle)
     {
-    XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&m_RightDir), angle);
-	XMStoreFloat3(&m_UpDir,   XMVector3TransformNormal(XMLoadFloat3(&m_UpDir), RotationM));
-	XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
+        XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&m_RightDir), angle);
+        XMStoreFloat3(&m_UpDir, XMVector3TransformNormal(XMLoadFloat3(&m_UpDir), RotationM));
+        XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
     }
 
     // ROTATE camera on the Y axis
     void Yaw(float angle)
-    {    
-    XMFLOAT3 upReset { 0.f,1.f,0.f }; // Reset up vector to avoid tilt
-    XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&upReset), angle);
-	XMStoreFloat3(&m_RightDir,   XMVector3TransformNormal(XMLoadFloat3(&m_RightDir), RotationM));
-	XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
+    {
+        XMFLOAT3 upReset{ 0.f,1.f,0.f }; // Reset up vector to avoid tilt
+        XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&upReset), angle);
+        XMStoreFloat3(&m_RightDir, XMVector3TransformNormal(XMLoadFloat3(&m_RightDir), RotationM));
+        XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
     }
 
     // Translate camera position along the look vector
     void Walk(float distance)
     {
-    XMVECTOR distV = DirectX::XMVectorReplicate(distance);
-    XMVECTOR lookV = XMLoadFloat3(&m_LookDir);
-	XMVECTOR posV = XMLoadFloat3(&m_Position);
-    // Store product of 1st 2 vectors + 3rd vector in m_Position
-	XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, lookV, posV));
+        XMVECTOR distV = DirectX::XMVectorReplicate(distance);
+        XMVECTOR lookV = XMLoadFloat3(&m_LookDir);
+        XMVECTOR posV = XMLoadFloat3(&m_Position);
+        // Store product of 1st 2 vectors + 3rd vector in m_Position
+        XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, lookV, posV));
     }
 
     // Translate camera position along the right vector
     void Strafe(float distance)
     {
-	XMVECTOR distV = DirectX::XMVectorReplicate(distance);
-    XMVECTOR rightV = XMLoadFloat3(&m_RightDir);
-	XMVECTOR posV = XMLoadFloat3(&m_Position);
-    // Store product of 1st 2 vectors + 3rd vector in m_Position
-	XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, rightV, posV));
+        XMVECTOR distV = DirectX::XMVectorReplicate(distance);
+        XMVECTOR rightV = XMLoadFloat3(&m_RightDir);
+        XMVECTOR posV = XMLoadFloat3(&m_Position);
+        // Store product of 1st 2 vectors + 3rd vector in m_Position
+        XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, rightV, posV));
     }
 
     void Render()
     {
+        // Load rotation XMFLOAT3 into a vector after converting it to radians
+        XMVECTOR pos = XMLoadFloat3(&(ConvertToRadians(m_Position)));
 
+        // Load up and right into vectors & convert to radians
+        XMVECTOR up = XMLoadFloat3(&(ConvertToRadians(m_UpDir)));
+        XMVECTOR right = XMLoadFloat3(&(ConvertToRadians(m_UpDir)));
+        // Rotate up and right vectors
+        XMVECTOR rotation = XMLoadFloat3(&(ConvertToRadians(m_Rotation)));
+        XMVECTOR upR = up/**rotation*/;
+        XMVECTOR rightR = right/**rotation*/;
 
-        m_viewMatrix = XMMatrixIdentity();
+        // Cross product of rotated vectors
+        XMVECTOR fwdR = XMVector3Cross(upR, rightR);
+
+        // Calculate view matrix
+        m_ViewMatrix = XMMatrixLookAtLH(pos, fwdR, upR);
     }
 
 private:
@@ -105,5 +191,6 @@ private:
     XMFLOAT3 m_RightDir = { 1.0f, 0.0f, 0.0f };
     XMFLOAT3 m_UpDir = { 0.0f, 1.0f, 0.0f };
     XMFLOAT3 m_LookDir = { 0.0f, 0.0f, 1.0f };
-    XMMATRIX m_viewMatrix;
+    XMMATRIX m_ViewMatrix, m_ProjectionMatrix, m_OrthoMatrix;;
+    XMFLOAT3 m_LastMousePos;
 };

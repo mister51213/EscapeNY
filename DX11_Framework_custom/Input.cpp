@@ -3,12 +3,11 @@
 // in a keyboard array. When queried it will tell the 
 // calling functions if a certain key is pressed.
 //////////////////////////////////////////////////////////
-
 #include "Input.h"
 
 Input::Input(HWND& hMainWnd):
     m_hMainWnd(hMainWnd),
-    m_pCamera(pCam),
+    //m_pCamera(pCam),
     m_LastMousePos({ 0.f,0.f,0.f })
 {}
 
@@ -18,10 +17,10 @@ Input::Input(const Input& other)
 Input::~Input()
 {}
 
-void Input::SetCam(std::shared_ptr<Camera>& pCam)
-{
-    m_pCamera = pCam;
-}
+//void Input::SetCam(std::shared_ptr<Camera>& pCam)
+//{
+//    m_pCamera = pCam;
+//}
 
 void Input::Initialize()
 {
@@ -66,14 +65,13 @@ void Input::OnMouseUp(WPARAM btnState, int x, int y)
 
 void Input::OnMouseMove(WPARAM btnState, int x, int y)
 {
-    // Make each pixel correspond to a quarter of a degree.
-    float angleX = XMConvertToRadians(0.25f*static_cast<float>(x - m_LastMousePos.x));
-    float angleY = XMConvertToRadians(0.25f*static_cast<float>(y - m_LastMousePos.y));
-
-    // TODO: Change alt cam to main cam
-    m_pCamera->Pitch(angleX);
-    m_pCamera->Yaw(angleY);
-
+    // TODO: These should be in camera class
+    //// Make each pixel correspond to a quarter of a degree.
+    //float angleX = XMConvertToRadians(0.25f*static_cast<float>(x - m_LastMousePos.x));
+    //float angleY = XMConvertToRadians(0.25f*static_cast<float>(y - m_LastMousePos.y));
+    //// TODO: Change alt cam to main cam
+    //m_pCamera->Pitch(angleX);
+    //m_pCamera->Yaw(angleY);
     m_LastMousePos.x = x;
     m_LastMousePos.y = y;
 }

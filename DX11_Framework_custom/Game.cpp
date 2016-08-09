@@ -47,16 +47,15 @@ bool Game::Initialize(
 void Game::getInput(std::shared_ptr<Input> pInput)
 {
     // Tried to make pInput a member variable but input doesnt work that way for some reason.
-    pInput->SetCam(m_pCamera);
+    //pInput->SetCam(m_pCamera);
 
     int randInt = rand() % 3;
 	// NOTE: If you need a float between 0.f and 10.f, shouldn't the line say:
-	// float randFloat = static_cast<float>(rand() % 100) / 10.f;
-	// TODO: Multiplying is faster than dividing, change ( / 10.f ) to ( * 0.1f ).
-    float randFloat = (rand()%50)/10.0f; // get random float from 0~10.0
+    float randFloat = static_cast<float>(rand() % 100)* 0.1f; // get random float from 0~10.0
 
     // Camera input
     m_pCamera->GetInput(pInput);
+    m_pCamera->GetMouseInput(pInput);
 
     // Player input
     m_player.GetInput(pInput);
@@ -66,54 +65,47 @@ void Game::getInput(std::shared_ptr<Input> pInput)
     {
         pActor.GetInput(pInput, randInt, randFloat);
     }
-
     randInt = rand() % 3;
     randFloat = (rand()%50)/10.0f; // get random float from 0~10.0
     for (auto& pActor : m_actorsSUB2)
     {
         pActor.GetInput(pInput, randInt, randFloat);
     }
-
     // CAMERA INPUT
     // Pan and tilt
-    if (pInput->IsKeyDown(0x51)) // Left - Q
-    {
-        m_pCamera->Rotate({ 0, -1, 0 });
-    }
-
-    if (pInput->IsKeyDown(0x45)) // Right - E
-    {
-        m_pCamera->Rotate({ 0, 1, 0 });
-    }
-
-    if (pInput->IsKeyDown(VK_NEXT))
-    {
-        m_pCamera->Rotate({ -1.f, 0.f, 0.f });
-    }
-    else if (pInput->IsKeyDown(VK_PRIOR))
-    {
-        m_pCamera->Rotate({ 1.f, 0.f, 0.f });
-    }
-    // FPS Move
-    if (pInput->IsKeyDown(0x41)) // Left - A
-    {
-        m_pCamera->Move({ -1, 0, 0 });
-    }
-
-    if (pInput->IsKeyDown(0x53)) // Back - S
-    {
-        m_pCamera->Move({ 0, 0, -1 });
-    }
-
-    if (pInput->IsKeyDown(0x57)) // Fwd - W
-    {
-        m_pCamera->Move({ 0, 0, 1 });
-    }
-
-    if (pInput->IsKeyDown(0x44)) // Right - D
-    {
-        m_pCamera->Move({ 1, 0, 0 });
-    }
+    //if (pInput->IsKeyDown(0x51)) // Left - Q
+    //{
+    //    m_pCamera->Rotate({ 0, -1, 0 });
+    //}
+    //if (pInput->IsKeyDown(0x45)) // Right - E
+    //{
+    //    m_pCamera->Rotate({ 0, 1, 0 });
+    //}
+    //if (pInput->IsKeyDown(VK_NEXT))
+    //{
+    //    m_pCamera->Rotate({ -1.f, 0.f, 0.f });
+    //}
+    //else if (pInput->IsKeyDown(VK_PRIOR))
+    //{
+    //    m_pCamera->Rotate({ 1.f, 0.f, 0.f });
+    //}
+    //// FPS Move
+    //if (pInput->IsKeyDown(0x41)) // Left - A
+    //{
+    //    m_pCamera->Move({ -1, 0, 0 });
+    //}
+    //if (pInput->IsKeyDown(0x53)) // Back - S
+    //{
+    //    m_pCamera->Move({ 0, 0, -1 });
+    //}
+    //if (pInput->IsKeyDown(0x57)) // Fwd - W
+    //{
+    //    m_pCamera->Move({ 0, 0, 1 });
+    //}
+    //if (pInput->IsKeyDown(0x44)) // Right - D
+    //{
+    //    m_pCamera->Move({ 1, 0, 0 });
+    //}
 }
 
 // TODO: Make a list of Actor* ptrs, pass pointers to them to GameWorld.Update() function
