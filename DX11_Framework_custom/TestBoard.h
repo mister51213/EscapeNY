@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Actor.h"
 #include "Includes.h"
+#include "Actor.h"
+#include "ResourceManager.h"
 
 enum eTileType
 {
@@ -15,7 +16,7 @@ public:
 	TestBoard();
 	~TestBoard();
 
-	void Initialize( UINT Width, UINT Height );
+	void Initialize( UINT Width, UINT Height, Graphics *const pGraphics, ResourceManager *const pResource );
 	DirectX::XMUINT2 GetStartCellCoord()const;
 	DirectX::XMUINT2 GetEndCellCoord()const;
 	DirectX::XMFLOAT3 GetStartPosition()const;
@@ -34,5 +35,6 @@ private:
 	DirectX::XMFLOAT3 m_cellSize;
 	std::vector<Actor> m_pCells;
 	DirectX::XMUINT2 m_startCell, m_endCell;
+
 };
 

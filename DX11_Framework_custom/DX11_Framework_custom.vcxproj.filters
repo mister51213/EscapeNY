@@ -28,7 +28,40 @@
     <Filter Include="Conventions">
       <UniqueIdentifier>{69f6d359-4809-4ea6-8303-406b16079cad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Overlay">
+    <Filter Include="Header Files\Messages">
+      <UniqueIdentifier>{8650aef8-13e7-401a-ad49-479ef35d1cde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Actors">
+      <UniqueIdentifier>{5031a83c-eda0-4dcf-9bc9-4cbf3ac3651c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Algorithms">
+      <UniqueIdentifier>{93c7d9ef-42f0-4023-a2e3-018431a1ebb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Actors">
+      <UniqueIdentifier>{1e280fc4-f0a3-4e16-a709-ef5992c28281}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Algorithms">
+      <UniqueIdentifier>{4dc6d0a4-4a82-4b56-baae-cc920c081f70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Messages">
+      <UniqueIdentifier>{0954f171-4722-4a5c-8f4f-9dd556d17a53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Models">
+      <UniqueIdentifier>{57b82770-b620-48e9-82e6-c2641fea5b70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SubGames">
+      <UniqueIdentifier>{241baa53-ff1a-4170-a02d-0a1e9a4b765a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Models">
+      <UniqueIdentifier>{7a4df60f-dfe1-46ac-8172-86f4d3ea63d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SubGames">
+      <UniqueIdentifier>{14ad7c76-655f-4c44-b353-5d6973890e41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Overlays">
+      <UniqueIdentifier>{2ad6e404-f5a3-4e83-ace9-e4f53b7795f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Overlays">
       <UniqueIdentifier>{430ac553-6859-4297-8064-375504c1d923}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -60,9 +93,6 @@
     <ClCompile Include="D3DGraphics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FontLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -76,15 +106,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Wic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Overlay.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Model_Colored.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Model_Textured.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Shader_Color.cpp">
@@ -114,25 +135,52 @@
     <ClCompile Include="GameView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MazeGame.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Actor_Player_Alt.cpp">
+      <Filter>Source Files\Actors</Filter>
     </ClCompile>
     <ClCompile Include="Algorithm_Maze.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Actor_Player_Alt.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
     <ClCompile Include="MessageBox_Goal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Overlay_Title.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Messages</Filter>
     </ClCompile>
     <ClCompile Include="MessageBox_Title.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Model_Colored.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Model_Textured.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeGame.cpp">
+      <Filter>Source Files\SubGames</Filter>
+    </ClCompile>
+    <ClCompile Include="Overlay.cpp">
+      <Filter>Source Files\Overlays</Filter>
     </ClCompile>
     <ClCompile Include="Overlay_Base.cpp">
+      <Filter>Source Files\Overlays</Filter>
+    </ClCompile>
+    <ClCompile Include="Overlay_Title.cpp">
+      <Filter>Source Files\Overlays</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Algorithm_Random.cpp">
+      <Filter>Source Files\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="Algorithm_Grid3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Algorithm_Spiral3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -161,9 +209,6 @@
     <ClInclude Include="D3DGraphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FontLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -180,12 +225,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Wic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Model_Colored.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Model_Textured.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
@@ -206,19 +245,7 @@
     <ClInclude Include="PrimitiveFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Algorithm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Algorithm_Grid3D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Algorithm_Spiral3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Board.h">
@@ -230,38 +257,65 @@
     <ClInclude Include="Utilities.h">
       <Filter>Header Files\Utility Classes</Filter>
     </ClInclude>
-    <ClInclude Include="ISubGame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MazeGame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Algorithm_Maze.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Actor_Player_Alt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MessageBox_Goal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IGameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IOverlay.h">
-      <Filter>Header Files\Overlay</Filter>
+      <Filter>Header Files\Overlays</Filter>
     </ClInclude>
     <ClInclude Include="Overlay.h">
-      <Filter>Header Files\Overlay</Filter>
+      <Filter>Header Files\Overlays</Filter>
     </ClInclude>
     <ClInclude Include="Overlay_Title.h">
-      <Filter>Header Files\Overlay</Filter>
-    </ClInclude>
-    <ClInclude Include="MessageBox_Title.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Overlays</Filter>
     </ClInclude>
     <ClInclude Include="Overlay_Base.h">
-      <Filter>Header Files\Overlay</Filter>
+      <Filter>Header Files\Overlays</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageBox_Goal.h">
+      <Filter>Header Files\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageBox_Title.h">
+      <Filter>Header Files\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_Player_Alt.h">
+      <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithm.h">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithm_Grid3D.h">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithm_Maze.h">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithm_Spiral3D.h">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Model_Colored.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Model_Textured.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="MazeGame.h">
+      <Filter>Header Files\SubGames</Filter>
+    </ClInclude>
+    <ClInclude Include="ISubGame.h">
+      <Filter>Header Files\SubGames</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithm_Random.h">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

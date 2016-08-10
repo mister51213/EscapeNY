@@ -43,7 +43,7 @@ public:
 	void Rotate( XMFLOAT3 offset );
 
     // create the view matrix based on the position and rotation of the camera. 
-	void Update();
+	void Update(const XMFLOAT3 &LookAtV);
 
     // retrieve the view matrix from the camera object so that the 
     // shaders can use it for rendering.

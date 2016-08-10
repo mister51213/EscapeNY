@@ -30,49 +30,8 @@ else int a = 0
 #define RETURN_IF_FAILED(Result) RETURN_IF_FALSE( SUCCEEDED( ( Result ) ) )
 
 ////////////////////////////////////////////////////
-// Vector Math Operator Overloads
+// Math Constants
 ///////////////////////////////////////////////////
-
-// Keep operator overloads out of namespace so we can access them
-// without having to declare: using namespace
-inline XMFLOAT3 operator+( const XMFLOAT3 &V1, const XMFLOAT3& V2 )
-{
-	return XMFLOAT3( V1.x + V2.x, V1.y + V2.y, V1.z + V2.z );
-}
-inline XMFLOAT3 operator-( const XMFLOAT3 &V1, const XMFLOAT3& V2 )
-{
-	return XMFLOAT3( V1.x - V2.x, V1.y - V2.y, V1.z - V2.z );
-}
-inline XMFLOAT3 operator*( const XMFLOAT3 &V, const float S )
-{
-	return XMFLOAT3( V.x * S, V.y * S, V.z * S );
-}
-inline XMFLOAT3 operator/( const XMFLOAT3 &V, const float S )
-{
-	const float recipScalar = 1.f / S;
-	return XMFLOAT3( V.x * recipScalar, V.y * recipScalar, V.z * recipScalar );
-}
-
-inline XMFLOAT3 &operator+= ( XMFLOAT3& V1, const XMFLOAT3& V2 )
-{
-	V1 = V2 + V1;
-	return V1;
-}
-inline XMFLOAT3 &operator-= ( XMFLOAT3& V1, const XMFLOAT3& V2 )
-{
-	V1 = V2 - V1;
-	return V1;
-}
-inline XMFLOAT3 &operator*= ( XMFLOAT3 &V, const float S )
-{
-	V = V * S;
-	return V;
-}
-inline XMFLOAT3 &operator/= ( XMFLOAT3 &V, const float S )
-{
-	V = V / S;
-	return V;
-}
 
 // PI is equal to 180 degrees
 constexpr float PI = 3.141592654f;
@@ -93,102 +52,44 @@ constexpr float radian = PI / 180.f;
 // Radian to degree conversion
 constexpr float degree = 180.f / PI;
 
+////////////////////////////////////////////////////
+// Vector Math Operator Overloads
+///////////////////////////////////////////////////
+
+// Keep operator overloads out of namespace so we can access them
+// without having to declare: using namespace
+
+XMFLOAT3 operator+( const XMFLOAT3 &V1, const XMFLOAT3& V2 );
+XMFLOAT3 operator-( const XMFLOAT3 &V1, const XMFLOAT3& V2 );
+XMFLOAT3 operator*( const XMFLOAT3 &V, const float S );
+XMFLOAT3 operator/( const XMFLOAT3 &V, const float S );
+
+XMFLOAT3 &operator+= ( XMFLOAT3& V1, const XMFLOAT3& V2 );
+XMFLOAT3 &operator-= ( XMFLOAT3& V1, const XMFLOAT3& V2 );
+XMFLOAT3 &operator*= ( XMFLOAT3 &V, const float S );
+XMFLOAT3 &operator/= ( XMFLOAT3 &V, const float S );
+
 // Calculates the cross-product of two float3 vectors
-inline XMFLOAT3 CrossProduct( const XMFLOAT3 &V1, const XMFLOAT3 &V2 )
-{
-	return
-	{
-		( V1.y * V2.z ) - ( V1.z * V2.y ),
-		( V1.z * V2.x ) - ( V1.x * V2.z ),
-		( V1.x * V2.y ) - ( V1.y * V2.x )
-	};
-}
+XMFLOAT3 CrossProduct( const XMFLOAT3 &V1, const XMFLOAT3 &V2 );
 
 // Calculates the dot-product of two float3 vectors
-inline float DotProduct( const XMFLOAT3 &V1, const XMFLOAT3 &V2 )
-{
-	return ( V1.x * V2.x ) + ( V1.y * V2.y ) + ( V1.z * V2.z );
-}
+float DotProduct( const XMFLOAT3 &V1, const XMFLOAT3 &V2 );
 
 // Calculates the magnitude of a float3 vector
-inline float Magnitude( const XMFLOAT3 &V )
-{
-	// The dot-product of an angle with itself is the same as
-	// the magnitude of the vector squared, to get the magnitude
-	// return the square root of the result.
-	return sqrtf( DotProduct( V, V ) );
-}
+float Magnitude( const XMFLOAT3 &V );
 
 // Calcualtes the length between two float3 point vectors
-inline float Length( const XMFLOAT3 &V1, const XMFLOAT3 &V2 )
-{
-	// Length between two points is the magnitude of the vector
-	// that starts at point1 and goes to point2
-	return Magnitude( V2 - V1 );
-}
+float Length( const XMFLOAT3 &V1, const XMFLOAT3 &V2 );
 
 // Normalizes a float3 vector
-inline XMFLOAT3 Normalize( const XMFLOAT3 &V )
-{
-	// Optimization
-	// Division is the slowest basic math operation, so getting
-	// the recipricol we can use multiplication instead, which is faster
-	float recipricalLength = 1.0f / Magnitude( V );
-	return V * recipricalLength;
-}
+XMFLOAT3 Normalize( const XMFLOAT3 &V );
 
-inline XMVECTOR ConvertToRadians( const XMVECTOR& angleInDegrees )
-{
-	// Use constexpr radian which is the result of PI / 180.f calculated
-	// at compile time.
-	return angleInDegrees * XMVectorReplicate( radian );
-}
-
-inline XMFLOAT3 ConvertToRadians( const XMFLOAT3& angleInDegrees )
-{
-	// Use constexpr radian which is the result of PI / 180.f calculated
-	// at compile time.
-	return{ angleInDegrees * radian };
-}
-
-inline float CalculateYRotation( const float X, const float Z, float &RX, float &RZ )
-{
-	// If x or z is greater than 0.f, calculate new direction, otherwise
-	// skips calculations, uses trig function acos (arccosine) to convert
-	// vector direction to angle in radians, then to degrees.
-	float angle = -0.f;
-	if( ( fabsf( X ) > 0.f ) || ( fabsf( Z ) > 0.f ) )
-	{
-		// Normalize X and Z to get direction
-		// Get the recipricol magnitude of the 2D vector
-		float recipricolMagnitude = 1.f / sqrtf( pow( X, 2 ) + pow( Z, 2 ) );
-
-		// Use the recipricol magnitude to get the normalized 2D vector.
-		// Using the recipricol of the magnitude is faster, because multiplying
-		// is faster than dividing
-		RX = X * recipricolMagnitude;
-		RZ = Z * recipricolMagnitude;
-
-		// Get the angle in radians, depending on which you use, result
-		// could be positive or negative
-		float radx = acosf( RX );
-		float radz = asinf( RZ );
-
-		// Determine the sign (positive or negative) of the angle
-		// If both are positive, angle will be positive,
-		// if one is negative or both, then angle will be negative
-		float sgn = ( radx >= 0.f ) && ( radz >= 0.f ) ? 1.f : -1.f;
-
-		// Convert to degrees
-		angle = degree * (sgn * radx);
-	}
-
-	return angle;
-}
+XMVECTOR ConvertToRadians( const XMVECTOR& angleInDegrees );
+XMFLOAT3 ConvertToRadians( const XMFLOAT3& angleInDegrees );
+float CalculateYRotation( const float X, const float Z, float &RX, float &RZ );
 
 ////////////////////////////////////////////////////////////////
 // STRUCTS CONTAINING MODEL INFO for gameplay and rendering
-// TODO: make it global; see which is faster
 ////////////////////////////////////////////////////////////////
 struct ModelSpecs_W
 {
@@ -197,21 +98,10 @@ struct ModelSpecs_W
 
 struct ModelSpecs_L
 {
-	/*ModelSpecs_L()
-		:
-		center( 0.f, 0.f, 0.f ),
-		size( 5.f, 5.f, 5.f ),
-		orientation( 0.f, 0.f, 0.f )
-	{}*/
-	ModelSpecs_L( 
+	ModelSpecs_L(
 		const XMFLOAT3 &Center = { 0.f, 0.f, 0.f },
 		const XMFLOAT3 &Orientation = { 0.f,0.f,0.f },
-   		const XMFLOAT3 &Size = { 5.f, 5.f, 5.f })
-		:
-		center( Center ),
-    	orientation( Orientation ),
-        size( Size )
-	{}
+		const XMFLOAT3 &Size = { 5.f, 5.f, 5.f } );
 
 	XMFLOAT3 center;
 	XMFLOAT3 orientation;
@@ -233,33 +123,7 @@ enum eTexture
 // FUNCTION FOR GETTING WORLD MATRIX
 // TODO: make it global; see which is faster
 ////////////////////////////////////////////////////////////////
-
-inline DirectX::XMMATRIX GetWorldMatrix( ModelSpecs_W modSpecs
-/*const XMFLOAT3& translate, const XMFLOAT3& rotate, const XMFLOAT3& scale*/ )
-{
-	DirectX::XMMATRIX trans = XMMatrixTranslation(/*translate.x, translate.y, translate.z*/modSpecs.position.x, modSpecs.position.y, modSpecs.position.z );
-	auto rotation = ConvertToRadians( modSpecs.orientation );
-	DirectX::XMMATRIX rot = XMMatrixRotationRollPitchYaw(/*rotate.x, rotate.y, rotate.z*/rotation.x, rotation.y, rotation.z );
-	DirectX::XMMATRIX scal = XMMatrixScaling(/*scale.x, scale.y, scale.z*/modSpecs.scale.x, modSpecs.scale.y, modSpecs.scale.z );
-
-	//return rot*scal*trans;
-	return XMMatrixTranspose( rot*scal*trans ); // Also transpose it in this step to make it easier for GPU to handle
-												// TODO: remove transponse world matrix from shader
-}
-
-// TODO: Make this global inline in Utilities
-// Transpose the matrices to prepare them for the shader.
-inline DirectX::XMMATRIX Transpose( std::vector<XMMATRIX> & matrices )
-{
-	// TODO:  Figure out best way to do this; what's the fastest way,
-	// pass a list of matrices, or what?????
-
-	/*MatrixBufferType data;
-	data.world = XMMatrixTranspose( worldMatrix );
-	data.view = XMMatrixTranspose( viewMatrix );
-	data.projection = XMMatrixTranspose( projectionMatrix );*/
-	return XMMatrixIdentity();
-}
+DirectX::XMMATRIX GetWorldMatrix( const ModelSpecs_W &modSpecs );
 
 // Common vertex buffer types and corresponding input element descriptions
 
@@ -268,33 +132,7 @@ struct VertexPositionColorType
 {
 	DirectX::XMFLOAT3 position;
 	DirectX::XMFLOAT4 color;
-	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions()
-	{
-		///////////////////////////////////////////////////////////////////////////////////
-		// Create the layout of the VERTEX DATA that will be processed by the shader.    //
-		// We indicate the usage of each element in the layout to the shader by labeling //
-		// the first one POSITION and the second one COLOR.                              //
-		///////////////////////////////////////////////////////////////////////////////////
-
-		std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
-		eDesc[ 0 ].SemanticName = "POSITION";
-		eDesc[ 0 ].SemanticIndex = 0;
-		eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		eDesc[ 0 ].InputSlot = 0;
-		eDesc[ 0 ].AlignedByteOffset = 0;
-		eDesc[ 0 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		eDesc[ 0 ].InstanceDataStepRate = 0;
-
-		eDesc[ 1 ].SemanticName = "COLOR";
-		eDesc[ 1 ].SemanticIndex = 0;
-		eDesc[ 1 ].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		eDesc[ 1 ].InputSlot = 0;
-		eDesc[ 1 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-		eDesc[ 1 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		eDesc[ 1 ].InstanceDataStepRate = 0;
-
-		return eDesc;
-	}
+	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
 };
 
 // Position and texture coordinates
@@ -304,27 +142,7 @@ struct VertexPositionUVType
 	DirectX::XMFLOAT2 uv;
 
 	// Input layout descriptions for position and texture coordinates
-	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions()
-	{
-		std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
-		eDesc[ 0 ].SemanticName = "POSITION";
-		eDesc[ 0 ].SemanticIndex = 0;
-		eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		eDesc[ 0 ].InputSlot = 0;
-		eDesc[ 0 ].AlignedByteOffset = 0;
-		eDesc[ 0 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		eDesc[ 0 ].InstanceDataStepRate = 0;
-
-		eDesc[ 1 ].SemanticName = "TEXCOORD";
-		eDesc[ 1 ].SemanticIndex = 0;
-		eDesc[ 1 ].Format = DXGI_FORMAT_R32G32_FLOAT;
-		eDesc[ 1 ].InputSlot = 0;
-		eDesc[ 1 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-		eDesc[ 1 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		eDesc[ 1 ].InstanceDataStepRate = 0;
-
-		return eDesc;
-	}
+	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
 
 };
 
@@ -336,33 +154,5 @@ struct VertexPositionUVNormalType
 	DirectX::XMFLOAT2 uv;
 
 	// Input layout descriptions for position, normal and texture coordinates
-	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions()
-	{
-		std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
-		eDesc[ 0 ].SemanticName = "POSITION";
-		eDesc[ 0 ].SemanticIndex = 0;
-		eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		eDesc[ 0 ].InputSlot = 0;
-		eDesc[ 0 ].AlignedByteOffset = 0;
-		eDesc[ 0 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		eDesc[ 0 ].InstanceDataStepRate = 0;
-
-		eDesc[ 1 ].SemanticName = "NORMAL";
-		eDesc[ 1 ].SemanticIndex = 0;
-		eDesc[ 1 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		eDesc[ 1 ].InputSlot = 0;
-		eDesc[ 1 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-		eDesc[ 1 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		eDesc[ 1 ].InstanceDataStepRate = 0;
-
-		eDesc[ 2 ].SemanticName = "TEXCOORD";
-		eDesc[ 2 ].SemanticIndex = 0;
-		eDesc[ 2 ].Format = DXGI_FORMAT_R32G32_FLOAT;
-		eDesc[ 2 ].InputSlot = 0;
-		eDesc[ 2 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-		eDesc[ 2 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		eDesc[ 2 ].InstanceDataStepRate = 0;
-
-		return eDesc;
-	}
+	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
 };

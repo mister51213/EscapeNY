@@ -22,7 +22,6 @@ public:
 		UINT ScreenHeight );
 	
 	bool Frame();
-	const GameView &GetGameView()const;
 private:
 	void updateGameObjects();
 	bool render();
@@ -31,8 +30,6 @@ private:
 	Graphics *m_pGraphics; // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
 	D3DGraphics *m_pDirect3D;
 
-	Camera m_camera;
-    GameView m_GameView;
     std::shared_ptr<Input> m_pInput;
 	std::unique_ptr<ISubGame> m_pActiveGame; 
 };

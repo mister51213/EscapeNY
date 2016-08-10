@@ -1,6 +1,6 @@
 #include "MazeGame.h"
 #include "Game.h"
-
+#include "Algorithm_Random.h"
 
 MazeGame::MazeGame()
 {
@@ -19,14 +19,24 @@ MazeGame::~MazeGame()
 // can be changed unless you use at least const *.
 void MazeGame::Initialize( 
 	Graphics *pGraphics,
-	Game *const pGame,
-	Camera *const pCamera )
+	Game *const pGame)
 {
+	// Copy Game and Graphics pointers to member viarable
 	m_pGame = pGame;
 	m_pGraphics = pGraphics;
-	m_pCamera = pCamera;
-	m_pCamera->SetRotation( { 90.f, 0.f, 0.f } );
 
+	// Initialize camera
+	m_camera.Initialize(
+	{ g_screenWidth, g_screenHeight },
+	{ g_screenNear, g_screenDepth } );
+
+	m_camera.SetRotation( { 90.f, 0.f, 0.f } );
+
+	// Initialize resource manager
+	m_resource.Initialize( pGraphics );
+
+	// Initialize the game view object
+	m_GameView.Initialize( &m_resource, m_pGraphics, &m_camera );
 	m_Overlay.Initialize( *pGraphics );	
 	reset();
 }
@@ -39,10 +49,28 @@ void MazeGame::UpdateFrame( const Input & InputRef )
 	// Get player position, offset camera, set camera position
 	auto camOffset = m_player.GetWorldSpecs().position;
 	camOffset.y += 30.f;
-	m_pCamera->SetPosition( camOffset );
+	m_camera.SetPosition( camOffset );
+
+	if( InputRef.IsKeyDown( VK_NEXT ) )
+	{
+		m_camera.Rotate( { 1.f, 0.f,0.f } );
+	}
+	else if( InputRef.IsKeyDown( VK_PRIOR ) )
+	{
+		m_camera.Rotate( { -1.f, 0.f, 0.f } );
+	}
+
+	auto boardPosition = m_board.GetPosition();
+	auto camPosition = m_camera.GetPosition();
+
+	/*auto dir = Normalize( boardPosition - camPosition );
+	DirectX::XMFLOAT3 offsetRotation =
+		DirectX::XMFLOAT3( asin( dir.x ), acos( dir.y ), asin( dir.z ) ) * degree;
+*/
+	//m_camera.SetRotation( offsetRotation );
 
 	// Update the camera to update the view matrix
-	m_pCamera->Update();
+	m_camera.Update( boardPosition );
 
 	// Pass input to overlay to check if player wants to regenerate the maze
 	m_Overlay.Update( InputRef );
@@ -76,8 +104,11 @@ void MazeGame::reset()
 	// clearing it when already empty doesn't hurt anything
 	m_pActorDrawList.clear();
 
+	// Initialize the resource manager
+	m_resource.Initialize( m_pGraphics );
+
 	// Initialize the board object
-	m_board.Initialize( 9, 9 );
+	m_board.Initialize( 9, 9, m_pGraphics, &m_resource );
 
 	// Initialize the test player actor
 	m_player = Actor_Player_Alt( {
@@ -90,23 +121,32 @@ void MazeGame::reset()
 	// Create the maze and get the list of actors representing walls
 	///////////////////////////////////////////////////
 	// CODE FOR MAZE/LEVEL GEN
-	Algorithm_Maze gen( this );
-	auto actorList = gen.MakePattern( 0 );
+	/*Algorithm_Maze gen( this );
+	auto actorList = gen.MakePattern( 0 );*/
+	///////////////////////////////////////////////////
+	///////////////////////////////////////////////////
+	// CODE FOR RANDOM LEVEL GEN
+	Algorithm_Random gen( this );
+	auto actorList = gen.MakePattern( 20 );
 	///////////////////////////////////////////////////
 
 	// Reserve space in draw list so pointers remain valid
 	// Add additional space for actors not apart of a list
-	m_pActorDrawList.reserve( actorList.size() + 1 );
+	m_pActorDrawList.reserve( actorList.size() + 2 );
 
 	// Load draw list with actor pointers
 	m_pActorDrawList.push_back( &m_player );
+
 	for( auto &actor : actorList )
 	{
 		m_pActorDrawList.push_back( &actor );
 	}
 
 	// Load models for actors
-	m_pGame->GetGameView().OnReset( m_pActorDrawList );
+	m_GameView.OnReset( m_pActorDrawList );
+
+	// Board makes it's own model, so not passed to GameView::OnReset
+	m_pActorDrawList.push_back( &m_board );
 
 	// Move list of actors to board object
 	m_board.SetCells( std::move( actorList ) );
@@ -119,9 +159,9 @@ void MazeGame::reset()
 
 }
 
-void MazeGame::RenderFrame( const GameView & GameViewRef )
+void MazeGame::RenderFrame()
 {
-	GameViewRef.UpdateView( m_pActorDrawList );
+	m_GameView.UpdateView( m_pActorDrawList );
 
 	// Overlay must be drawn last, since it draws directly to 
 	// back buffer

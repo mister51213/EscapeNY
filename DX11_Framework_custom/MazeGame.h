@@ -5,6 +5,7 @@
 #include "TestBoard.h"
 #include "Algorithm_Maze.h"
 #include "Actor_Player_Alt.h"
+#include "ResourceManager.h"
 
 class MazeGame:
 	public ISubGame
@@ -15,16 +16,15 @@ public:
 
 	// Use Initialize to initialize anything that needs initializing.
 	void Initialize( 
-		Graphics *pGraphics, 
-		class Game *const pGame,
-		Camera *const pCamera ) override;
+		Graphics *pGraphics,
+		class Game *const pGame ) override;
 
 	// Use UpdateFrame to update actors, camera and anything else that 
 	// needs updating.
 	void UpdateFrame( const Input &InputRef ) override;
 
 	// Use RenderFrame to render the list of actors or other game objects
-	void RenderFrame( const GameView &GameViewRef ) override;
+	void RenderFrame() override;
 
 	const TestBoard &GetBoard();
 
@@ -36,13 +36,17 @@ private: // Private members
 	// delete
 	Game *m_pGame;
 	Graphics *m_pGraphics;
-	Camera *m_pCamera;
+	Camera m_camera;
+	GameView m_GameView;
+
+	ResourceManager m_resource;
 
 	Overlay m_Overlay;
 	TestBoard m_board;
 
 	Actor_Player_Alt m_player;
 	std::vector<Actor*> m_pActorDrawList;
+
 
 	bool m_endReached = false;
 };

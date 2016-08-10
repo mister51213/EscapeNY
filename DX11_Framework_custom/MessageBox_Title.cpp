@@ -6,6 +6,12 @@ MessageBox_Title::MessageBox_Title()
 {
 }
 
+MessageBox_Title::MessageBox_Title( const std::wstring & Message, const D2D1_RECT_F & Position )
+	:
+	MessageBoxBase( Message, Position )
+{
+}
+
 
 MessageBox_Title::~MessageBox_Title()
 {

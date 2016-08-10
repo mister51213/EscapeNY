@@ -33,7 +33,7 @@ System::~System()
 	// Return screen settings back to normal and release the 
 	// window and the handles associated with it.
 	// Fix the display settings if leaving full screen mode.
-	if( FULL_SCREEN )
+	if( g_fullScreen )
 	{
 		ChangeDisplaySettings( NULL, 0 );
 	}
@@ -226,7 +226,7 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
 
 	int posX = 0, posY = 0;
 	// Setup screen settings depending on whether it is running in full screen or windowed.
-	if (FULL_SCREEN)
+	if( g_fullScreen )
     {
         // If full screen set the screen to maximum size of the users desktop and 32bit.
 		DEVMODE dmScreenSettings{};

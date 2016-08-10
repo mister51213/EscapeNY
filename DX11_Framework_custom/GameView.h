@@ -4,6 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include "ResourceManager.h"
 #include "Camera.h"
 #include "Model_Textured.h"
 #include "Model.h"
@@ -20,10 +21,13 @@ class GameView
 {
 public:
 	GameView();
-	GameView( Graphics* pGfx, D3DGraphics* pD3D, Camera* pCam );
+	
 	 
 	// CODE_CHANGE: Initialize function no longer needs vector of Actor pointers
-	void InitializeGameObjectsSystem();
+	void Initialize( 
+		ResourceManager *const pResource, 
+		Graphics* pGfx,
+		Camera* pCam );
 	void UpdateView( const vector<Actor*>& actors )const;
 
 	// CODE_CHANGE: Renamed function to OnReset to be more clear of intent and
@@ -46,5 +50,6 @@ private:
 
 	Camera *m_pCam;
 	Shader_Texture m_shader_Texture;
-    vector<Texture> m_Textures;
+	ResourceManager *m_pResource;
+    //vector<Texture> m_Textures;
 };

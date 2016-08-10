@@ -143,6 +143,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor_Player_Alt.cpp" />
+    <ClCompile Include="Algorithm_Grid3D.cpp" />
+    <ClCompile Include="Algorithm_Random.cpp" />
+    <ClCompile Include="Algorithm_Spiral3D.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GameView.cpp" />
     <ClCompile Include="MazeGame.cpp" />
@@ -151,6 +154,7 @@
     <ClCompile Include="MessageBox_Title.cpp" />
     <ClCompile Include="Overlay_Base.cpp" />
     <ClCompile Include="Overlay_Title.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shader_Color.cpp" />
     <ClCompile Include="COMHandler.cpp" />
@@ -172,6 +176,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedPlane.cpp" />
     <ClCompile Include="Shader_Texture.cpp" />
+    <ClCompile Include="Utilities.cpp" />
     <ClCompile Include="Wic.cpp" />
     <ClCompile Include="Board.cpp" />
   </ItemGroup>
@@ -179,6 +184,7 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Actor_Player_Alt.h" />
     <ClInclude Include="Algorithm_Grid3D.h" />
+    <ClInclude Include="Algorithm_Random.h" />
     <ClInclude Include="Algorithm_Spiral3D.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Algorithm.h" />
@@ -193,6 +199,7 @@
     <ClInclude Include="MessageBox_Title.h" />
     <ClInclude Include="Overlay_Base.h" />
     <ClInclude Include="Overlay_Title.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />
     <ClInclude Include="COMHandler.h" />

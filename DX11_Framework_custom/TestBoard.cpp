@@ -1,4 +1,6 @@
 #include "TestBoard.h"
+#include "PrimitiveFactory.h"
+#include "Model_Textured.h"
 
 using namespace DirectX;
 
@@ -13,13 +15,25 @@ TestBoard::~TestBoard()
 {
 }
 
-void TestBoard::Initialize( UINT Width, UINT Height )
+void TestBoard::Initialize( UINT Width, UINT Height, Graphics *const pGraphics, ResourceManager *const pResource )
 {
 	m_width = Width;
 	m_height = Height;
 
 	m_startCell =	{ rand() % m_width, m_height - 1 };
 	m_endCell =		{ rand() % m_width, 0 };
+
+	ModelSpecs_L specs{};
+	specs.size = {
+		static_cast<float>( m_width ),
+		static_cast<float>( m_height ), 1.f };
+	specs.orientation = { 90.f, 0.f,0.f };
+
+	PrimitiveFactory pf;
+	pf.CreatePlane( specs );
+
+	m_pModel.reset( new Model_Textured );
+	m_pModel->Initialize( pf, *pGraphics );
 }
 
 DirectX::XMUINT2 TestBoard::GetStartCellCoord() const
