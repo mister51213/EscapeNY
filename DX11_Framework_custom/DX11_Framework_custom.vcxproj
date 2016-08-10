@@ -154,7 +154,6 @@
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Model_Colored.cpp" />
     <ClCompile Include="Model_Textured.cpp" />
     <ClCompile Include="Overlay.cpp" />

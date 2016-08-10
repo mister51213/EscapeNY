@@ -105,9 +105,6 @@
     <ClCompile Include="GameView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Source Files\Models</Filter>
-    </ClCompile>
     <ClCompile Include="Model_Colored.cpp">
       <Filter>Source Files\Models</Filter>
     </ClCompile>

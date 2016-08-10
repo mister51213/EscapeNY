@@ -12,6 +12,9 @@
 //////////////
 #include "Graphics.h"
 #include "PrimitiveFactory.h"
+#include <fstream>
+
+using namespace std;
 using namespace DirectX;
 
 ////////////////////////
@@ -20,39 +23,48 @@ using namespace DirectX;
 class Model
 {
 public:
-    Model();
-    //Model(/*XMFLOAT3 pos*/);
-    Model(const Model&);
-    ~Model();
+    Model()
+    {}
+    Model(const Model& other)
+    {}
+    ~Model()
+    {}
 
     // This pure virtual initializer takes into account different types of models
     // (textured and primitive, for example)
     virtual bool Initialize(const PrimitiveFactory &PrimMaker, const Graphics &Gfx) = 0;
     virtual std::vector<D3D11_INPUT_ELEMENT_DESC> GetInputElementDescriptions() const = 0;
 
-    DWORD GetVertexCount()const;
-    DWORD GetIndexCount()const;
-    ID3D11Buffer *GetVertexBuffer()const;
-    ID3D11Buffer *GetIndexBuffer()const;
-    UINT GetStride()const;
+    // Returns the number of vertices, sometimes may be different than 
+// the index count
+    DWORD GetVertexCount()const
+    {
+        return m_vertexCount;
 
-    //// TODO: Move these into Actor
-    //// Modulate position member; this will be reflected by global GetWorldMatrix()
-    //void Move(XMFLOAT3 Offset)
-    //{
-    //    m_Position.x += Offset.x;
-    //    m_Position.y += Offset.y;
-    //    m_Position.z += Offset.z;
-    //}
-
-    //void Rotate(XMFLOAT3 axis/*, float angle*/)
-    //{
-    //    m_Orientation.x += axis.x;
-    //    m_Orientation.y += axis.y;
-    //    m_Orientation.z += axis.z;
-    //    /*m_rotateAngle += angle;
-    //    m_worldMatrix = XMMatrixRotationX(m_rotateAngle);*/
-    //}
+    }
+    // Returns the number of indices in the model. The color shader will 
+// need this information to draw this model.
+    DWORD GetIndexCount()const
+    {
+        return m_indexCount;
+    }
+    ID3D11Buffer *GetVertexBuffer()const
+    {
+        return m_vertexBuffer.Get();
+    }
+    ID3D11Buffer *GetIndexBuffer()const
+    {
+        return m_indexBuffer.Get();
+    }
+    ///////////////////////////////////////////////////////////////////////
+// Stride is the size of one unit of info in an array
+// for example one row in a pixel array representing the screen (pitch)
+// or one Vertex containing 3D COORDINATE and UV COORDINATE info
+///////////////////////////////////////////////////////////////////////
+    UINT GetStride()const
+    {
+        return m_Stride;
+    }
 
 protected:
     template<class VertexType>
