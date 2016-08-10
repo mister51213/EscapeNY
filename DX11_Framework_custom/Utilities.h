@@ -150,8 +150,8 @@ struct VertexPositionUVType
 struct VertexPositionUVNormalType
 {
 	DirectX::XMFLOAT3 position;
-	DirectX::XMFLOAT3 normal;
 	DirectX::XMFLOAT2 uv;
+	DirectX::XMFLOAT3 normal;
 
 	// Input layout descriptions for position, normal and texture coordinates
 	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
