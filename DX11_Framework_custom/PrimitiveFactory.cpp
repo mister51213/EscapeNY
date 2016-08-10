@@ -282,15 +282,18 @@ void PrimitiveFactory::CreateMesh(
     const ModelType & type, 
     const string& fileName)
 {
+    //bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename);
+    //result = m_Model->Initialize(m_D3D->GetDevice(), "../Engine/data/cube.txt", L"../Engine/data/seafloor.dds");
+
     ////////////////////////////////  
-    // LOAD MODEL FILE (use lambda)
+    // LOAD MODEL FROM FILE (use lambda)
     ////////////////////////////////
    	ID3D11Buffer *pVertexBuffer, *pIndexBuffer;
 	int vertexCount, indexCount;
     ModelType* pModel;
 
-	bool result = [&fileName, &vertexCount, &indexCount, &pModel]()
-	{
+    // TODO: call this expression(?)
+	auto result = [&fileName, &vertexCount, &indexCount, &pModel]()->bool{
         ifstream fin;
         char input;
         int i;
@@ -363,8 +366,10 @@ void PrimitiveFactory::CreateMesh(
 		pIndices[i] = i;
 	}
 
-
+    ///////////////////////////////////////  
     // Release all 3 arrays
+    ///////////////////////////////////////  
+
 if(pIndices)
 	{
 		delete [] pIndices;
