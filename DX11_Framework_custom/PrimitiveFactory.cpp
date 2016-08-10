@@ -270,6 +270,125 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 	Common( Specs );
 }
 
+/*
+http://www.rastertek.com/dx11tut07.html
+*/
+// Custom file format - 
+// Each line contains position vector(x, y, z), 
+// texture coordinates(tu, tv), 
+// and normal vector(nx, ny, nz). 
+void PrimitiveFactory::CreateMesh(
+    const ModelSpecs_L & Specs,
+    const ModelType & type, 
+    const string& fileName)
+{
+    ////////////////////////////////  
+    // LOAD MODEL FILE (use lambda)
+    ////////////////////////////////
+   	ID3D11Buffer *pVertexBuffer, *pIndexBuffer;
+	int vertexCount, indexCount;
+    ModelType* pModel;
+
+	bool result = [&fileName, &vertexCount, &indexCount, &pModel]()
+	{
+        ifstream fin;
+        char input;
+        int i;
+
+        // Open the model file.
+        fin.open(fileName);
+
+        // If it could not open the file then exit.
+        if (fin.fail())
+        {
+            return false;
+        }
+
+        // Read up to the value of vertex count.
+        fin.get(input);
+        while (input != ':')
+        {
+            fin.get(input);
+        }
+
+        // Read in the vertex count.
+        fin >> vertexCount;
+
+        // Set the number of indices to be the same as the vertex count.
+        indexCount = vertexCount;
+
+        // Create the model using the vertex count that was read in.
+        pModel = new ModelType[vertexCount];
+        if (!pModel)
+        {
+            return false;
+        }
+
+        // Read up to the beginning of the data.
+        fin.get(input);
+        while (input != ':')
+        {
+            fin.get(input);
+        }
+        fin.get(input);
+        fin.get(input);
+
+        // Read in the vertex data.
+        for (i = 0; i < vertexCount; i++)
+        {
+            fin >> pModel[i].x >> pModel[i].y >> pModel[i].z;
+            fin >> pModel[i].tu >> pModel[i].tv;
+            fin >> pModel[i].nx >> pModel[i].ny >> pModel[i].nz;
+        }
+
+        // Close the model file.
+        fin.close();
+
+        return true;
+    };
+
+    ///////////////////////////////////////  
+    // LOAD MODEL DATA into vertex array //
+    ///////////////////////////////////////
+    // Load the vertex array and index array with data.
+    VertexType* pVertices;
+   	unsigned long* pIndices;
+
+	for(int i =0; i< vertexCount; i++)
+	{
+		pVertices[i].position = XMFLOAT3(pModel[i].x, pModel[i].y, pModel[i].z);
+		pVertices[i].texture = XMFLOAT2(pModel[i].tu, pModel[i].tv);
+		pVertices[i].normal = XMFLOAT3(pModel[i].nx, pModel[i].ny, pModel[i].nz);
+
+		pIndices[i] = i;
+	}
+
+
+    // Release all 3 arrays
+if(pIndices)
+	{
+		delete [] pIndices;
+		pIndices = 0;
+	}
+if(pVertices)
+	{
+		delete [] pVertices;
+		pVertices = 0;
+	}
+if(pModel)
+	{
+		delete [] pModel;
+		pModel = 0;
+	}
+
+    // TODO: Is it necessary to make the above lambdas and call them here?
+	//PrimitiveFactory::ClearAllBuffers();
+	//PrimitiveFactory::vertices = CreateVertexList();
+	//PrimitiveFactory::normals = CreateNormalsList();
+	//PrimitiveFactory::uvs = CreateUVList();
+	//Common( Specs );
+}
+
 void PrimitiveFactory::CreateColor( float R, float G, float B, float A )
 {
 	color = DirectX::XMFLOAT4( R, G, B, A );
