@@ -171,6 +171,7 @@
     <ClInclude Include="Algorithm_Grid3D.h" />
     <ClInclude Include="Algorithm_Spiral3D.h" />
     <ClInclude Include="Algorithm.h" />
+    <ClInclude Include="BinaryLoader.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GameView.h" />
     <ClInclude Include="Input.h" />

@@ -6,6 +6,7 @@
 
 #include "Camera.h"
 #include "Model_Textured.h"
+#include "Model_Colored.h"
 #include "Model.h"
 #include "Graphics.h"
 #include "Shader_Color.h"
@@ -26,13 +27,12 @@ public:
 	 
 	void InitializeGameObjectsSystem( const vector<Actor*>& actors );
 	void UpdateView( const vector<Actor*>& actors );
-	void Reset( const vector<Actor *> &pActors );
+    void initModelPool();
 private:
 	void initTexturePool();
 	void initializeShader();
-	void modelAllActors( const vector<Actor*>& actors );
-	std::shared_ptr<Model>
-		makeModel(ModelSpecs_L localSpecs, eModType Type = CUBE_TEXTURED );
+	//void modelAllActors( const vector<Actor*>& actors );
+	//std::shared_ptr<Model> makeModel(ModelSpecs_L localSpecs, eModType Type = CUBE_TEXTURED );
 	void drawModel( const Actor& actor );
 
 private:
@@ -41,7 +41,9 @@ private:
 
     std::shared_ptr<Camera> m_pCam;
 	Shader_Texture m_shader_Texture;
-    vector<Texture> m_Textures;
+    Shader_Color m_shader_Color;
+    vector<Texture> m_TexturePool;
+    vector<std::shared_ptr<Model>> m_ModelPool;
 
     std::shared_ptr<Model_Textured> m_pModTEST = 0;
 };

@@ -21,12 +21,12 @@ using namespace std;
 		float nx, ny, nz; // normal vector
 	};
 
-    	struct VertexType
-	{
-		XMFLOAT3 position;
-		XMFLOAT2 texture;
-		XMFLOAT3 normal;
-	};
+ //   struct VertexType
+	//{
+	//	XMFLOAT3 position;
+	//	XMFLOAT2 texture;
+	//	XMFLOAT3 normal;
+	//};
 
 class PrimitiveFactory
 {

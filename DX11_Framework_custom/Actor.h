@@ -31,6 +31,8 @@ public:
     ///////////////
     // ACCESSORS //
     ///////////////
+    eModType GetModelType()const { return m_modType; }
+
     ModelSpecs_W GetWorldSpecs() const
     { return m_worldSpecs; }
 

@@ -334,11 +334,23 @@ void PrimitiveFactory::CreateMesh(
         fin.get(input);
 
         // Read in vertex, uv, and normal data
+        //for (i = 0; i < vertexCount; i++)
+        //{
+        //    fin >> pModel[i].x >> pModel[i].y >> pModel[i].z;
+        //    fin >> pModel[i].tu >> pModel[i].tv;
+        //    fin >> pModel[i].nx >> pModel[i].ny >> pModel[i].nz;
+        //}
+
+        // load straight into static members
+        vertices.resize(vertexCount);
+        uvs.resize(vertexCount);
+        normals.resize(vertexCount);
+
         for (i = 0; i < vertexCount; i++)
         {
-            fin >> pModel[i].x >> pModel[i].y >> pModel[i].z;
-            fin >> pModel[i].tu >> pModel[i].tv;
-            fin >> pModel[i].nx >> pModel[i].ny >> pModel[i].nz;
+            fin >> vertices[i].x >> vertices[i].y >> vertices[i].z;
+            fin >> uvs[i].x >> uvs[i].y;
+            fin >> normals[i].x >> normals[i].y >> normals[i].z;
         }
 
         // Close the model file.
@@ -346,6 +358,8 @@ void PrimitiveFactory::CreateMesh(
 
         return true;
     };
+
+    	PrimitiveFactory::ClearAllBuffers();
 
     // TODO: Check GameView lines 60~82 for exact data it needs to load a model.
     // store file data into ModelType pModel list of verts,uvs,norms
@@ -355,47 +369,50 @@ void PrimitiveFactory::CreateMesh(
     // LOAD MODEL DATA into vertex array //
     ///////////////////////////////////////
     //VertexType* pVertices;
-    vector<VertexType> vertexList;
-    vertexList.resize(vertexCount);
+    /*vector<VertexPositionUVNormalType> vertexList;
+    vertexList.resize(vertexCount);*/
    	/*unsigned long* pIndices;*/
-    vector<DWORD> indexList;
-    indexList.resize(indexCount);
+    //vector<DWORD> indexList;
+    //indexList.resize(indexCount);
 
-    auto loadVandIarrays = [&vertexList, &pModel, &indexList, &vertexCount]()->bool {
-        for (int i = 0; i < vertexCount; i++)
+    indices.resize(indexCount);
+
+    //auto loadVandIarrays = [&vertexList, &pModel, &indexList, &vertexCount]()->bool {
+        for (int i = 0; i < indexCount; i++)
         {
-            vertexList[i].position = XMFLOAT3(pModel[i].x, pModel[i].y, pModel[i].z);
-            vertexList[i].texture = XMFLOAT2(pModel[i].tu, pModel[i].tv);
-            vertexList[i].normal = XMFLOAT3(pModel[i].nx, pModel[i].ny, pModel[i].nz);
+            //vertexList[i].position = XMFLOAT3(pModel[i].x, pModel[i].y, pModel[i].z);
+            //vertexList[i].uv = XMFLOAT2(pModel[i].tu, pModel[i].tv);
+            //vertexList[i].normal = XMFLOAT3(pModel[i].nx, pModel[i].ny, pModel[i].nz);
             
-            indexList[i] = i;
+            indices[i] = i;
         }
-        return true;
-    };
-
-	PrimitiveFactory::ClearAllBuffers();
-
-    // store pModel pos,tex,norms into VertexType pVertices
-    result = loadVandIarrays(); 
-
-    // Set PrimMaker member index list to the one we've created here
-    indices = indexList;
-
-    // resize all vectors first to avoid errors
-    vertices.resize(vertexCount);
-    uvs.resize(vertexCount);
-    normals.resize(vertexCount);
-
-    // Set PrimMaker other members to the ones we've created here
-    for (int i = 0; i < vertexCount; i++)
+        //return true;
+    //};
+       /* for (int i = 0; i < vertexCount; i++)
     {
         vertices[i] = vertexList[i].position;
-        uvs[i] = vertexList[i].texture;
+        uvs[i] = vertexList[i].uv;
         normals[i] = vertexList[i].normal;
     }
+*/
+    //// store pModel pos,tex,norms into VertexType pVertices
+    //result = loadVandIarrays(); 
 
-	//Common( Specs );
+    //// Set PrimMaker member index list to the one we've created here
+    //indices = indexList;
 
+    // resize all vectors first to avoid errors
+    //vertices.resize(vertexCount);
+    //uvs.resize(vertexCount);
+    //normals.resize(vertexCount);
+
+    // Set PrimMaker other members to the ones we've created here
+   /* for (int i = 0; i < vertexCount; i++)
+    {
+        vertices[i] = vertexList[i].position;
+        uvs[i] = vertexList[i].uv;
+        normals[i] = vertexList[i].normal;
+    }*/
     ///////////////////////////////////////  
     // Release all 3 arrays
     ///////////////////////////////////////  
@@ -409,11 +426,11 @@ void PrimitiveFactory::CreateMesh(
 //		delete [] pVertices;
 //		pVertices = 0;
 //	}
-if(pModel)
-	{
-		delete [] pModel;
-		pModel = 0;
-	}
+//if(pModel)
+//	{
+//		delete [] pModel;
+//		pModel = 0;
+//	}
 }
 
 void PrimitiveFactory::CreateColor( float R, float G, float B, float A )

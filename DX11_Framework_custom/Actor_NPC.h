@@ -12,11 +12,11 @@ public:
         ModelSpecs_W worldSpecs,
         eTexture tex,
         ModelSpecs_L localSpecs,
-        eModType modType = CUBE_TEXTURED) :
+        eModType mod = CUBE_TEXTURED) :
 		// NOTE: modType is already default initialized in the signature,
 		// TEST: modType = CUBE_TEXTURED below to just modType
 		// Actor( worldSpecs, tex, localSpecs, modType ) // base constructor
-		Actor(worldSpecs, tex, localSpecs, modType = CUBE_TEXTURED) // base constructor
+		Actor(worldSpecs, tex, localSpecs, mod) // base constructor
     { }
 
 public:
