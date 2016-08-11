@@ -66,7 +66,7 @@ bool System::Initialize()
 	RETURN_IF_FALSE( result );
 
     // Initialize the input object.
-    m_Input->Initialize();
+    m_Input->Initialize(m_hwnd);
 
     // Create graphics object to handle all rendering.
 	m_Graphics.reset( new Graphics );
@@ -183,6 +183,43 @@ LRESULT CALLBACK System::MessageHandler(
 			// If a key is released then send it to the input object so it can unset the state for that key.
 			m_Input->KeyUp( static_cast<unsigned int>( wparam ) );
 			return 0;
+		}
+
+		case WM_INPUT:
+		{
+			// Apparently DefWindowProc needs to be called regardless if this
+			// message is handled, so no break set, just let is fall through.
+
+			bool appInForeground = GET_RAWINPUT_CODE_WPARAM( wparam );
+			
+			UINT dataSize = sizeof(RAWINPUT);
+			
+			RAWINPUT rInput{};
+			
+			auto result = GetRawInputData( reinterpret_cast<HRAWINPUT>( lparam ), RID_INPUT, &rInput, &dataSize, sizeof( RAWINPUTHEADER ) );
+
+			int x = 0, y = 0;
+			x = rInput.data.mouse.lLastX;
+			y = rInput.data.mouse.lLastY;
+
+			m_Input->OnMouseMove( x, y );
+
+			if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_1_DOWN )
+			{
+				m_Input->OnLeftDown(x, y);
+			}
+			else if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_1_UP )
+			{
+				m_Input->OnLeftUp(x, y);
+			}
+			if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_2_DOWN )
+			{
+				m_Input->OnRightDown( x, y );
+			}
+			else if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_2_UP )
+			{
+				m_Input->OnRightUp( x, y );
+			}
 		}
 
 		// Any other messages send to the default message handler as our application won't make use of them.

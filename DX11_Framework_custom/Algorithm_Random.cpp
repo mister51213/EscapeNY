@@ -19,34 +19,40 @@ vector<Actor> Algorithm_Random::MakePattern( int numActors )
 	const unsigned vert = 0;
 	const unsigned horiz = 1;
 
+	std::vector<Actor> actors;
 	const UINT carCount = numActors;
 
-	MazeGame *pGame = dynamic_cast<MazeGame *>( m_pGame );
-	assert( pGame );
-
-	const auto &board = pGame->GetBoard();
-	const auto &width = board.GetWidth();
-	const auto &height = board.GetHeight();
-	const UINT tileCount = width * height;
-	auto start = board.GetStartCellCoord();
-	auto end = board.GetEndCellCoord();
-	const int startIndex = start.x + ( start.y * width );
-	const int endIndex = end.x + ( end.y * width );
-
-	std::vector<Actor> actors;
-	const auto &cellSize = board.GetLocalSpecs().size.x;
-
+	UINT width = 0, height = 0;
 	ModelSpecs_L lSpecs{};
-	lSpecs.size = XMFLOAT3( cellSize, cellSize, cellSize ) * 0.8f;
-
 	std::vector<eTileType> tileTypes;
-	for( int i = 0; i < tileCount; ++i )
+	float cellSize = 0.f;
 	{
-		tileTypes.push_back( eTileType::PATH );
-	}
-	tileTypes[ startIndex ] = WALL;
-	tileTypes[ endIndex ] = WALL;
+		MazeGame *pGame = dynamic_cast<MazeGame *>( m_pGame );
+		assert( pGame );
 
+		const auto &board = pGame->GetBoard();
+		width = board.GetWidth();
+		height = board.GetHeight();
+
+		const UINT tileCount = width * height;
+
+		auto start = board.GetStartCellCoord();
+		auto end = board.GetEndCellCoord();
+		const int startIndex = start.x + ( start.y * width );
+		const int endIndex = end.x + ( end.y * width );
+
+		for( int i = 0; i < tileCount; ++i )
+		{
+			tileTypes.push_back( eTileType::PATH );
+		}
+		tileTypes[ startIndex ] = WALL;
+		tileTypes[ endIndex ] = WALL;
+
+		XMFLOAT3 xmCellSize = board.GetCellSize();
+		lSpecs.size = xmCellSize * 0.8f;
+		cellSize = xmCellSize.x;
+	}
+	
 	for( int i = 0; i < carCount; ++i )
 	{
 		auto dir = rand() % 2;

@@ -5,6 +5,11 @@ XMFLOAT3 operator+( const XMFLOAT3 & V1, const XMFLOAT3 & V2 )
 	return XMFLOAT3( V1.x + V2.x, V1.y + V2.y, V1.z + V2.z );
 }
 
+XMFLOAT3 operator-( const XMFLOAT3 & V )
+{
+	return XMFLOAT3(-V.x, -V.y, -V.z);
+}
+
 XMFLOAT3 operator-( const XMFLOAT3 & V1, const XMFLOAT3 & V2 )
 {
 	return XMFLOAT3( V1.x - V2.x, V1.y - V2.y, V1.z - V2.z );

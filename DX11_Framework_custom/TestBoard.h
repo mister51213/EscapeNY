@@ -23,6 +23,7 @@ public:
 	DirectX::XMFLOAT3 GetEndPosition()const;
 	UINT GetWidth()const;
 	UINT GetHeight()const;
+	DirectX::XMFLOAT3 GetCellSize()const;
 
 	bool HasReachedEnd( const Actor &crActor )const;
 

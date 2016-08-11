@@ -16,7 +16,7 @@ vector<Actor> Algorithm_Maze::MakePattern( int numActors )
 {
 	// Retrieve the board from the game object
 	// TODO: Try casting to child class of ISubGame
-	auto *pMazeGame = reinterpret_cast<MazeGame *>( m_pGame );
+	auto *pMazeGame = dynamic_cast<MazeGame *>( m_pGame );
 
 	// Crash with error if cast didn't work, otherwise continue creating
 	// maze
@@ -160,8 +160,13 @@ std::vector<eTileType> Algorithm_Maze::Generate( const UINT Width, const UINT He
 
 std::vector<Actor> Algorithm_Maze::CreateActorList( const UINT Width, const UINT Height, const std::vector<eTileType>& TileTypes )
 {
+	// Create offset vector so cells aren't created from 0,0,0; but instead
+	// created from (-width, 2, -height) / 2 to ( width, 2, height) / 2
+	XMFLOAT3 offset = XMFLOAT3( Width, 2.f, Height ) * .5f;
+
 	// Create actor list where walls are
 	vector<Actor> actorList;
+	ModelSpecs_L lSpecs;
 	for( int z = 0; z < Height; ++z )
 	{
 		for( int x = 0; x < Width; ++x )
@@ -170,13 +175,13 @@ std::vector<Actor> Algorithm_Maze::CreateActorList( const UINT Width, const UINT
 			ModelSpecs_W specs{};
 			if( TileTypes[ idx ] == WALL )
 			{
-				specs.position.x = static_cast<float>( x ) * 5.f;
-				specs.position.y = 1.f;
-				specs.position.z = static_cast<float>( z ) * 5.f;
+				specs.position.x = (static_cast<float>( x ) * 5.f) - offset.x;
+				specs.position.y = offset.y;
+				specs.position.z = ( static_cast<float>( z ) * 5.f ) - offset.z;
 
 				specs.scale = { 1.f, 1.f, 1.f };
 
-				actorList.push_back( Actor( specs, AsphaltOld, ModelSpecs_L() ) );
+				actorList.push_back( Actor( specs, AsphaltOld, lSpecs ) );
 			}
 		}
 	}

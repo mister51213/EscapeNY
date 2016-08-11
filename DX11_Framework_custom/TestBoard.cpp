@@ -6,7 +6,7 @@ using namespace DirectX;
 
 TestBoard::TestBoard()
 	:
-	Actor( { { 0.f, 0.f, 0.f },{ 0.f, 0.f, 0.f },{ 10.f, 10.f, 10.f } }, AsphaltOld, ModelSpecs_L() )
+	Actor( { { 0.f, 0.f, 0.f },{ 0.f, 0.f, 0.f },{ 5.f, 5.f, 5.f } }, AsphaltOld, ModelSpecs_L() )
 {
 }
 
@@ -23,17 +23,19 @@ void TestBoard::Initialize( UINT Width, UINT Height, Graphics *const pGraphics, 
 	m_startCell =	{ rand() % m_width, m_height - 1 };
 	m_endCell =		{ rand() % m_width, 0 };
 
-	ModelSpecs_L specs{};
-	specs.size = {
+	m_localSpecs.size = {
 		static_cast<float>( m_width ),
 		static_cast<float>( m_height ), 1.f };
-	specs.orientation = { 90.f, 0.f,0.f };
+	m_localSpecs.orientation = { 90.f, 0.f,0.f };
 
 	PrimitiveFactory pf;
-	pf.CreatePlane( specs );
+	pf.CreatePlane( m_localSpecs );
 
 	m_pModel.reset( new Model_Textured );
 	m_pModel->Initialize( pf, *pGraphics );
+
+	m_cellSize = { 5.f, 1.f, 5.f };
+	
 }
 
 DirectX::XMUINT2 TestBoard::GetStartCellCoord() const
@@ -74,6 +76,11 @@ UINT TestBoard::GetWidth() const
 UINT TestBoard::GetHeight() const
 {
 	return m_height;
+}
+
+DirectX::XMFLOAT3 TestBoard::GetCellSize() const
+{
+	return m_cellSize;
 }
 
 bool TestBoard::HasReachedEnd( const Actor &crActor ) const

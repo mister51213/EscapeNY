@@ -60,17 +60,8 @@ void MazeGame::UpdateFrame( const Input & InputRef )
 		m_camera.Rotate( { -1.f, 0.f, 0.f } );
 	}
 
-	auto boardPosition = m_board.GetPosition();
-	auto camPosition = m_camera.GetPosition();
-
-	/*auto dir = Normalize( boardPosition - camPosition );
-	DirectX::XMFLOAT3 offsetRotation =
-		DirectX::XMFLOAT3( asin( dir.x ), acos( dir.y ), asin( dir.z ) ) * degree;
-*/
-	//m_camera.SetRotation( offsetRotation );
-
 	// Update the camera to update the view matrix
-	m_camera.Update( boardPosition );
+	m_camera.Update( {} );
 
 	// Pass input to overlay to check if player wants to regenerate the maze
 	m_Overlay.Update( InputRef );

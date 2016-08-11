@@ -60,6 +60,7 @@ constexpr float degree = 180.f / PI;
 // without having to declare: using namespace
 
 XMFLOAT3 operator+( const XMFLOAT3 &V1, const XMFLOAT3& V2 );
+XMFLOAT3 operator-( const XMFLOAT3 &V );
 XMFLOAT3 operator-( const XMFLOAT3 &V1, const XMFLOAT3& V2 );
 XMFLOAT3 operator*( const XMFLOAT3 &V, const float S );
 XMFLOAT3 operator/( const XMFLOAT3 &V, const float S );
