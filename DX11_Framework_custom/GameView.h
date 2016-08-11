@@ -42,4 +42,6 @@ private:
     std::shared_ptr<Camera> m_pCam;
 	Shader_Texture m_shader_Texture;
     vector<Texture> m_Textures;
+
+    std::shared_ptr<Model_Textured> m_pModTEST = 0;
 };

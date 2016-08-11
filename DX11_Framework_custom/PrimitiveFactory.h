@@ -21,6 +21,13 @@ using namespace std;
 		float nx, ny, nz; // normal vector
 	};
 
+    	struct VertexType
+	{
+		XMFLOAT3 position;
+		XMFLOAT2 texture;
+		XMFLOAT3 normal;
+	};
+
 class PrimitiveFactory
 {
     //// prevent making instances of this class
@@ -35,9 +42,9 @@ public:
 	static void CreateCube( const ModelSpecs_L &Specs );
 	static void PrimitiveFactory::CreateColor( float R, float G, float B, float A );
     static void PrimitiveFactory::CreateMesh(
-        const ModelSpecs_L & Specs, 
-        const ModelType & type, 
-        const string& fileName);
+        //const ModelSpecs_L & Specs, 
+        //const ModelType & type, 
+        const wstring& fileName);
 
     // ACCESSOR FUNCTIONS
 	static std::vector<DirectX::XMFLOAT3> GetVertices();
@@ -55,13 +62,5 @@ private:
 	 static std::vector<DirectX::XMFLOAT2> uvs; 
 	 static std::vector<DWORD> indices;
    	 static DirectX::XMFLOAT4 color;
-private:
-    private:
-	struct VertexType
-	{
-		XMFLOAT3 position;
-		XMFLOAT2 texture;
-		XMFLOAT3 normal;
-	};
 };
 

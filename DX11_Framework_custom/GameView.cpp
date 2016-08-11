@@ -12,8 +12,7 @@ GameView::GameView( Graphics * pGfx, D3DGraphics * pD3D, std::shared_ptr<Camera>
 	m_pGfx( pGfx ),
 	m_pD3D( pD3D ),
 	m_pCam( pCam )
-{
-}
+{}
 
 void GameView::InitializeGameObjectsSystem( const vector<Actor*>& actors )
 {
@@ -27,6 +26,17 @@ void GameView::UpdateView( const vector<Actor*>& actors )
 	{
 		drawModel( *actor );
 	}
+    // TEST OUT SAMPLE MESH MODEL
+    ModelSpecs_W wSpecs = {
+        { 0.f, 0.f, 0.f },
+        { 0.f,0.f,0.f },
+        { 5.f, 5.f, 5.f } };
+    std::shared_ptr<Input> pInput = 0;
+    Actor_NPC aTest;
+    aTest = Actor_NPC(pInput, wSpecs, Water, ModelSpecs_L());
+    aTest.SetModel(m_pModTEST);
+
+    drawModel(aTest);
 }
 
 void GameView::Reset( const vector<Actor*>& pActors )
@@ -56,6 +66,11 @@ void GameView::modelAllActors( const vector<Actor*>& actors )
 	{
 		actors[ i ]->SetModel( makeModel( actors[ i ]->GetLocalSpecs() ) );
 	}
+    // TEST OUT MESH FUNCTION
+    	m_pModTEST.reset( new Model_Textured );
+    	PrimitiveFactory prim;
+        prim.CreateMesh(L"Meshes\\Cube.txt");
+        m_pModTEST->Initialize( prim, *m_pGfx );
 }
 
 std::shared_ptr<Model> GameView::makeModel( ModelSpecs_L localSpecs, eModType Type )
@@ -63,7 +78,7 @@ std::shared_ptr<Model> GameView::makeModel( ModelSpecs_L localSpecs, eModType Ty
 	std::shared_ptr<Model_Textured> pModel;
 	pModel.reset( new Model_Textured );
 	PrimitiveFactory primMaker;
-	// TODO: Implement it so it can draw difft shapes based on eModType
+	// TODO: Implement drawing shapes based on eModType
 	primMaker.CreateCube( localSpecs );
 	pModel->Initialize( primMaker, *m_pGfx );
 	return pModel;

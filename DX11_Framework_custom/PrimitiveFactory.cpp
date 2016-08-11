@@ -278,22 +278,19 @@ http://www.rastertek.com/dx11tut07.html
 // texture coordinates(tu, tv), 
 // and normal vector(nx, ny, nz). 
 void PrimitiveFactory::CreateMesh(
-    const ModelSpecs_L & Specs,
-    const ModelType & type, 
-    const string& fileName)
+    //const ModelSpecs_L & Specs,
+    //const ModelType & type, 
+    const wstring& fileName)
 {
-    //bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename);
-    //result = m_Model->Initialize(m_D3D->GetDevice(), "../Engine/data/cube.txt", L"../Engine/data/seafloor.dds");
-
     ////////////////////////////////  
-    // LOAD MODEL FROM FILE (use lambda)
+    // LOAD MODEL FROM FILE
     ////////////////////////////////
    	ID3D11Buffer *pVertexBuffer, *pIndexBuffer;
 	int vertexCount, indexCount;
     ModelType* pModel;
 
-    // TODO: call this expression(?)
-	auto result = [&fileName, &vertexCount, &indexCount, &pModel]()->bool{
+	auto loadVertsFromF = [&fileName, &vertexCount, &indexCount, &pModel]()->bool
+    {
         ifstream fin;
         char input;
         int i;
@@ -336,7 +333,7 @@ void PrimitiveFactory::CreateMesh(
         fin.get(input);
         fin.get(input);
 
-        // Read in the vertex data.
+        // Read in vertex, uv, and normal data
         for (i = 0; i < vertexCount; i++)
         {
             fin >> pModel[i].x >> pModel[i].y >> pModel[i].z;
@@ -353,45 +350,64 @@ void PrimitiveFactory::CreateMesh(
     ///////////////////////////////////////  
     // LOAD MODEL DATA into vertex array //
     ///////////////////////////////////////
-    // Load the vertex array and index array with data.
-    VertexType* pVertices;
-   	unsigned long* pIndices;
+    //VertexType* pVertices;
+    vector<VertexType> vertexList;
+    vertexList.resize(vertexCount);
+   	/*unsigned long* pIndices;*/
+    vector<DWORD> indexList;
+    indexList.resize(indexCount);
 
-	for(int i =0; i< vertexCount; i++)
-	{
-		pVertices[i].position = XMFLOAT3(pModel[i].x, pModel[i].y, pModel[i].z);
-		pVertices[i].texture = XMFLOAT2(pModel[i].tu, pModel[i].tv);
-		pVertices[i].normal = XMFLOAT3(pModel[i].nx, pModel[i].ny, pModel[i].nz);
 
-		pIndices[i] = i;
-	}
+    auto loadVandIarrays = [&vertexList, &pModel, &indexList, &vertexCount]()->bool {
+        for (int i = 0; i < vertexCount; i++)
+        {
+            vertexList[i].position = XMFLOAT3(pModel[i].x, pModel[i].y, pModel[i].z);
+            vertexList[i].texture = XMFLOAT2(pModel[i].tu, pModel[i].tv);
+            vertexList[i].normal = XMFLOAT3(pModel[i].nx, pModel[i].ny, pModel[i].nz);
+            
+            indexList[i] = i;
+        }
+        return true;
+    };
+
+	PrimitiveFactory::ClearAllBuffers();
+
+    // TODO: Check GameView lines 60~82 for exact data it needs to load a model.
+    // store file data into ModelType pModel list of verts,uvs,norms
+    bool res = loadVertsFromF();
+    // store pModel pos,tex,norms into VertexType pVertices
+    res = loadVandIarrays(); 
+
+    // Set PrimMaker member index list to the one we've created here
+    indices = indexList;
+    // Set PrimMaker other members to the ones we've created here
+    for (int i = 0; i < vertexCount; i++)
+    {
+        vertices[i] = vertexList[i].position;
+        uvs[i] = vertexList[i].texture;
+        normals[i] = vertexList[i].normal;
+    }
+
+	//Common( Specs );
 
     ///////////////////////////////////////  
     // Release all 3 arrays
     ///////////////////////////////////////  
-
-if(pIndices)
-	{
-		delete [] pIndices;
-		pIndices = 0;
-	}
-if(pVertices)
-	{
-		delete [] pVertices;
-		pVertices = 0;
-	}
+//if(pIndices)
+//	{
+//		delete [] pIndices;
+//		pIndices = 0;
+//	}
+//if(pVertices)
+//	{
+//		delete [] pVertices;
+//		pVertices = 0;
+//	}
 if(pModel)
 	{
 		delete [] pModel;
 		pModel = 0;
 	}
-
-    // TODO: Is it necessary to make the above lambdas and call them here?
-	//PrimitiveFactory::ClearAllBuffers();
-	//PrimitiveFactory::vertices = CreateVertexList();
-	//PrimitiveFactory::normals = CreateNormalsList();
-	//PrimitiveFactory::uvs = CreateUVList();
-	//Common( Specs );
 }
 
 void PrimitiveFactory::CreateColor( float R, float G, float B, float A )
