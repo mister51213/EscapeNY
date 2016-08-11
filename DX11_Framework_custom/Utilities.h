@@ -324,8 +324,8 @@ struct VertexPositionUVType
 struct VertexPositionUVNormalType
 {
 	DirectX::XMFLOAT3 position;
-	DirectX::XMFLOAT3 normal;
 	DirectX::XMFLOAT2 uv;
+	DirectX::XMFLOAT3 normal;
 
 	// Input layout descriptions for position, normal and texture coordinates
 	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions()
@@ -339,17 +339,17 @@ struct VertexPositionUVNormalType
 		eDesc[ 0 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		eDesc[ 0 ].InstanceDataStepRate = 0;
 
-		eDesc[ 1 ].SemanticName = "NORMAL";
+		eDesc[ 1 ].SemanticName = "TEXCOORD";
 		eDesc[ 1 ].SemanticIndex = 0;
-		eDesc[ 1 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		eDesc[ 1 ].Format = DXGI_FORMAT_R32G32_FLOAT;
 		eDesc[ 1 ].InputSlot = 0;
 		eDesc[ 1 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 		eDesc[ 1 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		eDesc[ 1 ].InstanceDataStepRate = 0;
 
-		eDesc[ 2 ].SemanticName = "TEXCOORD";
+		eDesc[ 2 ].SemanticName = "NORMAL";
 		eDesc[ 2 ].SemanticIndex = 0;
-		eDesc[ 2 ].Format = DXGI_FORMAT_R32G32_FLOAT;
+		eDesc[ 2 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		eDesc[ 2 ].InputSlot = 0;
 		eDesc[ 2 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 		eDesc[ 2 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
