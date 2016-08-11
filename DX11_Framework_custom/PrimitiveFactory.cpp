@@ -347,6 +347,10 @@ void PrimitiveFactory::CreateMesh(
         return true;
     };
 
+    // TODO: Check GameView lines 60~82 for exact data it needs to load a model.
+    // store file data into ModelType pModel list of verts,uvs,norms
+    bool result = loadVertsFromF();
+
     ///////////////////////////////////////  
     // LOAD MODEL DATA into vertex array //
     ///////////////////////////////////////
@@ -356,7 +360,6 @@ void PrimitiveFactory::CreateMesh(
    	/*unsigned long* pIndices;*/
     vector<DWORD> indexList;
     indexList.resize(indexCount);
-
 
     auto loadVandIarrays = [&vertexList, &pModel, &indexList, &vertexCount]()->bool {
         for (int i = 0; i < vertexCount; i++)
@@ -372,14 +375,17 @@ void PrimitiveFactory::CreateMesh(
 
 	PrimitiveFactory::ClearAllBuffers();
 
-    // TODO: Check GameView lines 60~82 for exact data it needs to load a model.
-    // store file data into ModelType pModel list of verts,uvs,norms
-    bool res = loadVertsFromF();
     // store pModel pos,tex,norms into VertexType pVertices
-    res = loadVandIarrays(); 
+    result = loadVandIarrays(); 
 
     // Set PrimMaker member index list to the one we've created here
     indices = indexList;
+
+    // resize all vectors first to avoid errors
+    vertices.resize(vertexCount);
+    uvs.resize(vertexCount);
+    normals.resize(vertexCount);
+
     // Set PrimMaker other members to the ones we've created here
     for (int i = 0; i < vertexCount; i++)
     {

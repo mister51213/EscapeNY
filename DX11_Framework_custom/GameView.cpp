@@ -30,7 +30,7 @@ void GameView::UpdateView( const vector<Actor*>& actors )
     ModelSpecs_W wSpecs = {
         { 0.f, 0.f, 0.f },
         { 0.f,0.f,0.f },
-        { 5.f, 5.f, 5.f } };
+        { 13.f, 13.f, 35.f } };
     std::shared_ptr<Input> pInput = 0;
     Actor_NPC aTest;
     aTest = Actor_NPC(pInput, wSpecs, Water, ModelSpecs_L());
