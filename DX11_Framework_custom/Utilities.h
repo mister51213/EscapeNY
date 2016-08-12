@@ -229,7 +229,14 @@ enum eTexture
 	AsphaltTGA = 1,
 	AsphaltOld = 2,
 	Water = 3,
-	SharkSkin = 4
+    Underwater1 = 4,
+    Underwater2 = 5,
+    Underwater3 = 6,
+    Underwater4 = 7,
+    Underwater5 = 8,
+    Underwater6 = 9,
+    Underwater7 = 10,
+	SharkSkin = 11
 };
 
 

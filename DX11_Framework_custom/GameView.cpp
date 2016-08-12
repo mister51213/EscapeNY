@@ -29,7 +29,7 @@ void GameView::UpdateView( const vector<Actor*>& actors )
 	//}
     // TEST OUT SAMPLE MESH MODEL
     ModelSpecs_W wSpecs1 = 
-    { { 0.f, -20.f, 0.f },
+    { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
       { 1.f, -1.f, -1.f } };
     std::shared_ptr<Input> pInput = 0;
@@ -37,7 +37,7 @@ void GameView::UpdateView( const vector<Actor*>& actors )
     aTest1 = Actor_NPC(pInput, wSpecs1, AsphaltFresh, ModelSpecs_L(), CUSTOM_MESH);
 
     ModelSpecs_W wSpecs2 = 
-    { { 0.f, -20.f, 10.f },
+    { { 20.f, -.5f, 20.f },
       { 0.f,0.f,0.f },
       { 0.5f, -0.5f, -0.5f } };
     Actor_NPC aTest2;
@@ -49,14 +49,12 @@ void GameView::UpdateView( const vector<Actor*>& actors )
       { 0.f,0.f,0.f },
       { 80.f, -1.f, -80.f } };
     Actor_NPC aTest3;
-    aTest3 = Actor_NPC(pInput, wSpecs3, Water, ModelSpecs_L(), CUBE_TEXTURED);
+    aTest3 = Actor_NPC(pInput, wSpecs3, Underwater3, ModelSpecs_L(), CUBE_TEXTURED);
 
     //aTest.SetModel(m_pModTEST); // TODO: change to actor.Initialize()
     drawModel(aTest1);
         drawModel(aTest2);
             drawModel(aTest3);
-
-
 }
 
 void GameView::drawModel( const Actor & actor )
@@ -136,13 +134,19 @@ void GameView::initModelPool()
 
 void GameView::initTexturePool()
 {
-	const int numTextures = 5;
+	const int numTextures = 12;
 	m_TexturePool.resize( numTextures );
 	m_TexturePool[ AsphaltFresh ].Initialize( *m_pGfx, L"Textures\\fresh-black-asphalt-texture.jpg" );
 	m_TexturePool[ AsphaltTGA ].Initialize( *m_pGfx, L"Textures\\asphalt.tga" );
 	m_TexturePool[ AsphaltOld ].Initialize( *m_pGfx, L"Textures\\old-asphalt-texture.jpg" );
-	m_TexturePool[ Water ].Initialize( *m_pGfx, L"Textures\\water3.jpg" );
-	m_TexturePool[ SharkSkin ].Initialize( *m_pGfx, L"Textures\\sharkskin1.jpg" );
+	m_TexturePool[ Underwater1 ].Initialize( *m_pGfx, L"Textures\\underwater1.jpg" );
+    m_TexturePool[ Underwater2 ].Initialize( *m_pGfx, L"Textures\\underwater2.jpg" );
+    m_TexturePool[ Underwater3 ].Initialize( *m_pGfx, L"Textures\\underwater3.jpg" );
+    m_TexturePool[ Underwater4 ].Initialize( *m_pGfx, L"Textures\\underwater4.jpg" );
+    m_TexturePool[ Underwater5 ].Initialize( *m_pGfx, L"Textures\\underwater5.jpg" );
+    m_TexturePool[ Underwater6 ].Initialize( *m_pGfx, L"Textures\\underwater6.jpg" );
+    m_TexturePool[ Underwater7 ].Initialize( *m_pGfx, L"Textures\\underwater7.jpg" );
+    m_TexturePool[ SharkSkin ].Initialize( *m_pGfx, L"Textures\\sharkskin1.jpg" );
 }
 
 void GameView::initializeShader()
