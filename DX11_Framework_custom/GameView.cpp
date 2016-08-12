@@ -23,20 +23,40 @@ void GameView::InitializeGameObjectsSystem( const vector<Actor*>& actors )
 
 void GameView::UpdateView( const vector<Actor*>& actors )
 {
-	for( const auto *actor : actors )
-	{
-		drawModel( *actor );
-	}
+	//for( const auto *actor : actors )
+	//{
+	//	drawModel( *actor );
+	//}
     // TEST OUT SAMPLE MESH MODEL
-    ModelSpecs_W wSpecs = {
-        { 0.f, 0.f, 0.f },
-        { 0.f,0.f,0.f },
-        { 1.f, -1.f, -1.f } };
+    ModelSpecs_W wSpecs1 = 
+    { { 0.f, -20.f, 0.f },
+      { 0.f,0.f,0.f },
+      { 1.f, -1.f, -1.f } };
     std::shared_ptr<Input> pInput = 0;
-    Actor_NPC aTest;
-    aTest = Actor_NPC(pInput, wSpecs, Water, ModelSpecs_L(), CUSTOM_MESH);
+    Actor_NPC aTest1;
+    aTest1 = Actor_NPC(pInput, wSpecs1, SharkSkin, ModelSpecs_L(), CUSTOM_MESH);
+
+    ModelSpecs_W wSpecs2 = 
+    { { 0.f, -20.f, 10.f },
+      { 0.f,0.f,0.f },
+      { 0.5f, -0.5f, -0.5f } };
+    Actor_NPC aTest2;
+    aTest2 = Actor_NPC(pInput, wSpecs2, AsphaltFresh, ModelSpecs_L(), CUSTOM_MESH2);
+
+    // Playing field
+    ModelSpecs_W wSpecs3 = 
+    { { -10.f, 0.f, -30.f },
+      { 0.f,0.f,0.f },
+      { 80.f, -1.f, -80.f } };
+    Actor_NPC aTest3;
+    aTest3 = Actor_NPC(pInput, wSpecs3, Water, ModelSpecs_L(), CUBE_TEXTURED);
+
     //aTest.SetModel(m_pModTEST); // TODO: change to actor.Initialize()
-    drawModel(aTest);
+    drawModel(aTest1);
+        drawModel(aTest2);
+            drawModel(aTest3);
+
+
 }
 
 void GameView::drawModel( const Actor & actor )
@@ -98,9 +118,20 @@ void GameView::initModelPool()
 
     //prim.CreateMesh(L"Meshes\\Cube.txt");
     prim.CreateMesh(L"Meshes\\model.BinaryMesh");
-
     m_ModelPool[CUSTOM_MESH].reset(new Model_Textured);
     m_ModelPool[CUSTOM_MESH]->Initialize(prim, *m_pGfx);
+
+    prim.CreateMesh(L"Meshes\\model2.BinaryMesh");
+    m_ModelPool[CUSTOM_MESH2].reset(new Model_Textured);
+    m_ModelPool[CUSTOM_MESH2]->Initialize(prim, *m_pGfx);
+
+    prim.CreateMesh(L"Meshes\\model3.BinaryMesh");
+    m_ModelPool[CUSTOM_MESH3].reset(new Model_Textured);
+    m_ModelPool[CUSTOM_MESH3]->Initialize(prim, *m_pGfx);
+
+    prim.CreateMesh(L"Meshes\\model4.BinaryMesh");
+    m_ModelPool[CUSTOM_MESH4].reset(new Model_Textured);
+    m_ModelPool[CUSTOM_MESH4]->Initialize(prim, *m_pGfx);
 }
 
 void GameView::initTexturePool()

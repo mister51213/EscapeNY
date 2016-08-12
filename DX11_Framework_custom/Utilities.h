@@ -210,7 +210,18 @@ struct ModelSpecs_L
    	XMFLOAT3 size;
 };
 
-enum eModType { CUBE, CUBE_TEXTURED, PLANE, SPHERE, POLYGON, CUSTOM_MESH };
+enum eModType 
+{ 
+    CUBE, 
+    CUBE_TEXTURED, 
+    PLANE, 
+    SPHERE, 
+    POLYGON, 
+    CUSTOM_MESH,
+    CUSTOM_MESH2,
+    CUSTOM_MESH3,
+    CUSTOM_MESH4
+};
 
 enum eTexture
 {

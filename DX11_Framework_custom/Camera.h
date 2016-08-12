@@ -163,9 +163,8 @@ public:
 
         XMVECTOR posV = XMLoadFloat3(&m_Position);
         // Store product of 1st 2 vectors + 3rd vector in m_Position
-        // TODO: make him walk along the ground; DO NOT increment Y component.
         // make sure that the Y component wont get incremented
-        lookV_Rotated *= XMVectorSet(1.f, 0.f, 1.f, .0f);
+        lookV_Rotated *= XMVectorSet(1.f, 1.f, 1.f, .0f);
         XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, lookV_Rotated, posV));
     }
 
@@ -247,7 +246,7 @@ public:
     }
 
 private:
-    XMFLOAT3 m_Position = { 0.0f, 0.0f, 0.0f };
+    XMFLOAT3 m_Position = { 0.0f, 200.0f, 0.0f };
     // How many degrees is it rotated on the x, y, z axes
     // JUST a collection of three different angles
     XMFLOAT3 m_Orientation = { 0.0f, 0.0f, 0.0f };
