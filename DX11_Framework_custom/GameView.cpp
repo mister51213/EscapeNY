@@ -31,7 +31,7 @@ void GameView::UpdateView( const vector<Actor*>& actors )
     ModelSpecs_W wSpecs = {
         { 0.f, 0.f, 0.f },
         { 0.f,0.f,0.f },
-        { 13.f, 13.f, 35.f } };
+        { 10.f, 10.f, 10.f } };
     std::shared_ptr<Input> pInput = 0;
     Actor_NPC aTest;
     aTest = Actor_NPC(pInput, wSpecs, Water, ModelSpecs_L(), CUBE);
@@ -76,7 +76,7 @@ void GameView::initModelPool()
     PrimitiveFactory prim;
 
     prim.CreateCube(defaultSpecs);
-    prim.CreateColor(0.f,0.f,0.f,.5f);
+    prim.CreateColor(1.f,0.f,0.f,.5f);
     m_ModelPool[CUBE].reset(new Model_Colored);
     m_ModelPool[CUBE]->Initialize(prim, *m_pGfx);
 
@@ -96,15 +96,11 @@ void GameView::initModelPool()
     m_ModelPool[POLYGON].reset(new Model_Textured);
     m_ModelPool[POLYGON]->Initialize(prim, *m_pGfx);
 
-    prim.CreateMesh(L"Meshes\\Cube.txt");
+    //prim.CreateMesh(L"Meshes\\Cube.txt");
+    prim.CreateMesh(L"Meshes\\model.BinaryMesh");
+
     m_ModelPool[CUSTOM_MESH].reset(new Model_Textured);
     m_ModelPool[CUSTOM_MESH]->Initialize(prim, *m_pGfx);
-
-    // TEST
-    //m_pModTEST.reset( new Model_Textured );
-    //PrimitiveFactory prim;
-    //prim.CreateMesh(L"Meshes\\Cube.txt");
-    //m_pModTEST->Initialize( prim, *m_pGfx );
 }
 
 void GameView::initTexturePool()
@@ -136,7 +132,6 @@ void GameView::initializeShader()
 //        prim.CreateMesh(L"Meshes\\Cube.txt");
 //        m_pModTEST->Initialize( prim, *m_pGfx );
 //}
-
 //std::shared_ptr<Model> GameView::makeModel( ModelSpecs_L localSpecs, eModType Type )
 //{
 //	std::shared_ptr<Model_Textured> pModel;

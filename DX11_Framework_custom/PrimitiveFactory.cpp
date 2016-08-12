@@ -270,13 +270,7 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 	Common( Specs );
 }
 
-/*
-http://www.rastertek.com/dx11tut07.html
-*/
-// Custom file format - 
-// Each line contains position vector(x, y, z), 
-// texture coordinates(tu, tv), 
-// and normal vector(nx, ny, nz). 
+// Custom file format - Each line contains position vector(x, y, z), texture coordinates(tu, tv), and normal vector(nx, ny, nz). 
 void PrimitiveFactory::CreateMesh(
     //const ModelSpecs_L & Specs,
     //const ModelType & type, 
@@ -289,7 +283,7 @@ void PrimitiveFactory::CreateMesh(
 	int vertexCount, indexCount;
     ModelType* pModel;
 
-	auto loadVertsFromF = [&fileName, &vertexCount, &indexCount, &pModel]()->bool
+	auto VertsFromF = [&fileName, &vertexCount, &indexCount, &pModel]()->bool
     {
         ifstream fin;
         char input;
@@ -333,14 +327,6 @@ void PrimitiveFactory::CreateMesh(
         fin.get(input);
         fin.get(input);
 
-        // Read in vertex, uv, and normal data
-        //for (i = 0; i < vertexCount; i++)
-        //{
-        //    fin >> pModel[i].x >> pModel[i].y >> pModel[i].z;
-        //    fin >> pModel[i].tu >> pModel[i].tv;
-        //    fin >> pModel[i].nx >> pModel[i].ny >> pModel[i].nz;
-        //}
-
         // load straight into static members
         vertices.resize(vertexCount);
         uvs.resize(vertexCount);
@@ -359,78 +345,55 @@ void PrimitiveFactory::CreateMesh(
         return true;
     };
 
+    auto VertsFromB = [&fileName, &vertexCount, &indexCount, &pModel]()->bool {
+        ifstream file(fileName, std::ios::binary); // open file in binary mode
+
+        if (file.fail())
+        {
+            return false;
+        }
+
+        vertexCount = 0; // read first 32 bits into vertexCount
+        file.read(reinterpret_cast<char*>(&vertexCount), sizeof(int));
+
+        // pack into vector of structs
+        vector<VertexPositionUVNormalType> vertList(vertexCount);
+        file.read(reinterpret_cast<char*>(vertList.data()), sizeof(VertexPositionUVNormalType)*vertexCount);
+
+
+        // Pack into member variables of PrimFactory
+        vertices.resize(vertexCount);
+        uvs.resize(vertexCount);
+        normals.resize(vertexCount);
+
+        for (int i = 0; i < vertexCount; i++)
+        {
+            vertices[i] = vertList[i].position;
+            uvs[i] = vertList[i].uv;
+            normals[i] = vertList[i].normal;
+            indices[i] = i; // TODO: not sure about this
+        }
+
+        file.close();
+        return true;
+    };
+
     	PrimitiveFactory::ClearAllBuffers();
 
     // TODO: Check GameView lines 60~82 for exact data it needs to load a model.
     // store file data into ModelType pModel list of verts,uvs,norms
-    bool result = loadVertsFromF();
+    //bool result = VertsFromF();
+     bool result = VertsFromB();
 
     ///////////////////////////////////////  
     // LOAD MODEL DATA into vertex array //
     ///////////////////////////////////////
-    //VertexType* pVertices;
-    /*vector<VertexPositionUVNormalType> vertexList;
-    vertexList.resize(vertexCount);*/
-   	/*unsigned long* pIndices;*/
-    //vector<DWORD> indexList;
-    //indexList.resize(indexCount);
-
     indices.resize(indexCount);
 
-    //auto loadVandIarrays = [&vertexList, &pModel, &indexList, &vertexCount]()->bool {
         for (int i = 0; i < indexCount; i++)
         {
-            //vertexList[i].position = XMFLOAT3(pModel[i].x, pModel[i].y, pModel[i].z);
-            //vertexList[i].uv = XMFLOAT2(pModel[i].tu, pModel[i].tv);
-            //vertexList[i].normal = XMFLOAT3(pModel[i].nx, pModel[i].ny, pModel[i].nz);
-            
             indices[i] = i;
         }
-        //return true;
-    //};
-       /* for (int i = 0; i < vertexCount; i++)
-    {
-        vertices[i] = vertexList[i].position;
-        uvs[i] = vertexList[i].uv;
-        normals[i] = vertexList[i].normal;
-    }
-*/
-    //// store pModel pos,tex,norms into VertexType pVertices
-    //result = loadVandIarrays(); 
-
-    //// Set PrimMaker member index list to the one we've created here
-    //indices = indexList;
-
-    // resize all vectors first to avoid errors
-    //vertices.resize(vertexCount);
-    //uvs.resize(vertexCount);
-    //normals.resize(vertexCount);
-
-    // Set PrimMaker other members to the ones we've created here
-   /* for (int i = 0; i < vertexCount; i++)
-    {
-        vertices[i] = vertexList[i].position;
-        uvs[i] = vertexList[i].uv;
-        normals[i] = vertexList[i].normal;
-    }*/
-    ///////////////////////////////////////  
-    // Release all 3 arrays
-    ///////////////////////////////////////  
-//if(pIndices)
-//	{
-//		delete [] pIndices;
-//		pIndices = 0;
-//	}
-//if(pVertices)
-//	{
-//		delete [] pVertices;
-//		pVertices = 0;
-//	}
-//if(pModel)
-//	{
-//		delete [] pModel;
-//		pModel = 0;
-//	}
 }
 
 void PrimitiveFactory::CreateColor( float R, float G, float B, float A )
