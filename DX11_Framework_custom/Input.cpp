@@ -9,7 +9,9 @@ Input::Input(HWND& hMainWnd):
     m_hMainWnd(hMainWnd),
     //m_pCamera(pCam),
     m_LastMousePos({ 0.f,0.f,0.f })
-{}
+{
+    SetCapture(hMainWnd);
+}
 
 Input::Input(const Input& other)
 {}
@@ -60,18 +62,11 @@ void Input::OnMouseDown(WPARAM btnState, int x, int y)
 // NOTE: You don't use the WPARAM, why even pass it?
 void Input::OnMouseUp(WPARAM btnState, int x, int y)
 {
-    ReleaseCapture();
+    //ReleaseCapture();
 }
 
 void Input::OnMouseMove(WPARAM btnState, int x, int y)
 {
-    // TODO: These should be in camera class
-    //// Make each pixel correspond to a quarter of a degree.
-    //float angleX = XMConvertToRadians(0.25f*static_cast<float>(x - m_LastMousePos.x));
-    //float angleY = XMConvertToRadians(0.25f*static_cast<float>(y - m_LastMousePos.y));
-    //// TODO: Change alt cam to main cam
-    //m_pCamera->Pitch(angleX);
-    //m_pCamera->Yaw(angleY);
     m_LastMousePos.x = x;
     m_LastMousePos.y = y;
 }

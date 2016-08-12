@@ -14,7 +14,6 @@ using namespace Microsoft::WRL;
 ImageLoader::ImageLoader()
 {}
 
-
 ImageLoader::~ImageLoader()
 {
 }
