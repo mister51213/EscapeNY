@@ -109,6 +109,15 @@ public:
         {
             Walk(-displacement);
         }
+        if (pInput->IsKeyDown(VK_PRIOR))
+        {
+            FloatSink(displacement);
+        }
+        if (pInput->IsKeyDown(VK_NEXT))
+        {
+            FloatSink(-displacement);
+        }
+
     }
 
     void GetMouseInput(std::shared_ptr<Input> pInput)
@@ -129,10 +138,6 @@ public:
     // ROTATE camera on the X axis
     void Pitch(float angle)
     {
-        // Frank Luna version
-        //XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&m_RightDir), angle);
-        //XMStoreFloat3(&m_UpDir, XMVector3TransformNormal(XMLoadFloat3(&m_UpDir), RotationM));
-        //XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));
         m_Orientation.x += angle; // will be converted to radians in render()
         Clamp(m_Orientation.x, -80.f, 80.f);
     }
@@ -140,11 +145,6 @@ public:
     // ROTATE camera on the Y axis
     void Yaw(float angle)
     {
-        // Frank Luna version
-        //XMFLOAT3 upReset{ 0.f,1.f,0.f }; // Reset up vector to avoid tilt
-        //XMMATRIX RotationM = XMMatrixRotationAxis(XMLoadFloat3(&upReset), angle);
-        //XMStoreFloat3(&m_RightDir, XMVector3TransformNormal(XMLoadFloat3(&m_RightDir), RotationM));
-        //XMStoreFloat3(&m_LookDir, XMVector3TransformNormal(XMLoadFloat3(&m_LookDir), RotationM));        
         m_Orientation.y -= angle; // will be converted to radians in render()
     }
 
@@ -166,6 +166,25 @@ public:
         // make sure that the Y component wont get incremented
         lookV_Rotated *= XMVectorSet(1.f, 1.f, 1.f, .0f);
         XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, lookV_Rotated, posV));
+    }
+        // Translate camera position along the look vector
+    void FloatSink(float distance)
+    {
+        XMVECTOR distV = DirectX::XMVectorReplicate(distance);
+        XMVECTOR riseV = XMLoadFloat3(&m_UpDir);
+        // Load up rotation matrix w current orientation
+        XMMATRIX rotMat = XMMatrixRotationRollPitchYaw(
+            XMConvertToRadians(m_Orientation.x), 
+            XMConvertToRadians(m_Orientation.y), 
+            XMConvertToRadians(m_Orientation.z));
+        // Transform look vector by rotation matrix
+        XMVECTOR riseV_Rotated = XMVector3Transform(riseV, rotMat);
+
+        XMVECTOR posV = XMLoadFloat3(&m_Position);
+        // Store product of 1st 2 vectors + 3rd vector in m_Position
+        // make sure that the Y component wont get incremented
+        riseV_Rotated *= XMVectorSet(1.f, 1.f, 1.f, .0f);
+        XMStoreFloat3(&m_Position, XMVectorMultiplyAdd(distV, riseV_Rotated, posV));
     }
 
     // Translate camera position along the right vector

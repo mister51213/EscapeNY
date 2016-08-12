@@ -34,7 +34,7 @@ void GameView::UpdateView( const vector<Actor*>& actors )
       { 1.f, -1.f, -1.f } };
     std::shared_ptr<Input> pInput = 0;
     Actor_NPC aTest1;
-    aTest1 = Actor_NPC(pInput, wSpecs1, SharkSkin, ModelSpecs_L(), CUSTOM_MESH);
+    aTest1 = Actor_NPC(pInput, wSpecs1, AsphaltFresh, ModelSpecs_L(), CUSTOM_MESH);
 
     ModelSpecs_W wSpecs2 = 
     { { 0.f, -20.f, 10.f },
