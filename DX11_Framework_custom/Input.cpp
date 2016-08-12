@@ -10,7 +10,6 @@ Input::Input(HWND& hMainWnd):
     //m_pCamera(pCam),
     m_LastMousePos({ 0.f,0.f,0.f })
 {
-    SetCapture(hMainWnd);
 }
 
 Input::Input(const Input& other)
@@ -62,7 +61,7 @@ void Input::OnMouseDown(WPARAM btnState, int x, int y)
 // NOTE: You don't use the WPARAM, why even pass it?
 void Input::OnMouseUp(WPARAM btnState, int x, int y)
 {
-    //ReleaseCapture();
+    ReleaseCapture();
 }
 
 void Input::OnMouseMove(WPARAM btnState, int x, int y)

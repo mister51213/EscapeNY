@@ -31,17 +31,17 @@ void GameView::UpdateView( const vector<Actor*>& actors )
     ModelSpecs_W wSpecs1 = 
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
-      { 1.f, -1.f, -1.f } };
+      { 10.f, -8.f, -8.f } };
     std::shared_ptr<Input> pInput = 0;
     Actor_NPC aTest1;
-    aTest1 = Actor_NPC(pInput, wSpecs1, AsphaltFresh, ModelSpecs_L(), CUSTOM_MESH);
+    aTest1 = Actor_NPC(pInput, wSpecs1, Water2, ModelSpecs_L(), CUSTOM_MESH);
 
     ModelSpecs_W wSpecs2 = 
     { { 20.f, -.5f, 20.f },
       { 0.f,0.f,0.f },
       { 0.5f, -0.5f, -0.5f } };
     Actor_NPC aTest2;
-    aTest2 = Actor_NPC(pInput, wSpecs2, AsphaltFresh, ModelSpecs_L(), CUSTOM_MESH2);
+    aTest2 = Actor_NPC(pInput, wSpecs2, Water3, ModelSpecs_L(), CUSTOM_MESH2);
 
     // Playing field
     ModelSpecs_W wSpecs3 = 
@@ -79,9 +79,7 @@ void GameView::drawModel( const Actor & actor )
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix());
     }
-
     m_pGfx->RenderModel(*(m_ModelPool[actor.GetModelType()]));
-
 }
 
 // TODO: implement model pool
@@ -134,11 +132,14 @@ void GameView::initModelPool()
 
 void GameView::initTexturePool()
 {
-	const int numTextures = 12;
+	const int numTextures = 14;
 	m_TexturePool.resize( numTextures );
 	m_TexturePool[ AsphaltFresh ].Initialize( *m_pGfx, L"Textures\\fresh-black-asphalt-texture.jpg" );
 	m_TexturePool[ AsphaltTGA ].Initialize( *m_pGfx, L"Textures\\asphalt.tga" );
 	m_TexturePool[ AsphaltOld ].Initialize( *m_pGfx, L"Textures\\old-asphalt-texture.jpg" );
+    m_TexturePool[ Water1 ].Initialize( *m_pGfx, L"Textures\\water1.jpg" );
+    m_TexturePool[ Water2 ].Initialize( *m_pGfx, L"Textures\\water2.jpg" );
+    m_TexturePool[ Water3 ].Initialize( *m_pGfx, L"Textures\\water3.jpg" );
 	m_TexturePool[ Underwater1 ].Initialize( *m_pGfx, L"Textures\\underwater1.jpg" );
     m_TexturePool[ Underwater2 ].Initialize( *m_pGfx, L"Textures\\underwater2.jpg" );
     m_TexturePool[ Underwater3 ].Initialize( *m_pGfx, L"Textures\\underwater3.jpg" );

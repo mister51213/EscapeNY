@@ -228,15 +228,17 @@ enum eTexture
 	AsphaltFresh = 0,
 	AsphaltTGA = 1,
 	AsphaltOld = 2,
-	Water = 3,
-    Underwater1 = 4,
-    Underwater2 = 5,
-    Underwater3 = 6,
-    Underwater4 = 7,
-    Underwater5 = 8,
-    Underwater6 = 9,
-    Underwater7 = 10,
-	SharkSkin = 11
+	Water1 = 3,
+  	Water2 = 4,
+	Water3 = 5,
+    Underwater1 = 6,
+    Underwater2 = 7,
+    Underwater3 = 8,
+    Underwater4 = 9,
+    Underwater5 = 10,
+    Underwater6 = 11,
+    Underwater7 = 12,
+	SharkSkin = 13
 };
 
 
