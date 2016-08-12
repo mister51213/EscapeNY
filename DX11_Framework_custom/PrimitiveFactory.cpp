@@ -365,6 +365,7 @@ void PrimitiveFactory::CreateMesh(
         vertices.resize(vertexCount);
         uvs.resize(vertexCount);
         normals.resize(vertexCount);
+        indices.resize(vertexCount);
 
         for (int i = 0; i < vertexCount; i++)
         {
@@ -388,6 +389,7 @@ void PrimitiveFactory::CreateMesh(
     ///////////////////////////////////////  
     // LOAD MODEL DATA into vertex array //
     ///////////////////////////////////////
+    indexCount = vertexCount;
     indices.resize(indexCount);
 
         for (int i = 0; i < indexCount; i++)
