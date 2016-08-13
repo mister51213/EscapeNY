@@ -76,7 +76,7 @@ bool System::Initialize()
 	result = m_Graphics->Initialize(
 		screenWidth, screenHeight,					// Screen dimensions
 		m_hwnd,										// Window handle
-		0.f, 255.f, 120.f, 0.f	    			// Background color (R,G,B,A)
+		0.f, 0.f, 120.f, 0.f	    			// Background color (R,G,B,A)
 	);
 	RETURN_IF_FALSE( result );
 
