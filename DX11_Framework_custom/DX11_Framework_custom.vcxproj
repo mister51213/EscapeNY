@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameView.cpp" />
+    <ClCompile Include="Game_FPS.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shader_Color.cpp" />
     <ClCompile Include="COMHandler.cpp" />
@@ -174,7 +175,9 @@
     <ClInclude Include="BinaryLoader.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GameView.h" />
+    <ClInclude Include="Game_FPS.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="ISubGame.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />
     <ClInclude Include="COMHandler.h" />
