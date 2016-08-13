@@ -2,10 +2,11 @@
 #include "Algorithm.h"
 #include "Utilities.h"
 
+
 class Algorithm_Spiral3D : public Algorithm
 {
-public: Algorithm_Spiral3D(Game* pGame, std::shared_ptr<Input> pInput):
-    Algorithm(pGame, pInput)
+public: Algorithm_Spiral3D(ISubGame* pGame/*, std::shared_ptr<Input> pInput*/):
+    Algorithm(pGame/*, pInput*/)
 {}
 
         vector<Actor_NPC> MakePatternNPC(int numActors)
@@ -35,7 +36,7 @@ public: Algorithm_Spiral3D(Game* pGame, std::shared_ptr<Input> pInput):
                 specs.position.y = y;
                 specs.position.z = z;
                
-                actorsSUB.push_back(Actor_NPC(m_pInput, specs, (eTexture)tex, ModelSpecs_L()));
+                actorsSUB.push_back(Actor_NPC(/*m_pInput, */specs, (eTexture)tex, ModelSpecs_L()));
 
                 x = sin(angleStep*radian) * increment;
                 z = cos(angleStep*radian) * increment;

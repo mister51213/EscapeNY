@@ -3,8 +3,8 @@
 
 class Algorithm_Grid3D : public Algorithm
 {
-public: Algorithm_Grid3D(std::shared_ptr<Input> pInput):
-    Algorithm(nullptr, pInput){}
+public: Algorithm_Grid3D(/*std::shared_ptr<Input> pInput*/):
+    Algorithm(nullptr/*, pInput*/){}
 
         vector<Actor_NPC> MakePatternNPC(int numActors)
         {
@@ -43,7 +43,7 @@ public: Algorithm_Grid3D(std::shared_ptr<Input> pInput):
                         specs.scale.z += .02f;
 
                         int index = actorsSUB.size();
-                        actorsSUB.push_back(Actor_NPC(m_pInput, specs, AsphaltFresh, ModelSpecs_L()));
+                        actorsSUB.push_back(Actor_NPC(/*m_pInput, */specs, AsphaltFresh, ModelSpecs_L()));
                     }
                 }
             }

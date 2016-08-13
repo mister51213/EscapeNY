@@ -4,6 +4,9 @@
 #include "GameView.h"
 #include "Input.h"
 #include "Actor.h"
+#include "Overlay.h"
+#include "Includes.h"
+#include "Utilities.h"
 
 class ISubGame
 {
@@ -16,7 +19,7 @@ public:
 
 	// Use UpdateFrame to update actors, camera and anything else that 
 	// needs updating.
-	virtual void UpdateFrame( const Input &InputRef ) = 0;
+	virtual void UpdateFrame( const Input &InputRef, Camera *const pCamera) = 0;
 
 	// Use RenderFrame to render the list of actors or other game objects
 	virtual void RenderFrame( const GameView &GameViewRef ) = 0;

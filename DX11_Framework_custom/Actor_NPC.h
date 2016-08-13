@@ -8,7 +8,7 @@ public:
     Actor_NPC() {}
 
     Actor_NPC(
-        std::shared_ptr<Input> pInput,
+        //std::shared_ptr<Input> pInput,
         ModelSpecs_W worldSpecs,
         eTexture tex,
         ModelSpecs_L localSpecs,
@@ -20,19 +20,19 @@ public:
     { }
 
 public:
-    void GetInput(std::shared_ptr<Input> pInput, int randI, float randF) override
+    void GetInput(const Input& pInput, int randI, float randF) override
     {
         //srand( static_cast<unsigned int>( time( nullptr ) ) );
         //int dieRoll = rand() % 3;
         //float randNum = (rand()%50)/10.0f; // get random float from 0~10.0
-        if (pInput->IsKeyDown(VK_RIGHT))
+        if (pInput.IsKeyDown(VK_RIGHT))
         {
             //if(randI == 0)
             //Move({ randF, randF, randF });
             //else
             Move({ .5f, 0.f, 0.f });
         }
-        if (pInput->IsKeyDown(VK_LEFT))
+        if (pInput.IsKeyDown(VK_LEFT))
         {
             //if(randI == 1)
             //    Move({ -randF, -randF, -randF });
@@ -40,14 +40,14 @@ public:
             Move({ -.5f, 0.f, 0.f });
         }
 
-        if (pInput->IsKeyDown(VK_UP))
+        if (pInput.IsKeyDown(VK_UP))
         {
             //if(randI == 2)
             //Move({ randF, randF, randF });
             //else
             Move({ 0.f, 0.f, .5f });
         }
-        if (pInput->IsKeyDown(VK_DOWN))
+        if (pInput.IsKeyDown(VK_DOWN))
         {
             //if(randI == 3)
             //Move({ -randF, -randF, -randF });
@@ -55,12 +55,12 @@ public:
             Move({ 0.f, 0.f, -.5f });
         }
 
-        if (pInput->IsKeyDown(VK_SPACE))
+        if (pInput.IsKeyDown(VK_SPACE))
         {
             Rotate({ 1.f,1.f,1.f });
         }
 
-        if (pInput->IsKeyDown(VK_CONTROL))
+        if (pInput.IsKeyDown(VK_CONTROL))
         {
             Rotate({ -1.f,-1.f,-1.f });
         }

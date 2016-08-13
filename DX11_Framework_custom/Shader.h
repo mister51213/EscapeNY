@@ -38,7 +38,7 @@ public:
 		XMMATRIX & worldMatrix,
 		XMMATRIX & viewMatrix,
 		XMMATRIX & projectionMatrix,
-		ID3D11ShaderResourceView* texture = nullptr )
+		ID3D11ShaderResourceView* texture = nullptr ) const
 	{
 		// Set the shader parameters to use for rendering.
 
@@ -57,7 +57,7 @@ public:
 		return true;
 	}
 
-	virtual void RenderShader( ID3D11DeviceContext* ) = 0;
+	virtual void RenderShader( ID3D11DeviceContext* ) const = 0;
 
 	// possible issue with passing params as references
 	virtual bool SetShaderParameters(
@@ -65,7 +65,7 @@ public:
 		XMMATRIX &,
 		XMMATRIX &,
 		XMMATRIX &,
-		ID3D11ShaderResourceView* ) = 0;
+		ID3D11ShaderResourceView* ) const = 0;
 
 public:
 	virtual bool InitializeShader(

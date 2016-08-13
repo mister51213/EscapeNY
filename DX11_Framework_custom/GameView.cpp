@@ -14,50 +14,18 @@ GameView::GameView( Graphics * pGfx, D3DGraphics * pD3D, std::shared_ptr<Camera>
 	m_pCam( pCam )
 {}
 
-void GameView::InitializeGameObjectsSystem( const vector<Actor*>& actors )
+void GameView::Initialize()
 {
     initModelPool();
 	initTexturePool();
 	initializeShader();
 }
 
-void GameView::UpdateView( const vector<Actor*>& actors )
+void GameView::UpdateView( const vector<Actor*>& actors ) const
 {
-	//for( const auto *actor : actors )
-	//{
-	//	drawModel( *actor );
-	//}
-    // TEST OUT SAMPLE MESH MODEL
-    ModelSpecs_W wSpecs1 = 
-    { { 0.f, -1.f, 0.f },
-      { 0.f,0.f,0.f },
-      { 10.f, -8.f, -8.f } };
-    std::shared_ptr<Input> pInput = 0;
-    Actor_NPC aTest1;
-    aTest1 = Actor_NPC(pInput, wSpecs1, Water2, ModelSpecs_L(), CUSTOM_MESH);
-
-    ModelSpecs_W wSpecs2 = 
-    { { 20.f, -.5f, 20.f },
-      { 0.f,0.f,0.f },
-      { 0.5f, -0.5f, -0.5f } };
-    Actor_NPC aTest2;
-    aTest2 = Actor_NPC(pInput, wSpecs2, Water3, ModelSpecs_L(), CUSTOM_MESH2);
-
-    // Playing field
-    ModelSpecs_W wSpecs3 = 
-    { { -10.f, 0.f, -30.f },
-      { 0.f,0.f,0.f },
-      { 80.f, -1.f, -80.f } };
-    Actor_NPC aTest3;
-    aTest3 = Actor_NPC(pInput, wSpecs3, Underwater3, ModelSpecs_L(), CUBE_TEXTURED);
-
-    //aTest.SetModel(m_pModTEST); // TODO: change to actor.Initialize()
-    drawModel(aTest1);
-        drawModel(aTest2);
-            drawModel(aTest3);
 }
 
-void GameView::drawModel( const Actor & actor )
+void GameView::drawModel( const Actor & actor ) const
 {
     // UNTextured cube index is 0, so if > 0, use tex shader
     if (actor.GetModelType()>0)
@@ -155,26 +123,3 @@ void GameView::initializeShader()
 	m_shader_Texture.Initialize( m_pD3D->GetDevice() );
     m_shader_Color.Initialize( m_pD3D->GetDevice() );
 }
-
-//void GameView::modelAllActors( const vector<Actor*>& actors )
-//{
-//	for( int i = 0; i < actors.size(); i++ )
-//	{
-//		actors[ i ]->SetModel( makeModel( actors[ i ]->GetLocalSpecs() ) );
-//	}
-//    // TEST OUT MESH FUNCTION
-//    	m_pModTEST.reset( new Model_Textured );
-//    	PrimitiveFactory prim;
-//        prim.CreateMesh(L"Meshes\\Cube.txt");
-//        m_pModTEST->Initialize( prim, *m_pGfx );
-//}
-//std::shared_ptr<Model> GameView::makeModel( ModelSpecs_L localSpecs, eModType Type )
-//{
-//	std::shared_ptr<Model_Textured> pModel;
-//	pModel.reset( new Model_Textured );
-//	PrimitiveFactory primMaker;
-//	// TODO: Implement drawing shapes based on eModType
-//	primMaker.CreateCube( localSpecs );
-//	pModel->Initialize( primMaker, *m_pGfx );
-//	return pModel;
-//}

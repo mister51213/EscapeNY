@@ -18,28 +18,28 @@ public:
     { }
 
 public:
-    void GetInput(std::shared_ptr<Input> pInput, int randI=0.f, float randF=0.f) override
+    void GetInput(const Input& pInput, int randI=0.f, float randF=0.f) override
     {
-        if (pInput->IsKeyDown(VK_RIGHT))
+        if (pInput.IsKeyDown(VK_RIGHT))
         {
             Move({ .6f, 0.f, 0.f });
         }
-        if (pInput->IsKeyDown(VK_LEFT))
+        if (pInput.IsKeyDown(VK_LEFT))
         {
             Move({ -.6f, 0.f, 0.f });
         }
 
-        if (pInput->IsKeyDown(VK_UP))
+        if (pInput.IsKeyDown(VK_UP))
         {
             Move({ 0.f, 0.f, .6f });
         }
-        if (pInput->IsKeyDown(VK_DOWN))
+        if (pInput.IsKeyDown(VK_DOWN))
         {
             Move({ 0.f, 0.f, -.6f });
         }
 
         // TEST: ShapeBuilder.cpp line 171~
-        m_worldSpecs.orientation = pInput->m_LastMousePos;
+        m_worldSpecs.orientation = pInput.m_LastMousePos;
     } 
 
 private:

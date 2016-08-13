@@ -160,6 +160,7 @@
     <ClCompile Include="Overlay.cpp" />
     <ClCompile Include="PrimitiveFactory.cpp" />
     <ClCompile Include="System.cpp" />
+    <ClCompile Include="TEMP.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedPlane.cpp" />
     <ClCompile Include="Shader_Texture.cpp" />

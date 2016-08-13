@@ -87,48 +87,48 @@ public:
         return true;
     }
 
-    void GetInput(std::shared_ptr<Input> pInput)
+    void GetInput(const Input& pInput)
     {
         const float time = 1.f;
         const float camSpeed = 2.f;
         float displacement = time*camSpeed;
 
-        if (pInput->IsKeyDown('D'))
+        if (pInput.IsKeyDown('D'))
         {
             Strafe(displacement);
         }
-        if (pInput->IsKeyDown('A'))
+        if (pInput.IsKeyDown('A'))
         {
             Strafe(-displacement);
         }
-        if (pInput->IsKeyDown('W'))
+        if (pInput.IsKeyDown('W'))
         {
             Walk(displacement);
         }
-        if (pInput->IsKeyDown('S'))
+        if (pInput.IsKeyDown('S'))
         {
             Walk(-displacement);
         }
-        if (pInput->IsKeyDown(VK_PRIOR))
+        if (pInput.IsKeyDown(VK_PRIOR))
         {
             FloatSink(displacement);
         }
-        if (pInput->IsKeyDown(VK_NEXT))
+        if (pInput.IsKeyDown(VK_NEXT))
         {
             FloatSink(-displacement);
         }
 
     }
 
-    void GetMouseInput(std::shared_ptr<Input> pInput)
+    void GetMouseInput(const Input& pInput)
     {
     // Get "angle" traveled by mouse since last position
-    float angleX = 0.25f*static_cast<float>(pInput->m_LastMousePos.y - m_LastMousePos.y);
-    float angleY = 0.25f*static_cast<float>(pInput->m_LastMousePos.x - m_LastMousePos.x);
+    float angleX = 0.25f*static_cast<float>(pInput.m_LastMousePos.y - m_LastMousePos.y);
+    float angleY = 0.25f*static_cast<float>(pInput.m_LastMousePos.x - m_LastMousePos.x);
 
     // Store current mouse position
-    m_LastMousePos.x = pInput->m_LastMousePos.x;
-    m_LastMousePos.y = pInput->m_LastMousePos.y;
+    m_LastMousePos.x = pInput.m_LastMousePos.x;
+    m_LastMousePos.y = pInput.m_LastMousePos.y;
 
     // Re-rotate camera based on new position of mouse
     Pitch(angleX);

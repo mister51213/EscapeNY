@@ -26,7 +26,7 @@ public:
     void KeyDown(unsigned int);
     void KeyUp(unsigned int);
 
-    bool IsKeyDown(unsigned int);
+    bool IsKeyDown(unsigned int) const;
 
     void OnMouseDown(WPARAM btnState, int x, int y);
     void OnMouseUp(WPARAM btnState, int x, int y);

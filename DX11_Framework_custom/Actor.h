@@ -58,7 +58,7 @@ public:
     ////////////////
     // MOVE LOGIC //
     ////////////////
-    virtual void GetInput(std::shared_ptr<Input> pInput, int randI, float randF) = 0;
+    virtual void GetInput(const Input& pInput, int randI, float randF) = 0;
 
 private:
     // TODO: take this OUT of parent (Some classes wont need to move, like walls)

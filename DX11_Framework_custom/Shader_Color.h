@@ -40,7 +40,7 @@ public:
         XMMATRIX &, 
         XMMATRIX &, 
         XMMATRIX &, 
-        ID3D11ShaderResourceView* =0) override;
+        ID3D11ShaderResourceView* =0) const override;
 	
-    virtual void RenderShader( ID3D11DeviceContext* );
+    virtual void RenderShader( ID3D11DeviceContext* ) const;
 };
