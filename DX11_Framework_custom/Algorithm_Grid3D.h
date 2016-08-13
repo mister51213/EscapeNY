@@ -25,6 +25,7 @@ public: Algorithm_Grid3D(/*std::shared_ptr<Input> pInput*/):
                 m_numRows = numActors / 25;
                 m_numZ = numActors / 25;
             }
+            float spacing = 1.f;
             vector<Actor_NPC> actorsSUB;
             actorsSUB.reserve(numActors);
 
@@ -35,15 +36,16 @@ public: Algorithm_Grid3D(/*std::shared_ptr<Input> pInput*/):
                 {
                     for (float k = 0; k < m_numZ; k++)
                     {
-                        specs.position.x = i*15.f;
-                        specs.position.y = j*15.f;
-                        specs.position.z = k*15.f;
+                        specs.position.x = i*spacing;
+                        specs.position.y = j*spacing;
+                        specs.position.z = k*spacing;
                         specs.scale.x += .01f;
-                        specs.scale.y += .015f;
-                        specs.scale.z += .02f;
+                        specs.scale.y += .01f;
+                        specs.scale.z += .01f;
 
                         int index = actorsSUB.size();
-                        actorsSUB.push_back(Actor_NPC(/*m_pInput, */specs, AsphaltFresh, ModelSpecs_L()));
+                        actorsSUB.push_back(Actor_NPC(/*m_pInput, */specs, Water3, ModelSpecs_L(), CUSTOM_MESH));
+                        spacing += .5f;
                     }
                 }
             }

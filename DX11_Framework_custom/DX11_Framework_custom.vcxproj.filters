@@ -114,6 +114,9 @@
     <ClCompile Include="Game_FPS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Shader_Lighting.cpp">
+      <Filter>Source Files\Shader Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -212,9 +215,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SPARE_CODE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BinaryLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -223,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="Game_FPS.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_Lighting.h">
+      <Filter>Header Files\Shader Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -238,5 +241,7 @@
     <FxCompile Include="Shaders\Color_vs.hlsl" />
     <FxCompile Include="Shaders\texture_ps.hlsl" />
     <FxCompile Include="Shaders\texture_vs.hlsl" />
+    <FxCompile Include="DiffuseLight_vs.hlsl" />
+    <FxCompile Include="DiffuseLight_ps.hlsl" />
   </ItemGroup>
 </Project>

@@ -30,6 +30,7 @@ bool Model_Textured::Initialize(
 	{
 		m_Vertices[ idx ] = {verts[ idx ], uvs[ idx ]};
 		++idx;
+        //TODO: load up normal data too here for use w lighting.
 	}
 
 	// Load the index array with data.

@@ -2,7 +2,7 @@
 
 void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const pCamera) 
 {
-    	// Take a copy of the graphics and direct3d pointers
+    // Take a copy of the graphics and direct3d pointers
 	m_pGraphics = pGraphics;
 	m_pDirect3D = pGraphics->GetDirect3D();
     m_pCamera = pCamera;
@@ -70,6 +70,7 @@ void Game_FPS::reset()
       { 0.f,0.f,0.f },
       { 80.f, -1.f, -80.f } };
     aTest3 = Actor_NPC(wSpecs3, Underwater3, ModelSpecs_L(), CUBE_TEXTURED);
+
     // MAKE m_actorsSUB1 (ONE SUBSET OF ACTORS)
     const int numRows = 5, numColumns = 5, numZ = 5;
     const int numActors1 = numRows * numColumns * numZ;

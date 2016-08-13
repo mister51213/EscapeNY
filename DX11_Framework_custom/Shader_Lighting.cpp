@@ -1,27 +1,37 @@
-// 
-// TODO: Change shader functionality to using built-in shader header files instead of .cso
-// files that need to be packaged with the final .exe file (before we actually ship the game)
+#include "Shader_Lighting.h"
+
+Shader_Lighting::Shader_Lighting()
+    :
+Shader(L"Shaders/lighting_vs.cso", L"Shaders/lighting_vs.cso")
+// TODO: remember to manually copy and paste cso's into Shader Folder
+{
+    m_vertexShader.Reset();
+	m_pixelShader.Reset();
+	m_layout.Reset();
+	m_sampleState.Reset();
+	m_matrixBuffer.Reset();
+// Set the light constant buffer to null in the class constructor.
+	m_lightBuffer.Reset();
+}
+
+Shader_Lighting::Shader_Lighting(const Shader_Lighting &)
+{}
+
+Shader_Lighting::~Shader_Lighting()
+{
+}
+
+//TODO: is this necessary w comptrs?
+//void Shader_Lighting::Shutdown()
+//{
+//	// Shutdown the vertex and pixel shaders as well as the related objects.
+//	ShutdownShader();
 //
+//	return;
+//}
 
-////////////////////////////////////////////////////////////////////////////////
-// Filename: Shader_Texture.cpp
-////////////////////////////////////////////////////////////////////////////////
-#include "Shader_Texture.h"
-#include "Model.h"
-
-Shader_Texture::Shader_Texture()
-	:
-	Shader(L"Shaders/texture_vs.cso", L"Shaders/texture_ps.cso")
-{}
-
-Shader_Texture::~Shader_Texture()
-{}
-
-bool Shader_Texture::InitializeShader( 
-    ID3D11Device* pDevice, 
-    const std::wstring & vsFilename,
-    const std::wstring & psFilename)
-{	
+bool Shader_Lighting::InitializeShader(ID3D11Device * pDevice, const std::wstring & vsFilename, const std::wstring & psFilename)
+{
 	// Initialize the pointers this function will use to null.
 	comptr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer;
 
@@ -95,16 +105,11 @@ bool Shader_Texture::InitializeShader(
 	hr = pDevice->CreateSamplerState( &samplerDesc, &m_sampleState );
 	RETURN_IF_FAILED( hr );
 
-	return true;
-}
+	return true;}
 
-bool Shader_Texture::SetShaderParameters( 
-    ID3D11DeviceContext* deviceContext, 
-    XMMATRIX & worldMatrix, 
-    XMMATRIX & viewMatrix,
-	XMMATRIX & projectionMatrix, 
-    ID3D11ShaderResourceView* texture ) const
+bool Shader_Lighting::SetShaderParameters(ID3D11DeviceContext * deviceContext, XMMATRIX & worldMatrix, XMMATRIX & viewMatrix, XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture) const
 {
+
 	// Lock the constant buffer so it can be written to.
 	D3D11_MAPPED_SUBRESOURCE mappedResource{};
 	HRESULT result = deviceContext->Map( m_matrixBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0,
@@ -138,12 +143,35 @@ bool Shader_Texture::SetShaderParameters(
 	// Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources( 0, 1, &texture );
 
-	return true;
-}
+	return true;}
 
-void Shader_Texture::RenderShader( ID3D11DeviceContext* deviceContext ) const
+bool Shader_Lighting::Render(
+    ID3D11DeviceContext *deviceContext, 
+    int indexCount, 
+    XMMATRIX worldMatrix, 
+    XMMATRIX viewMatrix,
+    XMMATRIX projectionMatrix, 
+    ID3D11ShaderResourceView *texture, 
+    XMVECTOR lightDirection, 
+    XMVECTOR diffuseColor)
 {
-	// Set the vertex input layout.
+		// NOTE: texture is NULL by default and will be set only in CHILD texture class.
+		bool result = SetShaderParameters(
+			deviceContext,
+			worldMatrix,
+			viewMatrix,
+			projectionMatrix,
+			texture );
+		RETURN_IF_FALSE( result );
+
+		// Now render the prepared buffers with the shader.
+		RenderShader( deviceContext );
+
+		return true;}
+
+void Shader_Lighting::RenderShader(ID3D11DeviceContext * deviceContext) const
+{
+    // Set the vertex input layout.
 	deviceContext->IASetInputLayout( m_layout.Get() );
 
 	// Set the vertex and pixel shaders that will be used to render this triangle.
