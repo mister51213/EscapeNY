@@ -11,21 +11,24 @@ struct LightBufferType
 class Shader_Lighting : public Shader
 {
 public:
-    Shader_Lighting();
+    Shader_Lighting(HWND hWnd);
   	Shader_Lighting(const Shader_Lighting&);
     ~Shader_Lighting();
 
     bool InitializeShader(
         ID3D11Device* pDevice,
-        const std::wstring & vsFilename,
-        const std::wstring & psFilename);
+        HWND hwnd, 
+        LPCWSTR& vsFilename,
+        LPCWSTR& psFilename);
 
     bool SetShaderParameters(
         ID3D11DeviceContext* deviceContext,
         XMMATRIX & worldMatrix,
         XMMATRIX & viewMatrix,
         XMMATRIX & projectionMatrix,
-        ID3D11ShaderResourceView* texture) const;
+        ID3D11ShaderResourceView* texture,
+        XMVECTOR lightDirection,
+        XMVECTOR diffuseColor) const;
     
     // Need difft parameters so have to overload the parent function.
     bool Render(
@@ -38,9 +41,10 @@ public:
         XMVECTOR,  //TODO: should be D3DXVECTOR3
         XMVECTOR); //TODO: should be D3DXVECTOR4
 
-    void RenderShader(ID3D11DeviceContext* deviceContext) const;
+    void RenderShader(ID3D11DeviceContext* deviceContext, int indexCount) const;
 private:
 	comptr<ID3D11SamplerState> m_sampleState;
     comptr<ID3D11Buffer> m_lightBuffer;
+    HWND m_hWnd;
 };
 

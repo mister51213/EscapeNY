@@ -5,7 +5,7 @@
 
 #include "Shader.h"
 
-Shader::Shader( const std::wstring &vs, const std::wstring &ps )
+Shader::Shader( const std::wstring &vs, const std::wstring &ps)
 {
 	m_vsFilename = vs;
 	m_psFilename = ps;
