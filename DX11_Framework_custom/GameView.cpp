@@ -23,6 +23,10 @@ void GameView::Initialize()
 
 void GameView::UpdateView( const vector<Actor*>& actors ) const
 {
+    for each (Actor* actor in actors)
+    {
+        drawModel(*actor);
+    }
 }
 
 void GameView::drawModel( const Actor & actor ) const

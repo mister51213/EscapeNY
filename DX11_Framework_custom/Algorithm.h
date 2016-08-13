@@ -16,7 +16,6 @@ public:
     Algorithm(ISubGame* pGame/*, std::shared_ptr<Input>& pInput*/) 
     { 
         m_pGame = pGame;
-        //m_pInput = pInput;
     }
 
     // TODO: Still make it pure virtual or just overload it instead because of difft return values?
@@ -24,7 +23,7 @@ public:
     virtual void SetData() {}
 
 protected:
-    Game* m_pGame;
+    ISubGame* m_pGame;
     std::shared_ptr<Input> m_pInput;
 };
 

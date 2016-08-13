@@ -61,5 +61,5 @@ bool Game::render()
 
 void Game::updateGameObjects()
 {
-    m_pActiveGame->UpdateFrame(*m_pInput, m_pCamera.get());
+    m_pActiveGame->UpdateScene(*m_pInput, m_pCamera.get());
 }

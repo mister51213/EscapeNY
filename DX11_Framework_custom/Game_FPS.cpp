@@ -13,7 +13,7 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 }
 
 	// Use UpdateFrame to update actors, camera and anything else that needs updating.
-void Game_FPS::UpdateFrame(const Input &InputRef, Camera *const pCamera)
+void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
 {
     int randInt = rand() % 3;
 	// NOTE: If you need a float between 0.f and 10.f, shouldn't the line say:
@@ -29,8 +29,6 @@ void Game_FPS::UpdateFrame(const Input &InputRef, Camera *const pCamera)
     {
         pActor.GetInput(InputRef, randInt, randFloat);
     }
-
-
 
     randInt = rand() % 3;
     randFloat = (rand()%50)/10.0f; // get random float from 0~10.0
@@ -92,7 +90,7 @@ void Game_FPS::reset()
     {
         m_pActorsMASTER.push_back(&(m_actorsSUB1[i]));
     }
-    for (int i = 0; i < numActors1; i++)
+    for (int i = 0; i < numActors2; i++)
     {
         m_pActorsMASTER.push_back(&(m_actorsSUB2[i]));
     }
@@ -102,5 +100,5 @@ void Game_FPS::reset()
 void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
     GameViewRef.UpdateView(m_pActorsMASTER);
-  	m_Overlay.Render( *m_pGraphics );
+   	m_Overlay.Render( *m_pGraphics );
 }
