@@ -39,7 +39,7 @@ void Input::Initialize( HWND WinHandle )
 	ZeroMemory( m_keys, 256 );
 
 	
-	GetClientRect( WinHandle, &m_clamp );
+	GetWindowRect( WinHandle, &m_clamp );
 	m_x = ( m_clamp.right - m_clamp.left ) / 2;
 	m_y = ( m_clamp.bottom - m_clamp.top ) / 2;
 	m_relX = 0;
