@@ -63,10 +63,10 @@ public:
     }
 
 private:
-    void Move( const XMFLOAT3 &offset) override
+    void Move( const XMFLOAT3 &offset)
     { m_worldSpecs.position += offset; } 
 
-    void Rotate( const XMFLOAT3 &rotation) override
+    void Rotate( const XMFLOAT3 &rotation)
     { m_worldSpecs.orientation += rotation; }
 
 };
