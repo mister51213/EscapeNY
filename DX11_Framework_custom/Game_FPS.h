@@ -11,8 +11,7 @@ public:
         class Game *const pGame,
         Camera *const pCamera) override;
 
-	// Use UpdateFrame to update actors, camera and anything else that 
-	// needs updating.
+	// Use UpdateFrame to update actors, camera and anything else that needs updating.
     virtual void UpdateScene(const Input &InputRef, Camera *const pCamera) override;
 
 	// Use RenderFrame to render the list of actors or other game objects
@@ -20,6 +19,8 @@ public:
 
 private:
     void reset();
+
+    void doVisualFX();
 
 private:
     Graphics *m_pGraphics; // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership
@@ -38,4 +39,10 @@ private:
     Actor_NPC aTest1;
     Actor_NPC aTest2;
     Actor_NPC aTest3;
+
+    // LIGHTING EFFECTS variables
+    float m_offset = .01f;
+    FX_Light m_light;
+    bool m_reverseL = false;
+
 };

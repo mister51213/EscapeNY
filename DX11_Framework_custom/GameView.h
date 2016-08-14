@@ -27,14 +27,12 @@ public:
 	GameView( Graphics* pGfx, D3DGraphics* pD3D, std::shared_ptr<Camera> &pCam );
 	 
     void Initialize();
-	void UpdateView( const vector<Actor*>& actors ) const;
+	void UpdateView( const vector<Actor*>& actors, const FX_Light& light) const;
     void initModelPool();
 private:
 	void initTexturePool();
 	void initializeShader();
-	//void modelAllActors( const vector<Actor*>& actors );
-	//std::shared_ptr<Model> makeModel(ModelSpecs_L localSpecs, eModType Type = CUBE_TEXTURED );
-	void drawModel( const Actor& actor ) const;
+	void drawModel( const Actor& actor, const FX_Light& light) const;
 
 private:
     Graphics* m_pGfx;

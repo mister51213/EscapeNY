@@ -41,8 +41,8 @@ public:
         XMMATRIX, 
         XMMATRIX, 
         ID3D11ShaderResourceView*, 
-        XMFLOAT3,  //TODO: should be D3DXVECTOR3
-        XMFLOAT4) const; //TODO: should be D3DXVECTOR4
+        XMFLOAT3 lightDirection,  //TODO: should be D3DXVECTOR3
+        XMFLOAT4 diffuseColor) const; //TODO: should be D3DXVECTOR4
 
     void RenderShader(ID3D11DeviceContext* deviceContext, int indexCount) const;
     void RenderShader(ID3D11DeviceContext*)const override {}

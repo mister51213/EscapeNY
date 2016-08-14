@@ -97,9 +97,38 @@ void Game_FPS::reset()
     }
 }
 
+void Game_FPS::doVisualFX()
+{
+        // MOVE LIGHTING    
+        if (!m_reverseL)
+        {
+            if (m_light.Direction.x < 1.f)
+            {
+                m_light.Direction.x += .01f;
+                m_light.Color.x += .01f;
+                m_offset += .001f;
+            }
+            else
+                m_reverseL = true;
+        }
+        else
+        {
+            if (m_light.Direction.x > -1.f)
+            {
+                m_light.Direction.x -= .01f;
+                 m_light.Color.x -= .01f;
+                m_offset -= .001f;
+            }
+            else
+                m_reverseL = false;
+        }
+}
+
 	// Use RenderFrame to render the list of actors or other game objects
 void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
-    GameViewRef.UpdateView(m_pActorsMASTER);
+    doVisualFX();
+    GameViewRef.UpdateView(m_pActorsMASTER, m_light);
    	m_Overlay.Render( *m_pGraphics );
 }
+

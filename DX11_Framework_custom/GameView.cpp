@@ -21,15 +21,15 @@ void GameView::Initialize()
 	initializeShader();
 }
 
-void GameView::UpdateView( const vector<Actor*>& actors ) const
-{
-    for each (Actor* actor in actors)
+void GameView::UpdateView(const vector<Actor*>& actors, const FX_Light& light) const
     {
-        drawModel(*actor);
+        for each (Actor* actor in actors)
+        {
+            drawModel(*actor, light);
+        }
     }
-}
 
-void GameView::drawModel( const Actor & actor ) const
+void GameView::drawModel( const Actor & actor, const FX_Light& light ) const
 {
     // UNTextured cube index is 0, so if > 0, use tex shader
     if (actor.GetModelType()>0)
@@ -42,8 +42,8 @@ void GameView::drawModel( const Actor & actor ) const
             m_pCam->GetProjectionMatrix(),
             (m_TexturePool[actor.GetTexIndex()]).GetTextureView());
 
-        int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
         // lighting effects
+        int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
         m_shader_Lighting.Render(
             m_pD3D->GetDeviceContext(),
             indexCount,
@@ -51,32 +51,32 @@ void GameView::drawModel( const Actor & actor ) const
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
             (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
-            {.3f,.1f,1.f}, {0.f,1.f,.5f,1.f});
+            light.Direction,
+            light.Color);
     }
     else
     {   
-       // // color the actor
+       // color the actor
         m_shader_Color.Render(
             m_pD3D->GetDeviceContext(),
             GetWorldMatrix(actor.GetWorldSpecs()),
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix());
 
-       // // LIGHTING
-       //int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
-       //m_shader_Lighting.Render(
-       //     m_pD3D->GetDeviceContext(),
-       //     indexCount,
-       //     GetWorldMatrix(actor.GetWorldSpecs()),
-       //     m_pCam->GetViewMatrix(),
-       //     m_pCam->GetProjectionMatrix(),
-       //     (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
-       //     {.57f,.57f,.57f}, {1.f,1.f,1.f,1.f});
+       // LIGHTING
+       int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
+       m_shader_Lighting.Render(
+            m_pD3D->GetDeviceContext(),
+            indexCount,
+            GetWorldMatrix(actor.GetWorldSpecs()),
+            m_pCam->GetViewMatrix(),
+            m_pCam->GetProjectionMatrix(),
+            (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
+            {.57f,.57f,.57f}, {1.f,1.f,1.f,1.f});
     }
     m_pGfx->RenderModel(*(m_ModelPool[actor.GetModelType()]));
 }
 
-// TODO: implement model pool
 void GameView::initModelPool()
 {
     char numModels = 10;
