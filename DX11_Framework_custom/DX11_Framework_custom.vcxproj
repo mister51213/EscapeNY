@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="actor_player.cpp" />
     <ClCompile Include="Actor_Player_Alt.cpp" />
     <ClCompile Include="Algorithm_Grid3D.cpp" />
     <ClCompile Include="Algorithm_Random.cpp" />

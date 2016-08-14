@@ -26,8 +26,9 @@ using namespace DirectX;
 class Camera
 {
 public:
-	Camera() {}
-	~Camera() {}
+	// Default cause they don't do anything, so no need to define them
+	Camera() = default;
+	~Camera() = default;
 
 	XMMATRIX GetViewMatrix()const;
 	XMMATRIX GetProjectionMatrix()const;
