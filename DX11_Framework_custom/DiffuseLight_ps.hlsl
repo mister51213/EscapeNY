@@ -29,18 +29,18 @@ struct PixelInputType
     float2 tex : TEXCOORD0;
     float3 normal : NORMAL;
 };
-
-struct PixelInputType
-{
-    float4 position : SV_POSITION;
-    float2 tex : TEXCOORD0;
-    float3 normal : NORMAL;
-};
+//
+//struct PixelInputType
+//{
+//    float4 position : SV_POSITION;
+//    float2 tex : TEXCOORD0;
+//    float3 normal : NORMAL;
+//};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Pixel Shader
 ////////////////////////////////////////////////////////////////////////////////
-float4 LightPixelShader(PixelInputType input) : SV_TARGET
+float4 main(PixelInputType input) : SV_TARGET
 {
     float4 textureColor;
     float3 lightDir;
@@ -48,7 +48,7 @@ float4 LightPixelShader(PixelInputType input) : SV_TARGET
     float4 color;
 
     // Sample the pixel color from the texture using the sampler at this texture coordinate location.
-    textureColor = shaderTexture.Sample(SampleType, input.tex);
+    //textureColor = shaderTexture.Sample(SampleType, input.tex);
 
     // Invert the light direction for calculations.
     lightDir = -lightDirection;
@@ -60,7 +60,7 @@ float4 LightPixelShader(PixelInputType input) : SV_TARGET
     color = saturate(diffuseColor * lightIntensity);
 
     // Multiply the texture pixel and the final diffuse color to get the final pixel color result.
-    color = color * textureColor;
+    //color = color * textureColor;
 
     return color;
 }

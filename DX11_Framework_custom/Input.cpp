@@ -75,11 +75,14 @@ void Input::OnRightUp( int RelativeX, int RelativeY )
 
 void Input::OnMouseMove( int RelativeX, int RelativeY )
 {
-	int tx = m_x + RelativeX;
+    // tx and ty are storing temporary x and y mouse coordinates
+    // RelativeX, Y are the distance mouse has traveled since last frame
+	int tx = m_x + RelativeX; 
 	int ty = m_y + RelativeY;
 
-	m_x = max( 0, min( tx, m_clamp.right - 1 ) );
-	m_y = max( 0, min( ty, m_clamp.bottom - 1 ) );
+    // m_x and y are the last known coordinates of mouse
+	m_x = max( m_clamp.left, min( tx, m_clamp.right - 1 ) );
+	m_y = max( m_clamp.top, min( ty, m_clamp.bottom - 1 ) );
 	
 	SetCursorPos( m_x, m_y );
 	m_relX = RelativeX;
