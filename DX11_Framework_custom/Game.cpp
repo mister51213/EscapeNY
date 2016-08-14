@@ -4,8 +4,9 @@
 using namespace DirectX;
 
 Game::Game( std::shared_ptr<Input> pInput )
-    :
-  	m_pActiveGame(new Game_FPS) // change active game here
+	:
+	//m_pActiveGame(new Game_FPS) // change active game here
+	m_pActiveGame( new Game_Maze )
 {
 	m_pInput = pInput;
 	srand( static_cast<unsigned int>( time( nullptr ) ) );
