@@ -42,10 +42,11 @@ void GameView::drawModel( const Actor & actor ) const
             m_pCam->GetProjectionMatrix(),
             (m_TexturePool[actor.GetTexIndex()]).GetTextureView());
 
+        int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
         // lighting effects
         m_shader_Lighting.Render(
             m_pD3D->GetDeviceContext(),
-            m_ModelPool[actor.GetModelType()]->GetIndexCount(),
+            indexCount,
             GetWorldMatrix(actor.GetWorldSpecs()),
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
@@ -62,9 +63,10 @@ void GameView::drawModel( const Actor & actor ) const
             m_pCam->GetProjectionMatrix());
 
        // // LIGHTING
+       //int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
        //m_shader_Lighting.Render(
        //     m_pD3D->GetDeviceContext(),
-       //     m_ModelPool[actor.GetModelType()]->GetIndexCount(),
+       //     indexCount,
        //     GetWorldMatrix(actor.GetWorldSpecs()),
        //     m_pCam->GetViewMatrix(),
        //     m_pCam->GetProjectionMatrix(),

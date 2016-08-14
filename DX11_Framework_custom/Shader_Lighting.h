@@ -16,11 +16,11 @@ public:
   	Shader_Lighting(const Shader_Lighting&);
     ~Shader_Lighting();
 
+    // TODO: The override for this is NOT being called!
     bool InitializeShader(
         ID3D11Device* pDevice,
         const std::wstring & vsFilename,
-        const std::wstring & psFilename/*,
-        HWND& hwnd*/);
+        const std::wstring & psFilename) override;
 
     void OutputShaderErrorMessage(ID3DBlob * errorMessage, HWND & hwnd, LPCWSTR & shaderFilename);
 

@@ -19,11 +19,11 @@ Shader_Lighting::Shader_Lighting(const Shader_Lighting &)
 Shader_Lighting::~Shader_Lighting()
 {}
 
+// TODO: this isn't being called!!!!
 bool Shader_Lighting::InitializeShader(
     ID3D11Device * pDevice, 
     const std::wstring & vsFilename, 
-    const std::wstring & psFilename/*,
-    HWND& hwnd*/) // HWND member is initialized in constructor
+    const std::wstring & psFilename) // HWND member is initialized in constructor
 {
 	HRESULT result;
 	ID3DBlob* errorMessage;
