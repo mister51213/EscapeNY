@@ -193,34 +193,38 @@ LRESULT CALLBACK System::MessageHandler(
 		{
 			// Apparently DefWindowProc needs to be called regardless if this
 			// message is handled, so no break set, just let is fall through.
-
-			bool appInForeground = GET_RAWINPUT_CODE_WPARAM( wparam );
-			
 			UINT dataSize = sizeof(RAWINPUT);
 			
 			RAWINPUT rInput{};
 			
-			auto result = GetRawInputData( reinterpret_cast<HRAWINPUT>( lparam ), RID_INPUT, &rInput, &dataSize, sizeof( RAWINPUTHEADER ) );
+			auto result = GetRawInputData( 
+				reinterpret_cast<HRAWINPUT>( lparam ), 
+				RID_INPUT, 
+				&rInput, 
+				&dataSize, 
+				sizeof( RAWINPUTHEADER ) );
 
 			int x = 0, y = 0;
 			x = rInput.data.mouse.lLastX;
 			y = rInput.data.mouse.lLastY;
-
+			
 			m_Input->OnMouseMove( x, y );
 
-			if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_1_DOWN )
+			auto btnFlag = rInput.data.mouse.usButtonFlags;
+
+			if( ( btnFlag & RI_MOUSE_LEFT_BUTTON_DOWN ) )
 			{
 				m_Input->OnLeftDown(x, y);
 			}
-			else if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_1_UP )
+			else if( ( btnFlag & RI_MOUSE_LEFT_BUTTON_UP ) >> 1 )
 			{
 				m_Input->OnLeftUp(x, y);
 			}
-			if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_2_DOWN )
+			if( ( btnFlag & RI_MOUSE_RIGHT_BUTTON_DOWN ) >> 2 )
 			{
 				m_Input->OnRightDown( x, y );
 			}
-			else if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_2_UP )
+			else if( ( btnFlag & RI_MOUSE_RIGHT_BUTTON_UP ) >> 3 )
 			{
 				m_Input->OnRightUp( x, y );
 			}

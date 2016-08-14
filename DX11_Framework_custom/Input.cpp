@@ -23,6 +23,8 @@ Input::~Input()
 	rawDevice.hwndTarget = nullptr;			
 											
 	RegisterRawInputDevices( &rawDevice, 1, sizeof( RAWINPUTDEVICE ) );
+
+	ReleaseCapture();
 }
 
 void Input::Initialize( HWND WinHandle )
@@ -38,8 +40,7 @@ void Input::Initialize( HWND WinHandle )
 
 	ZeroMemory( m_keys, 256 );
 
-	
-	GetClientRect( WinHandle, &m_clamp );
+	GetWindowRect( WinHandle, &m_clamp );
 	m_x = ( m_clamp.right - m_clamp.left ) / 2;
 	m_y = ( m_clamp.bottom - m_clamp.top ) / 2;
 	m_relX = 0;
@@ -75,13 +76,14 @@ void Input::OnRightUp( int RelativeX, int RelativeY )
 
 void Input::OnMouseMove( int RelativeX, int RelativeY )
 {
-	int tx = m_x + RelativeX;
-	int ty = m_y + RelativeY;
+	ClipCursor( &m_clamp );
 
-	m_x = max( 0, min( tx, m_clamp.right - 1 ) );
-	m_y = max( 0, min( ty, m_clamp.bottom - 1 ) );
+	POINT p{};
+	GetCursorPos( &p );
+
+	m_x = p.x;
+	m_y = p.y;
 	
-	SetCursorPos( m_x, m_y );
 	m_relX = RelativeX;
 	m_relY = RelativeY;
 }
