@@ -12,6 +12,7 @@
 #include "Shader_Color.h"
 #include "Texture.h"
 #include "Shader_Texture.h"
+#include "Shader_Lighting.h"
 #include "Actor.h"
 #include "Actor_Player.h"
 #include "Actor_NPC.h"
@@ -42,6 +43,8 @@ private:
     std::shared_ptr<Camera> m_pCam;
 	Shader_Texture m_shader_Texture;
     Shader_Color m_shader_Color;
+    Shader_Lighting m_shader_Lighting;
+
     vector<Texture> m_TexturePool;
     vector<std::shared_ptr<Model>> m_ModelPool;
 

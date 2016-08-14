@@ -22,7 +22,8 @@ System::System()
 	m_hInstance( GetModuleHandle( NULL ) ),
 	m_applicationName( L"DX11_Framework" ),
 	done(false)
-{ }
+{    
+}
 
 System::~System() 
 {
@@ -32,7 +33,7 @@ System::~System()
 	// Return screen settings back to normal and release the 
 	// window and the handles associated with it.
 	// Fix the display settings if leaving full screen mode.
-	if( FULL_SCREEN )
+	if( g_fullScreen )
 	{
 		ChangeDisplaySettings( NULL, 0 );
 	}
@@ -60,12 +61,12 @@ bool System::Initialize()
 	InitializeWindows( screenWidth, screenHeight );
 
     // Create input object for keyboard input.
-	m_Input.reset( new Input(m_hwnd) );
+	m_Input.reset( new Input );
 	bool result = m_Input != nullptr;
 	RETURN_IF_FALSE( result );
 
     // Initialize the input object.
-    m_Input->Initialize();
+    m_Input->Initialize(m_hwnd);
 
     // Create graphics object to handle all rendering.
 	m_Graphics.reset( new Graphics );
@@ -76,7 +77,7 @@ bool System::Initialize()
 	result = m_Graphics->Initialize(
 		screenWidth, screenHeight,					// Screen dimensions
 		m_hwnd,										// Window handle
-		0.f, 0.f, 120.f, 0.f	    			// Background color (R,G,B,A)
+		0.f, 0.f, 0.f, 0.f							// Background color (R,G,B,A)
 	);
 	RETURN_IF_FALSE( result );
 
@@ -105,6 +106,10 @@ void System::Run()
 	// Loop until there is a quit message from the window or the user.
 	while( !done )
 	{
+		// Input relative members should be reset before processing
+		// the message queue
+		m_Input->FlushRelativeData();
+
 		// Handle the windows messages.
 		while( PeekMessage( &msg, nullptr, NULL, NULL, PM_REMOVE ) )
 		{
@@ -184,31 +189,42 @@ LRESULT CALLBACK System::MessageHandler(
 			return 0;
 		}
 
-//  WINDOWS CONVENTIONS - 
-// If a message takes a pointer, the pointer is usually passed in the LPARAM. 
-// If the message takes a handle or an integer, then it is passed in the WPARAM. 
+		case WM_INPUT:
+		{
+			// Apparently DefWindowProc needs to be called regardless if this
+			// message is handled, so no break set, just let is fall through.
 
-#pragma region ****************** MOUSE INPUT *******************
-        // TODO: ADD MOUSEDOWN Handlers, then make it send mousedown info to input object!
-   	case WM_LBUTTONDOWN:
-	case WM_MBUTTONDOWN:
-	case WM_RBUTTONDOWN:
-		m_Input->OnMouseDown(wparam, (int)(short)LOWORD(lparam), (int)(short)HIWORD(lparam));
-		return 0;
-	case WM_LBUTTONUP:
-	case WM_MBUTTONUP:
-	case WM_RBUTTONUP:
+			bool appInForeground = GET_RAWINPUT_CODE_WPARAM( wparam );
+			
+			UINT dataSize = sizeof(RAWINPUT);
+			
+			RAWINPUT rInput{};
+			
+			auto result = GetRawInputData( reinterpret_cast<HRAWINPUT>( lparam ), RID_INPUT, &rInput, &dataSize, sizeof( RAWINPUTHEADER ) );
 
-        // PASS MOUSE X and Y VALUES
-        // NOTE: the lowest word (byte) of the param will be the mouse X value, that's why we cast it here
-        // NOTE: the highest word (byte) of the param will be the mouse Y value, that's why we cast it here
-		m_Input->OnMouseUp(wparam, (int)(short)LOWORD(lparam), (int)(short)HIWORD(lparam));
-		return 0;
-	case WM_MOUSEMOVE:
-		m_Input->OnMouseMove(wparam, (int)(short)LOWORD(lparam), (int)(short)HIWORD(lparam));
-		return 0;
+			int x = 0, y = 0;
+			x = rInput.data.mouse.lLastX;
+			y = rInput.data.mouse.lLastY;
 
-#pragma endregion
+			m_Input->OnMouseMove( x, y );
+
+			if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_1_DOWN )
+			{
+				m_Input->OnLeftDown(x, y);
+			}
+			else if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_1_UP )
+			{
+				m_Input->OnLeftUp(x, y);
+			}
+			if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_2_DOWN )
+			{
+				m_Input->OnRightDown( x, y );
+			}
+			else if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_2_UP )
+			{
+				m_Input->OnRightUp( x, y );
+			}
+		}
 
 		// Any other messages send to the default message handler as our application won't make use of them.
 		default:
@@ -237,7 +253,7 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
     wcex.hIcon = LoadIcon(NULL, IDI_WINLOGO);
     wcex.hIconSm       = wcex.hIcon;
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wcex.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
+    wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = m_applicationName.c_str();
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -251,7 +267,7 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
 
 	int posX = 0, posY = 0;
 	// Setup screen settings depending on whether it is running in full screen or windowed.
-	if (FULL_SCREEN)
+	if( g_fullScreen )
     {
         // If full screen set the screen to maximum size of the users desktop and 32bit.
 		DEVMODE dmScreenSettings{};

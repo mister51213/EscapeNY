@@ -11,7 +11,7 @@ Model_Colored::~Model_Colored()
 bool Model_Colored::Initialize( const PrimitiveFactory & PrimMaker, const Graphics & Gfx )
 {
 	// Set the stride for this model type
-	m_Stride = sizeof( VertexPositionColorType );
+	m_Stride = sizeof( VertexPositionColorNormalType );
 
 	// Load the vertex array with data.
 	auto verts = PrimMaker.GetVertices();
@@ -22,13 +22,14 @@ bool Model_Colored::Initialize( const PrimitiveFactory & PrimMaker, const Graphi
 
 	// Get the color
 	auto color = PrimMaker.GetColor();
+    auto normals = PrimMaker.GetNormals();
 
 	// Create the vertex buffer array
 	UINT idx = 0;
     m_vertices.resize(m_vertexCount);
 	for( auto &v : verts )
 	{
-		m_vertices[ idx ] = {v, color};
+   		m_vertices[ idx ] = {verts[ idx ], color, normals[idx]};
 		++idx;
 	}
 

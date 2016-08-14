@@ -441,18 +441,19 @@ void PrimitiveFactory::Common( const ModelSpecs_L & Specs )
 	auto rotationMatrix = XMMatrixRotationRollPitchYawFromVector( rotationVector );
 
 	// Rotate each vertex
-	for( auto &vertex : vertices )
+	for( int i = 0; i < vertices.size(); ++i )
 	{
-		auto xmVector = XMLoadFloat3( &vertex );
-		auto rotatedVector = XMVector3TransformCoord( xmVector, rotationMatrix );
-		XMStoreFloat3( &vertex, rotatedVector );
-	}
+		auto &vertex = vertices[ i ];
+		auto &normal = normals[ i ];
 
-	for( auto &normal : normals )
-	{
-		auto xmVector = XMLoadFloat3( &normal );
-		auto rotatedVector = XMVector3TransformCoord( xmVector, rotationMatrix );
-		XMStoreFloat3( &normal, rotatedVector );
+		auto xmPosition = XMLoadFloat3( &vertex );
+		auto xmNormal = XMLoadFloat3( &normal );
+
+		auto rotatedPosition = XMVector3Transform( xmPosition, rotationMatrix );
+		auto rotatedNormal = XMVector3Transform( xmNormal, rotationMatrix );
+
+		XMStoreFloat3( &vertex, rotatedPosition );
+		XMStoreFloat3( &normal, rotatedNormal );
 	}
 }
 

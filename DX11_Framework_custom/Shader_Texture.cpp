@@ -54,7 +54,7 @@ bool Shader_Texture::InitializeShader(
 	
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
-  	auto polygonLayout = VertexPositionUVType::CreateLayoutDescriptions();
+  	auto polygonLayout = VertexPositionUVNormalType::CreateLayoutDescriptions();
 
 	// Create the vertex input layout.
 	hr = pDevice->CreateInputLayout( polygonLayout.data(), polygonLayout.size(),
@@ -98,12 +98,13 @@ bool Shader_Texture::InitializeShader(
 	return true;
 }
 
-bool Shader_Texture::SetShaderParameters( 
+// CODE_CHANGE: made function const
+bool Shader_Texture::SetShaderParameters(
     ID3D11DeviceContext* deviceContext, 
-    XMMATRIX & worldMatrix, 
-    XMMATRIX & viewMatrix,
-	XMMATRIX & projectionMatrix, 
-    ID3D11ShaderResourceView* texture ) const
+	const XMMATRIX &worldMatrix,
+	const XMMATRIX &viewMatrix,
+	const XMMATRIX &projectionMatrix,
+    ID3D11ShaderResourceView* texture )const
 {
 	// Lock the constant buffer so it can be written to.
 	D3D11_MAPPED_SUBRESOURCE mappedResource{};
@@ -112,14 +113,10 @@ bool Shader_Texture::SetShaderParameters(
 	RETURN_IF_FAILED( result );
 
     // TODO: Consolidate this into a common parent function
-    // TODO: Make this global inline in Utilities
-	// Transpose the matrices to prepare them for the shader.
 	MatrixBufferType data;
 
-    // TODO: Implement global transpose and then change to this:
-	//data.world = XMMatrixTranspose( worldMatrix );
+    // transposed elsewhere.
     data.world = worldMatrix;
-
 	data.view = XMMatrixTranspose( viewMatrix );
     // TODO: Implement global transpose and then change to this:
    	//data.view = viewMatrix;
@@ -145,7 +142,8 @@ bool Shader_Texture::SetShaderParameters(
 	return true;
 }
 
-void Shader_Texture::RenderShader( ID3D11DeviceContext* deviceContext ) const
+// CODE_CHANGE: made function const
+void Shader_Texture::RenderShader( ID3D11DeviceContext* deviceContext )const
 {
 	// Set the vertex input layout.
 	deviceContext->IASetInputLayout( m_layout.Get() );

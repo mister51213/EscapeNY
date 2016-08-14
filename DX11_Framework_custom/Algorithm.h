@@ -1,29 +1,27 @@
 #pragma once
 #include <vector>
 #include "Actor.h"
-#include "Actor_Player.h"
-#include "Actor_NPC.h"
 #include "ISubGame.h"
-using namespace std;
 
-class Game;
+using namespace std;
 
 class Algorithm
 {
 public:
     Algorithm(){}
 
-    Algorithm(ISubGame* pGame/*, std::shared_ptr<Input>& pInput*/) 
-    { 
-        m_pGame = pGame;
-    }
+	// Parent can be explicitly cast to pointer to a child class of ISubGame
+	// like so: ChildClass *pChild = dynamic_cast<ChildClass*>(m_pGame);
+	// However, if the cast fails, the returned pointer is nullptr, so it's 
+	// safer to add assert( pChild != nullptr ); to test in debug mode before
+	// assuming it will work, which if used correctly, it should.
+	Algorithm( ISubGame*const pGame )
+    { m_pGame = pGame; }
 
-    // TODO: Still make it pure virtual or just overload it instead because of difft return values?
-    virtual vector<Actor> MakePattern(int numActors) { return vector<Actor>(); }
-    virtual void SetData() {}
+    virtual vector<Actor> MakePattern(int numActors) = 0;
+    virtual void SetData() = 0;
 
 protected:
     ISubGame* m_pGame;
-    std::shared_ptr<Input> m_pInput;
 };
 

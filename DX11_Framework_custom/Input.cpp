@@ -1,84 +1,121 @@
+#include "Input.h"
+
 //////////////////////////////////////////////////////////
 // The input object will store the state of each key 
 // in a keyboard array. When queried it will tell the 
 // calling functions if a certain key is pressed.
 //////////////////////////////////////////////////////////
-#include "Input.h"
 
-Input::Input(HWND& hMainWnd):
-    m_hMainWnd(hMainWnd),
-    //m_pCamera(pCam),
-    m_LastMousePos({ 0.f,0.f,0.f })
+Input::Input()
 {
 }
-
-Input::Input(const Input& other)
-{}
 
 Input::~Input()
-{}
-
-//void Input::SetCam(std::shared_ptr<Camera>& pCam)
-//{
-//    m_pCamera = pCam;
-//}
-
-void Input::Initialize()
 {
-	int i;
+	// Raw input test
+	// Unregister mouse as raw input device
+	RAWINPUTDEVICE rawDevice{};
+	rawDevice.usUsagePage = 1;
+	rawDevice.usUsage = 2;
+	rawDevice.dwFlags = RIDEV_REMOVE;
 	
-	// Initialize all the keys to being released and not pressed.
-	for(i=0; i<256; i++)
-	{
-		m_keys[i] = false;
-	}
-
-	// NOTE: You aren't doing anything with x,y,z; so why is this here?
-    // (Is this needed?) Convert Spherical to Cartesian coordinates.
-    float x = m_Radius*sinf(m_Phi)*cosf(m_Theta);
-    float z = m_Radius*sinf(m_Phi)*sinf(m_Theta);
-    float y = m_Radius*cosf(m_Phi);
-	// NOTE: This looks like it was a copy/paste of Luna's code, we don't have a ShapeBuilder class
-    // NOTE: This info is passed on to the camera POSITION in ShapeBuilder.cpp line 171~
-
-	return;
+	// Setting hwndTarget to null unregisters the device
+	rawDevice.hwndTarget = nullptr;			
+											
+	RegisterRawInputDevices( &rawDevice, 1, sizeof( RAWINPUTDEVICE ) );
 }
 
-#pragma region ***********MOUSE INPUT***********
-//  WINDOWS CONVENTIONS - 
-// If a message takes a pointer, the pointer is usually passed in the LPARAM. 
-// If the message takes a handle or an integer, then it is passed in the WPARAM. 
-
-// NOTE: You don't use the WPARAM, why even pass it?
-void Input::OnMouseDown(WPARAM btnState, int x, int y)
+void Input::Initialize( HWND WinHandle )
 {
-    m_LastMousePos.x = y;
-    m_LastMousePos.y = x;
+	// Raw input test
+	// Register the mouse for raw input
+	RAWINPUTDEVICE rawDevice{};
+	rawDevice.usUsagePage = 1;
+	rawDevice.usUsage = 2;
+	rawDevice.dwFlags = RIDEV_NOLEGACY;
+	rawDevice.hwndTarget = WinHandle;
+	RegisterRawInputDevices( &rawDevice, 1, sizeof( RAWINPUTDEVICE ) );
 
-    SetCapture(m_hMainWnd);
+	ZeroMemory( m_keys, 256 );
+
+	
+	GetWindowRect( WinHandle, &m_clamp );
+	m_x = ( m_clamp.right - m_clamp.left ) / 2;
+	m_y = ( m_clamp.bottom - m_clamp.top ) / 2;
+	m_relX = 0;
+	m_relY = 0;
+	SetCursorPos( m_x, m_y );
 }
 
-// NOTE: You don't use the WPARAM, why even pass it?
-void Input::OnMouseUp(WPARAM btnState, int x, int y)
+void Input::FlushRelativeData()
 {
-    ReleaseCapture();
+	m_relX = 0;
+	m_relY = 0;
 }
 
-void Input::OnMouseMove(WPARAM btnState, int x, int y)
+void Input::OnLeftDown( int RelativeX, int RelativeY )
 {
-    m_LastMousePos.x = x;
-    m_LastMousePos.y = y;
+	m_leftDown = true;
 }
 
-#pragma endregion
+void Input::OnLeftUp( int RelativeX, int RelativeY )
+{
+	m_leftDown = false;
+}
 
-// KEYBOARD INPUT
+void Input::OnRightDown( int RelativeX, int RelativeY )
+{
+	m_rightDown = true;
+}
+
+void Input::OnRightUp( int RelativeX, int RelativeY )
+{
+	m_rightDown = false;
+}
+
+void Input::OnMouseMove( int RelativeX, int RelativeY )
+{
+    // tx and ty are storing temporary x and y mouse coordinates
+    // RelativeX, Y are the distance mouse has traveled since last frame
+	int tx = m_x + RelativeX; 
+	int ty = m_y + RelativeY;
+
+    // m_x and y are the last known coordinates of mouse
+	m_x = max( m_clamp.left, min( tx, m_clamp.right - 1 ) );
+	m_y = max( m_clamp.top, min( ty, m_clamp.bottom - 1 ) );
+	
+	SetCursorPos( m_x, m_y );
+	m_relX = RelativeX;
+	m_relY = RelativeY;
+}
+
+int Input::GetX() const
+{
+	return m_x;
+}
+
+int Input::GetY() const
+{
+	return m_y;
+}
+
+int Input::GetRelativeX() const
+{
+	return m_relX;
+}
+
+int Input::GetRelativeY() const
+{
+	return m_relY;
+}
+
 void Input::KeyDown(unsigned int input)
 {
 	// If a key is pressed then save that state in the key array.
 	m_keys[input] = true;
 	return;
 }
+
 
 void Input::KeyUp(unsigned int input)
 {
@@ -87,7 +124,8 @@ void Input::KeyUp(unsigned int input)
 	return;
 }
 
-bool Input::IsKeyDown(unsigned int key) const
+// CODE_CHANGE: Made function const
+bool Input::IsKeyDown(unsigned int key)const
 {
 	// Return what state the key is in (pressed/not pressed).
 	return m_keys[key];

@@ -34,22 +34,44 @@ void GameView::drawModel( const Actor & actor ) const
     // UNTextured cube index is 0, so if > 0, use tex shader
     if (actor.GetModelType()>0)
     {
-        // texture the actor
+        //// texture the actor
         m_shader_Texture.Render(
             m_pD3D->GetDeviceContext(),
             GetWorldMatrix(actor.GetWorldSpecs()),
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
             (m_TexturePool[actor.GetTexIndex()]).GetTextureView());
+
+        int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
+        // lighting effects
+        m_shader_Lighting.Render(
+            m_pD3D->GetDeviceContext(),
+            indexCount,
+            GetWorldMatrix(actor.GetWorldSpecs()),
+            m_pCam->GetViewMatrix(),
+            m_pCam->GetProjectionMatrix(),
+            (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
+            {.3f,.1f,1.f}, {0.f,1.f,.5f,1.f});
     }
     else
     {   
-        // color the actor
+       // // color the actor
         m_shader_Color.Render(
             m_pD3D->GetDeviceContext(),
             GetWorldMatrix(actor.GetWorldSpecs()),
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix());
+
+       // // LIGHTING
+       //int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
+       //m_shader_Lighting.Render(
+       //     m_pD3D->GetDeviceContext(),
+       //     indexCount,
+       //     GetWorldMatrix(actor.GetWorldSpecs()),
+       //     m_pCam->GetViewMatrix(),
+       //     m_pCam->GetProjectionMatrix(),
+       //     (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
+       //     {.57f,.57f,.57f}, {1.f,1.f,1.f,1.f});
     }
     m_pGfx->RenderModel(*(m_ModelPool[actor.GetModelType()]));
 }
@@ -125,5 +147,6 @@ void GameView::initTexturePool()
 void GameView::initializeShader()
 {
 	m_shader_Texture.Initialize( m_pD3D->GetDevice() );
-    m_shader_Color.Initialize( m_pD3D->GetDevice() );
+    m_shader_Color.Initialize( m_pD3D->GetDevice() );    
+    m_shader_Lighting.Initialize(m_pD3D->GetDevice());
 }

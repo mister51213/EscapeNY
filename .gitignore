@@ -243,4 +243,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-/DX11_Framework_custom/Textures/Thumbs.db
+*.db
