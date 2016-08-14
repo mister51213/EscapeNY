@@ -11,7 +11,7 @@ bool Model_Textured::Initialize(
     const PrimitiveFactory &PrimMaker, const Graphics & Gfx)
 {
 	// Set the stride for this model type
-	m_Stride = sizeof( VertexPositionUVType );
+	m_Stride = sizeof( VertexPositionUVNormalType );
 
 	// Create the vertex array.
 	auto verts = PrimMaker.GetVertices();
@@ -23,12 +23,15 @@ bool Model_Textured::Initialize(
 
 	// Get the color
 	auto uvs = PrimMaker.GetUVs();
+    // Get normals
+    auto normals = PrimMaker.GetNormals();
 
 	// Load the vertex buffer array with data.
 	UINT idx = 0;
 	for( auto &v : verts )
 	{
-		m_Vertices[ idx ] = {verts[ idx ], uvs[ idx ]};
+		m_Vertices[ idx ] = {verts[ idx ], uvs[ idx ], normals[idx]};
+        // TODO: later add functionality to deal w files w NO normals
 		++idx;
 	}
 

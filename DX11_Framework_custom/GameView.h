@@ -12,6 +12,7 @@
 #include "Shader_Color.h"
 #include "Texture.h"
 #include "Shader_Texture.h"
+#include "Shader_Lighting.h"
 #include "Actor.h"
 #include "Actor_Player.h"
 #include "Actor_NPC.h"
@@ -26,14 +27,12 @@ public:
 	GameView( Graphics* pGfx, D3DGraphics* pD3D, std::shared_ptr<Camera> &pCam );
 	 
     void Initialize();
-	void UpdateView( const vector<Actor*>& actors ) const;
+	void UpdateView( const vector<Actor*>& actors, const FX_Light& light) const;
     void initModelPool();
 private:
 	void initTexturePool();
 	void initializeShader();
-	//void modelAllActors( const vector<Actor*>& actors );
-	//std::shared_ptr<Model> makeModel(ModelSpecs_L localSpecs, eModType Type = CUBE_TEXTURED );
-	void drawModel( const Actor& actor ) const;
+	void drawModel( const Actor& actor, const FX_Light& light) const;
 
 private:
     Graphics* m_pGfx;
@@ -42,6 +41,8 @@ private:
     std::shared_ptr<Camera> m_pCam;
 	Shader_Texture m_shader_Texture;
     Shader_Color m_shader_Color;
+    Shader_Lighting m_shader_Lighting;
+
     vector<Texture> m_TexturePool;
     vector<std::shared_ptr<Model>> m_ModelPool;
 

@@ -2,7 +2,7 @@
 
 void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const pCamera) 
 {
-    	// Take a copy of the graphics and direct3d pointers
+    // Take a copy of the graphics and direct3d pointers
 	m_pGraphics = pGraphics;
 	m_pDirect3D = pGraphics->GetDirect3D();
     m_pCamera = pCamera;
@@ -56,20 +56,21 @@ void Game_FPS::reset()
     ModelSpecs_W wSpecs1 = 
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
-      { 10.f, -8.f, -8.f } };
+      { 10.f, 8.f, 8.f } };
     aTest1 = Actor_NPC(wSpecs1, Water2, ModelSpecs_L(), CUSTOM_MESH);
     //3
     ModelSpecs_W wSpecs2 = 
     { { 20.f, -.5f, 20.f },
       { 0.f,0.f,0.f },
-      { 0.5f, -0.5f, -0.5f } };
+      { 0.5f, 0.5f, 0.5f } };
     aTest2 = Actor_NPC(wSpecs2, Water3, ModelSpecs_L(), CUSTOM_MESH2);
     //4
     ModelSpecs_W wSpecs3 = 
     { { -10.f, 0.f, -30.f },
       { 0.f,0.f,0.f },
-      { 80.f, -1.f, -80.f } };
+      { 80.f, 1.f, 80.f } };
     aTest3 = Actor_NPC(wSpecs3, Underwater3, ModelSpecs_L(), CUBE_TEXTURED);
+
     // MAKE m_actorsSUB1 (ONE SUBSET OF ACTORS)
     const int numRows = 5, numColumns = 5, numZ = 5;
     const int numActors1 = numRows * numColumns * numZ;
@@ -96,9 +97,44 @@ void Game_FPS::reset()
     }
 }
 
+void Game_FPS::doVisualFX()
+{
+        // MOVE LIGHTING    
+        if (!m_reverseL)
+        {
+            if (m_light.Direction.x < 1.f)
+            {
+                m_light.Direction.x += .01f;
+                m_light.Direction.y += .03f;
+
+                m_light.Color.y += .01f;
+                m_light.Color.y += m_offset;
+                m_offset += .0005f;
+            }
+            else
+                m_reverseL = true;
+        }
+        else
+        {
+            if (m_light.Direction.x > -1.f)
+            {
+                m_light.Direction.x -= .01f;
+                m_light.Direction.y -= .03f;
+
+                m_light.Color.y -= .01f;
+                m_light.Color.y -= m_offset;
+                m_offset -= .0005f;
+            }
+            else
+                m_reverseL = false;
+        }
+}
+
 	// Use RenderFrame to render the list of actors or other game objects
 void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
-    GameViewRef.UpdateView(m_pActorsMASTER);
+    doVisualFX();
+    GameViewRef.UpdateView(m_pActorsMASTER, m_light);
    	m_Overlay.Render( *m_pGraphics );
 }
+

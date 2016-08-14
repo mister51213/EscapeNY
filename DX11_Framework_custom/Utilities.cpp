@@ -222,7 +222,7 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionUVType::CreateLayoutDescript
 
 std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionUVNormalType::CreateLayoutDescriptions()
 {
-	std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
+	std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 3 );
 	eDesc[ 0 ].SemanticName = "POSITION";
 	eDesc[ 0 ].SemanticIndex = 0;
 	eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -271,3 +271,38 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionNormalType::CreateLayoutDesc
 
 	return eDesc;
 }
+
+std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionColorNormalType::CreateLayoutDescriptions()
+{
+	///////////////////////////////////////////////////////////////////////////////////
+	// Create the layout of the VERTEX DATA that will be processed by the shader.    //
+	// We indicate the usage of each element in the layout to the shader by labeling //
+	// the first one POSITION and the second one COLOR.                              //
+	///////////////////////////////////////////////////////////////////////////////////
+
+	std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 3 );
+	eDesc[ 0 ].SemanticName = "POSITION";
+	eDesc[ 0 ].SemanticIndex = 0;
+	eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	eDesc[ 0 ].InputSlot = 0;
+	eDesc[ 0 ].AlignedByteOffset = 0;
+	eDesc[ 0 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	eDesc[ 0 ].InstanceDataStepRate = 0;
+
+	eDesc[ 1 ].SemanticName = "COLOR";
+	eDesc[ 1 ].SemanticIndex = 0;
+	eDesc[ 1 ].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	eDesc[ 1 ].InputSlot = 0;
+	eDesc[ 1 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	eDesc[ 1 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	eDesc[ 1 ].InstanceDataStepRate = 0;
+
+    eDesc[ 2 ].SemanticName = "NORMAL";
+	eDesc[ 2 ].SemanticIndex = 0;
+	eDesc[ 2 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	eDesc[ 2 ].InputSlot = 0;
+	eDesc[ 2 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	eDesc[ 2 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	eDesc[ 2 ].InstanceDataStepRate = 0;
+
+	return eDesc;}

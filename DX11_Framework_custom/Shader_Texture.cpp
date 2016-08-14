@@ -54,7 +54,7 @@ bool Shader_Texture::InitializeShader(
 	
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
-  	auto polygonLayout = VertexPositionUVType::CreateLayoutDescriptions();
+  	auto polygonLayout = VertexPositionUVNormalType::CreateLayoutDescriptions();
 
 	// Create the vertex input layout.
 	hr = pDevice->CreateInputLayout( polygonLayout.data(), polygonLayout.size(),
@@ -113,14 +113,10 @@ bool Shader_Texture::SetShaderParameters(
 	RETURN_IF_FAILED( result );
 
     // TODO: Consolidate this into a common parent function
-    // TODO: Make this global inline in Utilities
-	// Transpose the matrices to prepare them for the shader.
 	MatrixBufferType data;
 
-    // TODO: Implement global transpose and then change to this:
-	//data.world = XMMatrixTranspose( worldMatrix );
+    // transposed elsewhere.
     data.world = worldMatrix;
-
 	data.view = XMMatrixTranspose( viewMatrix );
     // TODO: Implement global transpose and then change to this:
    	//data.view = viewMatrix;

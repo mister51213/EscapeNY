@@ -23,8 +23,6 @@ Input::~Input()
 	rawDevice.hwndTarget = nullptr;			
 											
 	RegisterRawInputDevices( &rawDevice, 1, sizeof( RAWINPUTDEVICE ) );
-
-	ReleaseCapture();
 }
 
 void Input::Initialize( HWND WinHandle )
@@ -40,6 +38,7 @@ void Input::Initialize( HWND WinHandle )
 
 	ZeroMemory( m_keys, 256 );
 
+	
 	GetWindowRect( WinHandle, &m_clamp );
 	m_x = ( m_clamp.right - m_clamp.left ) / 2;
 	m_y = ( m_clamp.bottom - m_clamp.top ) / 2;
@@ -54,38 +53,28 @@ void Input::FlushRelativeData()
 	m_relY = 0;
 }
 
-void Input::OnLeftDown( int RelativeX, int RelativeY )
+void Input::OnMouseInput( const RAWMOUSE & RawMouseInput )
 {
-	m_leftDown = true;
-}
+	// Store any relative mouse movements from last frame
+	m_relX = RawMouseInput.lLastX;
+	m_relY = RawMouseInput.lLastY;
 
-void Input::OnLeftUp( int RelativeX, int RelativeY )
-{
-	m_leftDown = false;
-}
+	m_leftDown = RawMouseInput.usButtonFlags & RI_MOUSE_LEFT_BUTTON_DOWN;
+	m_rightDown = ( ( RawMouseInput.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_DOWN ) >> 2 );
 
-void Input::OnRightDown( int RelativeX, int RelativeY )
-{
-	m_rightDown = true;
-}
-
-void Input::OnRightUp( int RelativeX, int RelativeY )
-{
-	m_rightDown = false;
-}
-
-void Input::OnMouseMove( int RelativeX, int RelativeY )
-{
+	// Clip the cursor to window boundaries
 	ClipCursor( &m_clamp );
 
-	POINT p{};
-	GetCursorPos( &p );
+	// Get the mouse position
+	POINT currentMousePos{};
+	GetCursorPos( &currentMousePos );
 
-	m_x = p.x;
-	m_y = p.y;
-	
-	m_relX = RelativeX;
-	m_relY = RelativeY;
+	// Update Input's mouse position
+	m_x = currentMousePos.x;
+	m_y = currentMousePos.y;
+
+	// Register the new position with Windows
+	SetCursorPos( currentMousePos.x, currentMousePos.y );
 }
 
 int Input::GetX() const
