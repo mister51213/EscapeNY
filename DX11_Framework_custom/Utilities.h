@@ -117,6 +117,13 @@ struct ModelSpecs_L
    	XMFLOAT3 size;
 };
 
+struct FX_Light
+{
+    XMFLOAT3 Direction = { .5f,.5f,.5f };
+    XMFLOAT4 Color = { .1f,.1f,.1f,1.f };
+    float Intensity = 1.f;
+};
+
 enum eModType 
 { 
     CUBE, 
