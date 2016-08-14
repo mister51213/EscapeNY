@@ -93,14 +93,14 @@ XMVECTOR ConvertToRadians( const XMVECTOR & angleInDegrees )
 {
 	// Use constexpr radian which is the result of PI / 180.f calculated
 	// at compile time.
-	return angleInDegrees * XMVectorReplicate( radian );
+	return angleInDegrees * XMVectorReplicate( g_radian );
 }
 
 XMFLOAT3 ConvertToRadians( const XMFLOAT3 & angleInDegrees )
 {
 	// Use constexpr radian which is the result of PI / 180.f calculated
 	// at compile time.
-	return{ angleInDegrees * radian };
+	return{ angleInDegrees * g_radian };
 }
 
 float CalculateYRotation( const float X, const float Z, float & RX, float & RZ )
@@ -132,7 +132,7 @@ float CalculateYRotation( const float X, const float Z, float & RX, float & RZ )
 		float sgn = ( radx > 0.f ) && ( radz > 0.f ) ? 1.f : -1.f;
 
 		// Convert to degrees
-		angle = degree * ( sgn * radx );
+		angle = g_degree * ( sgn * radx );
 	}
 
 	return angle;
@@ -152,6 +152,14 @@ DirectX::XMMATRIX GetWorldMatrix( const ModelSpecs_W & modSpecs )
 
 	// Also transpose it in this step to make it easier for GPU to handle
 	return XMMatrixTranspose( rot*scal*trans );
+}
+
+void Transpose( std::vector<XMMATRIX>& matrices )
+{
+	for( auto &matrix : matrices )
+	{
+		matrix = XMMatrixTranspose( matrix );
+	}
 }
 
 ModelSpecs_L::ModelSpecs_L( const XMFLOAT3 & Center, const XMFLOAT3 & Orientation, const XMFLOAT3 & Size )
@@ -238,6 +246,28 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionUVNormalType::CreateLayoutDe
 	eDesc[ 2 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 	eDesc[ 2 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	eDesc[ 2 ].InstanceDataStepRate = 0;
+
+	return eDesc;
+}
+
+std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionNormalType::CreateLayoutDescriptions()
+{
+	std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
+	eDesc[ 0 ].SemanticName = "POSITION";
+	eDesc[ 0 ].SemanticIndex = 0;
+	eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	eDesc[ 0 ].InputSlot = 0;
+	eDesc[ 0 ].AlignedByteOffset = 0;
+	eDesc[ 0 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	eDesc[ 0 ].InstanceDataStepRate = 0;
+
+	eDesc[ 1 ].SemanticName = "NORMAL";
+	eDesc[ 1 ].SemanticIndex = 0;
+	eDesc[ 1 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	eDesc[ 1 ].InputSlot = 0;
+	eDesc[ 1 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	eDesc[ 1 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	eDesc[ 1 ].InstanceDataStepRate = 0;
 
 	return eDesc;
 }
