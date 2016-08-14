@@ -43,8 +43,12 @@ bool Graphics::Initialize(
 		L"Could not allocate memory for Direct3D object.");
 
 	// Initialize the Direct3D object.	
-	RETURN_MESSAGE_IF_FALSE( m_pDirect3D->Initialize( ScreenWidth, ScreenHeight,
-		VSYNC_ENABLED, WinHandle, FULL_SCREEN ), L"Could not initialize Direct3D." );
+	RETURN_MESSAGE_IF_FALSE(
+		m_pDirect3D->Initialize(
+			g_screenWidth, g_screenHeight,
+			g_vsyncEnabled,
+			WinHandle, g_fullScreen ),
+		L"Could not initialize Direct3D." );
 
 	// Create the Direct3D object.
 	m_pDirect2D.reset( new D2DGraphics );

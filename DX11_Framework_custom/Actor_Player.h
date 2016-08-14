@@ -4,21 +4,21 @@
 class Actor_Player : public Actor
 {
 public:
-    Actor_Player() {}
+	Actor_Player() = default;
 
-    Actor_Player(
-        ModelSpecs_W worldSpecs,
-        eTexture tex,
-        ModelSpecs_L localSpecs,
-        eModType modType = CUBE_TEXTURED) :
-		// NOTE: modType is already default initialized in the signature,
-		// TEST: modType = CUBE_TEXTURED below to just modType
-		// Actor( worldSpecs, tex, localSpecs, modType ) // base constructor
-        Actor(worldSpecs, tex, localSpecs, modType = CUBE_TEXTURED) // base constructor
-    { }
+	// Enums are the same size as references and pointers so we can just
+	// pass them by value
+	Actor_Player(
+		const ModelSpecs_W & worldSpecs, 
+		eTexture tex, 
+		const ModelSpecs_L & localSpecs, 
+		eModType modType = CUBE_TEXTURED );
+
 
 public:
-    void GetInput(const Input& pInput, int randI=0.f, float randF=0.f) override
+	// Left this stuff here in case you are still testing it, just 
+	// try to remember to move to CPP file when you are done testing
+    void GetInput(const Input& pInput, int randI=0.f, float randF=0.f)override 
     {
         if (pInput.IsKeyDown(VK_RIGHT))
         {
@@ -38,16 +38,16 @@ public:
             Move({ 0.f, 0.f, -.6f });
         }
 
-        // TEST: ShapeBuilder.cpp line 171~
-        m_worldSpecs.orientation = pInput.m_LastMousePos;
+        m_worldSpecs.orientation.y += pInput.GetRelativeX();
+		m_worldSpecs.orientation.x += pInput.GetRelativeY();
     } 
 
 private:
-    void Move(XMFLOAT3 offset) override
-    { m_worldSpecs.position += offset; } 
+	void Move( const XMFLOAT3 &offset )
+	{ m_worldSpecs.position += offset; }
 
-    void Rotate(XMFLOAT3 rotation) override
-    { m_worldSpecs.orientation += rotation; }
+	void Rotate( const XMFLOAT3 &rotation )
+	{ m_worldSpecs.orientation += rotation; }
 
 private:
     //std::shared_ptr<Input> m_pInput;

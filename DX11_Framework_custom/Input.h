@@ -5,64 +5,49 @@
 //////////////////////////////////////////////////////////
 #pragma once
 
-#include "Utilities.h"
-
-//class Camera;
-
-#ifndef _INPUTCLASS_H_
-#define _INPUTCLASS_H_
+#include "Includes.h"
 
 class Input
 {
 public:
-    Input(HWND& hWnd);
-    Input(const Input&);
-    ~Input();
+	Input();
+	~Input();
 
-    //void SetCam(std::shared_ptr<Camera>& pCam);
+	void Initialize( HWND WinHandle );
 
-    void Initialize();
+	// Relative data is only sent when a mouse event happens, 
+	// so there is nothing to tell it that the mouse hasn't moved.
+	void FlushRelativeData();
+	void OnLeftDown( int RelativeX, int RelativeY );
+	void OnLeftUp( int RelativeX, int RelativeY );
+	void OnRightDown( int RelativeX, int RelativeY );
+	void OnRightUp( int RelativeX, int RelativeY );
+	void OnMouseMove( int RelativeX, int RelativeY );
 
-    void KeyDown(unsigned int);
-    void KeyUp(unsigned int);
+	// Mouse will have to have two modes, one for clicking on screen items
+	// the other for camera/player movement.
 
-    bool IsKeyDown(unsigned int) const;
+	int GetX() const;
 
-    void OnMouseDown(WPARAM btnState, int x, int y);
-    void OnMouseUp(WPARAM btnState, int x, int y);
-    void OnMouseMove(WPARAM btnState, int x, int y);
+	int GetY()const;
 
-    XMFLOAT3 GetCamOffset()
-    {
-        return m_camOffset;
-    }
+	// Gets relative X position, not screen coordinates
+	int GetRelativeX()const;
+	
+	// Gets relative Y position, not screen coordinates
+	int GetRelativeY()const;
 
-    float GetTheta()
-    {
-        return m_Theta;
-    }
-    float GetPhi()
-    {
-        return m_Phi;
-    }
-    float GetRadius()
-    {
-        return m_Radius;
-    }
+	void KeyDown( unsigned int );
+	void KeyUp( unsigned int );
 
-    XMFLOAT3 m_LastMousePos;
+	// CODE_CHANGE: Made function const
+	bool IsKeyDown( unsigned int )const;
 
 private:
-    bool m_keys[256];
-    HWND m_hMainWnd = nullptr;
+	bool m_keys[ 256 ];
 
-    // Camera lookat and movement functions
-    XMFLOAT3 m_camOffset = { 0.f,0.f,0.f };
-    float m_Theta = 1.5f*XM_PI;
-    float m_Phi = XM_PIDIV4;
-    float m_Radius = 5.0f;
-
-    //std::shared_ptr<Camera> m_pCamera;
+	bool m_leftDown, m_rightDown;
+	int m_x, m_y;
+	int m_relX, m_relY;
+	RECT m_clamp;
 };
-
-#endif

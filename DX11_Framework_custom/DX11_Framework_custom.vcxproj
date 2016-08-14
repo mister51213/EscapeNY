@@ -142,8 +142,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Actor_NPC.cpp" />
+    <ClCompile Include="actor_player.cpp" />
+    <ClCompile Include="Actor_Player_Alt.cpp" />
+    <ClCompile Include="Algorithm_Grid3D.cpp" />
+    <ClCompile Include="Algorithm_Random.cpp" />
+    <ClCompile Include="Algorithm_Spiral3D.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GameView.cpp" />
     <ClCompile Include="Game_FPS.cpp" />
+    <ClCompile Include="Game_Maze.cpp" />
+    <ClCompile Include="Algorithm_Maze.cpp" />
+    <ClCompile Include="MessageBox_Goal.cpp" />
+    <ClCompile Include="MessageBox_Title.cpp" />
+    <ClCompile Include="Overlay_Base.cpp" />
+    <ClCompile Include="Overlay_Title.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shader_Color.cpp" />
     <ClCompile Include="COMHandler.cpp" />
@@ -161,24 +175,34 @@
     <ClCompile Include="PrimitiveFactory.cpp" />
     <ClCompile Include="Shader_Lighting.cpp" />
     <ClCompile Include="System.cpp" />
+    <ClCompile Include="TestBoard.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedPlane.cpp" />
     <ClCompile Include="Shader_Texture.cpp" />
+    <ClCompile Include="Utilities.cpp" />
     <ClCompile Include="Wic.cpp" />
+    <ClCompile Include="Board.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
-    <ClInclude Include="Actor_NPC.h" />
-    <ClInclude Include="Actor_Player.h" />
+    <ClInclude Include="Actor_Player_Alt.h" />
     <ClInclude Include="Algorithm_Grid3D.h" />
+    <ClInclude Include="Algorithm_Random.h" />
     <ClInclude Include="Algorithm_Spiral3D.h" />
-    <ClInclude Include="Algorithm.h" />
-    <ClInclude Include="BinaryLoader.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Algorithm.h" />
     <ClInclude Include="GameView.h" />
     <ClInclude Include="Game_FPS.h" />
+    <ClInclude Include="IGameState.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="IOverlay.h" />
     <ClInclude Include="ISubGame.h" />
+    <ClInclude Include="Game_Maze.h" />
+    <ClInclude Include="Algorithm_Maze.h" />
+    <ClInclude Include="MessageBox_Goal.h" />
+    <ClInclude Include="MessageBox_Title.h" />
+    <ClInclude Include="Overlay_Base.h" />
+    <ClInclude Include="Overlay_Title.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />
     <ClInclude Include="COMHandler.h" />
@@ -197,10 +221,12 @@
     <ClInclude Include="Shader_Lighting.h" />
     <ClInclude Include="Shader_Texture.h" />
     <ClInclude Include="System.h" />
+    <ClInclude Include="TestBoard.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TexturedPlane.h" />
     <ClInclude Include="Utilities.h" />
     <ClInclude Include="Wic.h" />
+    <ClInclude Include="Board.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Development Guidelines.txt" />
