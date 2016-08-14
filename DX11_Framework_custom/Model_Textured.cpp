@@ -23,14 +23,16 @@ bool Model_Textured::Initialize(
 
 	// Get the color
 	auto uvs = PrimMaker.GetUVs();
+    // Get normals
+    auto normals = PrimMaker.GetNormals();
 
 	// Load the vertex buffer array with data.
 	UINT idx = 0;
 	for( auto &v : verts )
 	{
-		m_Vertices[ idx ] = {verts[ idx ], uvs[ idx ]};
+		m_Vertices[ idx ] = {verts[ idx ], uvs[ idx ], normals[idx]};
+        // TODO: later add functionality to deal w files w NO normals
 		++idx;
-        //TODO: load up normal data too here for use w lighting.
 	}
 
 	// Load the index array with data.

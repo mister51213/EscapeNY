@@ -13,5 +13,5 @@ public:
 	std::vector<D3D11_INPUT_ELEMENT_DESC> GetInputElementDescriptions() const override;
 
 private:
-	std::vector<VertexPositionUVType> m_Vertices;
+	std::vector<VertexPositionUVNormalType> m_Vertices;
 };

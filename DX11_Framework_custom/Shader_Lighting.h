@@ -3,8 +3,8 @@
 
 struct LightBufferType
 	{
-		XMVECTOR diffuseColor; // should be XMFLOAT3?
-		XMVECTOR lightDirection; // should be XMFLOAT4?
+		XMFLOAT4 diffuseColor; // should be XMFLOAT3?
+		XMFLOAT3 lightDirection; // should be XMFLOAT4?
 		float padding;  // Added extra padding so structure is a multiple of 16 for CreateBuffer function requirements.
 	};
 
@@ -30,8 +30,8 @@ public:
         XMMATRIX & viewMatrix,
         XMMATRIX & projectionMatrix,
         ID3D11ShaderResourceView* texture,
-        XMVECTOR lightDirection,
-        XMVECTOR diffuseColor) const;
+        XMFLOAT3 lightDirection,
+        XMFLOAT4 diffuseColor) const;
     
     // Need difft parameters so have to overload the parent function.
     bool Render(

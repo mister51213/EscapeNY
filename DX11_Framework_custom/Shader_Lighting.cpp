@@ -123,7 +123,7 @@ bool Shader_Lighting::InitializeShader(
 	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
 	polygonLayout[0].SemanticName = "POSITION";
 	polygonLayout[0].SemanticIndex = 0;
-	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT; // TODO: should be DXGI_FORMAT_R32G32B32A32_FLOAT to match shader?
 	polygonLayout[0].InputSlot = 0;
 	polygonLayout[0].AlignedByteOffset = 0;
 	polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -263,8 +263,8 @@ bool Shader_Lighting::SetShaderParameters(
     XMMATRIX & viewMatrix, 
     XMMATRIX & projectionMatrix, 
     ID3D11ShaderResourceView * texture,
-    XMVECTOR lightDirection, // should be 3 and 4?
-	XMVECTOR diffuseColor) const
+    XMFLOAT3 lightDirection, // should be 3 and 4?
+	XMFLOAT4 diffuseColor) const
 {
 
     HRESULT result;
@@ -340,8 +340,8 @@ bool Shader_Lighting::Render(
     XMMATRIX viewMatrix,
     XMMATRIX projectionMatrix, 
     ID3D11ShaderResourceView* texture, 
-    XMVECTOR lightDirection, 
-    XMVECTOR diffuseColor)
+    XMFLOAT3 lightDirection, 
+    XMFLOAT4 diffuseColor)
 {
     	bool result;
 	// Set the shader parameters that it will use for rendering.
