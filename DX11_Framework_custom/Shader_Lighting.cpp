@@ -37,75 +37,8 @@ bool Shader_Lighting::InitializeShader(
 
     // Light constant buffer description
     D3D11_BUFFER_DESC lightBufferDesc;
-
 	// Initialize the pointers this function will use to null.
 	errorMessage = 0;
-	//vertexShaderBuffer = 0;
-	//pixelShaderBuffer = 0;
-
-    //Load in the new light vertex shader.
-	// Compile the vertex shader code.
-	//result = D3DCompileFromFile(
- //       L"DiffuseLight_vs.hlsl",
- //       NULL, 
- //       NULL, 
- //       "main", 
- //       "vs_5_0", 
- //       D3D10_SHADER_ENABLE_STRICTNESS, 
- //       NULL, 
- //       &vertexShaderBuffer, 
- //       &errorMessage);
-	////if(FAILED(result))
-	////{
-	////	// If the shader failed to compile it should have writen something to the error message.
-	////	if(errorMessage)
-	////	{
-	////		OutputShaderErrorMessage(errorMessage, m_hWnd, vsFilename);
-	////	}
-	////	// If there was nothing in the error message then it simply could not find the shader file itself.
-	////	else
-	////	{
-	////		MessageBox(m_hWnd, vsFilename, L"Missing Shader File", MB_OK);
-	////	}
-	////	return false;
-	////}
- //   //Load in the new light pixel shader, Compile the pixel shader code.
-	//result = D3DCompileFromFile(
- //       L"DiffuseLight_ps.hlsl",
- //       NULL, 
- //       NULL, 
- //       "main", 
- //       "ps_5_0", 
- //       D3D10_SHADER_ENABLE_STRICTNESS, 
- //       NULL,
- //       &pixelShaderBuffer, 
- //       &errorMessage);
-	////if(FAILED(result))
-	////{
-	////	// If the shader failed to compile it should have writen something to the error message.
-	////	if(errorMessage)
-	////	{
-	////		OutputShaderErrorMessage(errorMessage, m_hWnd, psFilename);
-	////	}
-	////	// If there was nothing in the error message then it simply could not find the file itself.
-	////	else
-	////	{
-	////		MessageBox(m_hWnd, psFilename, L"Missing Shader File", MB_OK);
-	////	}
-	////	return false;
-	////}
- //   	// Create the vertex shader from the buffer.
-	//result = pDevice->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
-	//if(FAILED(result))
-	//{
-	//	return false;
-	//}
-	//// Create the pixel shader from the buffer.
-	//result = pDevice->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
-	//if(FAILED(result))
-	//{
-	//	return false;
-	//}
 
     // TODO:*********************************************
     // TODO: Try using D3DReadFileToBlob instead here:
@@ -173,12 +106,6 @@ bool Shader_Lighting::InitializeShader(
 	{
 		return false;
 	}
-
-	// Release the vertex shader buffer and pixel shader buffer since they are no longer needed.
-	//vertexShaderBuffer->Release();
-	//vertexShaderBuffer = 0;
-	//pixelShaderBuffer->Release();
-	//pixelShaderBuffer = 0;
 
 	// Create a texture sampler state description.
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -254,9 +181,7 @@ void Shader_Lighting::OutputShaderErrorMessage(ID3DBlob* errorMessage, HWND& hwn
 
 	// Write out the error message.
 	for(i=0; i<bufferSize; i++)
-	{
-		fout << compileErrors[i];
-	}
+	{fout << compileErrors[i];}
 
 	// Close the file.
 	fout.close();
@@ -280,35 +205,23 @@ bool Shader_Lighting::SetShaderParameters(
     XMFLOAT3 lightDirection, // should be 3 and 4?
 	XMFLOAT4 diffuseColor) const
 {
-
     HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	unsigned int bufferNumber;
 	MatrixBufferType* dataPtr;
 	LightBufferType* dataPtr2;
 
-	// Transpose the matrices to prepare them for the shader.
-	XMMATRIX worldMatrixT = worldMatrix;
-	XMMATRIX viewMatrixT = XMMatrixTranspose(viewMatrix);
-	XMMATRIX projectionMatrixT = XMMatrixTranspose(projectionMatrix);
-
 	// Lock the constant buffer so it can be written to.
 	result = deviceContext->Map(m_matrixBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	if(FAILED(result))
-	{
-		return false;
-	}
+	if(FAILED(result)){return false;}
 
 	// Get a pointer to the data in the constant buffer.
 	dataPtr = (MatrixBufferType*)mappedResource.pData;
 
 	// Copy the matrices into the constant buffer.
-	//dataPtr->world = worldMatrix;
-	//dataPtr->view = viewMatrix;
-	//dataPtr->projection = projectionMatrix;
-  	dataPtr->world = worldMatrixT;
-	dataPtr->view = viewMatrixT;
-	dataPtr->projection = projectionMatrixT;
+  	dataPtr->world = worldMatrix; // TODO: worldMat is transposed elsewhere. shouldnt be that way.
+	dataPtr->view = XMMatrixTranspose(viewMatrix);
+	dataPtr->projection = XMMatrixTranspose(projectionMatrix);
 
 	// Unlock the constant buffer.
 	deviceContext->Unmap(m_matrixBuffer.Get(), 0);
@@ -322,12 +235,9 @@ bool Shader_Lighting::SetShaderParameters(
 	// Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);
 
-// Lock the light constant buffer so it can be written to.
+    // Lock the light constant buffer so it can be written to.
 	result = deviceContext->Map(m_lightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	if(FAILED(result))
-	{
-		return false;
-	}
+	if(FAILED(result)){return false;}
 
 	// Get a pointer to the data in the constant buffer.
 	dataPtr2 = (LightBufferType*)mappedResource.pData;

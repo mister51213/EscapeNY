@@ -51,7 +51,7 @@ void GameView::drawModel( const Actor & actor ) const
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
             (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
-            {.57f,.57f,.57f}, {1.f,1.f,1.f,1.f});
+            {.3f,.1f,1.f}, {0.f,1.f,.5f,1.f});
     }
     else
     {   
