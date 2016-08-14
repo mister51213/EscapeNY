@@ -105,8 +105,11 @@ void Game_FPS::doVisualFX()
             if (m_light.Direction.x < 1.f)
             {
                 m_light.Direction.x += .01f;
-                m_light.Color.x += .01f;
-                m_offset += .001f;
+                m_light.Direction.y += .03f;
+
+                m_light.Color.y += .01f;
+                m_light.Color.y += m_offset;
+                m_offset += .0005f;
             }
             else
                 m_reverseL = true;
@@ -116,8 +119,11 @@ void Game_FPS::doVisualFX()
             if (m_light.Direction.x > -1.f)
             {
                 m_light.Direction.x -= .01f;
-                 m_light.Color.x -= .01f;
-                m_offset -= .001f;
+                m_light.Direction.y -= .03f;
+
+                m_light.Color.y -= .01f;
+                m_light.Color.y -= m_offset;
+                m_offset -= .0005f;
             }
             else
                 m_reverseL = false;
