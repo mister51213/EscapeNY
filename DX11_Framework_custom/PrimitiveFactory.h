@@ -7,6 +7,26 @@ texture functionality for more detailed graphics.
 
 #include "Includes.h"
 #include "Utilities.h"
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+// Contains position, texture, and normal vectors 
+// corresponding to mesh file format
+	struct ModelType
+	{
+		float x, y, z; // vertex coordinates
+		float tu, tv; // UV coordinates
+		float nx, ny, nz; // normal vector
+	};
+
+ //   struct VertexType
+	//{
+	//	XMFLOAT3 position;
+	//	XMFLOAT2 texture;
+	//	XMFLOAT3 normal;
+	//};
 
 class PrimitiveFactory
 {
@@ -21,6 +41,10 @@ public:
 	static void CreatePlane( const ModelSpecs_L &Specs );
 	static void CreateCube( const ModelSpecs_L &Specs );
 	static void PrimitiveFactory::CreateColor( float R, float G, float B, float A );
+    static void PrimitiveFactory::CreateMesh(
+        //const ModelSpecs_L & Specs, 
+        //const ModelType & type, 
+        const wstring& fileName);
 
     // ACCESSOR FUNCTIONS
 	static std::vector<DirectX::XMFLOAT3> GetVertices();

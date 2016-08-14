@@ -25,9 +25,10 @@ bool Model_Colored::Initialize( const PrimitiveFactory & PrimMaker, const Graphi
 
 	// Create the vertex buffer array
 	UINT idx = 0;
+    m_vertices.resize(m_vertexCount);
 	for( auto &v : verts )
 	{
-		vertices[ idx ] = {v, color};
+		m_vertices[ idx ] = {v, color};
 		++idx;
 	}
 
@@ -38,7 +39,7 @@ bool Model_Colored::Initialize( const PrimitiveFactory & PrimMaker, const Graphi
 	m_indexCount = indices.size();
 
 	// use vertex and index arrays to create the vertex and index buffers.
-	bool result = initializeBuffers( vertices.data(), indices.data(), Gfx );
+	bool result = initializeBuffers( m_vertices.data(), indices.data(), Gfx );
 	RETURN_IF_FALSE( result );
 
 	return true;

@@ -4,13 +4,11 @@
 Model_Textured::Model_Textured()
 {}
 
-//Model_Textured::Model_Textured(XMFLOAT3 pos):Model::Model(pos) // initialize base position
-//{}
-
 Model_Textured::~Model_Textured()
 {}
 
-bool Model_Textured::Initialize( const PrimitiveFactory &PrimMaker, const Graphics & Gfx)
+bool Model_Textured::Initialize( 
+    const PrimitiveFactory &PrimMaker, const Graphics & Gfx)
 {
 	// Set the stride for this model type
 	m_Stride = sizeof( VertexPositionUVType );

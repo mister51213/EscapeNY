@@ -5,13 +5,13 @@
 //////////////
 #define WIN32_LEAN_AND_MEAN
 
-// C++ standar headers
+// C++ standard headers
 #include <memory>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <stdio.h>
-
+#include <algorithm>
 
 // Win API headers
 #include <windows.h>

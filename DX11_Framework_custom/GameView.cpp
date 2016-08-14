@@ -7,107 +7,123 @@ GameView::GameView()
 	m_pCam( nullptr )
 {}
 
-// CODE_CHANGE: Initialize function no longer needs vector of Actor pointers
-void GameView::Initialize( 
-	ResourceManager *const pResource,
-	Graphics* pGfx,
-	Camera* pCam )
+GameView::GameView( Graphics * pGfx, D3DGraphics * pD3D, std::shared_ptr<Camera>& pCam )
+	:
+	m_pGfx( pGfx ),
+	m_pD3D( pD3D ),
+	m_pCam( pCam )
+{}
+
+void GameView::Initialize()
 {
-	m_pResource = pResource;
-	m_pGfx = pGfx;
-	m_pD3D = pGfx->GetDirect3D();
-	m_pCam = pCam;
+    initModelPool();
+	initTexturePool();
 	initializeShader();
 }
 
-void GameView::UpdateView( const vector<Actor*>& actors )const
+void GameView::UpdateView( const vector<Actor*>& actors ) const
 {
-	for( const auto *actor : actors )
-	{
-		drawModel( *actor );
-	}
+    for each (Actor* actor in actors)
+    {
+        drawModel(*actor);
+    }
 }
 
-// CODE_CHANGE: Renamed function to OnReset to be more clear of intent and
-// made const, none of the functions called from here change the 
-// state of GameView members.
-void GameView::OnReset( const vector<Actor*>& pActors )const
+void GameView::drawModel( const Actor & actor ) const
 {
-	modelAllActors( pActors );
+    // UNTextured cube index is 0, so if > 0, use tex shader
+    if (actor.GetModelType()>0)
+    {
+        // texture the actor
+        m_shader_Texture.Render(
+            m_pD3D->GetDeviceContext(),
+            GetWorldMatrix(actor.GetWorldSpecs()),
+            m_pCam->GetViewMatrix(),
+            m_pCam->GetProjectionMatrix(),
+            (m_TexturePool[actor.GetTexIndex()]).GetTextureView());
+    }
+    else
+    {   
+        // color the actor
+        m_shader_Color.Render(
+            m_pD3D->GetDeviceContext(),
+            GetWorldMatrix(actor.GetWorldSpecs()),
+            m_pCam->GetViewMatrix(),
+            m_pCam->GetProjectionMatrix());
+    }
+    m_pGfx->RenderModel(*(m_ModelPool[actor.GetModelType()]));
+}
+
+// TODO: implement model pool
+void GameView::initModelPool()
+{
+    char numModels = 10;
+    ModelSpecs_L defaultSpecs;
+    m_ModelPool.resize(numModels);
+
+    PrimitiveFactory prim;
+
+    prim.CreateCube(defaultSpecs);
+    prim.CreateColor(1.f,0.f,0.f,.5f);
+    m_ModelPool[CUBE].reset(new Model_Colored);
+    m_ModelPool[CUBE]->Initialize(prim, *m_pGfx);
+
+    prim.CreateCube(defaultSpecs);
+    m_ModelPool[CUBE_TEXTURED].reset(new Model_Textured);
+    m_ModelPool[CUBE_TEXTURED]->Initialize(prim, *m_pGfx);
+
+    prim.CreatePlane(defaultSpecs);
+    m_ModelPool[PLANE].reset(new Model_Textured);
+    m_ModelPool[PLANE]->Initialize(prim, *m_pGfx);
+    
+    prim.CreateCube(defaultSpecs); // TODO: Change to CreateSphere
+    m_ModelPool[SPHERE].reset(new Model_Textured);
+    m_ModelPool[SPHERE]->Initialize(prim, *m_pGfx);
+
+    prim.CreateTriangle(defaultSpecs);
+    m_ModelPool[POLYGON].reset(new Model_Textured);
+    m_ModelPool[POLYGON]->Initialize(prim, *m_pGfx);
+
+    //prim.CreateMesh(L"Meshes\\Cube.txt");
+    prim.CreateMesh(L"Meshes\\model.BinaryMesh");
+    m_ModelPool[CUSTOM_MESH].reset(new Model_Textured);
+    m_ModelPool[CUSTOM_MESH]->Initialize(prim, *m_pGfx);
+
+    prim.CreateMesh(L"Meshes\\model2.BinaryMesh");
+    m_ModelPool[CUSTOM_MESH2].reset(new Model_Textured);
+    m_ModelPool[CUSTOM_MESH2]->Initialize(prim, *m_pGfx);
+
+    prim.CreateMesh(L"Meshes\\model3.BinaryMesh");
+    m_ModelPool[CUSTOM_MESH3].reset(new Model_Textured);
+    m_ModelPool[CUSTOM_MESH3]->Initialize(prim, *m_pGfx);
+
+    prim.CreateMesh(L"Meshes\\model4.BinaryMesh");
+    m_ModelPool[CUSTOM_MESH4].reset(new Model_Textured);
+    m_ModelPool[CUSTOM_MESH4]->Initialize(prim, *m_pGfx);
 }
 
 void GameView::initTexturePool()
 {
-	/*const int numTextures = 5;
-	m_Textures.resize( numTextures );
-	m_Textures[ AsphaltFresh ].Initialize( *m_pGfx, L"Textures\\fresh-black-asphalt-texture.jpg" );
-	m_Textures[ AsphaltTGA ].Initialize( *m_pGfx, L"Textures\\asphalt.tga" );
-	m_Textures[ AsphaltOld ].Initialize( *m_pGfx, L"Textures\\old-asphalt-texture.jpg" );
-	m_Textures[ Water ].Initialize( *m_pGfx, L"Textures\\water3.jpg" );
-	m_Textures[ SharkSkin ].Initialize( *m_pGfx, L"Textures\\sharkskin1.jpg" );*/
+	const int numTextures = 14;
+	m_TexturePool.resize( numTextures );
+	m_TexturePool[ AsphaltFresh ].Initialize( *m_pGfx, L"Textures\\fresh-black-asphalt-texture.jpg" );
+	m_TexturePool[ AsphaltTGA ].Initialize( *m_pGfx, L"Textures\\asphalt.tga" );
+	m_TexturePool[ AsphaltOld ].Initialize( *m_pGfx, L"Textures\\old-asphalt-texture.jpg" );
+    m_TexturePool[ Water1 ].Initialize( *m_pGfx, L"Textures\\water1.jpg" );
+    m_TexturePool[ Water2 ].Initialize( *m_pGfx, L"Textures\\water2.jpg" );
+    m_TexturePool[ Water3 ].Initialize( *m_pGfx, L"Textures\\water3.jpg" );
+	m_TexturePool[ Underwater1 ].Initialize( *m_pGfx, L"Textures\\underwater1.jpg" );
+    m_TexturePool[ Underwater2 ].Initialize( *m_pGfx, L"Textures\\underwater2.jpg" );
+    m_TexturePool[ Underwater3 ].Initialize( *m_pGfx, L"Textures\\underwater3.jpg" );
+    m_TexturePool[ Underwater4 ].Initialize( *m_pGfx, L"Textures\\underwater4.jpg" );
+    m_TexturePool[ Underwater5 ].Initialize( *m_pGfx, L"Textures\\underwater5.jpg" );
+    m_TexturePool[ Underwater6 ].Initialize( *m_pGfx, L"Textures\\underwater6.jpg" );
+    m_TexturePool[ Underwater7 ].Initialize( *m_pGfx, L"Textures\\underwater7.jpg" );
+    m_TexturePool[ SharkSkin ].Initialize( *m_pGfx, L"Textures\\sharkskin1.jpg" );
 }
 
 void GameView::initializeShader()
 {
 	m_shader_Texture.Initialize( m_pD3D->GetDevice() );
-}
-
-// CODE_CHANGE: Made const
-void GameView::modelAllActors( const vector<Actor*>& actors )const
-{
-	for( int i = 0; i < actors.size(); i++ )
-	{
-		actors[ i ]->SetModel( makeModel( actors[ i ]->GetLocalSpecs() ) );
-	}
-}
-
-// CODE_CHANGE: Made const
-std::shared_ptr<Model> GameView::makeModel( ModelSpecs_L localSpecs, eModType Type )const
-{
-	std::shared_ptr<Model_Textured> pModel;
-	pModel.reset( new Model_Textured );
-	PrimitiveFactory primMaker;
-	// TODO: Implement it so it can draw difft shapes based on eModType
-	switch( Type )
-	{
-		case CUBE:
-			primMaker.CreateCube( localSpecs );
-			primMaker.CreateColor( 0.f, 0.f, 0.f, 1.f );
-			break;
-		case CUBE_TEXTURED:
-			primMaker.CreateCube( localSpecs );
-			break;
-		case PLANE:
-			primMaker.CreatePlane( localSpecs );
-			break;
-		case SPHERE:
-			// primMaker.CreateSphere( localSpecs );
-			break;
-		case POLYGON:
-			primMaker.CreateTriangle( localSpecs );
-			break;
-		case CUSTOM_MESH:
-			//primMaker.CreateCustom( localSpecs );
-			break;
-		default:
-			break;
-	}
-	pModel->Initialize( primMaker, *m_pGfx );
-	return pModel;
-}
-
-void GameView::drawModel( const Actor & actor )const
-{
-	auto *const pContext = m_pD3D->GetDeviceContext();
-	const auto &worldMatrix = GetWorldMatrix( actor.GetWorldSpecs() );
-	const auto &viewMatrix = m_pCam->GetViewMatrix();
-	const auto &projection = m_pCam->GetProjectionMatrix();
-	auto *const pTextureView =
-		m_pResource->GetTexture( actor.GetTexIndex() )->GetTextureView();
-	
-	m_shader_Texture.Render( 
-		pContext, worldMatrix, viewMatrix, projection, pTextureView 
-	);
-
-	m_pGfx->RenderModel( *( actor.GetModel() ) );
+    m_shader_Color.Initialize( m_pD3D->GetDevice() );
 }

@@ -14,7 +14,6 @@ using namespace Microsoft::WRL;
 ImageLoader::ImageLoader()
 {}
 
-
 ImageLoader::~ImageLoader()
 {
 }
@@ -65,7 +64,7 @@ WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename, const 
 
 		// Initialize the converter using the frame grabbed.
 		// This is just to make sure that the colors are in BGRA order
-		imgResult.first = pConverter->Initialize( pFrame.Get(), GUID_WICPixelFormat32bppPBGRA,
+		imgResult.first = pConverter->Initialize( pFrame.Get(), GUID_WICPixelFormat32bppPRGBA,
 			WICBitmapDitherTypeNone, nullptr, 1.f, WICBitmapPaletteTypeCustom );
 		if( FAILED( imgResult.first ) )
 		{
@@ -95,7 +94,8 @@ WicBitmapResult  ImageLoader::CreateBitmap( const UINT Width, const UINT Height,
 	// Create bitmap from memory using the temp bitmap
 	HRESULT hr = pFactory->CreateBitmap(
 		Width, Height,								// Width and height of bitmap
-		GUID_WICPixelFormat32bppPBGRA,				// BGRA pixel format
+		//GUID_WICPixelFormat32bppPBGRA,				// BGRA pixel format
+        GUID_WICPixelFormat32bppPRGBA,
 		WICBitmapCacheOnDemand,						// Cache on demand, not sure what this does
 		&pBitmap									// Pass address of the bitmap interface
 	);
