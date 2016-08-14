@@ -29,7 +29,7 @@ void Actor_Player_Alt::SetPosition( const DirectX::XMFLOAT3 & Position )
 	m_worldSpecs.position = Position;
 }
 
-void Actor_Player_Alt::Update( const Input & UserInput )
+void Actor_Player_Alt::GetInput( const Input& pInput, int randI = 0.f, float randF = 0.f )
 {
 	// Initialize the values to be used for direction
 	float x = 0.f, z = 0.f;
@@ -40,20 +40,20 @@ void Actor_Player_Alt::Update( const Input & UserInput )
 	// south, southwest, west and northwest
 	// Set X and Z to a constant 1 or -1 to use for direction
 	// calculations
-	if( UserInput.IsKeyDown( VK_UP ) )
+	if( pInput.IsKeyDown( VK_UP ) )
 	{
 		z = 1.f;
 	}
-	else if( UserInput.IsKeyDown( VK_DOWN ) )
+	else if( pInput.IsKeyDown( VK_DOWN ) )
 	{
 		z = -1.f;
 	}
 
-	if( UserInput.IsKeyDown( VK_LEFT ) )
+	if( pInput.IsKeyDown( VK_LEFT ) )
 	{
 		x = -1.f;
 	}
-	else if( UserInput.IsKeyDown( VK_RIGHT ) )
+	else if( pInput.IsKeyDown( VK_RIGHT ) )
 	{
 		x = 1.f;
 	}
@@ -65,12 +65,22 @@ void Actor_Player_Alt::Update( const Input & UserInput )
 	/////////////////////////////////////////////////////////////////////////
 	// rx and rz are used as result of multiplying recipricol magnitude
 	// by the x and z values as mentioned below
-	float rx = 0.f;
-	float rz = 0.f;
 
+	float recipLength = 1.f / sqrtf( pow( x, 2 ) + pow( z, 2 ) );
+	float rx = x * recipLength;
+	float rz = z * recipLength;
+
+	
 	// Made a function in Utilities.h to convert the keyboard input
 	// to a rotation in Y axis.  
-	float yRotation = CalculateYRotation( x, z, rx, rz );
+	// Function was lost during merge :(
+	
+	// Figure out how to convert vector direction to angle in degrees
+	bool posResult = ( ( rx > 0.f && rz > 0.f ) );
+	bool negResult = ( ( rx < 0.f && rz < 0.f ) );
+	float yRotation = g_degree * 
+		( posResult && negResult ? asin( rx ) : -( fabsf( asin( rx ) ) ) );
+		
 	
 	// If function returns -0.f( Yes, -0.f is a thing ), no calculations 
 	// were done so skip assigning rotation to world specs member.
@@ -78,19 +88,19 @@ void Actor_Player_Alt::Update( const Input & UserInput )
 	// are the same apparently, so casting to an int* then dereferencing
 	// it, shows they are different values in memory.
 
-	// Store -0.f 
-	float nZero = -0.f;
-	// Convert to int * and dereference to get the int value
-	int negZero = *(int*)&nZero;
-	// Convert yRotation to int * and dereference to get the int value
-	int fConversion = *(int*)&yRotation;
+	//// Store -0.f 
+	//float nZero = -0.f;
+	//// Convert to int * and dereference to get the int value
+	//int negZero = *(int*)&nZero;
+	//// Convert yRotation to int * and dereference to get the int value
+	//int fConversion = *(int*)&yRotation;
 
-	// Compare the converted values
-	if( fConversion != negZero )
-	{
+	//// Compare the converted values
+	//if( fConversion != negZero )
+	//{
 		m_worldSpecs.orientation.y = yRotation;
-	}
-
+	//}
+	
 	// Use the vector direction and speed to move player to new position
 	m_worldSpecs.position.x += ( rx * m_speed );
 	m_worldSpecs.position.z += ( rz * m_speed );

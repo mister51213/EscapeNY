@@ -18,7 +18,7 @@ public:
 public:
 	// Left this stuff here in case you are still testing it, just 
 	// try to remember to move to CPP file when you are done testing
-    void GetInput(const Input& pInput, int randI=0.f, float randF=0.f) override
+    void GetInput(const Input& pInput, int randI=0.f, float randF=0.f)override 
     {
         if (pInput.IsKeyDown(VK_RIGHT))
         {
@@ -43,10 +43,10 @@ public:
     } 
 
 private:
-	void Move( const XMFLOAT3 &offset ) override
+	void Move( const XMFLOAT3 &offset )
 	{ m_worldSpecs.position += offset; }
 
-	void Rotate( const XMFLOAT3 &rotation ) override
+	void Rotate( const XMFLOAT3 &rotation )
 	{ m_worldSpecs.orientation += rotation; }
 
 private:

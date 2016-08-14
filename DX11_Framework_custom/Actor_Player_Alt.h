@@ -17,7 +17,8 @@ public:
 	~Actor_Player_Alt();
 
 	void SetPosition( const DirectX::XMFLOAT3 &Position );
-	void Update( const Input &UserInput);
+	void GetInput( const Input& pInput, int randI = 0.f, float randF = 0.f ) override;
+	
 	
 private:
 	float m_speed;
