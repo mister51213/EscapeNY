@@ -27,10 +27,10 @@ bool Game::Initialize(
 	RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Camera." );
 	
     result = m_pCamera->Initialize(
-		{ -0.0f, 16.0f, -30.0f },					                // Position		
-		{ 90.f, 0.f, 0.f }, 						        // Rotation
+		{ -0.0f, 16.0f, -30.0f },					// Position		
+		{ 90.f, 0.f, 0.f }, 						// Rotation
 		{ ScreenWidth, ScreenHeight },				// Screen size
-		{ SCREEN_NEAR, SCREEN_DEPTH } ); 		    // Screen clip depths
+		{ g_screenNear, g_screenDepth } ); 		    // Screen clip depths
 	RETURN_IF_FALSE( result );
 
 	// Pass all member pointers to GameObjects class so it can draw with them
