@@ -15,6 +15,9 @@ public:
 
 	void Initialize( HWND WinHandle );
 
+	// Relative data is only sent when a mouse event happens, 
+	// so there is nothing to tell it that the mouse hasn't moved.
+	void FlushRelativeData();
 	void OnLeftDown( int RelativeX, int RelativeY );
 	void OnLeftUp( int RelativeX, int RelativeY );
 	void OnRightDown( int RelativeX, int RelativeY );

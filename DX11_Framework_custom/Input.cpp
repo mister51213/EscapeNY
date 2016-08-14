@@ -42,8 +42,15 @@ void Input::Initialize( HWND WinHandle )
 	GetClientRect( WinHandle, &m_clamp );
 	m_x = ( m_clamp.right - m_clamp.left ) / 2;
 	m_y = ( m_clamp.bottom - m_clamp.top ) / 2;
+	m_relX = 0;
+	m_relY = 0;
 	SetCursorPos( m_x, m_y );
+}
 
+void Input::FlushRelativeData()
+{
+	m_relX = 0;
+	m_relY = 0;
 }
 
 void Input::OnLeftDown( int RelativeX, int RelativeY )
@@ -74,6 +81,7 @@ void Input::OnMouseMove( int RelativeX, int RelativeY )
 	m_x = max( 0, min( tx, m_clamp.right - 1 ) );
 	m_y = max( 0, min( ty, m_clamp.bottom - 1 ) );
 	
+	SetCursorPos( m_x, m_y );
 	m_relX = RelativeX;
 	m_relY = RelativeY;
 }

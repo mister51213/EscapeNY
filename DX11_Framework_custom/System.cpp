@@ -106,6 +106,10 @@ void System::Run()
 	// Loop until there is a quit message from the window or the user.
 	while( !done )
 	{
+		// Input relative members should be reset before processing
+		// the message queue
+		m_Input->FlushRelativeData();
+
 		// Handle the windows messages.
 		while( PeekMessage( &msg, nullptr, NULL, NULL, PM_REMOVE ) )
 		{
