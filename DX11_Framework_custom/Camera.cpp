@@ -103,9 +103,16 @@ void Camera::GetInput( const Input & pInput )
 
 void Camera::GetMouseInput( const Input & pInput )
 {
+	float xIncr = static_cast<float>( pInput.GetRelativeY() );
+	float yIncr = static_cast<float>( pInput.GetRelativeX() );
+	
+	if( xIncr > 0.f || xIncr < 0.f )
+	{
+		int a = 0;
+	}
 	// Get "angle" traveled by mouse since last position
-	float angleX = 0.25f*static_cast<float>( pInput.GetRelativeY() );
-	float angleY = 0.25f*static_cast<float>( pInput.GetRelativeX() );
+	float angleX = 0.25f * xIncr;
+	float angleY = 0.25f * yIncr;
 
 	// Re-rotate camera based on new position of mouse
 	Pitch( angleX );
@@ -120,7 +127,7 @@ void Camera::Pitch( float angle )
 
 void Camera::Yaw( float angle )
 {
-	m_Orientation.y -= angle; // will be converted to radians in render()
+	m_Orientation.y += angle; // will be converted to radians in render()
 }
 
 void Camera::Walk( float distance )

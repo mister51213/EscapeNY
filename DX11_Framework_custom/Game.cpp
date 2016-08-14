@@ -28,7 +28,7 @@ bool Game::Initialize(
 	
     result = m_pCamera->Initialize(
 		{ -0.0f, 16.0f, -30.0f },					// Position		
-		{ 90.f, 0.f, 0.f }, 						// Rotation
+		{ 0.f, 0.f, 0.f }, 							// Rotation
 		{ ScreenWidth, ScreenHeight },				// Screen size
 		{ g_screenNear, g_screenDepth } ); 		    // Screen clip depths
 	RETURN_IF_FALSE( result );

@@ -7,6 +7,9 @@
 
 #include "Includes.h"
 
+// TODO: Make input more versatile, needs actual event handling
+// Input needs have three events, one for button press, one for button
+// release and one for when no events have been received.
 class Input
 {
 public:
@@ -16,19 +19,17 @@ public:
 	void Initialize( HWND WinHandle );
 
 	// Relative data is only sent when a mouse event happens, 
-	// so there is nothing to tell it that the mouse hasn't moved.
+	// FlushRelativeData resets the relative data back to 0.
+	// Gets called once a frame before the message loop is 
+	// processed.
 	void FlushRelativeData();
-	void OnLeftDown( int RelativeX, int RelativeY );
-	void OnLeftUp( int RelativeX, int RelativeY );
-	void OnRightDown( int RelativeX, int RelativeY );
-	void OnRightUp( int RelativeX, int RelativeY );
-	void OnMouseMove( int RelativeX, int RelativeY );
 
-	// Mouse will have to have two modes, one for clicking on screen items
-	// the other for camera/player movement.
+	// Handles mouse events
+	void OnMouseInput( const RAWMOUSE &RawMouseInput );
 
+	// GetX gets mouse X position on screen
 	int GetX() const;
-
+	// GetY gets mouse Y position on screen
 	int GetY()const;
 
 	// Gets relative X position, not screen coordinates
@@ -40,7 +41,6 @@ public:
 	void KeyDown( unsigned int );
 	void KeyUp( unsigned int );
 
-	// CODE_CHANGE: Made function const
 	bool IsKeyDown( unsigned int )const;
 
 private:

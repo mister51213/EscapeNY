@@ -52,19 +52,19 @@ void Game_FPS::reset()
     { .5f, .5f, .5f } },
         eTexture::SharkSkin,
         ModelSpecs_L());
-    //2
+    //2 Bear
     ModelSpecs_W wSpecs1 = 
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
-      { 10.f, -8.f, -8.f } };
+      { 10.f, 8.f, 8.f } };
     aTest1 = Actor_NPC(wSpecs1, Water2, ModelSpecs_L(), CUSTOM_MESH);
-    //3
+    //3 Plane
     ModelSpecs_W wSpecs2 = 
     { { 20.f, -.5f, 20.f },
       { 0.f,0.f,0.f },
-      { 0.5f, -0.5f, -0.5f } };
+      { 0.5f, 0.5f, -0.5f } };
     aTest2 = Actor_NPC(wSpecs2, Water3, ModelSpecs_L(), CUSTOM_MESH2);
-    //4
+    //4 Bowling pin and ball
     ModelSpecs_W wSpecs3 = 
     { { -10.f, 0.f, -30.f },
       { 0.f,0.f,0.f },
