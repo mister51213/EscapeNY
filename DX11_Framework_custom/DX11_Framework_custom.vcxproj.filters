@@ -168,9 +168,6 @@
     <ClCompile Include="Overlay_Title.cpp">
       <Filter>Source Files\Overlays</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Algorithm_Random.cpp">
       <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
@@ -182,6 +179,9 @@
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Source Files\Utility Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
