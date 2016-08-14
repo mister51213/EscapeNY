@@ -1,6 +1,6 @@
 #include "Algorithm_Maze.h"
 #include <random>
-#include "MazeGame.h"
+#include "Game_Maze.h"
 
 using namespace DirectX;
 

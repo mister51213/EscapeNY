@@ -1,5 +1,5 @@
 #include "Algorithm_Random.h"
-#include "MazeGame.h"
+#include "Game_Maze.h"
 
 
 Algorithm_Random::Algorithm_Random( ISubGame*const pGame )
