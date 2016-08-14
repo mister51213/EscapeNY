@@ -2,7 +2,7 @@
 
 Shader_Lighting::Shader_Lighting()
 :
-Shader(L"Shaders/lighting_vs.cso", L"Shaders/lighting_vs.cso"),
+Shader(L"Shaders/DiffuseLight_vs.cso", L"Shaders/DiffuseLight_ps.cso"),
 m_hWnd(NULL) // need this bc not in Initialize()
 {}
 
@@ -11,16 +11,7 @@ Shader_Lighting::Shader_Lighting(HWND& hWnd)
 Shader(L"Shaders/lighting_vs.cso", L"Shaders/lighting_vs.cso"),
 m_hWnd(NULL) // need this bc not in Initialize()
 // TODO: remember to manually copy and paste cso's into Shader Folder
-{
-    // we are using comptrs, set to null by default, so no need for these
-    //m_vertexShader.Reset();
-	//m_pixelShader.Reset();
-	//m_layout.Reset();
-	//m_sampleState.Reset();
-	//m_matrixBuffer.Reset();
-    // Set the light constant buffer to null in the class constructor.
-	//m_lightBuffer = 0;
-}
+{}
 
 Shader_Lighting::Shader_Lighting(const Shader_Lighting &)
 {}
@@ -28,19 +19,17 @@ Shader_Lighting::Shader_Lighting(const Shader_Lighting &)
 Shader_Lighting::~Shader_Lighting()
 {}
 
-// TODO: Add HWND in above function too. Here HWND has been added.
 bool Shader_Lighting::InitializeShader(
     ID3D11Device * pDevice, 
     const std::wstring & vsFilename, 
     const std::wstring & psFilename/*,
-    HWND& hwnd*/) // HWND member is initialized in concstructor
+    HWND& hwnd*/) // HWND member is initialized in constructor
 {
 	HRESULT result;
 	ID3DBlob* errorMessage;
 	ID3DBlob* vertexShaderBuffer;
 	ID3DBlob* pixelShaderBuffer;
 
-    // TODO: Change element description here
     D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
 	unsigned int numElements;
 	D3D11_SAMPLER_DESC samplerDesc;
