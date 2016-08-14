@@ -27,7 +27,7 @@ vector<Actor> Algorithm_Random::MakePattern( int numActors )
 	std::vector<eTileType> tileTypes;
 	float cellSize = 0.f;
 	{
-		MazeGame *pGame = dynamic_cast<MazeGame *>( m_pGame );
+		Game_Maze *pGame = dynamic_cast<Game_Maze *>( m_pGame );
 		assert( pGame );
 
 		const auto &board = pGame->GetBoard();
