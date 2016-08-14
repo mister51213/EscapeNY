@@ -13,7 +13,7 @@ public:
 	Input();
 	~Input();
 
-	void Initialize(HWND WinHandle);
+	void Initialize( HWND WinHandle );
 
 	void OnLeftDown( int RelativeX, int RelativeY );
 	void OnLeftUp( int RelativeX, int RelativeY );
@@ -21,6 +21,18 @@ public:
 	void OnRightUp( int RelativeX, int RelativeY );
 	void OnMouseMove( int RelativeX, int RelativeY );
 
+	// Mouse will have to have two modes, one for clicking on screen items
+	// the other for camera/player movement.
+
+	int GetX() const;
+
+	int GetY()const;
+
+	// Gets relative X position, not screen coordinates
+	int GetRelativeX()const;
+	
+	// Gets relative Y position, not screen coordinates
+	int GetRelativeY()const;
 
 	void KeyDown( unsigned int );
 	void KeyUp( unsigned int );
@@ -33,4 +45,6 @@ private:
 
 	bool m_leftDown, m_rightDown;
 	int m_x, m_y;
+	int m_relX, m_relY;
+	RECT m_clamp;
 };

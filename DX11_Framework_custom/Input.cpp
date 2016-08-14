@@ -18,7 +18,10 @@ Input::~Input()
 	rawDevice.usUsagePage = 1;
 	rawDevice.usUsage = 2;
 	rawDevice.dwFlags = RIDEV_REMOVE;
-	rawDevice.hwndTarget = nullptr;
+	
+	// Setting hwndTarget to null unregisters the device
+	rawDevice.hwndTarget = nullptr;			
+											
 	RegisterRawInputDevices( &rawDevice, 1, sizeof( RAWINPUTDEVICE ) );
 }
 
@@ -33,15 +36,14 @@ void Input::Initialize( HWND WinHandle )
 	rawDevice.hwndTarget = WinHandle;
 	RegisterRawInputDevices( &rawDevice, 1, sizeof( RAWINPUTDEVICE ) );
 
-	int i;
-	
-	// Initialize all the keys to being released and not pressed.
-	for(i=0; i<256; i++)
-	{
-		m_keys[i] = false;
-	}
+	ZeroMemory( m_keys, 256 );
 
-	return;
+	
+	GetClientRect( WinHandle, &m_clamp );
+	m_x = ( m_clamp.right - m_clamp.left ) / 2;
+	m_y = ( m_clamp.bottom - m_clamp.top ) / 2;
+	SetCursorPos( m_x, m_y );
+
 }
 
 void Input::OnLeftDown( int RelativeX, int RelativeY )
@@ -66,8 +68,34 @@ void Input::OnRightUp( int RelativeX, int RelativeY )
 
 void Input::OnMouseMove( int RelativeX, int RelativeY )
 {
-	m_x += RelativeX;
-	m_y += RelativeY;
+	int tx = m_x + RelativeX;
+	int ty = m_y + RelativeY;
+
+	m_x = max( 0, min( tx, m_clamp.right - 1 ) );
+	m_y = max( 0, min( ty, m_clamp.bottom - 1 ) );
+	
+	m_relX = RelativeX;
+	m_relY = RelativeY;
+}
+
+int Input::GetX() const
+{
+	return m_x;
+}
+
+int Input::GetY() const
+{
+	return m_y;
+}
+
+int Input::GetRelativeX() const
+{
+	return m_relX;
+}
+
+int Input::GetRelativeY() const
+{
+	return m_relY;
 }
 
 void Input::KeyDown(unsigned int input)
