@@ -35,12 +35,12 @@ void GameView::drawModel( const Actor & actor, const FX_Light& light ) const
     if (actor.GetModelType()>0)
     {
         //// texture the actor
-        m_shader_Texture.Render(
-            m_pD3D->GetDeviceContext(),
-            GetWorldMatrix(actor.GetWorldSpecs()),
-            m_pCam->GetViewMatrix(),
-            m_pCam->GetProjectionMatrix(),
-            (m_TexturePool[actor.GetTexIndex()]).GetTextureView());
+        //m_shader_Texture.Render(
+        //    m_pD3D->GetDeviceContext(),
+        //    GetWorldMatrix(actor.GetWorldSpecs()),
+        //    m_pCam->GetViewMatrix(),
+        //    m_pCam->GetProjectionMatrix(),
+        //    (m_TexturePool[actor.GetTexIndex()]).GetTextureView());
 
         // lighting effects
         int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
@@ -146,7 +146,7 @@ void GameView::initTexturePool()
 
 void GameView::initializeShader()
 {
-	m_shader_Texture.Initialize( m_pD3D->GetDevice() );
+	// m_shader_Texture.Initialize( m_pD3D->GetDevice() );
     m_shader_Color.Initialize( m_pD3D->GetDevice() );    
     m_shader_Lighting.Initialize(m_pD3D->GetDevice());
 }

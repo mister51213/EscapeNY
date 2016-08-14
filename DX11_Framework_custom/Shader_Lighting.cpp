@@ -69,6 +69,7 @@ bool Shader_Lighting::InitializeShader(
 		m_pixelShader.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 	
+    // TODO: use Utilities global function VertexPositionUVNormalType ....
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
 	polygonLayout[0].SemanticName = "POSITION";

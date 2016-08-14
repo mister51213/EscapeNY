@@ -120,7 +120,7 @@ void Camera::Pitch( float angle )
 
 void Camera::Yaw( float angle )
 {
-	m_Orientation.y -= angle; // will be converted to radians in render()
+	m_Orientation.y += angle; // will be converted to radians in render()
 }
 
 void Camera::Walk( float distance )
