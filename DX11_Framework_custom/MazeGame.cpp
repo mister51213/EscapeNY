@@ -41,7 +41,7 @@ void MazeGame::Initialize(
 
 void MazeGame::UpdateScene( const Input &InputRef, Camera *const pCamera )
 {
-	m_player.Update( InputRef );
+	m_player.GetInput( InputRef );
 
 	// MAKE CAMERA FOLLOW THE PLAYER
 	// Get player position, offset camera, set camera position

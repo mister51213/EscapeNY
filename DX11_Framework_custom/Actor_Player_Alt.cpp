@@ -29,7 +29,7 @@ void Actor_Player_Alt::SetPosition( const DirectX::XMFLOAT3 & Position )
 	m_worldSpecs.position = Position;
 }
 
-void Actor_Player_Alt::GetInput( const Input& pInput, int randI = 0.f, float randF = 0.f )
+void Actor_Player_Alt::GetInput( const Input& pInput, int randI, float randF )
 {
 	// Initialize the values to be used for direction
 	float x = 0.f, z = 0.f;

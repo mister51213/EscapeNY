@@ -139,7 +139,7 @@ vector<Actor> Algorithm_Random::MakePattern( int numActors )
 		float z = ( idx0 / width ) * cellSize;
 		wSpecs.position = { x, 1.f, z };
 
-		actors.push_back( Actor( wSpecs, Water, lSpecs ) );
+		actors.push_back( Actor( wSpecs, Water1, lSpecs ) );
 	}
 
 	return actors;
