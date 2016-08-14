@@ -288,9 +288,9 @@ bool Shader_Lighting::SetShaderParameters(
 	LightBufferType* dataPtr2;
 
 	// Transpose the matrices to prepare them for the shader.
-	XMMatrixTranspose(worldMatrix);
-	XMMatrixTranspose(viewMatrix);
-	XMMatrixTranspose(projectionMatrix);
+	XMMATRIX worldMatrixT = worldMatrix;
+	XMMATRIX viewMatrixT = XMMatrixTranspose(viewMatrix);
+	XMMATRIX projectionMatrixT = XMMatrixTranspose(projectionMatrix);
 
 	// Lock the constant buffer so it can be written to.
 	result = deviceContext->Map(m_matrixBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -303,9 +303,12 @@ bool Shader_Lighting::SetShaderParameters(
 	dataPtr = (MatrixBufferType*)mappedResource.pData;
 
 	// Copy the matrices into the constant buffer.
-	dataPtr->world = worldMatrix;
-	dataPtr->view = viewMatrix;
-	dataPtr->projection = projectionMatrix;
+	//dataPtr->world = worldMatrix;
+	//dataPtr->view = viewMatrix;
+	//dataPtr->projection = projectionMatrix;
+  	dataPtr->world = worldMatrixT;
+	dataPtr->view = viewMatrixT;
+	dataPtr->projection = projectionMatrixT;
 
 	// Unlock the constant buffer.
 	deviceContext->Unmap(m_matrixBuffer.Get(), 0);
