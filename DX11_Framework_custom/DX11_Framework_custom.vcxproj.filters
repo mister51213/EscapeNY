@@ -189,6 +189,9 @@
     <ClCompile Include="Game_Maze.cpp">
       <Filter>Source Files\SubGames</Filter>
     </ClCompile>
+    <ClCompile Include="Shader_Lighting.cpp">
+      <Filter>Source Files\Shader Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -323,6 +326,9 @@
     <ClInclude Include="Game_Maze.h">
       <Filter>Header Files\SubGames</Filter>
     </ClInclude>
+    <ClInclude Include="Shader_Lighting.h">
+      <Filter>Header Files\Shader Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Development Guidelines.txt">
@@ -337,5 +343,7 @@
     <FxCompile Include="Shaders\Color_vs.hlsl" />
     <FxCompile Include="Shaders\texture_ps.hlsl" />
     <FxCompile Include="Shaders\texture_vs.hlsl" />
+    <FxCompile Include="DiffuseLight_ps.hlsl" />
+    <FxCompile Include="DiffuseLight_vs.hlsl" />
   </ItemGroup>
 </Project>

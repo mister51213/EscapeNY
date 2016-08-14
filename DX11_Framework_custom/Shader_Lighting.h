@@ -11,15 +11,18 @@ struct LightBufferType
 class Shader_Lighting : public Shader
 {
 public:
-    Shader_Lighting(HWND hWnd);
+    Shader_Lighting();
+    Shader_Lighting(HWND& hWnd);
   	Shader_Lighting(const Shader_Lighting&);
     ~Shader_Lighting();
 
     bool InitializeShader(
         ID3D11Device* pDevice,
-        HWND hwnd, 
         LPCWSTR& vsFilename,
-        LPCWSTR& psFilename);
+        LPCWSTR& psFilename/*,
+        HWND& hwnd*/);
+
+    void OutputShaderErrorMessage(ID3DBlob * errorMessage, HWND & hwnd, LPCWSTR & shaderFilename);
 
     bool SetShaderParameters(
         ID3D11DeviceContext* deviceContext,
@@ -38,13 +41,20 @@ public:
         XMMATRIX, 
         XMMATRIX, 
         ID3D11ShaderResourceView*, 
-        XMVECTOR,  //TODO: should be D3DXVECTOR3
-        XMVECTOR); //TODO: should be D3DXVECTOR4
+        XMFLOAT3,  //TODO: should be D3DXVECTOR3
+        XMFLOAT4); //TODO: should be D3DXVECTOR4
 
     void RenderShader(ID3D11DeviceContext* deviceContext, int indexCount) const;
 private:
+    // child-specfic members
 	comptr<ID3D11SamplerState> m_sampleState;
     comptr<ID3D11Buffer> m_lightBuffer;
-    HWND m_hWnd;
+    HWND m_hWnd; // can't pass in initializer
+    // passed in constructor
+    /*ID3D11VertexShader* m_vertexShader;
+	ID3D11PixelShader* m_pixelShader;
+	ID3D11InputLayout* m_layout;
+	ID3D11SamplerState* m_sampleState;
+	ID3D11Buffer* m_matrixBuffer;*/
 };
 

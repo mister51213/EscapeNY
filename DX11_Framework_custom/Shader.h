@@ -19,7 +19,8 @@ class Model;
 class Shader
 {
 public:
-	Shader(const std::wstring &vs, const std::wstring &ps );
+    Shader();
+    Shader(const std::wstring &vs, const std::wstring &ps );
 
 protected:
 	struct MatrixBufferType

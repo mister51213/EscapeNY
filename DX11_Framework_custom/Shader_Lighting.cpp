@@ -1,43 +1,35 @@
 #include "Shader_Lighting.h"
 
-Shader_Lighting::Shader_Lighting(HWND hWnd)
+Shader_Lighting::Shader_Lighting(){}
+
+Shader_Lighting::Shader_Lighting(HWND& hWnd)
     :
-Shader(L"Shaders/lighting_vs.cso", L"Shaders/lighting_vs.cso")
+Shader(L"Shaders/lighting_vs.cso", L"Shaders/lighting_vs.cso"),
+m_hWnd(hWnd) // need this bc not in Initialize()
 // TODO: remember to manually copy and paste cso's into Shader Folder
 {
-    // set member pointers to null.
-    m_vertexShader.Reset();
-	m_pixelShader.Reset();
-	m_layout.Reset();
-	m_sampleState.Reset();
-	m_matrixBuffer.Reset();
-// Set the light constant buffer to null in the class constructor.
-	m_lightBuffer.Reset();
-    m_hWnd = hWnd;
+    // we are using comptrs, set to null by default, so no need for these
+    //m_vertexShader.Reset();
+	//m_pixelShader.Reset();
+	//m_layout.Reset();
+	//m_sampleState.Reset();
+	//m_matrixBuffer.Reset();
+    // Set the light constant buffer to null in the class constructor.
+	//m_lightBuffer = 0;
 }
 
 Shader_Lighting::Shader_Lighting(const Shader_Lighting &)
 {}
 
 Shader_Lighting::~Shader_Lighting()
-{
-}
-
-//TODO: is this necessary w comptrs?
-//void Shader_Lighting::Shutdown()
-//{
-//	// Shutdown the vertex and pixel shaders as well as the related objects.
-//	ShutdownShader();
-//
-//	return;
-//}
+{}
 
 // TODO: Add HWND in above function too. Here HWND has been added.
 bool Shader_Lighting::InitializeShader(
     ID3D11Device * pDevice, 
-    HWND hwnd, 
     LPCWSTR& vsFilename, 
-    LPCWSTR& psFilename)
+    LPCWSTR& psFilename/*,
+    HWND& hwnd*/) // HWND member is initialized in concstructor
 {
 	HRESULT result;
 	ID3DBlob* errorMessage;
@@ -65,59 +57,63 @@ bool Shader_Lighting::InitializeShader(
         vsFilename, 
         NULL, 
         NULL, 
-        "LightVertexShader", 
+        "main", 
         "vs_5_0", 
         D3D10_SHADER_ENABLE_STRICTNESS, 
-        0, 
         NULL, 
         &vertexShaderBuffer, 
-        &errorMessage, 
-        NULL);
+        &errorMessage);
 	if(FAILED(result))
 	{
 		// If the shader failed to compile it should have writen something to the error message.
 		if(errorMessage)
 		{
-			OutputShaderErrorMessage(errorMessage, hwnd, vsFilename);
+			OutputShaderErrorMessage(errorMessage, m_hWnd, vsFilename);
 		}
 		// If there was nothing in the error message then it simply could not find the shader file itself.
 		else
 		{
-			MessageBox(hwnd, vsFilename, L"Missing Shader File", MB_OK);
+			MessageBox(m_hWnd, vsFilename, L"Missing Shader File", MB_OK);
 		}
 
 		return false;
 	}
-//Load in the new light pixel shader.
-
-	// Compile the pixel shader code.
-	result = D3DCompileFromFile(psFilename, NULL, NULL, "LightPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, 
-				       &pixelShaderBuffer, &errorMessage, NULL);
+    //Load in the new light pixel shader, Compile the pixel shader code.
+	result = D3DCompileFromFile(
+        psFilename, 
+        NULL, 
+        NULL, 
+        "main", 
+        "ps_5_0", 
+        D3D10_SHADER_ENABLE_STRICTNESS, 
+        NULL,
+        &pixelShaderBuffer, 
+        &errorMessage);
 	if(FAILED(result))
 	{
 		// If the shader failed to compile it should have writen something to the error message.
 		if(errorMessage)
 		{
-			OutputShaderErrorMessage(errorMessage, hwnd, psFilename);
+			OutputShaderErrorMessage(errorMessage, m_hWnd, psFilename);
 		}
 		// If there was nothing in the error message then it simply could not find the file itself.
 		else
 		{
-			MessageBox(hwnd, psFilename, L"Missing Shader File", MB_OK);
+			MessageBox(m_hWnd, psFilename, L"Missing Shader File", MB_OK);
 		}
 
 		return false;
 	}
 
 	// Create the vertex shader from the buffer.
-	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
+	result = pDevice->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
 	if(FAILED(result))
 	{
 		return false;
 	}
 
 	// Create the pixel shader from the buffer.
-	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
+	result = pDevice->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
 	if(FAILED(result))
 	{
 		return false;
@@ -156,7 +152,7 @@ bool Shader_Lighting::InitializeShader(
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	// Create the vertex input layout.
-	result = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), 
+	result = pDevice->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), 
 					   &m_layout);
 	if(FAILED(result))
 	{
@@ -186,7 +182,7 @@ bool Shader_Lighting::InitializeShader(
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	// Create the texture sampler state.
-	result = device->CreateSamplerState(&samplerDesc, &m_sampleState);
+	result = pDevice->CreateSamplerState(&samplerDesc, &m_sampleState);
 	if(FAILED(result))
 	{
 		return false;
@@ -201,7 +197,7 @@ bool Shader_Lighting::InitializeShader(
 	matrixBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	result = device->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
+	result = pDevice->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
 	if(FAILED(result))
 	{
 		return false;
@@ -218,7 +214,7 @@ bool Shader_Lighting::InitializeShader(
 	lightBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	result = device->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
+	result = pDevice->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
 	if(FAILED(result))
 	{
 		return false;
@@ -226,6 +222,40 @@ bool Shader_Lighting::InitializeShader(
 
 	return true;
     }
+
+void Shader_Lighting::OutputShaderErrorMessage(ID3DBlob* errorMessage, HWND& hwnd, LPCWSTR& shaderFilename)
+{
+	char* compileErrors;
+	unsigned long bufferSize, i;
+	ofstream fout;
+
+	// Get a pointer to the error message text buffer.
+	compileErrors = (char*)(errorMessage->GetBufferPointer());
+
+	// Get the length of the message.
+	bufferSize = errorMessage->GetBufferSize();
+
+	// Open a file to write the error message to.
+	fout.open("shader-error.txt");
+
+	// Write out the error message.
+	for(i=0; i<bufferSize; i++)
+	{
+		fout << compileErrors[i];
+	}
+
+	// Close the file.
+	fout.close();
+
+	// Release the error message.
+	errorMessage->Release();
+	errorMessage = 0;
+
+	// Pop a message up on the screen to notify the user to check the text file for compile errors.
+	MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
+
+	return;
+}
 
 bool Shader_Lighting::SetShaderParameters(
     ID3D11DeviceContext * deviceContext, 
@@ -242,7 +272,6 @@ bool Shader_Lighting::SetShaderParameters(
 	unsigned int bufferNumber;
 	MatrixBufferType* dataPtr;
 	LightBufferType* dataPtr2;
-
 
 	// Transpose the matrices to prepare them for the shader.
 	XMMatrixTranspose(worldMatrix);
