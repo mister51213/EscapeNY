@@ -8,7 +8,7 @@ m_hWnd(NULL) // need this bc not in Initialize()
 
 Shader_Lighting::Shader_Lighting(HWND& hWnd)
     :
-Shader(L"Shaders/lighting_vs.cso", L"Shaders/lighting_vs.cso"),
+Shader(L"Shaders/DiffuseLight_vs.cso", L"Shaders/DiffuseLight_ps.cso"),
 m_hWnd(NULL) // need this bc not in Initialize()
 // TODO: remember to manually copy and paste cso's into Shader Folder
 {}
@@ -27,8 +27,8 @@ bool Shader_Lighting::InitializeShader(
 {
 	HRESULT result;
 	ID3DBlob* errorMessage;
-	ID3DBlob* vertexShaderBuffer;
-	ID3DBlob* pixelShaderBuffer;
+	//ID3DBlob* vertexShaderBuffer;
+	//ID3DBlob* pixelShaderBuffer;
 
     D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
 	unsigned int numElements;
@@ -40,77 +40,102 @@ bool Shader_Lighting::InitializeShader(
 
 	// Initialize the pointers this function will use to null.
 	errorMessage = 0;
-	vertexShaderBuffer = 0;
-	pixelShaderBuffer = 0;
+	//vertexShaderBuffer = 0;
+	//pixelShaderBuffer = 0;
 
     //Load in the new light vertex shader.
-
 	// Compile the vertex shader code.
-	result = D3DCompileFromFile(
-        L"DiffuseLight_vs.hlsl",
-        NULL, 
-        NULL, 
-        "main", 
-        "vs_5_0", 
-        D3D10_SHADER_ENABLE_STRICTNESS, 
-        NULL, 
-        &vertexShaderBuffer, 
-        &errorMessage);
+	//result = D3DCompileFromFile(
+ //       L"DiffuseLight_vs.hlsl",
+ //       NULL, 
+ //       NULL, 
+ //       "main", 
+ //       "vs_5_0", 
+ //       D3D10_SHADER_ENABLE_STRICTNESS, 
+ //       NULL, 
+ //       &vertexShaderBuffer, 
+ //       &errorMessage);
+	////if(FAILED(result))
+	////{
+	////	// If the shader failed to compile it should have writen something to the error message.
+	////	if(errorMessage)
+	////	{
+	////		OutputShaderErrorMessage(errorMessage, m_hWnd, vsFilename);
+	////	}
+	////	// If there was nothing in the error message then it simply could not find the shader file itself.
+	////	else
+	////	{
+	////		MessageBox(m_hWnd, vsFilename, L"Missing Shader File", MB_OK);
+	////	}
+	////	return false;
+	////}
+ //   //Load in the new light pixel shader, Compile the pixel shader code.
+	//result = D3DCompileFromFile(
+ //       L"DiffuseLight_ps.hlsl",
+ //       NULL, 
+ //       NULL, 
+ //       "main", 
+ //       "ps_5_0", 
+ //       D3D10_SHADER_ENABLE_STRICTNESS, 
+ //       NULL,
+ //       &pixelShaderBuffer, 
+ //       &errorMessage);
+	////if(FAILED(result))
+	////{
+	////	// If the shader failed to compile it should have writen something to the error message.
+	////	if(errorMessage)
+	////	{
+	////		OutputShaderErrorMessage(errorMessage, m_hWnd, psFilename);
+	////	}
+	////	// If there was nothing in the error message then it simply could not find the file itself.
+	////	else
+	////	{
+	////		MessageBox(m_hWnd, psFilename, L"Missing Shader File", MB_OK);
+	////	}
+	////	return false;
+	////}
+ //   	// Create the vertex shader from the buffer.
+	//result = pDevice->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
 	//if(FAILED(result))
 	//{
-	//	// If the shader failed to compile it should have writen something to the error message.
-	//	if(errorMessage)
-	//	{
-	//		OutputShaderErrorMessage(errorMessage, m_hWnd, vsFilename);
-	//	}
-	//	// If there was nothing in the error message then it simply could not find the shader file itself.
-	//	else
-	//	{
-	//		MessageBox(m_hWnd, vsFilename, L"Missing Shader File", MB_OK);
-	//	}
 	//	return false;
 	//}
-    //Load in the new light pixel shader, Compile the pixel shader code.
-	result = D3DCompileFromFile(
-        L"DiffuseLight_ps.hlsl",
-        NULL, 
-        NULL, 
-        "main", 
-        "ps_5_0", 
-        D3D10_SHADER_ENABLE_STRICTNESS, 
-        NULL,
-        &pixelShaderBuffer, 
-        &errorMessage);
+	//// Create the pixel shader from the buffer.
+	//result = pDevice->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
 	//if(FAILED(result))
 	//{
-	//	// If the shader failed to compile it should have writen something to the error message.
-	//	if(errorMessage)
-	//	{
-	//		OutputShaderErrorMessage(errorMessage, m_hWnd, psFilename);
-	//	}
-	//	// If there was nothing in the error message then it simply could not find the file itself.
-	//	else
-	//	{
-	//		MessageBox(m_hWnd, psFilename, L"Missing Shader File", MB_OK);
-	//	}
-
 	//	return false;
 	//}
 
+    // TODO:*********************************************
+    // TODO: Try using D3DReadFileToBlob instead here:
+    // TODO:*********************************************
+    // Initialize the pointers this function will use to null.
+	comptr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer;
+    // Compile the vertex shader code.
+	HRESULT hr = D3DReadFileToBlob( 
+        vsFilename.c_str(), 
+        pVertexShaderBuffer.GetAddressOf() );
+	RETURN_IF_FAILED( hr );
+	// Compile the pixel shader code.
+	hr = D3DReadFileToBlob( 
+		psFilename.c_str(), 
+		pPixelShaderBuffer.GetAddressOf() );
 	// Create the vertex shader from the buffer.
-	result = pDevice->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
-	if(FAILED(result))
-	{
-		return false;
-	}
-
+	hr = pDevice->CreateVertexShader(
+		pVertexShaderBuffer->GetBufferPointer(),
+		pVertexShaderBuffer->GetBufferSize(),
+		NULL,
+		m_vertexShader.GetAddressOf() );
+	RETURN_IF_FAILED( hr );
 	// Create the pixel shader from the buffer.
-	result = pDevice->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
-	if(FAILED(result))
-	{
-		return false;
-	}
-
+	hr = pDevice->CreatePixelShader(
+		pPixelShaderBuffer->GetBufferPointer(),
+		pPixelShaderBuffer->GetBufferSize(),
+		NULL,
+		m_pixelShader.GetAddressOf() );
+	RETURN_IF_FAILED( hr );
+	
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
 	polygonLayout[0].SemanticName = "POSITION";
@@ -128,10 +153,8 @@ bool Shader_Lighting::InitializeShader(
 	polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	polygonLayout[1].InstanceDataStepRate = 0;
-// One of the major changes to the shader initialization is here in the polygonLayout. 
-// We add a third element for the normal vector that will be used for lighting. 
-// The semantic name is NORMAL and the format is the regular DXGI_FORMAT_R32G32B32_FLOAT which handles 3 floats for the x, y, and z of the normal vector. The layout will now match the expected input to the HLSL vertex shader.
 
+// add a third element for the normal vector for lighting
 	polygonLayout[2].SemanticName = "NORMAL";
 	polygonLayout[2].SemanticIndex = 0;
 	polygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -144,7 +167,7 @@ bool Shader_Lighting::InitializeShader(
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	// Create the vertex input layout.
-	result = pDevice->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), 
+	result = pDevice->CreateInputLayout(polygonLayout, numElements, pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), 
 					   &m_layout);
 	if(FAILED(result))
 	{
@@ -152,11 +175,10 @@ bool Shader_Lighting::InitializeShader(
 	}
 
 	// Release the vertex shader buffer and pixel shader buffer since they are no longer needed.
-	vertexShaderBuffer->Release();
-	vertexShaderBuffer = 0;
-
-	pixelShaderBuffer->Release();
-	pixelShaderBuffer = 0;
+	//vertexShaderBuffer->Release();
+	//vertexShaderBuffer = 0;
+	//pixelShaderBuffer->Release();
+	//pixelShaderBuffer = 0;
 
 	// Create a texture sampler state description.
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;

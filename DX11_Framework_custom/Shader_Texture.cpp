@@ -55,7 +55,6 @@ bool Shader_Texture::InitializeShader(
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
   	auto polygonLayout = VertexPositionUVNormalType::CreateLayoutDescriptions();
-    // TODO: CHANGE this to VertexPositionUVNormalType
 
 	// Create the vertex input layout.
 	hr = pDevice->CreateInputLayout( polygonLayout.data(), polygonLayout.size(),
