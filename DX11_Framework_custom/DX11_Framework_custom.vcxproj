@@ -157,7 +157,6 @@
     <ClCompile Include="MessageBox_Title.cpp" />
     <ClCompile Include="Overlay_Base.cpp" />
     <ClCompile Include="Overlay_Title.cpp" />
-    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shader_Color.cpp" />
     <ClCompile Include="COMHandler.cpp" />
@@ -169,7 +168,6 @@
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Model_Colored.cpp" />
     <ClCompile Include="Model_Textured.cpp" />
     <ClCompile Include="Overlay.cpp" />
@@ -202,7 +200,6 @@
     <ClInclude Include="MessageBox_Title.h" />
     <ClInclude Include="Overlay_Base.h" />
     <ClInclude Include="Overlay_Title.h" />
-    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />
     <ClInclude Include="COMHandler.h" />

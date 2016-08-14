@@ -24,6 +24,11 @@ Actor_Player_Alt::~Actor_Player_Alt()
 {
 }
 
+void Actor_Player_Alt::SetPosition( const DirectX::XMFLOAT3 & Position )
+{
+	m_worldSpecs.position = Position;
+}
+
 void Actor_Player_Alt::Update( const Input & UserInput )
 {
 	// Initialize the values to be used for direction

@@ -36,16 +36,6 @@ public:
 	const XMFLOAT3 &GetPosition()const { return m_worldSpecs.position; }
 	const XMFLOAT3 &GetRotation()const { return m_worldSpecs.orientation; }
 
-	////////////////
-	// MOVE LOGIC //
-	////////////////
-	virtual void GetInput( const Input& pInput, int randI, float randF ) = 0;
-
-	// |	: private inheritance?  Probably should be protected,
-	// V   	  or they should be removed from parent all together	  
-private:
-	virtual void Move( const XMFLOAT3 &offset ) = 0;
-	virtual void Rotate( const XMFLOAT3 &rotation ) = 0;
 
 protected:
 	eModType m_modType;

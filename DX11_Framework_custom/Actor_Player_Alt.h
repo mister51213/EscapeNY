@@ -16,6 +16,7 @@ public:
 		eModType modType = CUBE_TEXTURED );
 	~Actor_Player_Alt();
 
+	void SetPosition( const DirectX::XMFLOAT3 &Position );
 	void Update( const Input &UserInput);
 	
 private:

@@ -17,14 +17,15 @@ public:
 	// Use Initialize to initialize anything that needs initializing.
 	void Initialize( 
 		Graphics *pGraphics,
-		class Game *const pGame ) override;
+		class Game *const pGame,
+		Camera *const pCamera ) override;
 
 	// Use UpdateFrame to update actors, camera and anything else that 
 	// needs updating.
-	void UpdateFrame( const Input &InputRef ) override;
+	void UpdateScene( const Input &InputRef, Camera *const pCamera ) override;
 
 	// Use RenderFrame to render the list of actors or other game objects
-	void RenderFrame() override;
+	void RenderFrame( const GameView &GameViewRef ) override;
 
 	const TestBoard &GetBoard();
 
@@ -36,10 +37,8 @@ private: // Private members
 	// delete
 	Game *m_pGame;
 	Graphics *m_pGraphics;
-	Camera m_camera;
-	GameView m_GameView;
+	Camera *m_pCamera;
 
-	ResourceManager m_resource;
 
 	Overlay m_Overlay;
 	TestBoard m_board;
