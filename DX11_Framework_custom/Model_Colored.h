@@ -13,5 +13,5 @@ public:
 	std::vector<D3D11_INPUT_ELEMENT_DESC> GetInputElementDescriptions() const override;
 
 private:
-	std::vector<VertexPositionColorType> m_vertices;
+	std::vector<VertexPositionColorNormalType> m_vertices;
 };

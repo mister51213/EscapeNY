@@ -170,6 +170,15 @@ struct VertexPositionColorType
 	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
 };
 
+struct VertexPositionColorNormalType
+{
+	DirectX::XMFLOAT3 position;
+	DirectX::XMFLOAT4 color;
+   	DirectX::XMFLOAT3 normal;
+
+	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
+};
+
 // Position and texture coordinates
 struct VertexPositionUVType
 {

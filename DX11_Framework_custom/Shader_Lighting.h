@@ -18,8 +18,8 @@ public:
 
     bool InitializeShader(
         ID3D11Device* pDevice,
-        LPCWSTR& vsFilename,
-        LPCWSTR& psFilename/*,
+        const std::wstring & vsFilename,
+        const std::wstring & psFilename/*,
         HWND& hwnd*/);
 
     void OutputShaderErrorMessage(ID3DBlob * errorMessage, HWND & hwnd, LPCWSTR & shaderFilename);
@@ -42,9 +42,26 @@ public:
         XMMATRIX, 
         ID3D11ShaderResourceView*, 
         XMFLOAT3,  //TODO: should be D3DXVECTOR3
-        XMFLOAT4); //TODO: should be D3DXVECTOR4
+        XMFLOAT4) const; //TODO: should be D3DXVECTOR4
 
     void RenderShader(ID3D11DeviceContext* deviceContext, int indexCount) const;
+    void RenderShader(ID3D11DeviceContext*)const override {}
+    bool SetShaderParameters(
+        ID3D11DeviceContext*,
+		const XMMATRIX &,
+		const XMMATRIX &,
+		const XMMATRIX &,
+        ID3D11ShaderResourceView*)const override {
+        return false;
+    }
+
+    // DUMMY DECLARATION
+  //  bool InitializeShader(
+		//ID3D11Device*,
+		//const std::wstring &,
+  //      const std::wstring &) override {
+  //      return false;
+  //  }
 private:
     // child-specfic members
 	comptr<ID3D11SamplerState> m_sampleState;

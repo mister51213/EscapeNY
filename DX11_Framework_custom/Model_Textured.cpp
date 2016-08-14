@@ -11,7 +11,7 @@ bool Model_Textured::Initialize(
     const PrimitiveFactory &PrimMaker, const Graphics & Gfx)
 {
 	// Set the stride for this model type
-	m_Stride = sizeof( VertexPositionUVType );
+	m_Stride = sizeof( VertexPositionUVNormalType );
 
 	// Create the vertex array.
 	auto verts = PrimMaker.GetVertices();

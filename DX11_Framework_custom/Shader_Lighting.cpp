@@ -1,11 +1,15 @@
 #include "Shader_Lighting.h"
 
-Shader_Lighting::Shader_Lighting(){}
+Shader_Lighting::Shader_Lighting()
+:
+Shader(L"Shaders/lighting_vs.cso", L"Shaders/lighting_vs.cso"),
+m_hWnd(NULL) // need this bc not in Initialize()
+{}
 
 Shader_Lighting::Shader_Lighting(HWND& hWnd)
     :
 Shader(L"Shaders/lighting_vs.cso", L"Shaders/lighting_vs.cso"),
-m_hWnd(hWnd) // need this bc not in Initialize()
+m_hWnd(NULL) // need this bc not in Initialize()
 // TODO: remember to manually copy and paste cso's into Shader Folder
 {
     // we are using comptrs, set to null by default, so no need for these
@@ -27,8 +31,8 @@ Shader_Lighting::~Shader_Lighting()
 // TODO: Add HWND in above function too. Here HWND has been added.
 bool Shader_Lighting::InitializeShader(
     ID3D11Device * pDevice, 
-    LPCWSTR& vsFilename, 
-    LPCWSTR& psFilename/*,
+    const std::wstring & vsFilename, 
+    const std::wstring & psFilename/*,
     HWND& hwnd*/) // HWND member is initialized in concstructor
 {
 	HRESULT result;
@@ -54,7 +58,7 @@ bool Shader_Lighting::InitializeShader(
 
 	// Compile the vertex shader code.
 	result = D3DCompileFromFile(
-        vsFilename, 
+        L"DiffuseLight_vs.hlsl",
         NULL, 
         NULL, 
         "main", 
@@ -63,24 +67,23 @@ bool Shader_Lighting::InitializeShader(
         NULL, 
         &vertexShaderBuffer, 
         &errorMessage);
-	if(FAILED(result))
-	{
-		// If the shader failed to compile it should have writen something to the error message.
-		if(errorMessage)
-		{
-			OutputShaderErrorMessage(errorMessage, m_hWnd, vsFilename);
-		}
-		// If there was nothing in the error message then it simply could not find the shader file itself.
-		else
-		{
-			MessageBox(m_hWnd, vsFilename, L"Missing Shader File", MB_OK);
-		}
-
-		return false;
-	}
+	//if(FAILED(result))
+	//{
+	//	// If the shader failed to compile it should have writen something to the error message.
+	//	if(errorMessage)
+	//	{
+	//		OutputShaderErrorMessage(errorMessage, m_hWnd, vsFilename);
+	//	}
+	//	// If there was nothing in the error message then it simply could not find the shader file itself.
+	//	else
+	//	{
+	//		MessageBox(m_hWnd, vsFilename, L"Missing Shader File", MB_OK);
+	//	}
+	//	return false;
+	//}
     //Load in the new light pixel shader, Compile the pixel shader code.
 	result = D3DCompileFromFile(
-        psFilename, 
+        L"DiffuseLight_ps.hlsl",
         NULL, 
         NULL, 
         "main", 
@@ -89,21 +92,21 @@ bool Shader_Lighting::InitializeShader(
         NULL,
         &pixelShaderBuffer, 
         &errorMessage);
-	if(FAILED(result))
-	{
-		// If the shader failed to compile it should have writen something to the error message.
-		if(errorMessage)
-		{
-			OutputShaderErrorMessage(errorMessage, m_hWnd, psFilename);
-		}
-		// If there was nothing in the error message then it simply could not find the file itself.
-		else
-		{
-			MessageBox(m_hWnd, psFilename, L"Missing Shader File", MB_OK);
-		}
+	//if(FAILED(result))
+	//{
+	//	// If the shader failed to compile it should have writen something to the error message.
+	//	if(errorMessage)
+	//	{
+	//		OutputShaderErrorMessage(errorMessage, m_hWnd, psFilename);
+	//	}
+	//	// If there was nothing in the error message then it simply could not find the file itself.
+	//	else
+	//	{
+	//		MessageBox(m_hWnd, psFilename, L"Missing Shader File", MB_OK);
+	//	}
 
-		return false;
-	}
+	//	return false;
+	//}
 
 	// Create the vertex shader from the buffer.
 	result = pDevice->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
@@ -341,7 +344,7 @@ bool Shader_Lighting::Render(
     XMMATRIX projectionMatrix, 
     ID3D11ShaderResourceView* texture, 
     XMFLOAT3 lightDirection, 
-    XMFLOAT4 diffuseColor)
+    XMFLOAT4 diffuseColor) const
 {
     	bool result;
 	// Set the shader parameters that it will use for rendering.
@@ -377,7 +380,7 @@ void Shader_Lighting::RenderShader(ID3D11DeviceContext * deviceContext, int inde
 	deviceContext->PSSetSamplers( 0, 1, m_sampleState.GetAddressOf() );
 
   	// Render the triangle.
-	deviceContext->DrawIndexed(indexCount, 0, 0);
+	//deviceContext->DrawIndexed(indexCount, 0, 0);
 
 	return;
 }
