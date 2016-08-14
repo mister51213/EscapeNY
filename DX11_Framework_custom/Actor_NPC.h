@@ -5,21 +5,17 @@
 class Actor_NPC : public Actor
 {
 public:
-    Actor_NPC() {}
+	Actor_NPC() = default;
 
-    Actor_NPC(
-        //std::shared_ptr<Input> pInput,
-        ModelSpecs_W worldSpecs,
-        eTexture tex,
-        ModelSpecs_L localSpecs,
-        eModType mod = CUBE_TEXTURED) :
-		// NOTE: modType is already default initialized in the signature,
-		// TEST: modType = CUBE_TEXTURED below to just modType
-		// Actor( worldSpecs, tex, localSpecs, modType ) // base constructor
-		Actor(worldSpecs, tex, localSpecs, mod) // base constructor
-    { }
+	Actor_NPC(
+		const ModelSpecs_W &worldSpecs,
+		eTexture tex,
+		const ModelSpecs_L &localSpecs,
+		eModType mod = CUBE_TEXTURED );
 
 public:
+	// Leaving these functions here for you to test with, 
+	// please remember to put in CPP files when done.
     void GetInput(const Input& pInput, int randI, float randF) override
     {
         //srand( static_cast<unsigned int>( time( nullptr ) ) );
@@ -67,12 +63,10 @@ public:
     }
 
 private:
-    void Move(XMFLOAT3 offset) override
+    void Move( const XMFLOAT3 &offset) override
     { m_worldSpecs.position += offset; } 
 
-    void Rotate(XMFLOAT3 rotation) override
+    void Rotate( const XMFLOAT3 &rotation) override
     { m_worldSpecs.orientation += rotation; }
 
-private: // TODO: only in Player class
-    std::shared_ptr<Input> m_pInput;
 };
