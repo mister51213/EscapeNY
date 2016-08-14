@@ -14,65 +14,43 @@
 class Actor
 {
 public:
-    Actor() {}
+	Actor() = default;
 
-    Actor(
+	Actor(
 		const ModelSpecs_W &worldSpecs,
 		eTexture tex,
 		const ModelSpecs_L &localSpecs,
-		eModType modType = CUBE_TEXTURED )
-    {
-        m_worldSpecs = worldSpecs;
-        m_localSpecs = localSpecs;
-        m_texIndex = tex;
-        m_modType = modType;
-    }
+		eModType modType = CUBE_TEXTURED );
 
-    ///////////////
-    // ACCESSORS //
-    ///////////////
-    eModType GetModelType()const { return m_modType; }
+	///////////////
+	// ACCESSORS //
+	///////////////
+	eModType GetModelType()const { return m_modType; }
+	eTexture GetTexIndex() const { return m_texIndex; }
+	const ModelSpecs_W &GetWorldSpecs() const { return m_worldSpecs; }
+	const ModelSpecs_L &GetLocalSpecs() const { return m_localSpecs; }
 
-    ModelSpecs_W GetWorldSpecs() const
-    { return m_worldSpecs; }
+	// TODO: move these into a child class, they are redundant for most
+	// If they are redundant, wouldn't you want them in parent, so you 
+	// don't have to keep remaking the same function?
+	const XMFLOAT3 &GetPosition()const { return m_worldSpecs.position; }
+	const XMFLOAT3 &GetRotation()const { return m_worldSpecs.orientation; }
 
-    ModelSpecs_L GetLocalSpecs() const
-    { return m_localSpecs; }
-    
-    eTexture GetTexIndex() const
-    { return m_texIndex; }
+	////////////////
+	// MOVE LOGIC //
+	////////////////
+	virtual void GetInput( const Input& pInput, int randI, float randF ) = 0;
 
-    std::shared_ptr<Model> GetModel() const
-    { return m_pModel; }
-
-	void SetModel(const std::shared_ptr<Model>& pMod)
-    { m_pModel = pMod; }
-
-    // TODO: move these into a child class, they are redundant for most
-  	const XMFLOAT3 &GetPosition()const
-	{ return m_worldSpecs.position; }
-
-	const XMFLOAT3 &GetRotation()const
-	{ return m_worldSpecs.orientation; }
-
-    ////////////////
-    // MOVE LOGIC //
-    ////////////////
-    virtual void GetInput(const Input& pInput, int randI, float randF) = 0;
-
+	// |	: private inheritance?  Probably should be protected,
+	// V   	  or they should be removed from parent all together	  
 private:
-    // TODO: take this OUT of parent (Some classes wont need to move, like walls)
-    virtual void Move(XMFLOAT3 offset) = 0;
-            //{ m_worldSpecs.position += offset; } 
-    virtual void Rotate(XMFLOAT3 rotation) = 0;
-            //{ m_worldSpecs.orientation += rotation; }
+	virtual void Move( const XMFLOAT3 &offset ) = 0;
+	virtual void Rotate( const XMFLOAT3 &rotation ) = 0;
 
 protected:
-    eModType m_modType;
-    eTexture m_texIndex;
+	eModType m_modType;
+	eTexture m_texIndex;
 
 	ModelSpecs_W m_worldSpecs;
-    ModelSpecs_L m_localSpecs;
-
-    std::shared_ptr<Model> m_pModel;  	
+	ModelSpecs_L m_localSpecs;
 };

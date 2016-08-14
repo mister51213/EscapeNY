@@ -43,11 +43,11 @@ public:
     } 
 
 private:
-    void Move(XMFLOAT3 offset) override
-    { m_worldSpecs.position += offset; } 
+	void Move( const XMFLOAT3 &offset ) override
+	{ m_worldSpecs.position += offset; }
 
-    void Rotate(XMFLOAT3 rotation) override
-    { m_worldSpecs.orientation += rotation; }
+	void Rotate( const XMFLOAT3 &rotation ) override
+	{ m_worldSpecs.orientation += rotation; }
 
 private:
     //std::shared_ptr<Input> m_pInput;
