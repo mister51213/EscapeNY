@@ -151,7 +151,8 @@
     <ClCompile Include="Algorithm_Spiral3D.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GameView.cpp" />
-    <ClCompile Include="MazeGame.cpp" />
+    <ClCompile Include="Game_FPS.cpp" />
+    <ClCompile Include="Game_Maze.cpp" />
     <ClCompile Include="Algorithm_Maze.cpp" />
     <ClCompile Include="MessageBox_Goal.cpp" />
     <ClCompile Include="MessageBox_Title.cpp" />
@@ -190,11 +191,12 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="GameView.h" />
+    <ClInclude Include="Game_FPS.h" />
     <ClInclude Include="IGameState.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="IOverlay.h" />
     <ClInclude Include="ISubGame.h" />
-    <ClInclude Include="MazeGame.h" />
+    <ClInclude Include="Game_Maze.h" />
     <ClInclude Include="Algorithm_Maze.h" />
     <ClInclude Include="MessageBox_Goal.h" />
     <ClInclude Include="MessageBox_Title.h" />

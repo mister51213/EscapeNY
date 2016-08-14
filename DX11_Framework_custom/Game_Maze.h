@@ -7,12 +7,12 @@
 #include "Actor_Player_Alt.h"
 #include "ResourceManager.h"
 
-class MazeGame:
+class Game_Maze:
 	public ISubGame
 {
 public:
-	MazeGame();
-	~MazeGame();
+	Game_Maze() = default;
+	~Game_Maze()= default;
 
 	// Use Initialize to initialize anything that needs initializing.
 	void Initialize( 

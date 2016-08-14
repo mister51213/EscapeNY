@@ -1,15 +1,7 @@
-#include "MazeGame.h"
+#include "Game_Maze.h"
 #include "Game.h"
 #include "Algorithm_Random.h"
 
-MazeGame::MazeGame()
-{
-}
-
-
-MazeGame::~MazeGame()
-{
-}
 
 // Game and Camera are passed in as const pointer since we are wanting to 
 // make a separate copy and we aren't using the constructor to initialize
@@ -17,7 +9,7 @@ MazeGame::~MazeGame()
 // would be like const &.  It assures that the pointers passed in won't be 
 // changed to point to something else, though the data that they point to 
 // can be changed unless you use at least const *.
-void MazeGame::Initialize( 
+void Game_Maze::Initialize(
 	Graphics *pGraphics,
 	class Game *const pGame,
 	Camera *const pCamera )
@@ -39,7 +31,7 @@ void MazeGame::Initialize(
 	reset();
 }
 
-void MazeGame::UpdateScene( const Input &InputRef, Camera *const pCamera )
+void Game_Maze::UpdateScene( const Input &InputRef, Camera *const pCamera )
 {
 	m_player.GetInput( InputRef );
 
@@ -77,7 +69,7 @@ void MazeGame::UpdateScene( const Input &InputRef, Camera *const pCamera )
 	}
 }
 
-void MazeGame::reset()
+void Game_Maze::reset()
 {
 	// Must clear draw list before using it during reset, 
 	// clearing it when already empty doesn't hurt anything
@@ -133,7 +125,7 @@ void MazeGame::reset()
 	m_endReached = false;
 }
 
-void MazeGame::RenderFrame( const GameView &GameViewRef )
+void Game_Maze::RenderFrame( const GameView &GameViewRef )
 {
 	GameViewRef.UpdateView( m_pActorDrawList );
 
@@ -142,7 +134,7 @@ void MazeGame::RenderFrame( const GameView &GameViewRef )
 	m_Overlay.Render( *m_pGraphics );
 }
 
-const TestBoard & MazeGame::GetBoard()
+const TestBoard & Game_Maze::GetBoard()
 {
 	return m_board;
 }
