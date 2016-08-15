@@ -69,33 +69,10 @@ bool Shader_Lighting::InitializeShader(
 		m_pixelShader.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 	
-    // TODO: use Utilities global function VertexPositionUVNormalType ....
-	// Create the vertex input layout description.
-	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
-	polygonLayout[0].SemanticName = "POSITION";
-	polygonLayout[0].SemanticIndex = 0;
-	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT; // TODO: should be DXGI_FORMAT_R32G32B32A32_FLOAT to match shader?
-	polygonLayout[0].InputSlot = 0;
-	polygonLayout[0].AlignedByteOffset = 0;
-	polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[0].InstanceDataStepRate = 0;
-
-	polygonLayout[1].SemanticName = "TEXCOORD";
-	polygonLayout[1].SemanticIndex = 0;
-	polygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-	polygonLayout[1].InputSlot = 0;
-	polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[1].InstanceDataStepRate = 0;
-
-// add a third element for the normal vector for lighting
-	polygonLayout[2].SemanticName = "NORMAL";
-	polygonLayout[2].SemanticIndex = 0;
-	polygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[2].InputSlot = 0;
-	polygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[2].InstanceDataStepRate = 0;
+    // Instantiate element description vector w/ our global utility, then 
+    // copy it into a raw array for being passed further down
+    vector<D3D11_INPUT_ELEMENT_DESC> polyV = VertexPositionUVNormalType::CreateLayoutDescriptions();
+    std::copy(polyV.begin(), polyV.end(), polygonLayout);
 
 	// Get a count of the elements in the layout.
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
