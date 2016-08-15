@@ -129,68 +129,57 @@ After transforming the vertices in the vertex shader and passing the results
 class Shader
 {
 public:
-    Shader();
-    Shader(const std::wstring &vs, const std::wstring &ps );
+	Shader() = default;
 
-protected:
 	struct MatrixBufferType
 	{
 		XMMATRIX world;
 		XMMATRIX view;
 		XMMATRIX projection;
 	};
+	struct LightBufferType
+	{
+		XMFLOAT4 diffuseColor;
+		XMFLOAT3 lightDirection; // <- Could make XMFLOAT4 and make the
+								 // .w component 0.f by default, would make
+								 // the buffer a multiple of 16 and not have
+								 // to have the extra float for padding below
+
+		// Added extra padding so structure is a multiple of 16 for 
+		// CreateBuffer function requirements.
+		float padding;  
+	};
 
 public:
 	bool Initialize( ID3D11Device* pDevice );
 
-	// CODE_CHANGE: made function const
-	bool Render(
-		ID3D11DeviceContext* deviceContext,
-		const XMMATRIX & worldMatrix,
-		const XMMATRIX & viewMatrix,
-		const XMMATRIX & projectionMatrix,
-		ID3D11ShaderResourceView* texture = nullptr )const
-	{
-		// Set the shader parameters to use for rendering.
+	bool UpdateTransformBuffer(
+		ID3D11DeviceContext *pContext,
+		const MatrixBufferType &BufferData )const;
+	bool UpdateLightBuffer(
+		ID3D11DeviceContext *pContext,
+		const LightBufferType &BufferData )const;
+	void Render(
+		ID3D11DeviceContext* pContext, 
+		ID3D11ShaderResourceView *pTextureView )const;
+	
+	
+	
+protected:	
+	bool UpdateConstantBuffer( 
+		ID3D11DeviceContext *pContext,
+		LPCVOID BufferData,
+		size_t BufferSize,
+		ID3D11Buffer *pConstantBuffer)const;
+	bool InitializeShaderCommon(
+		ID3D11Device* pDevice,
+		const std::wstring & vsFilename,
+		const std::wstring & psFilename );
 
-		// NOTE: texture is NULL by default and will be set only in CHILD texture class.
-		bool result = SetShaderParameters(
-			deviceContext,
-			worldMatrix,
-			viewMatrix,
-			projectionMatrix,
-			texture );
-		RETURN_IF_FALSE( result );
-
-		// Now render the prepared buffers with the shader.
-		RenderShader( deviceContext );
-
-		return true;
-	}
-
-	// CODE_CHANGE: made function const
-	virtual void RenderShader( ID3D11DeviceContext* )const = 0;
-
-	// CODE_CHANGE: made function const
-	virtual bool SetShaderParameters(
-		ID3D11DeviceContext*,
-		const XMMATRIX &,
-		const XMMATRIX &,
-		const XMMATRIX &,
-		ID3D11ShaderResourceView* )const = 0;
-
-public:
-	virtual bool InitializeShader(
-		ID3D11Device*,
-		const std::wstring &,
-		const std::wstring & ) = 0;
-
-public:
+private:
 	comptr<ID3D11VertexShader> m_vertexShader;
 	comptr<ID3D11PixelShader> m_pixelShader;
 	comptr<ID3D11InputLayout> m_layout;
-	comptr<ID3D11Buffer> m_matrixBuffer;
-
-	std::wstring m_vsFilename;
-	std::wstring m_psFilename;
+	comptr<ID3D11Buffer> m_matrixBuffer, m_lightBuffer;
+	comptr<ID3D11SamplerState> m_sampleState;
 };

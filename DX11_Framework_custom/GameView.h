@@ -7,13 +7,9 @@
 #include "Camera.h"
 #include "Model_Textured.h"
 #include "Model_Colored.h"
-#include "Model.h"
 #include "Graphics.h"
-#include "Shader_Color.h"
 #include "Texture.h"
-#include "Shader_Texture.h"
-#include "Shader_Lighting.h"
-#include "Actor.h"
+#include "Shader.h"
 #include "Actor_Player.h"
 #include "Actor_NPC.h"
 #include <string>
@@ -32,16 +28,16 @@ public:
 private:
 	void initTexturePool();
 	void initializeShader();
-	void drawModel( const Actor& actor, const FX_Light& light) const;
+	void drawModel( 
+		const Actor& actor,
+		Shader::MatrixBufferType &Transforms ) const;
 
 private:
     Graphics* m_pGfx;
     D3DGraphics* m_pD3D;
 
     std::shared_ptr<Camera> m_pCam;
-	Shader_Texture m_shader_Texture;
-    Shader_Color m_shader_Color;
-    Shader_Lighting m_shader_Lighting;
+    Shader m_shader;
 
     vector<Texture> m_TexturePool;
     vector<std::shared_ptr<Model>> m_ModelPool;

@@ -172,13 +172,13 @@ ModelSpecs_L::ModelSpecs_L( const XMFLOAT3 & Center, const XMFLOAT3 & Orientatio
 
 std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionColorType::CreateLayoutDescriptions()
 {
-	///////////////////////////////////////////////////////////////////////////////////
-	// Create the layout of the VERTEX DATA that will be processed by the shader.    //
-	// We indicate the usage of each element in the layout to the shader by labeling //
-	// the first one POSITION and the second one COLOR.                              //
-	///////////////////////////////////////////////////////////////////////////////////
+	return std::vector<D3D11_INPUT_ELEMENT_DESC>
+	{
+		{ "POSITION", 0, float3Format, 0, 0, vertexDataType, 0 },
+		{ "COLOR", 0, float4Format, 0, appendAlignment, vertexDataType, 0 }
+	};
 
-	std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
+	/*std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
 	eDesc[ 0 ].SemanticName = "POSITION";
 	eDesc[ 0 ].SemanticIndex = 0;
 	eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -195,12 +195,17 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionColorType::CreateLayoutDescr
 	eDesc[ 1 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	eDesc[ 1 ].InstanceDataStepRate = 0;
 
-	return eDesc;
+	return eDesc;*/
 }
 
 std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionUVType::CreateLayoutDescriptions()
 {
-	std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
+	return std::vector<D3D11_INPUT_ELEMENT_DESC>
+	{
+		{ "POSITION", 0, float3Format, 0, 0, vertexDataType, 0 },
+		{ "TEXCOORD", 0, float2Format, 0, appendAlignment, vertexDataType, 0 }
+	};
+	/*std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
 	eDesc[ 0 ].SemanticName = "POSITION";
 	eDesc[ 0 ].SemanticIndex = 0;
 	eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -217,12 +222,19 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionUVType::CreateLayoutDescript
 	eDesc[ 1 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	eDesc[ 1 ].InstanceDataStepRate = 0;
 
-	return eDesc;
+	return eDesc;*/
 }
 
 std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionUVNormalType::CreateLayoutDescriptions()
 {
-	std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 3 );
+	return std::vector<D3D11_INPUT_ELEMENT_DESC>
+	{
+		{ "POSITION", 0, float3Format, 0, 0, vertexDataType , 0 },
+		{ "TEXCOORD", 0, float2Format, 0, appendAlignment, vertexDataType, 0 },
+		{ "NORMAL", 0, float3Format, 0, appendAlignment, vertexDataType, 0 }
+	};
+
+	/*std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 3 );
 	eDesc[ 0 ].SemanticName = "POSITION";
 	eDesc[ 0 ].SemanticIndex = 0;
 	eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -247,12 +259,18 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionUVNormalType::CreateLayoutDe
 	eDesc[ 2 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	eDesc[ 2 ].InstanceDataStepRate = 0;
 
-	return eDesc;
+	return eDesc;*/
 }
 
 std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionNormalType::CreateLayoutDescriptions()
 {
-	std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
+	return std::vector<D3D11_INPUT_ELEMENT_DESC>
+	{
+		{ "POSITION", 0, float3Format, 0, 0, vertexDataType, 0 },
+		{ "NORMAL", 0, float3Format, 0, appendAlignment, vertexDataType, 0 }
+	};
+
+	/*std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 2 );
 	eDesc[ 0 ].SemanticName = "POSITION";
 	eDesc[ 0 ].SemanticIndex = 0;
 	eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -269,18 +287,19 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionNormalType::CreateLayoutDesc
 	eDesc[ 1 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	eDesc[ 1 ].InstanceDataStepRate = 0;
 
-	return eDesc;
+	return eDesc;*/
 }
 
 std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionColorNormalType::CreateLayoutDescriptions()
 {
-	///////////////////////////////////////////////////////////////////////////////////
-	// Create the layout of the VERTEX DATA that will be processed by the shader.    //
-	// We indicate the usage of each element in the layout to the shader by labeling //
-	// the first one POSITION and the second one COLOR.                              //
-	///////////////////////////////////////////////////////////////////////////////////
+	return std::vector<D3D11_INPUT_ELEMENT_DESC>
+	{
+		{ "POSITION", 0, float3Format, 0, 0, vertexDataType, 0 },
+		{ "COLOR", 0, float4Format, 0, appendAlignment, vertexDataType, 0 },
+		{ "NORMAL", 0, float3Format, 0, appendAlignment, vertexDataType, 0 }
+	};
 
-	std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 3 );
+	/*std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 3 );
 	eDesc[ 0 ].SemanticName = "POSITION";
 	eDesc[ 0 ].SemanticIndex = 0;
 	eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -305,4 +324,55 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionColorNormalType::CreateLayou
 	eDesc[ 2 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	eDesc[ 2 ].InstanceDataStepRate = 0;
 
-	return eDesc;}
+	return eDesc;*/
+}
+
+std::vector<D3D11_INPUT_ELEMENT_DESC> VertexBufferTypeAllInOne::CreateLayoutDescriptions()
+{
+	std::vector<D3D11_INPUT_ELEMENT_DESC> desc
+	{
+		{ "POSITION", 0, float3Format, 0, 0, vertexDataType , 0},
+		{ "TEXCOORD", 0, float2Format, 0, appendAlignment, vertexDataType, 0},
+		{ "NORMAL", 0, float3Format, 0, appendAlignment, vertexDataType, 0 },
+		{ "COLOR", 0, float4Format, 0, appendAlignment, vertexDataType, 0 }
+	};
+
+	return desc;
+
+	/*std::vector<D3D11_INPUT_ELEMENT_DESC> eDesc( 4 );
+
+	eDesc[ 0 ].SemanticName = "POSITION";
+	eDesc[ 0 ].SemanticIndex = 0;
+	eDesc[ 0 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	eDesc[ 0 ].InputSlot = 0;
+	eDesc[ 0 ].AlignedByteOffset = 0;
+	eDesc[ 0 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	eDesc[ 0 ].InstanceDataStepRate = 0;
+	
+	eDesc[ 1 ].SemanticName = "TEXCOORD";
+	eDesc[ 1 ].SemanticIndex = 0;
+	eDesc[ 1 ].Format = DXGI_FORMAT_R32G32_FLOAT;
+	eDesc[ 1 ].InputSlot = 0;
+	eDesc[ 1 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	eDesc[ 1 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	eDesc[ 1 ].InstanceDataStepRate = 0;
+
+	eDesc[ 2 ].SemanticName = "NORMAL";
+	eDesc[ 2 ].SemanticIndex = 0;
+	eDesc[ 2 ].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	eDesc[ 2 ].InputSlot = 0;
+	eDesc[ 2 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	eDesc[ 2 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	eDesc[ 2 ].InstanceDataStepRate = 0;
+
+	eDesc[ 3 ].SemanticName = "COLOR";
+	eDesc[ 3 ].SemanticIndex = 0;
+	eDesc[ 3 ].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	eDesc[ 3 ].InputSlot = 0;
+	eDesc[ 3 ].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	eDesc[ 3 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	eDesc[ 3 ].InstanceDataStepRate = 0;
+
+	return eDesc;*/
+
+}

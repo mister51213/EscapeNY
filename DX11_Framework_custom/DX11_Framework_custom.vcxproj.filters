@@ -64,6 +64,12 @@
     <Filter Include="Header Files\Overlays">
       <UniqueIdentifier>{430ac553-6859-4297-8064-375504c1d923}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Lights">
+      <UniqueIdentifier>{a75e358a-e26b-4c0b-acf1-3f59f6fb07f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lights">
+      <UniqueIdentifier>{57592ce6-a899-49de-b65b-4bea65f05a86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -104,12 +110,6 @@
     </ClCompile>
     <ClCompile Include="Wic.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader_Color.cpp">
-      <Filter>Source Files\Shader Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader_Texture.cpp">
-      <Filter>Source Files\Shader Files</Filter>
     </ClCompile>
     <ClCompile Include="COMHandler.cpp">
       <Filter>Source Files\Utility Classes</Filter>
@@ -189,8 +189,8 @@
     <ClCompile Include="Game_Maze.cpp">
       <Filter>Source Files\SubGames</Filter>
     </ClCompile>
-    <ClCompile Include="Shader_Lighting.cpp">
-      <Filter>Source Files\Shader Files</Filter>
+    <ClCompile Include="LightSpotBase.cpp">
+      <Filter>Source Files\Lights</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,12 +238,6 @@
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader_Color.h">
-      <Filter>Header Files\Shader Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader_Texture.h">
-      <Filter>Header Files\Shader Files</Filter>
     </ClInclude>
     <ClInclude Include="COMHandler.h">
       <Filter>Header Files\Utility Classes</Filter>
@@ -326,8 +320,20 @@
     <ClInclude Include="Game_Maze.h">
       <Filter>Header Files\SubGames</Filter>
     </ClInclude>
-    <ClInclude Include="Shader_Lighting.h">
-      <Filter>Header Files\Shader Files</Filter>
+    <ClInclude Include="ILightPoint.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="ILight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="ILightDirection.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="ILightSpot.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="LightSpotBase.h">
+      <Filter>Header Files\Lights</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

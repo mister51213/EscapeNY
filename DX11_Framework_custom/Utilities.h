@@ -168,6 +168,12 @@ DirectX::XMMATRIX GetWorldMatrix( const ModelSpecs_W &modSpecs );
 void Transpose( std::vector<XMMATRIX> & matrices );
 
 // Common vertex buffer types and corresponding input element descriptions
+constexpr DWORD appendAlignment = D3D11_APPEND_ALIGNED_ELEMENT;
+constexpr DXGI_FORMAT float2Format = DXGI_FORMAT_R32G32_FLOAT;
+constexpr DXGI_FORMAT float3Format = DXGI_FORMAT_R32G32B32_FLOAT;
+constexpr DXGI_FORMAT float4Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+constexpr D3D11_INPUT_CLASSIFICATION vertexDataType = D3D11_INPUT_PER_VERTEX_DATA;
+
 
 // Position and Color 
 struct VertexPositionColorType
@@ -216,4 +222,16 @@ struct VertexPositionNormalType
 
 	// Input layout descriptions for position, normal and texture coordinates
 	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
+};
+
+struct VertexBufferTypeAllInOne
+{
+	DirectX::XMFLOAT3 position;
+	DirectX::XMFLOAT2 uv;
+	DirectX::XMFLOAT3 normal;
+	DirectX::XMFLOAT4 color;
+
+	// Input layout descriptions for position, texcoord, normals and color
+	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
+
 };

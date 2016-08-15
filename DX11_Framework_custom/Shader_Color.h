@@ -27,20 +27,10 @@ class Shader_Color:public Shader
 {
 
 public:
-	Shader_Color();
-	~Shader_Color();
+	Shader_Color() = default;
+	~Shader_Color() = default;
 
-	virtual bool InitializeShader( 
-        ID3D11Device*, 
-        const std::wstring &,
-        const std::wstring &) override;
-
-	virtual bool SetShaderParameters( 
-        ID3D11DeviceContext*, 
-        const XMMATRIX &, 
-        const XMMATRIX &, 
-        const XMMATRIX &, 
-        ID3D11ShaderResourceView* =0)const override;
+	virtual bool Initialize( ID3D11Device* ) override;
 	
-    virtual void RenderShader( ID3D11DeviceContext* )const override;
+    virtual void Render( ID3D11DeviceContext* pContext )const override;
 };

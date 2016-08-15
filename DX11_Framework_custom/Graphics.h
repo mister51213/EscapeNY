@@ -22,7 +22,6 @@ const UINT g_screenHeight = 600;
 
 // FWD DECLARATION (to avoid circular dependency; Model includes Graphics.h)
 class Model;
-
 class Graphics
 {
 public:

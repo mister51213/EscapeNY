@@ -5,13 +5,10 @@
 class Model_Textured :public Model
 {
 public:
-    Model_Textured();
-	//Model_Textured(XMFLOAT3 pos);
-	~Model_Textured();
+	Model_Textured() = default;
+	~Model_Textured() = default;
 
-	bool Initialize( const PrimitiveFactory &PrimMaker, const Graphics &Gfx )override;
-	std::vector<D3D11_INPUT_ELEMENT_DESC> GetInputElementDescriptions() const override;
-
+	bool Initialize( const PrimitiveFactory &PrimMaker, const Graphics &Gfx )/*override*/;
 private:
-	std::vector<VertexPositionUVNormalType> m_Vertices;
+	std::vector<VertexBufferTypeAllInOne> m_vertices;
 };
