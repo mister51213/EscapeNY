@@ -22,14 +22,6 @@ public:
     Shader();
     Shader(const std::wstring &vs, const std::wstring &ps );
 
-protected:
-	struct MatrixBufferType
-	{
-		XMMATRIX world;
-		XMMATRIX view;
-		XMMATRIX projection;
-	};
-
 public:
 	bool Initialize( ID3D11Device* pDevice );
 

@@ -1,13 +1,6 @@
 #pragma once
 #include "Shader.h"
 
-struct LightBufferType
-	{
-		XMFLOAT4 diffuseColor; // should be XMFLOAT3?
-		XMFLOAT3 lightDirection; // should be XMFLOAT4?
-		float padding;  // Added extra padding so structure is a multiple of 16 for CreateBuffer function requirements.
-	};
-
 class Shader_Lighting : public Shader
 {
 public:
@@ -21,8 +14,6 @@ public:
         ID3D11Device* pDevice,
         const std::wstring & vsFilename,
         const std::wstring & psFilename) override;
-
-    void OutputShaderErrorMessage(ID3DBlob * errorMessage, HWND & hwnd, LPCWSTR & shaderFilename);
 
     bool SetShaderParameters(
         ID3D11DeviceContext* deviceContext,

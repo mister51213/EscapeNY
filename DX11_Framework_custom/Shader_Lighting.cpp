@@ -10,8 +10,8 @@ Shader_Lighting::Shader_Lighting(HWND& hWnd)
     :
 Shader(L"Shaders/DiffuseLight_vs.cso", L"Shaders/DiffuseLight_ps.cso"),
 m_hWnd(NULL) // need this bc not in Initialize()
-// TODO: remember to manually copy and paste cso's into Shader Folder
-{}
+{// TODO: remember to manually copy and paste cso's into Shader Folder
+}
 
 Shader_Lighting::Shader_Lighting(const Shader_Lighting &)
 {}
@@ -26,51 +26,25 @@ bool Shader_Lighting::InitializeShader(
     const std::wstring & psFilename) // HWND member is initialized in constructor
 {
 	HRESULT result;
-	ID3DBlob* errorMessage;
-	//ID3DBlob* vertexShaderBuffer;
-	//ID3DBlob* pixelShaderBuffer;
+    unsigned int numElements;
 
-    D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
-	unsigned int numElements;
-	D3D11_SAMPLER_DESC samplerDesc;
-	D3D11_BUFFER_DESC matrixBufferDesc;
-
-    // Light constant buffer description
-    D3D11_BUFFER_DESC lightBufferDesc;
-	// Initialize the pointers this function will use to null.
-	errorMessage = 0;
-
-    // TODO:*********************************************
-    // TODO: Try using D3DReadFileToBlob instead here:
-    // TODO:*********************************************
     // Initialize the pointers this function will use to null.
 	comptr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer;
-    // Compile the vertex shader code.
-	HRESULT hr = D3DReadFileToBlob( 
-        vsFilename.c_str(), 
-        pVertexShaderBuffer.GetAddressOf() );
+
+    HRESULT hr = D3DReadFileToBlob( vsFilename.c_str(), pVertexShaderBuffer.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
-	// Compile the pixel shader code.
-	hr = D3DReadFileToBlob( 
-		psFilename.c_str(), 
-		pPixelShaderBuffer.GetAddressOf() );
-	// Create the vertex shader from the buffer.
-	hr = pDevice->CreateVertexShader(
-		pVertexShaderBuffer->GetBufferPointer(),
-		pVertexShaderBuffer->GetBufferSize(),
-		NULL,
-		m_vertexShader.GetAddressOf() );
+    hr = D3DReadFileToBlob( psFilename.c_str(), pPixelShaderBuffer.GetAddressOf() );
+    // Create the vertex shader from the buffer.
+	hr = pDevice->CreateVertexShader(pVertexShaderBuffer->
+        GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(),
+		NULL, m_vertexShader.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 	// Create the pixel shader from the buffer.
-	hr = pDevice->CreatePixelShader(
-		pPixelShaderBuffer->GetBufferPointer(),
-		pPixelShaderBuffer->GetBufferSize(),
-		NULL,
-		m_pixelShader.GetAddressOf() );
+	hr = pDevice->CreatePixelShader(pPixelShaderBuffer->GetBufferPointer(),
+        pPixelShaderBuffer->GetBufferSize(),NULL,m_pixelShader.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 	
-    // Instantiate element description vector w/ our global utility, then 
-    // copy it into a raw array for being passed further down
+    D3D11_INPUT_ELEMENT_DESC polygonLayout[3]; // Make vector w/ global utility, copy to array
     vector<D3D11_INPUT_ELEMENT_DESC> polyV = VertexPositionUVNormalType::CreateLayoutDescriptions();
     std::copy(polyV.begin(), polyV.end(), polygonLayout);
 
@@ -78,101 +52,45 @@ bool Shader_Lighting::InitializeShader(
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	// Create the vertex input layout.
-	result = pDevice->CreateInputLayout(polygonLayout, numElements, pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), 
-					   &m_layout);
+	result = pDevice->CreateInputLayout(polygonLayout, numElements, pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), &m_layout);
 	if(FAILED(result))
 	{
 		return false;
 	}
 
-	// Create a texture sampler state description.
-	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.MipLODBias = 0.0f;
-	samplerDesc.MaxAnisotropy = 1;
-	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-	samplerDesc.BorderColor[0] = 0;
-	samplerDesc.BorderColor[1] = 0;
-	samplerDesc.BorderColor[2] = 0;
-	samplerDesc.BorderColor[3] = 0;
-	samplerDesc.MinLOD = 0;
-	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-	// Create the texture sampler state.
+    // SAMPLER DESCRIPTION
+   	D3D11_SAMPLER_DESC samplerDesc;
+    samplerDesc = CreateSamplerDescription();
 	result = pDevice->CreateSamplerState(&samplerDesc, &m_sampleState);
 	if(FAILED(result))
 	{
 		return false;
 	}
 
-	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
-	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
-	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	matrixBufferDesc.MiscFlags = 0;
-	matrixBufferDesc.StructureByteStride = 0;
-
+	// DESCRIPTION for dynamic matrix constant buffer that is in the vertex shader.
+   	D3D11_BUFFER_DESC matrixBufferDesc;
+    matrixBufferDesc = MatrixBufferType::CreateMatrixDescription();
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	result = pDevice->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
 	if(FAILED(result))
 	{
 		return false;
 	}
-// Here we setup the light constant buffer description which will handle the diffuse light color and light direction. Pay attention to the size of the constant buffers, if they are not multiples of 16 you need to pad extra space on to the end of them or the CreateBuffer function will fail. In this case the constant buffer is 28 bytes with 4 bytes padding to make it 32.
 
-	// Setup the description of the light dynamic constant buffer that is in the pixel shader.
-	// Note that ByteWidth always needs to be a multiple of 16 if using D3D11_BIND_CONSTANT_BUFFER or CreateBuffer will fail.
-	lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	lightBufferDesc.ByteWidth = sizeof(LightBufferType);
-	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	lightBufferDesc.MiscFlags = 0;
-	lightBufferDesc.StructureByteStride = 0;
+    /*  If the constant buffer sizes are not multiples of 16, must pad them w extra space  or CreateBuffer() 
+        will fail. In this case the constant buffer is 28 bytes with 4 bytes padding to make it 32. */
 
+    // LIGHT BUFFER DESCRIPTION
+    D3D11_BUFFER_DESC lightBufferDesc;
+    lightBufferDesc = LightBufferType::CreateLightDescription();
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	result = pDevice->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
 	if(FAILED(result))
 	{
 		return false;
 	}
-
 	return true;
     }
-
-void Shader_Lighting::OutputShaderErrorMessage(ID3DBlob* errorMessage, HWND& hwnd, LPCWSTR& shaderFilename)
-{
-	char* compileErrors;
-	unsigned long bufferSize, i;
-	ofstream fout;
-
-	// Get a pointer to the error message text buffer.
-	compileErrors = (char*)(errorMessage->GetBufferPointer());
-
-	// Get the length of the message.
-	bufferSize = errorMessage->GetBufferSize();
-
-	// Open a file to write the error message to.
-	fout.open("shader-error.txt");
-
-	// Write out the error message.
-	for(i=0; i<bufferSize; i++)
-	{fout << compileErrors[i];}
-
-	// Close the file.
-	fout.close();
-
-	// Release the error message.
-	errorMessage->Release();
-	errorMessage = 0;
-
-	// Pop a message up on the screen to notify the user to check the text file for compile errors.
-	MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
-
-	return;
-}
 
 bool Shader_Lighting::SetShaderParameters(
     ID3D11DeviceContext * deviceContext, 
