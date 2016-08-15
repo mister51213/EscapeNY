@@ -188,41 +188,28 @@ LRESULT CALLBACK System::MessageHandler(
 			m_Input->KeyUp( static_cast<unsigned int>( wparam ) );
 			return 0;
 		}
-
 		case WM_INPUT:
 		{
-			// Apparently DefWindowProc needs to be called regardless if this
-			// message is handled, so no break set, just let is fall through.
+			bool discardData = GET_RAWINPUT_CODE_WPARAM( wparam ) & RIM_INPUTSINK;
 
-			bool appInForeground = GET_RAWINPUT_CODE_WPARAM( wparam );
-			
-			UINT dataSize = sizeof(RAWINPUT);
-			
-			RAWINPUT rInput{};
-			
-			auto result = GetRawInputData( reinterpret_cast<HRAWINPUT>( lparam ), RID_INPUT, &rInput, &dataSize, sizeof( RAWINPUTHEADER ) );
-
-			int x = 0, y = 0;
-			x = rInput.data.mouse.lLastX;
-			y = rInput.data.mouse.lLastY;
-
-			m_Input->OnMouseMove( x, y );
-
-			if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_1_DOWN )
+			if( !discardData )
 			{
-				m_Input->OnLeftDown(x, y);
+				RAWINPUT rInput{};
+				UINT dataSize = sizeof( RAWINPUT );
+
+				auto result = GetRawInputData(
+					reinterpret_cast<HRAWINPUT>( lparam ),
+					RID_INPUT,
+					&rInput,
+					&dataSize,
+					sizeof( RAWINPUTHEADER ) );
+				m_Input->OnMouseInput( rInput.data.mouse );
 			}
-			else if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_1_UP )
+			else
 			{
-				m_Input->OnLeftUp(x, y);
-			}
-			if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_2_DOWN )
-			{
-				m_Input->OnRightDown( x, y );
-			}
-			else if( rInput.data.mouse.usButtonFlags & RI_MOUSE_BUTTON_2_UP )
-			{
-				m_Input->OnRightUp( x, y );
+				// If data was sent while window not in foreground
+				// we'll just let windows handle it
+				return DefWindowProc( hwnd, umsg, wparam, lparam );
 			}
 		}
 

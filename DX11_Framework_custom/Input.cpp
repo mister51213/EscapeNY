@@ -53,40 +53,28 @@ void Input::FlushRelativeData()
 	m_relY = 0;
 }
 
-void Input::OnLeftDown( int RelativeX, int RelativeY )
+void Input::OnMouseInput( const RAWMOUSE & RawMouseInput )
 {
-	m_leftDown = true;
-}
+	// Store any relative mouse movements from last frame
+	m_relX = RawMouseInput.lLastX;
+	m_relY = RawMouseInput.lLastY;
 
-void Input::OnLeftUp( int RelativeX, int RelativeY )
-{
-	m_leftDown = false;
-}
+	m_leftDown = RawMouseInput.usButtonFlags & RI_MOUSE_LEFT_BUTTON_DOWN;
+	m_rightDown = ( ( RawMouseInput.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_DOWN ) >> 2 );
 
-void Input::OnRightDown( int RelativeX, int RelativeY )
-{
-	m_rightDown = true;
-}
+	// Clip the cursor to window boundaries
+	ClipCursor( &m_clamp );
 
-void Input::OnRightUp( int RelativeX, int RelativeY )
-{
-	m_rightDown = false;
-}
+	// Get the mouse position
+	POINT currentMousePos{};
+	GetCursorPos( &currentMousePos );
 
-void Input::OnMouseMove( int RelativeX, int RelativeY )
-{
-    // tx and ty are storing temporary x and y mouse coordinates
-    // RelativeX, Y are the distance mouse has traveled since last frame
-	int tx = m_x + RelativeX; 
-	int ty = m_y + RelativeY;
+	// Update Input's mouse position
+	m_x = currentMousePos.x;
+	m_y = currentMousePos.y;
 
-    // m_x and y are the last known coordinates of mouse
-	m_x = max( m_clamp.left, min( tx, m_clamp.right - 1 ) );
-	m_y = max( m_clamp.top, min( ty, m_clamp.bottom - 1 ) );
-	
-	SetCursorPos( m_x, m_y );
-	m_relX = RelativeX;
-	m_relY = RelativeY;
+	// Register the new position with Windows
+	SetCursorPos( currentMousePos.x, currentMousePos.y );
 }
 
 int Input::GetX() const
