@@ -19,7 +19,6 @@ Shader_Lighting::Shader_Lighting(const Shader_Lighting &)
 Shader_Lighting::~Shader_Lighting()
 {}
 
-// TODO: this isn't being called!!!!
 bool Shader_Lighting::InitializeShader(
     ID3D11Device * pDevice, 
     const std::wstring & vsFilename, 
@@ -198,9 +197,6 @@ void Shader_Lighting::RenderShader(ID3D11DeviceContext * deviceContext, int inde
 
 	// Set the sampler state in the pixel shader.
 	deviceContext->PSSetSamplers( 0, 1, m_sampleState.GetAddressOf() );
-
-  	// Render the triangle.
-	//deviceContext->DrawIndexed(indexCount, 0, 0);
 
 	return;
 }

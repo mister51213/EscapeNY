@@ -27,12 +27,12 @@ public:
 	GameView( Graphics* pGfx, D3DGraphics* pD3D, std::shared_ptr<Camera> &pCam );
 	 
     void Initialize();
-	void UpdateView( const vector<Actor*>& actors, const FX_Light& light) const;
+	void UpdateView( const vector<Actor*>& actors, FX& effect) const;
     void initModelPool();
 private:
 	void initTexturePool();
 	void initializeShader();
-	void drawModel( const Actor& actor, const FX_Light& light) const;
+	void drawModel( const Actor& actor, FX* effect) const;
 
 private:
     Graphics* m_pGfx;

@@ -21,15 +21,15 @@ void GameView::Initialize()
 	initializeShader();
 }
 
-void GameView::UpdateView(const vector<Actor*>& actors, const FX_Light& light) const
+void GameView::UpdateView(const vector<Actor*>& actors, FX& effect) const
     {
         for each (Actor* actor in actors)
         {
-            drawModel(*actor, light);
+            drawModel(*actor, &effect);
         }
     }
 
-void GameView::drawModel( const Actor & actor, const FX_Light& light ) const
+void GameView::drawModel( const Actor & actor, FX* effect ) const
 {
     // UNTextured cube index is 0, so if > 0, use tex shader
     if (actor.GetModelType()>0)
@@ -43,6 +43,10 @@ void GameView::drawModel( const Actor & actor, const FX_Light& light ) const
         //    (m_TexturePool[actor.GetTexIndex()]).GetTextureView());
 
         // lighting effects
+        // TODO: Shader base should take a parameter that decides which effects to turn on and off,
+        // TODO: which will be dictated by bool effectOn in FX_ struct
+
+
         int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
         m_shader_Lighting.Render(
             m_pD3D->GetDeviceContext(),
@@ -51,8 +55,8 @@ void GameView::drawModel( const Actor & actor, const FX_Light& light ) const
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
             (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
-            light.Direction,
-            light.Color);
+            ((FX_Light*)effect)->Direction,
+            ((FX_Light*)effect)->Color);
     }
     else
     {   
