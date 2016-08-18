@@ -20,58 +20,47 @@ class Shader
 {
 public:
     Shader();
-    Shader(const std::wstring &vs, const std::wstring &ps );
+    Shader(const std::wstring &vs, const std::wstring &ps);
 
 public:
-	bool Initialize( ID3D11Device* pDevice );
+    bool Initialize(ID3D11Device* pDevice);
 
-	// CODE_CHANGE: made function const
-	bool Render(
-		ID3D11DeviceContext* deviceContext,
-		const XMMATRIX & worldMatrix,
-		const XMMATRIX & viewMatrix,
-		const XMMATRIX & projectionMatrix,
-		ID3D11ShaderResourceView* texture = nullptr )const
-	{
-		// Set the shader parameters to use for rendering.
+    bool Render(
+        ID3D11DeviceContext* deviceContext,
+        const XMMATRIX & worldMatrix,
+        const XMMATRIX & viewMatrix,
+        const XMMATRIX & projectionMatrix,
+        ID3D11ShaderResourceView* texture = nullptr,
+        FX* effect = nullptr)const;
 
-		// NOTE: texture is NULL by default and will be set only in CHILD texture class.
-		bool result = SetShaderParameters(
-			deviceContext,
-			worldMatrix,
-			viewMatrix,
-			projectionMatrix,
-			texture );
-		RETURN_IF_FALSE( result );
+    virtual void RenderChild(ID3D11DeviceContext*)const = 0;
 
-		// Now render the prepared buffers with the shader.
-		RenderShader( deviceContext );
+    bool SetShaderParameters(
+        ID3D11DeviceContext* deviceContext,
+        const XMMATRIX & worldMatrix,
+        const XMMATRIX & viewMatrix,
+        const XMMATRIX & projectionMatrix,
+        ID3D11ShaderResourceView* texture,
+        FX* effect)const;
 
-		return true;
-	}
+//public:
+    //virtual bool InitializeShader(
+    //    ID3D11Device*,
+    //    const std::wstring &,
+    //    const std::wstring &) = 0;
+    //bool Shader::InitializeShaderCOMMON(
+    //    ID3D11Device* pDevice,
+    //    const std::wstring & vsFilename,
+    //    const std::wstring & psFilename);
 
-	// CODE_CHANGE: made function const
-	virtual void RenderShader( ID3D11DeviceContext* )const = 0;
+    virtual bool Shader::InitChild(ID3D11Device* pDevice) = 0;
 
-	// CODE_CHANGE: made function const
-	virtual bool SetShaderParameters(
-		ID3D11DeviceContext*,
-		const XMMATRIX &,
-		const XMMATRIX &,
-		const XMMATRIX &,
-		ID3D11ShaderResourceView* )const = 0;
-
-public:
-	virtual bool InitializeShader(
-		ID3D11Device*,
-		const std::wstring &,
-		const std::wstring & ) = 0;
-
-public:
+protected:
 	comptr<ID3D11VertexShader> m_vertexShader;
 	comptr<ID3D11PixelShader> m_pixelShader;
 	comptr<ID3D11InputLayout> m_layout;
 	comptr<ID3D11Buffer> m_matrixBuffer;
+    comptr<ID3D11Buffer> m_lightBuffer;
 
 	std::wstring m_vsFilename;
 	std::wstring m_psFilename;

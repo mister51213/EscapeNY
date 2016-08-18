@@ -45,39 +45,41 @@ void GameView::drawModel( const Actor & actor, FX* effect ) const
         // lighting effects
         // TODO: Shader base should take a parameter that decides which effects to turn on and off,
         // TODO: which will be dictated by bool effectOn in FX_ struct
-
-
         int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
         m_shader_Lighting.Render(
             m_pD3D->GetDeviceContext(),
-            indexCount,
+            //indexCount,
             GetWorldMatrix(actor.GetWorldSpecs()),
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
             (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
-            ((FX_Light*)effect)->Direction,
-            ((FX_Light*)effect)->Color);
+            effect
+/*            ((FX_Light*)effect)->Direction,
+            ((FX_Light*)effect)->Color*/);
     }
     else
     {   
        // color the actor
-        m_shader_Color.Render(
-            m_pD3D->GetDeviceContext(),
-            GetWorldMatrix(actor.GetWorldSpecs()),
-            m_pCam->GetViewMatrix(),
-            m_pCam->GetProjectionMatrix());
+        //m_shader_Color.Render(
+        //    m_pD3D->GetDeviceContext(),
+        //    GetWorldMatrix(actor.GetWorldSpecs()),
+        //    m_pCam->GetViewMatrix(),
+        //    m_pCam->GetProjectionMatrix());
 
        // LIGHTING
-       int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
-       m_shader_Lighting.Render(
+        int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
+        m_shader_Lighting.Render(
             m_pD3D->GetDeviceContext(),
-            indexCount,
+           // indexCount,
             GetWorldMatrix(actor.GetWorldSpecs()),
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
             (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
-            {.57f,.57f,.57f}, {1.f,1.f,1.f,1.f});
+            effect
+           /* ((FX_Light*)effect)->Direction,
+            ((FX_Light*)effect)->Color*/);
     }
+    // TODO: there seems to be an error here with new FX* parameter
     m_pGfx->RenderModel(*(m_ModelPool[actor.GetModelType()]));
 }
 

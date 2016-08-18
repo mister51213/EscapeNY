@@ -39,7 +39,7 @@ private:
     D3DGraphics* m_pD3D;
 
     std::shared_ptr<Camera> m_pCam;
-	Shader_Texture m_shader_Texture;
+	//Shader_Texture m_shader_Texture;
     Shader_Color m_shader_Color;
     Shader_Lighting m_shader_Lighting;
 
