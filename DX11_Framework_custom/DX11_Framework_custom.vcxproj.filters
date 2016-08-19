@@ -347,6 +347,9 @@
     <ClInclude Include="Light_Diffuse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Development Guidelines.txt">
@@ -363,5 +366,12 @@
     <FxCompile Include="Shaders\texture_vs.hlsl" />
     <FxCompile Include="DiffuseLight_ps.hlsl" />
     <FxCompile Include="DiffuseLight_vs.hlsl" />
+    <FxCompile Include="Light_and_Color_vs.hlsl" />
+    <FxCompile Include="Light_and_Color_ps.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DX11_Framework_custom.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
