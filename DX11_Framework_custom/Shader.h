@@ -43,6 +43,8 @@ public:
         ID3D11ShaderResourceView* texture,
         FX* effect)const;
 
+    virtual bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture) const = 0;
+
 //public:
     //virtual bool InitializeShader(
     //    ID3D11Device*,

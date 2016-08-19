@@ -38,13 +38,8 @@ public:
     // no need for sampler description; only lighting.
     virtual bool InitChild(ID3D11Device* pDevice) override;
 
-    virtual bool SetShaderParameters_CHILD(
-        ID3D11DeviceContext* deviceContext,
-        const XMMATRIX & worldMatrix,
-        const XMMATRIX & viewMatrix,
-        const XMMATRIX & projectionMatrix,
-        ID3D11ShaderResourceView* texture = 0,
-        FX* effect = 0)const;
+    virtual bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture = 0)const {
+        return true; }
 	
     virtual void RenderChild( ID3D11DeviceContext* )const override;
 

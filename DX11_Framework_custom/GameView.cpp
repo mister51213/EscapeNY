@@ -56,6 +56,9 @@ void GameView::drawModel( const Actor & actor, FX* effect ) const
             effect
 /*            ((FX_Light*)effect)->Direction,
             ((FX_Light*)effect)->Color*/);
+
+
+
     }
     else
     {   

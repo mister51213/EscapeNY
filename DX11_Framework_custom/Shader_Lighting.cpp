@@ -99,72 +99,10 @@ bool Shader_Lighting::InitChild(ID3D11Device * pDevice)
 //	return true;
 //    }
 
-bool Shader_Lighting::SetShaderParameters_CHILD(
-    ID3D11DeviceContext * deviceContext, 
-    XMMATRIX & worldMatrix, 
-    XMMATRIX & viewMatrix, 
-    XMMATRIX & projectionMatrix, 
-    ID3D11ShaderResourceView * texture,
-    FX* effect
-    /*XMFLOAT3 lightDirection, 
-	XMFLOAT4 diffuseColor*/) const
+bool Shader_Lighting::SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView * texture) const
 {
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	MatrixBufferType* dataPtr;
-	LightBufferType* dataPtr2;
-
-	// Lock the constant buffer so it can be written to.
-	HRESULT result = deviceContext->Map(
-        m_matrixBuffer.Get(), 
-        0, 
-        D3D11_MAP_WRITE_DISCARD, 
-        0, 
-        &mappedResource);
-	RETURN_IF_FAILED( result );
-
-	// Get a pointer to the data in the constant buffer.
-	dataPtr = (MatrixBufferType*)mappedResource.pData;
-
-	// Copy the matrices into the constant buffer.
-  	dataPtr->world = worldMatrix; // TODO: worldMat is transposed elsewhere. shouldnt be that way.
-	dataPtr->view = XMMatrixTranspose(viewMatrix);
-	dataPtr->projection = XMMatrixTranspose(projectionMatrix);
-
-	// Unlock the constant buffer.
-	deviceContext->Unmap(m_matrixBuffer.Get(), 0);
-
-	// Set the position of the constant buffer in the vertex shader.
-	unsigned int bufferNumber = 0;
-
-	// Now set the constant buffer in the vertex shader with the updated values.
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, m_matrixBuffer.GetAddressOf());
-
-	// Set shader texture resource in the pixel shader.
+    // Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);
-
-    // Lock the light constant buffer so it can be written to.
-	result = deviceContext->Map(m_lightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	if(FAILED(result)){return false;}
-
-	// Get a pointer to the data in the constant buffer.
-	dataPtr2 = (LightBufferType*)mappedResource.pData;
-
-	// Copy the lighting variables into the constant buffer.
-	//dataPtr2->diffuseColor = diffuseColor;
-	//dataPtr2->lightDirection = lightDirection;
-    dataPtr2->diffuseColor = effect->Color;
-	dataPtr2->lightDirection = effect->Direction;
-    dataPtr2->padding = 0.0f;
-
-	// Unlock the constant buffer.
-	deviceContext->Unmap(m_lightBuffer.Get(), 0);
-
-	// Set the position of the light constant buffer in the pixel shader.
-	bufferNumber = 0;
-
-	// Finally set the light constant buffer in the pixel shader with the updated values.
-	deviceContext->PSSetConstantBuffers(bufferNumber, 1, m_lightBuffer.GetAddressOf());
-
 	return true;
 }
 

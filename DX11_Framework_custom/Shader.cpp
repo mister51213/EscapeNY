@@ -160,11 +160,10 @@ bool Shader::SetShaderParameters(
 	XMFLOAT4 diffuseColor*/) const
 {
     // TODO: Copied from shader_lighting - compare w shader_color function
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	MatrixBufferType* pMatrixBuff;
-	LightBufferType* pLightBuff;
-
-	// Lock the constant buffer so it can be written to.
+    D3D11_MAPPED_SUBRESOURCE mappedResource{};
+    /////////////////
+    // WRITE to GPU
+    /////////////////
 	HRESULT result = deviceContext->Map(
         m_matrixBuffer.Get(), 
         0, 
@@ -173,13 +172,35 @@ bool Shader::SetShaderParameters(
         &mappedResource);
 	RETURN_IF_FAILED( result );
 
-	// Get a pointer to the data in the constant buffer.
-	pMatrixBuff = (MatrixBufferType*)mappedResource.pData;
+// FASTER IMPLEMENTATION
+    // DirectX 11 requires transposing matrices before sending them into the shader
+	MatrixBufferType matrixBuffer{
+		worldMatrix,
+		XMMatrixTranspose( viewMatrix ),
+		XMMatrixTranspose( projectionMatrix )
+	};
 
-	// Copy the matrices into the constant buffer.
-  	pMatrixBuff->world = worldMatrix; // TODO: worldMat is transposed elsewhere. shouldnt be that way.
-	pMatrixBuff->view = XMMatrixTranspose(viewMatrix);
-	pMatrixBuff->projection = XMMatrixTranspose(projectionMatrix);
+	// Copy the matrices into the constant buffer. // unsigned int = size_t
+	size_t bufferLength = sizeof( MatrixBufferType );
+	CopyMemory( mappedResource.pData, &matrixBuffer, bufferLength );
+
+#pragma region SLOW IMPLEMENTATION
+
+ //   // TODO: BAD! Performance hit!
+ //   /*
+ //   https://msdn.microsoft.com/en-us/library/windows/desktop/ff476457(v=vs.85).aspx
+ //   */
+	//// Cast void pointer to GPU into a MatrixBufferType* pointer
+	//MatrixBufferType* pMatrixBuff = (MatrixBufferType*)mappedResource.pData;
+
+ //   /////////////////
+ //   // READ from AND WRITE to GPU in same step = BAD!!!!
+ //   /////////////////
+ // 	pMatrixBuff->world = worldMatrix; // TODO: worldMat is transposed elsewhere. shouldnt be that way.
+	//pMatrixBuff->view = XMMatrixTranspose(viewMatrix);
+	//pMatrixBuff->projection = XMMatrixTranspose(projectionMatrix);
+
+#pragma endregion
 
 	// Unlock the constant buffer.
 	deviceContext->Unmap(m_matrixBuffer.Get(), 0);
@@ -189,31 +210,34 @@ bool Shader::SetShaderParameters(
 	// Now set the constant buffer in the vertex shader with the updated values.
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, m_matrixBuffer.GetAddressOf());
 
-	// Set shader texture resource in the pixel shader.
-	deviceContext->PSSetShaderResources(0, 1, &texture);
-
+////////////////////////////////////////////////////////////////////////
+// TODO: LIGHTING RELATED (new to Shader_Color)
+////////////////////////////////////////////////////////////////////////
     // Lock the light constant buffer so it can be written to.
 	result = deviceContext->Map(m_lightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if(FAILED(result)){return false;}
 
-	// Get a pointer to the data in the constant buffer.
-	pLightBuff = (LightBufferType*)mappedResource.pData;
+    LightBufferType LightBuff{
+        effect->Color,
+        effect->Direction,
+        0.f };
 
 	// Copy the LIGHTING variables into the constant buffer.
-	//dataPtr2->diffuseColor = diffuseColor;
-	//dataPtr2->lightDirection = lightDirection;
-    pLightBuff->diffuseColor = effect->Color;
-	pLightBuff->lightDirection = effect->Direction;
-    pLightBuff->padding = 0.0f;
+    bufferLength = sizeof( LightBufferType );
+    CopyMemory(mappedResource.pData, &LightBuff, bufferLength);
+ //   pLightBuff->diffuseColor = effect->Color;
+	//pLightBuff->lightDirection = effect->Direction;
+ //   pLightBuff->padding = 0.0f;
 
-	// Unlock the constant buffer.
+ // Unlock the constant buffer.
 	deviceContext->Unmap(m_lightBuffer.Get(), 0);
 
 	// Set the position of the light constant buffer in the pixel shader.
 	bufferNumber = 0;
-
 	// Finally set the light constant buffer in the pixel shader with the updated values.
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, m_lightBuffer.GetAddressOf());
 
-	return true;
+    SetShaderParameters_CHILD(deviceContext, texture);
+
+    return true;
 }

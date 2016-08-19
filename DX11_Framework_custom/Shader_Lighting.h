@@ -16,15 +16,7 @@ public:
     //    const std::wstring & vsFilename,
     //    const std::wstring & psFilename) override;
 
-    bool SetShaderParameters_CHILD(
-        ID3D11DeviceContext* deviceContext,
-        XMMATRIX & worldMatrix,
-        XMMATRIX & viewMatrix,
-        XMMATRIX & projectionMatrix,
-        ID3D11ShaderResourceView* texture,
-        FX* effect
-        /*XMFLOAT3 lightDirection,
-        XMFLOAT4 diffuseColor*/) const;
+    bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture) const;
     
     //bool Render(
     //    ID3D11DeviceContext*, 
