@@ -21,15 +21,15 @@ void GameView::Initialize()
 	initializeShader();
 }
 
-void GameView::UpdateView(const vector<Actor*>& actors, const FX_Light& light) const
+void GameView::UpdateView(const vector<Actor*>& actors, ILight* pLight) const
     {
         for each (Actor* actor in actors)
         {
-            drawModel(*actor, light);
+            drawModel(*actor, pLight);
         }
     }
 
-void GameView::drawModel( const Actor & actor, const FX_Light& light ) const
+void GameView::drawModel( const Actor & actor, ILight* pLight ) const
 {
     // UNTextured cube index is 0, so if > 0, use tex shader
     if (actor.GetModelType()>0)
@@ -43,37 +43,45 @@ void GameView::drawModel( const Actor & actor, const FX_Light& light ) const
         //    (m_TexturePool[actor.GetTexIndex()]).GetTextureView());
 
         // lighting effects
+        // TODO: Shader base should take a parameter that decides which effects to turn on and off,
+        // TODO: which will be dictated by bool effectOn in FX_ struct
         int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
         m_shader_Lighting.Render(
             m_pD3D->GetDeviceContext(),
-            indexCount,
+            //indexCount,
             GetWorldMatrix(actor.GetWorldSpecs()),
             m_pCam->GetViewMatrix(),
             m_pCam->GetProjectionMatrix(),
             (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
-            light.Direction,
-            light.Color);
+            pLight
+/*            ((FX_Light*)effect)->Direction,
+            ((FX_Light*)effect)->Color*/);
+
     }
     else
     {   
-       // color the actor
+        // TODO: ALSO Update Color hlsl shaders to use lighting.
+        // color the actor
         m_shader_Color.Render(
             m_pD3D->GetDeviceContext(),
             GetWorldMatrix(actor.GetWorldSpecs()),
             m_pCam->GetViewMatrix(),
-            m_pCam->GetProjectionMatrix());
+            m_pCam->GetProjectionMatrix(),
+            NULL,
+            pLight);
 
        // LIGHTING
-       int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
-       m_shader_Lighting.Render(
-            m_pD3D->GetDeviceContext(),
-            indexCount,
-            GetWorldMatrix(actor.GetWorldSpecs()),
-            m_pCam->GetViewMatrix(),
-            m_pCam->GetProjectionMatrix(),
-            (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
-            {.57f,.57f,.57f}, {1.f,1.f,1.f,1.f});
+        //int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
+        //m_shader_Lighting.Render(
+        //    m_pD3D->GetDeviceContext(),
+        //   // indexCount,
+        //    GetWorldMatrix(actor.GetWorldSpecs()),
+        //    m_pCam->GetViewMatrix(),
+        //    m_pCam->GetProjectionMatrix(),
+        //    (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
+        //    pLight);
     }
+    // TODO: there seems to be an error here with new FX* parameter
     m_pGfx->RenderModel(*(m_ModelPool[actor.GetModelType()]));
 }
 

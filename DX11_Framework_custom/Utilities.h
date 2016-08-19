@@ -117,13 +117,6 @@ struct ModelSpecs_L
    	XMFLOAT3 size;
 };
 
-struct FX_Light
-{
-    XMFLOAT3 Direction = { .5f,.5f,.5f };
-    XMFLOAT4 Color = { .1f,.1f,.1f,1.f };
-    float Intensity = 1.f;
-};
-
 enum eModType 
 { 
     CUBE, 
@@ -217,3 +210,23 @@ struct VertexPositionNormalType
 	// Input layout descriptions for position, normal and texture coordinates
 	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
 };
+
+struct MatrixBufferType
+{
+	XMMATRIX world;
+	XMMATRIX view;
+	XMMATRIX projection;
+
+    static D3D11_BUFFER_DESC CreateMatrixDescription();
+};
+
+struct LightBufferType
+{
+	XMFLOAT4 diffuseColor; // should be XMFLOAT3?
+	XMFLOAT3 lightDirection; // should be XMFLOAT4?
+	float padding;  // Added extra padding so structure is a multiple of 16 for CreateBuffer function requirements.
+
+    static D3D11_BUFFER_DESC CreateLightDescription();
+};
+
+D3D11_SAMPLER_DESC CreateSamplerDescription();

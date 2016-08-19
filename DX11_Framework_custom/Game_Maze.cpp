@@ -127,7 +127,7 @@ void Game_Maze::reset()
 
 void Game_Maze::RenderFrame( const GameView &GameViewRef )
 {
-	GameViewRef.UpdateView( m_pActorDrawList, FX_Light());
+	//GameViewRef.UpdateView( m_pActorDrawList, FX_Light());
 
 	// Overlay must be drawn last, since it draws directly to 
 	// back buffer

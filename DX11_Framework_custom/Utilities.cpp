@@ -305,4 +305,50 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionColorNormalType::CreateLayou
 	eDesc[ 2 ].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	eDesc[ 2 ].InstanceDataStepRate = 0;
 
-	return eDesc;}
+	return eDesc;
+}
+
+D3D11_BUFFER_DESC MatrixBufferType::CreateMatrixDescription()
+{
+    D3D11_BUFFER_DESC matrixBufferDesc;
+  	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	matrixBufferDesc.MiscFlags = 0;
+	matrixBufferDesc.StructureByteStride = 0;
+    return matrixBufferDesc;
+}
+
+D3D11_BUFFER_DESC LightBufferType::CreateLightDescription()
+{
+    D3D11_BUFFER_DESC lightBufferDesc;
+    lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	lightBufferDesc.ByteWidth = sizeof(LightBufferType);
+	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	lightBufferDesc.MiscFlags = 0;
+	lightBufferDesc.StructureByteStride = 0;
+    return lightBufferDesc;
+}
+
+D3D11_SAMPLER_DESC CreateSamplerDescription()
+{
+  	D3D11_SAMPLER_DESC samplerDesc;
+	// Create a texture sampler state description.
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.MipLODBias = 0.0f;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	samplerDesc.BorderColor[0] = 0;
+	samplerDesc.BorderColor[1] = 0;
+	samplerDesc.BorderColor[2] = 0;
+	samplerDesc.BorderColor[3] = 0;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+    return samplerDesc;
+}
+

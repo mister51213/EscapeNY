@@ -1,4 +1,5 @@
 #include "Game_FPS.h"
+#include "Light_Diffuse.h"
 
 void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const pCamera) 
 {
@@ -8,6 +9,9 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
     m_pCamera = pCamera;
 
     m_Overlay.Initialize( *m_pGraphics );
+
+    // INITIALIZE LIGHT
+    m_pLight.reset(new Light_Diffuse);
 
 	reset();
 }
@@ -52,19 +56,19 @@ void Game_FPS::reset()
     { .5f, .5f, .5f } },
         eTexture::SharkSkin,
         ModelSpecs_L());
-    //2
+    // BEAR
     ModelSpecs_W wSpecs1 = 
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
       { 10.f, 8.f, 8.f } };
-    aTest1 = Actor_NPC(wSpecs1, Water2, ModelSpecs_L(), CUSTOM_MESH);
-    //3
+    aTest1 = Actor_NPC(wSpecs1, SharkSkin, ModelSpecs_L(), CUBE/*CUSTOM_MESH*/);
+    // 
     ModelSpecs_W wSpecs2 = 
     { { 20.f, -.5f, 20.f },
       { 0.f,0.f,0.f },
       { 0.5f, 0.5f, 0.5f } };
     aTest2 = Actor_NPC(wSpecs2, Water3, ModelSpecs_L(), CUSTOM_MESH2);
-    //4
+    // GAME BOARD
     ModelSpecs_W wSpecs3 = 
     { { -10.f, 0.f, -30.f },
       { 0.f,0.f,0.f },
@@ -99,42 +103,48 @@ void Game_FPS::reset()
 
 void Game_FPS::doVisualFX()
 {
-        // MOVE LIGHTING    
-        if (!m_reverseL)
-        {
-            if (m_light.Direction.x < 1.f)
-            {
-                m_light.Direction.x += .01f;
-                m_light.Direction.y += .03f;
+    XMFLOAT4 color = m_pLight->GetColor();
+    XMFLOAT3 direction = m_pLight->GetDirection();
 
-                m_light.Color.y += .01f;
-                m_light.Color.y += m_offset;
-                m_offset += .0005f;
-            }
-            else
-                m_reverseL = true;
+    // MOVE LIGHTING    
+    if (!m_reverseL)
+    {
+        if (direction.x < 1.f)
+        {
+            direction.x += .01f;
+            direction.y += .03f;
+
+            color.y += .01f;
+            color.y += m_offset;
+            m_offset += .0005f;
         }
         else
+            m_reverseL = true;
+    }
+    else
+    {
+        if (direction.x > -1.f)
         {
-            if (m_light.Direction.x > -1.f)
-            {
-                m_light.Direction.x -= .01f;
-                m_light.Direction.y -= .03f;
+            direction.x -= .01f;
+            direction.y -= .03f;
 
-                m_light.Color.y -= .01f;
-                m_light.Color.y -= m_offset;
-                m_offset -= .0005f;
-            }
-            else
-                m_reverseL = false;
+            color.y -= .01f;
+            color.y -= m_offset;
+            m_offset -= .0005f;
         }
+        else
+            m_reverseL = false;
+    }
+
+    m_pLight->SetColor(color.x, color.y, color.z);
+    m_pLight->SetDirection(direction.x, direction.y, direction.z);
 }
 
 	// Use RenderFrame to render the list of actors or other game objects
 void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
     doVisualFX();
-    GameViewRef.UpdateView(m_pActorsMASTER, m_light);
+    GameViewRef.UpdateView(m_pActorsMASTER, m_pLight.get());
    	m_Overlay.Render( *m_pGraphics );
 }
 
