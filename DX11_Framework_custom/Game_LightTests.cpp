@@ -54,10 +54,10 @@ void Game_LightTests::Initialize( Graphics * pGraphics, Game * const pGame, Came
 
 void Game_LightTests::UpdateScene( const Input & InputRef, Camera * const pCamera )
 {
-	//m_animatedPendulum.Update( &m_spotLight, 0.016f );
+	m_animatedPendulum.Update( &m_spotLight, 0.016f );
 	//m_animatedLight.Update( &m_spotLight, 0.016f );
-	//m_pCamera->GetInput( InputRef );
-	//m_pCamera->GetMouseInput( InputRef );
+	m_pCamera->GetInput( InputRef );
+	m_pCamera->GetMouseInput( InputRef );
 
 }
 

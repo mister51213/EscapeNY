@@ -24,7 +24,7 @@ void AnimatedLight_Pendulum::Update( ILightSpot * pLight, float DeltaTime )
 	}
 	accel += pullVector;
 	m_velocity += accel;
-	lightPos += m_velocity;
+	lightPos += m_velocity/50.f;
 	
 	
 	pLight->SetPosition( lightPos.x, lightPos.y, lightPos.z );

@@ -16,8 +16,8 @@ public:
 		// Initialize the vertex and pixel shaders.
 		bool result = InitializeShaderCommon(
 			pDevice,
-			L"E:/Users/rvpjo/Documents/Visual Studio 2015/Projects/EscapeNY/x64/Debug/Shaders/DiffuseLight_vs.cso",
-			L"E:/Users/rvpjo/Documents/Visual Studio 2015/Projects/EscapeNY/x64/Debug/Shaders/DiffuseLight_ps.cso" );
+			L"Shaders/DiffuseLight_vs.cso",
+			L"Shaders/DiffuseLight_ps.cso" );
 		RETURN_IF_FALSE( result );
 
 		///////////////////////////////////////////////////////////

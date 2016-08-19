@@ -25,7 +25,7 @@ float4 main(PixelInputType Input) : SV_Target
 	float4 textureColor = shaderTexture.Sample(SampleType, Input.tex);
 	
 	// For now define the ambient color in shader
-	float4 ambientColor = float4(.1f, .1f, .1f, 1.f);
+	float4 ambientColor = float4(.5f, .5f, .1f, 1.f);
 
 	// Calculate distance to light
 	float3 distanceToLight = Input.world.xyz - g_lightPosition;
