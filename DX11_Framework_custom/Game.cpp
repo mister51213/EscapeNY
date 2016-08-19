@@ -1,12 +1,14 @@
 #include "Game.h"
 #include <time.h>
+#include "Game_LightTests.h"
 
 using namespace DirectX;
 
 Game::Game( std::shared_ptr<Input> pInput )
-	:
-	m_pActiveGame(new Game_FPS) // change active game here
-	//m_pActiveGame( new Game_Maze )
+	:// change active game here
+	m_pActiveGame( new Game_LightTests )// Used for testing light interfaces and shaders
+	//m_pActiveGame(new Game_FPS)		// Used for testing models and camera
+	//m_pActiveGame( new Game_Maze )	// Used for testing board generation
 {
 	m_pInput = pInput;
 	srand( static_cast<unsigned int>( time( nullptr ) ) );
@@ -62,5 +64,7 @@ bool Game::render()
 
 void Game::updateGameObjects()
 {
+	// This updateGameObjects function will be more useful when we 
+	// start making game logic and handling different sub-games
     m_pActiveGame->UpdateScene(*m_pInput, m_pCamera.get());
 }

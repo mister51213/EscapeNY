@@ -1,61 +1,70 @@
-////////////////////////////////////////////////////////////////////////////////
-// Filename: DiffuseLight.ps
-////////////////////////////////////////////////////////////////////////////////
-
-/////////////
-// GLOBALS //
-/////////////
 Texture2D shaderTexture;
 SamplerState SampleType;
 
-// This will be INITIALIZED differently for EACH OBJECT
-cbuffer WMatBuffer
+cbuffer SpotLightBuffer
 {
-    matrix objectWorldMatrix;
+	float3 g_lightColor : packoffset(c0);
+	float g_lightIntensity : packoffset(c0.a);
+	float3 g_lightPosition : packoffset(c1);
+	float g_innerCone : packoffset(c1.w);		// Value must be between 0 and 1 and less than g_outerCone
+	float3 g_lightDrection : packoffset(c2);
+	float g_outerCone : packoffset(c2.w);		// Value must be between 0 and 1 and greater than g_innerCone
 };
 
-// this is only INITIALIZED once per frame (for the camera)
-cbuffer LightBuffer
-{
-    float4 diffuseColor;
-    float3 lightDirection;
-    float padding;
-};
-
-//////////////
-// TYPEDEFS //
-//////////////
 struct PixelInputType
 {
-    float4 position : SV_POSITION;
-    float2 tex : TEXCOORD0;
-    float3 normal : NORMAL;
+	float4 position : SV_POSITION;
+	float2 tex : TEXCOORD0;
+	float3 normal : NORMAL;
+	float4 world : TEXCOORD1;
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// Pixel Shader
-////////////////////////////////////////////////////////////////////////////////
-float4 main(PixelInputType input) : SV_TARGET
+float4 main(PixelInputType Input) : SV_Target
 {
-    float4 textureColor;
-    float3 lightDir;
-    float lightIntensity;
-    float4 color;
+	// Get the color of the pixel at the texture coordinates
+	float4 textureColor = shaderTexture.Sample(SampleType, Input.tex);
+	
+	// For now define the ambient color in shader
+	float4 ambientColor = float4(.1f, .1f, .1f, 1.f);
 
-    // Sample the pixel color from the texture using the sampler at this texture coordinate location.
-    textureColor = shaderTexture.Sample(SampleType, input.tex);
+	// Calculate distance to light
+	float3 distanceToLight = Input.world.xyz - g_lightPosition;
+	float recipLen = 1.0f / length(distanceToLight);
 
-    // Invert the light direction for calculations.
-    lightDir = -lightDirection;
+	// Calculate the direction of the light to the point on the surface
+	float3 lightToPixelDir = distanceToLight * recipLen;
 
-    // Calculate the amount of light on this pixel.
-    lightIntensity = saturate(dot(input.normal, lightDir));
+	// Determine if the direction of the light lines up with the direction
+	// of the light to surface vector
+	float dp = dot(lightToPixelDir, g_lightDrection);
+	
+	// Since a dot-product result of 1.f would mean the light is facing the 
+	// pixel directly, we invert the values to correspond with the intent of 
+	// the variables in the main program.
+	float stopRange = 1.f - g_innerCone; // <- makes value bigger
+	float startRange = 1.f - g_outerCone; // <- makes value smaller
+	
+	// Interpolate 
+	float range = stopRange - startRange;
+	float distance = dp - startRange;
+	float scale = (distance / range); //* (10.f * recipLen);
+	
+	// Calculate the amount the surface is facing the light and 
+	// scale the result by the interpolated value
+	scale = dot(Input.normal, -g_lightDrection) * scale;
 
-    // Determine the final amount of diffuse color based on the diffuse color combined with the light intensity.
-    color = saturate(diffuseColor * lightIntensity);
+	// Calculate the corrected intensity of the light
+	float3 intensity = saturate(g_lightIntensity * scale);
 
-    // Multiply the texture pixel and the final diffuse color to get the final pixel color result.
-    color = color * textureColor;
+	// Modify the light color by the intensity
+	float4 lightColor = float4(g_lightColor * intensity, 1.f);
+	
+	// Calculate the final color of the pixel by multiplying the light color
+	// with the texture color and adding ambient color.
+	float4 finalColor = (lightColor * textureColor) + ambientColor;
+		
+	// Saturate result to be between 0.f and 1.f
+	finalColor = saturate(finalColor);
 
-    return color;
+	return finalColor;
 }

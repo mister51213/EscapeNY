@@ -43,7 +43,8 @@ bool Shader::Initialize( ID3D11Device * pDevice )
 	// Light constant buffer description
 	D3D11_BUFFER_DESC lightBufferDesc{};
 	lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	lightBufferDesc.ByteWidth = sizeof( LightBufferType );
+	//lightBufferDesc.ByteWidth = sizeof( LightBufferType );
+	lightBufferDesc.ByteWidth = sizeof( LightSpotBase );
 	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
@@ -66,6 +67,7 @@ void Shader::Render( ID3D11DeviceContext * pContext, ID3D11ShaderResourceView * 
 	// Now set the constant buffer in the vertex shader with the updated values.
 	pContext->VSSetConstantBuffers( bufferNumber, 1, m_matrixBuffer.GetAddressOf() );
 
+	//bufferNumber = 1;
 	// Set the light constant buffer in the pixel shader with the updated values.
 	pContext->PSSetConstantBuffers( bufferNumber, 1, m_lightBuffer.GetAddressOf() );
 
@@ -97,17 +99,45 @@ bool Shader::UpdateTransformBuffer(
 	return result;
 }
 
-bool Shader::UpdateLightBuffer( ID3D11DeviceContext * pContext, const LightBufferType & BufferData ) const
-{
-	bool result = UpdateConstantBuffer(
-		pContext,
-		reinterpret_cast<LPCVOID>( &BufferData ),
-		sizeof( LightBufferType ),
-		m_lightBuffer.Get()
-	);
-
-	return result;
-}
+//bool Shader::UpdateLightBuffer( ID3D11DeviceContext * pContext, const LightBufferType & BufferData ) const
+//{
+//	bool result = UpdateConstantBuffer(
+//		pContext,
+//		reinterpret_cast<LPCVOID>( &BufferData ),
+//		sizeof( LightBufferType ),
+//		m_lightBuffer.Get()
+//	);
+//
+//	return result;
+//}
+//
+//bool Shader::UpdateLightBuffer( 
+//	ID3D11DeviceContext * pContext, 
+//	const SpotLightBuffer & BufferData ) const
+//{
+//	auto bufferSize = sizeof( BufferData );
+//	bool result = UpdateConstantBuffer(
+//		pContext,
+//		reinterpret_cast<LPCVOID>( &BufferData ),
+//		bufferSize,
+//		m_lightBuffer.Get()
+//	);
+//
+//	return result;
+//}
+//
+//bool Shader::UpdateLightBuffer( ID3D11DeviceContext * pContext, const LightSpotBase & BufferData ) const
+//{
+//	auto bufferSize = sizeof( BufferData );
+//	bool result = UpdateConstantBuffer(
+//		pContext,
+//		reinterpret_cast<LPCVOID>( &BufferData ),
+//		bufferSize,
+//		m_lightBuffer.Get()
+//	);
+//
+//	return result;
+//}
 
 bool Shader::UpdateConstantBuffer(
 	ID3D11DeviceContext * pContext, 

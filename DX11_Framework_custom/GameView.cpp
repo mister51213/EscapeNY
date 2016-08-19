@@ -25,12 +25,42 @@ void GameView::UpdateView(
 	const vector<Actor*>& actors, 
 	const FX_Light& light) const
 {
-	Shader::LightBufferType lightBuffer;
+	/*Shader::LightBufferType lightBuffer;
 	lightBuffer.diffuseColor = light.Color;
 	lightBuffer.lightDirection = light.Direction;
 	lightBuffer.padding = 0.f;
 	
-	bool result = m_shader.UpdateLightBuffer( m_pD3D->GetDeviceContext(), lightBuffer );
+	bool result = m_tShader.UpdateLightBuffer( m_pD3D->GetDeviceContext(), lightBuffer );
+	if( !result )
+	{
+		MessageBox( nullptr, L"Failed to update light buffer.", L"Problem...", MB_OK );
+		PostQuitMessage( 0 );
+		return;
+	}
+
+	Shader::MatrixBufferType transforms{};
+	transforms.view = XMMatrixTranspose( m_pCam->GetViewMatrix() );
+	transforms.projection = XMMatrixTranspose( m_pCam->GetProjectionMatrix() );
+
+	for each ( Actor* actor in actors )
+	{
+		drawModel( *actor, transforms );
+	}*/
+}
+
+void GameView::UpdateView( const vector<Actor*>& actors, const LightSpotBase & light ) const
+{
+	/*Shader::SpotLightBuffer spBuffer;
+	spBuffer.m_colorAndIntensity = light.GetColor();
+	spBuffer.m_colorAndIntensity.w = light.GetIntensity();
+	spBuffer.m_direction = light.GetDirection();
+	spBuffer.m_position = light.GetPosition();
+	spBuffer.m_innerCone = light.GetInnerConeAngle();
+	spBuffer.m_outerCone = light.GetOuterConeAngle();*/
+
+	bool result = m_tShader.UpdateLightBuffer(
+		m_pD3D->GetDeviceContext(), 
+		light.GetDataBuffer());
 	if( !result )
 	{
 		MessageBox( nullptr, L"Failed to update light buffer.", L"Problem...", MB_OK );
@@ -58,7 +88,7 @@ void GameView::drawModel(
 	Transforms.world = GetWorldMatrix( actor.GetWorldSpecs() );
 
 	// Update the vertex shader's constant buffer
-	bool result = m_shader.UpdateTransformBuffer( pContext, Transforms );
+	bool result = m_tShader.UpdateTransformBuffer( pContext, Transforms );
 	if( !result )
 	{
 		MessageBox( nullptr, L"Failed to update Matrix buffer.", L"Problem...", MB_OK );
@@ -67,7 +97,7 @@ void GameView::drawModel(
 	}
 	
 	// Set the shader and it's resources
-	m_shader.Render( pContext, pTextureView );
+	m_tShader.Render( pContext, pTextureView );
 	
 	// Render the actor
 	m_pGfx->RenderModel(*(m_ModelPool[actor.GetModelType()]));
@@ -122,8 +152,7 @@ void GameView::initModelPool()
 
 void GameView::initTexturePool()
 {
-	const int numTextures = 14;
-	m_TexturePool.resize( numTextures );
+	m_TexturePool.resize( LASTTEXTURE );
 	m_TexturePool[ AsphaltFresh ].Initialize( *m_pGfx, L"Textures\\fresh-black-asphalt-texture.jpg" );
 	m_TexturePool[ AsphaltTGA ].Initialize( *m_pGfx, L"Textures\\asphalt.tga" );
 	m_TexturePool[ AsphaltOld ].Initialize( *m_pGfx, L"Textures\\old-asphalt-texture.jpg" );
@@ -138,9 +167,11 @@ void GameView::initTexturePool()
     m_TexturePool[ Underwater6 ].Initialize( *m_pGfx, L"Textures\\underwater6.jpg" );
     m_TexturePool[ Underwater7 ].Initialize( *m_pGfx, L"Textures\\underwater7.jpg" );
     m_TexturePool[ SharkSkin ].Initialize( *m_pGfx, L"Textures\\sharkskin1.jpg" );
+	m_TexturePool[ FlatGray ].Initialize( *m_pGfx, L"Textures/gray.png" );
 }
 
 void GameView::initializeShader()
 {
-	m_shader.Initialize( m_pD3D->GetDevice() );
+	m_tShader.Initialize( m_pD3D->GetDevice() );
+	//m_shader.Initialize( m_pD3D->GetDevice() );
 }

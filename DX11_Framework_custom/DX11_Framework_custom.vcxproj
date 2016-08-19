@@ -106,6 +106,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <FxCompile>
+      <ObjectFileOutput>$(OutDir)Shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -149,9 +152,12 @@
     <ClCompile Include="Algorithm_Grid3D.cpp" />
     <ClCompile Include="Algorithm_Random.cpp" />
     <ClCompile Include="Algorithm_Spiral3D.cpp" />
+    <ClCompile Include="AnimatedLight_Pendulum.cpp" />
+    <ClCompile Include="AnimatedLight_Square.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GameView.cpp" />
     <ClCompile Include="Game_FPS.cpp" />
+    <ClCompile Include="Game_LightTests.cpp" />
     <ClCompile Include="Game_Maze.cpp" />
     <ClCompile Include="Algorithm_Maze.cpp" />
     <ClCompile Include="LightSpotBase.cpp" />
@@ -187,10 +193,13 @@
     <ClInclude Include="Algorithm_Grid3D.h" />
     <ClInclude Include="Algorithm_Random.h" />
     <ClInclude Include="Algorithm_Spiral3D.h" />
+    <ClInclude Include="AnimatedLight_Pendulum.h" />
+    <ClInclude Include="AnimatedLight_Square.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="GameView.h" />
     <ClInclude Include="Game_FPS.h" />
+    <ClInclude Include="Game_LightTests.h" />
     <ClInclude Include="IGameState.h" />
     <ClInclude Include="ILightDirection.h" />
     <ClInclude Include="ILightPoint.h" />
@@ -220,6 +229,7 @@
     <ClInclude Include="Model_Textured.h" />
     <ClInclude Include="Overlay.h" />
     <ClInclude Include="PrimitiveFactory.h" />
+    <ClInclude Include="ShaderT.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="TestBoard.h" />
     <ClInclude Include="Texture.h" />

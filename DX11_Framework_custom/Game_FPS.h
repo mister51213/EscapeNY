@@ -2,6 +2,7 @@
 #include "ISubGame.h";
 #include "Algorithm_Grid3D.h"
 #include "Algorithm_Spiral3D.h"
+#include "LightSpotBase.h"
 
 class Game_FPS:public ISubGame
 {
@@ -44,5 +45,4 @@ private:
     float m_offset = .01f;
     FX_Light m_light;
     bool m_reverseL = false;
-
 };

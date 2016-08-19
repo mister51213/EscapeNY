@@ -37,6 +37,7 @@ else int a = 0
 // Keep operator overloads out of namespace so we can access them
 // without having to declare: using namespace
 XMFLOAT3 operator+( const XMFLOAT3 &V1, const XMFLOAT3& V2 );
+XMFLOAT3 operator-( const XMFLOAT3 &V );
 XMFLOAT3 operator-( const XMFLOAT3 &V1, const XMFLOAT3& V2 );
 XMFLOAT3 operator*( const XMFLOAT3 &V, const float S );
 XMFLOAT3 operator/( const XMFLOAT3 &V, const float S );
@@ -152,7 +153,14 @@ enum eTexture
     Underwater5 = 10,
     Underwater6 = 11,
     Underwater7 = 12,
-	SharkSkin = 13
+	SharkSkin = 13,
+	FlatGray,
+
+	// Place all textures before LASTTEXTURE and it will automatically
+	// increment it's position, giving you the count of loadable textures
+	// Can be used in for loop, for(int i = 0; i < LASTTEXTURE; ++i)
+	// Also, useful for resizing the texture pool
+	LASTTEXTURE
 };
 
 

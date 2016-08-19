@@ -135,6 +135,7 @@ void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
     doVisualFX();
     GameViewRef.UpdateView(m_pActorsMASTER, m_light);
+	//GameViewRef.UpdateView( m_pActorsMASTER, m_spotLight );
    	m_Overlay.Render( *m_pGraphics );
 }
 

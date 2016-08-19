@@ -8,6 +8,8 @@
 //////////////
 #include "Includes.h"
 #include "Utilities.h"
+#include "LightSpotBase.h"
+
 using namespace DirectX;
 using namespace std;
 
@@ -152,13 +154,35 @@ public:
 
 public:
 	bool Initialize( ID3D11Device* pDevice );
-
+	
 	bool UpdateTransformBuffer(
 		ID3D11DeviceContext *pContext,
 		const MatrixBufferType &BufferData )const;
+
+	template<class LightBuffer>
 	bool UpdateLightBuffer(
 		ID3D11DeviceContext *pContext,
+		const LightBuffer &BufferData )const
+	{
+		LPCVOID pBuffer = reinterpret_cast<LPCVOID>( &BufferData );
+		size_t buffSize = sizeof( LightBuffer );
+		bool result = UpdateConstantBuffer( 
+			pContext, pBuffer, buffSize, m_lightBuffer.Get()			
+		);
+
+		return result;
+	}
+
+	/*bool UpdateLightBuffer(
+		ID3D11DeviceContext *pContext,
 		const LightBufferType &BufferData )const;
+	bool UpdateLightBuffer(
+		ID3D11DeviceContext *pContext,
+		const SpotLightBuffer &BufferData )const;
+	bool UpdateLightBuffer(
+		ID3D11DeviceContext *pContext,
+		const LightSpotBase &BufferData )const;*/
+
 	void Render(
 		ID3D11DeviceContext* pContext, 
 		ID3D11ShaderResourceView *pTextureView )const;

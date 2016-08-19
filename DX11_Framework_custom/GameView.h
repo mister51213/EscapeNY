@@ -10,11 +10,16 @@
 #include "Graphics.h"
 #include "Texture.h"
 #include "Shader.h"
+#include "ShaderT.h"
 #include "Actor_Player.h"
 #include "Actor_NPC.h"
 #include <string>
+#include "LightSpotBase.h"
 
 using namespace std;
+
+using FXLightShader = ShaderT<Shader::MatrixBufferType, Shader::LightBufferType>;
+using SpotLightShader = ShaderT<Shader::MatrixBufferType, SpotLightBuffer>;
 
 class GameView
 {
@@ -24,6 +29,7 @@ public:
 	 
     void Initialize();
 	void UpdateView( const vector<Actor*>& actors, const FX_Light& light) const;
+	void UpdateView( const vector<Actor*>& actors, const LightSpotBase& light ) const;
     void initModelPool();
 private:
 	void initTexturePool();
@@ -37,7 +43,8 @@ private:
     D3DGraphics* m_pD3D;
 
     std::shared_ptr<Camera> m_pCam;
-    Shader m_shader;
+    //Shader m_shader;
+	SpotLightShader m_tShader;
 
     vector<Texture> m_TexturePool;
     vector<std::shared_ptr<Model>> m_ModelPool;
