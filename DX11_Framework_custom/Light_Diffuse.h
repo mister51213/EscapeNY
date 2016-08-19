@@ -19,7 +19,7 @@ public:
     virtual void SetDirection(float X, float Y, float Z) { m_direction = { X,Y,Z }; }
 
 private:
-    XMFLOAT4 m_color = { .1f,.1f,.1f,1.f };
-    XMFLOAT3 m_direction = { .5f,.5f,.5f };
+    XMFLOAT4 m_color = { 1.f,1.f,1.f,1.f };
+    XMFLOAT3 m_direction = { 1.f,-1.f,0.f };
     float m_intensity = 1.f;
 };

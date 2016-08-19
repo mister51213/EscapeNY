@@ -345,7 +345,7 @@
       <Filter>Header Files\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="Light_Diffuse.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Lighting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
