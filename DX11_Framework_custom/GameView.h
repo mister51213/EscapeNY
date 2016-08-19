@@ -17,6 +17,7 @@
 #include "Actor_Player.h"
 #include "Actor_NPC.h"
 #include <string>
+#include "ILight.h"
 
 using namespace std;
 
@@ -27,12 +28,12 @@ public:
 	GameView( Graphics* pGfx, D3DGraphics* pD3D, std::shared_ptr<Camera> &pCam );
 	 
     void Initialize();
-	void UpdateView( const vector<Actor*>& actors, FX& effect) const;
+	void UpdateView( const vector<Actor*>& actors, ILight* pLight) const;
     void initModelPool();
 private:
 	void initTexturePool();
 	void initializeShader();
-	void drawModel( const Actor& actor, FX* effect) const;
+	void drawModel( const Actor& actor, ILight* pLight) const;
 
 private:
     Graphics* m_pGfx;

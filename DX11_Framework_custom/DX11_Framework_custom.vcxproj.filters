@@ -64,6 +64,9 @@
     <Filter Include="Header Files\Overlays">
       <UniqueIdentifier>{430ac553-6859-4297-8064-375504c1d923}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Lighting">
+      <UniqueIdentifier>{dfef4832-f806-4e77-bfef-7c80e7c77156}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -328,6 +331,21 @@
     </ClInclude>
     <ClInclude Include="Shader_Lighting.h">
       <Filter>Header Files\Shader Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ILight.h">
+      <Filter>Header Files\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="ILightDirection.h">
+      <Filter>Header Files\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="ILightPoint.h">
+      <Filter>Header Files\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="ILightSpot.h">
+      <Filter>Header Files\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Light_Diffuse.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

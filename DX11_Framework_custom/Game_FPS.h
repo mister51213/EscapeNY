@@ -2,6 +2,7 @@
 #include "ISubGame.h";
 #include "Algorithm_Grid3D.h"
 #include "Algorithm_Spiral3D.h"
+#include "ILightDirection.h"
 
 class Game_FPS:public ISubGame
 {
@@ -42,7 +43,7 @@ private:
 
     // LIGHTING EFFECTS variables
     float m_offset = .01f;
-    FX_Light m_light;
+    unique_ptr<ILightDirection> m_pLight;
     bool m_reverseL = false;
 
 };

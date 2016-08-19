@@ -8,7 +8,7 @@ public:
   	Shader_Lighting(const Shader_Lighting&);
     ~Shader_Lighting();
 
-    virtual bool InitChild(ID3D11Device * pDevice) override;
+    virtual vector<D3D11_INPUT_ELEMENT_DESC> InitChild(ID3D11Device * pDevice) override;
 
     // TODO: The override for this is NOT being called!
     //bool InitializeShader(

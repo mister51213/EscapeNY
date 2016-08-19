@@ -36,7 +36,7 @@ public:
 //       const std::wstring &) override;
 
     // no need for sampler description; only lighting.
-    virtual bool InitChild(ID3D11Device* pDevice) override;
+    virtual vector<D3D11_INPUT_ELEMENT_DESC> InitChild(ID3D11Device* pDevice) override;
 
     virtual bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture = 0)const {
         return true; }

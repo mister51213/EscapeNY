@@ -12,26 +12,24 @@ Shader_Lighting::Shader_Lighting(const Shader_Lighting &)
 Shader_Lighting::~Shader_Lighting()
 {}
 
-bool Shader_Lighting::InitChild(ID3D11Device * pDevice)
+vector<D3D11_INPUT_ELEMENT_DESC> Shader_Lighting::InitChild(ID3D11Device * pDevice)
 {
-    HRESULT result;
-    /* If the constant buffer sizes are not multiples of 16, must pad them w extra space or CreateBuffer()
+/* If the constant buffer sizes are not multiples of 16, must pad them w extra space or CreateBuffer()
     will fail. In this case the constant buffer is 28 bytes with 4 bytes padding to make it 32. */
 
     // SAMPLER DESCRIPTION
     D3D11_SAMPLER_DESC samplerDesc;
     samplerDesc = CreateSamplerDescription();
-    result = pDevice->CreateSamplerState(&samplerDesc, &m_sampleState);
-    RETURN_IF_FAILED(result);
+    pDevice->CreateSamplerState(&samplerDesc, &m_sampleState);
 
     // LIGHT BUFFER DESCRIPTION
-    D3D11_BUFFER_DESC lightBufferDesc;
-    lightBufferDesc = LightBufferType::CreateLightDescription();
-    // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-    result = pDevice->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
-    RETURN_IF_FAILED(result);
+    //D3D11_BUFFER_DESC lightBufferDesc;
+    //lightBufferDesc = LightBufferType::CreateLightDescription();
+    //// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
+    //result = pDevice->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
+    //RETURN_IF_FAILED(result);
 
-    return true;
+    return VertexPositionUVNormalType::CreateLayoutDescriptions();
 }
 //
 //bool Shader_Lighting::InitializeShader(

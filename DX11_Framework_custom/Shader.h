@@ -8,6 +8,8 @@
 //////////////
 #include "Includes.h"
 #include "Utilities.h"
+#include "ILightDirection.h"
+
 using namespace DirectX;
 using namespace std;
 
@@ -30,8 +32,8 @@ public:
         const XMMATRIX & worldMatrix,
         const XMMATRIX & viewMatrix,
         const XMMATRIX & projectionMatrix,
-        ID3D11ShaderResourceView* texture = nullptr,
-        FX* effect = nullptr)const;
+        ID3D11ShaderResourceView* texture,
+        ILight* pLight)const;
 
     virtual void RenderChild(ID3D11DeviceContext*)const = 0;
 
@@ -41,7 +43,7 @@ public:
         const XMMATRIX & viewMatrix,
         const XMMATRIX & projectionMatrix,
         ID3D11ShaderResourceView* texture,
-        FX* effect)const;
+        ILight* pLight)const;
 
     virtual bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture) const = 0;
 
@@ -55,7 +57,7 @@ public:
     //    const std::wstring & vsFilename,
     //    const std::wstring & psFilename);
 
-    virtual bool Shader::InitChild(ID3D11Device* pDevice) = 0;
+    virtual vector<D3D11_INPUT_ELEMENT_DESC> Shader::InitChild(ID3D11Device* pDevice) = 0;
 
 protected:
 	comptr<ID3D11VertexShader> m_vertexShader;

@@ -114,16 +114,15 @@ Shader_Color::~Shader_Color()
 // by value in 32 bit mode, it will copy the value into 32 bit format, 
 // and it will no longer be 16 byte aligned with simd register.
 
-bool Shader_Color::InitChild(ID3D11Device * pDevice)
+vector<D3D11_INPUT_ELEMENT_DESC> Shader_Color::InitChild(ID3D11Device * pDevice)
 {
     // LIGHT BUFFER DESCRIPTION
-    D3D11_BUFFER_DESC lightBufferDesc;
-    lightBufferDesc = LightBufferType::CreateLightDescription();
-    // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-    HRESULT result = pDevice->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
-    RETURN_IF_FAILED(result);
-
-    return true;
+    //D3D11_BUFFER_DESC lightBufferDesc;
+    //lightBufferDesc = LightBufferType::CreateLightDescription();
+    //// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
+    //HRESULT result = pDevice->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
+    //RETURN_IF_FAILED(result);
+    return VertexPositionColorNormalType::CreateLayoutDescriptions();
 }
 
 //bool Shader_Color::SetShaderParameters_CHILD(

@@ -194,11 +194,16 @@
     <ClInclude Include="GameView.h" />
     <ClInclude Include="Game_FPS.h" />
     <ClInclude Include="IGameState.h" />
+    <ClInclude Include="ILight.h" />
+    <ClInclude Include="ILightDirection.h" />
+    <ClInclude Include="ILightPoint.h" />
+    <ClInclude Include="ILightSpot.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="IOverlay.h" />
     <ClInclude Include="ISubGame.h" />
     <ClInclude Include="Game_Maze.h" />
     <ClInclude Include="Algorithm_Maze.h" />
+    <ClInclude Include="Light_Diffuse.h" />
     <ClInclude Include="MessageBox_Goal.h" />
     <ClInclude Include="MessageBox_Title.h" />
     <ClInclude Include="Overlay_Base.h" />

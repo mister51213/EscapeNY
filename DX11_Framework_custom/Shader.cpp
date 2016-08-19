@@ -39,17 +39,16 @@ bool Shader::Initialize( ID3D11Device* pDevice )
         pPixelShaderBuffer->GetBufferSize(),NULL,m_pixelShader.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 	
-    D3D11_INPUT_ELEMENT_DESC polygonLayout[3]; // Make vector w/ global utility, copy to array
-    vector<D3D11_INPUT_ELEMENT_DESC> polyV = VertexPositionUVNormalType::CreateLayoutDescriptions();
-    std::copy(polyV.begin(), polyV.end(), polygonLayout);
+    //D3D11_INPUT_ELEMENT_DESC polygonLayout[3]; // Make vector w/ global utility, copy to array
+    //vector<D3D11_INPUT_ELEMENT_DESC> polyV = VertexPositionUVNormalType::CreateLayoutDescriptions();
+    //std::copy(polyV.begin(), polyV.end(), polygonLayout);
 
-	// Get a count of the elements in the layout.
-    unsigned int numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
+    auto polygonLayout = InitChild(pDevice);
 
 	// Create the vertex input layout.
 	hr = pDevice->CreateInputLayout(
-        polygonLayout, 
-        numElements, 
+        polygonLayout.data(), 
+        polygonLayout.size(), 
         pVertexShaderBuffer->GetBufferPointer(), 
         pVertexShaderBuffer->GetBufferSize(), 
         m_layout.GetAddressOf());
@@ -60,8 +59,15 @@ bool Shader::Initialize( ID3D11Device* pDevice )
 	hr = pDevice->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
     RETURN_IF_FAILED( hr );
 
-    // This may or may not be implemented depending on child shader
-    hr = InitChild(pDevice);
+        // LIGHT BUFFER DESCRIPTION
+    D3D11_BUFFER_DESC lightBufferDesc;
+    lightBufferDesc = LightBufferType::CreateLightDescription();
+    // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
+    hr = pDevice->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
+    RETURN_IF_FAILED(hr);
+
+    //// This may or may not be implemented depending on child shader
+    //hr = InitChild(pDevice);
 
     return true;
 }
@@ -118,7 +124,7 @@ bool Shader::Render(
     const XMMATRIX & viewMatrix,
     const XMMATRIX & projectionMatrix,
     ID3D11ShaderResourceView* texture,
-    FX* effect)const
+    ILight* pLight )const
 {
     // Set the shader parameters to use for rendering.
     // NOTE: texture is NULL by default and will be set only in CHILD texture class.
@@ -128,7 +134,7 @@ bool Shader::Render(
         viewMatrix,
         projectionMatrix,
         texture,
-        effect);
+        pLight);
     RETURN_IF_FALSE(result);
 
     // Now render the prepared buffers with the shader.
@@ -155,7 +161,7 @@ bool Shader::SetShaderParameters(
     const XMMATRIX & viewMatrix, 
     const XMMATRIX & projectionMatrix, 
     ID3D11ShaderResourceView * texture,
-    FX* effect
+    ILight* pLight
     /*XMFLOAT3 lightDirection, 
 	XMFLOAT4 diffuseColor*/) const
 {
@@ -217,9 +223,11 @@ bool Shader::SetShaderParameters(
 	result = deviceContext->Map(m_lightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if(FAILED(result)){return false;}
 
+    ILightDirection* pLightDiffuse = (ILightDirection*)pLight;
+
     LightBufferType LightBuff{
-        effect->Color,
-        effect->Direction,
+        pLightDiffuse->GetColor(),
+        pLightDiffuse->GetDirection(),
         0.f };
 
 	// Copy the LIGHTING variables into the constant buffer.
