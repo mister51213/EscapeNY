@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "../../Common/d3dUtil.h"
+#include "Common_EXP/d3dUtil.h"
 
 class SobelFilter
 {
