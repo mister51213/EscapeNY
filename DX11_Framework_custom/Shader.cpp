@@ -34,8 +34,10 @@ bool Shader::Initialize( ID3D11Device* pDevice )
         pPixelShaderBuffer->GetBufferSize(),NULL,m_pixelShader.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 
+    ////////////////////////////////////////////////
     // child-specific functionality
     auto polygonLayout = InitChild(pDevice);
+    ////////////////////////////////////////////////
 
 	// Create the vertex input layout.
 	hr = pDevice->CreateInputLayout(
@@ -52,8 +54,7 @@ bool Shader::Initialize( ID3D11Device* pDevice )
     RETURN_IF_FAILED( hr );
 
         // LIGHT BUFFER DESCRIPTION
-    D3D11_BUFFER_DESC lightBufferDesc;
-    lightBufferDesc = LightBufferType::CreateLightDescription();
+    D3D11_BUFFER_DESC lightBufferDesc = LightBufferType::CreateLightDescription();
     
     // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
     hr = pDevice->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
@@ -157,7 +158,6 @@ bool Shader::SetShaderParameters(
 
 	// Set the position of the light constant buffer in the pixel shader.
 	bufferNumber = 0;
-
 	// Finally set the light constant buffer in the pixel shader with the updated values.
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, m_lightBuffer.GetAddressOf());
 
