@@ -353,6 +353,9 @@
     <ClInclude Include="Shader_Sobel.h">
       <Filter>Header Files\Shader Files</Filter>
     </ClInclude>
+    <ClInclude Include="Light_Point.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Development Guidelines.txt">
@@ -367,8 +370,10 @@
     <FxCompile Include="Shaders\Color_vs.hlsl" />
     <FxCompile Include="Shaders\texture_ps.hlsl" />
     <FxCompile Include="Shaders\texture_vs.hlsl" />
-    <FxCompile Include="DiffuseLight_ps.hlsl" />
-    <FxCompile Include="DiffuseLight_vs.hlsl" />
     <FxCompile Include="Shaders\Sobel.hlsl" />
+    <FxCompile Include="Shaders\DiffuseLight_ps.hlsl" />
+    <FxCompile Include="Shaders\DiffuseLight_vs.hlsl" />
+    <FxCompile Include="Shaders\PointLight_ps.hlsl" />
+    <FxCompile Include="Shaders\PointLight_vs.hlsl" />
   </ItemGroup>
 </Project>

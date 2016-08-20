@@ -352,3 +352,7 @@ D3D11_SAMPLER_DESC CreateSamplerDescription()
     return samplerDesc;
 }
 
+D3D11_BUFFER_DESC PtLightBufferType::CreatePtLightDescription()
+{
+    return D3D11_BUFFER_DESC();
+}

@@ -3,6 +3,8 @@
 
 void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const pCamera) 
 {
+    srand( static_cast<unsigned int>( time( nullptr ) ) );
+
     // Take a copy of the graphics and direct3d pointers
 	m_pGraphics = pGraphics;
 	m_pDirect3D = pGraphics->GetDirect3D();
