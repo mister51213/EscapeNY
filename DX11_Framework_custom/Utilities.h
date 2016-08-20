@@ -222,6 +222,7 @@ struct MatrixBufferType
 
 struct LightBufferType
 {
+    XMFLOAT4 ambientColor;
 	XMFLOAT4 diffuseColor; // should be XMFLOAT3?
 	XMFLOAT3 lightDirection; // should be XMFLOAT4?
 	float padding;  // Added extra padding so structure is a multiple of 16 for CreateBuffer function requirements.

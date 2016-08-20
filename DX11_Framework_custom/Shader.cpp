@@ -100,11 +100,8 @@ bool Shader::SetShaderParameters(
     const XMMATRIX & viewMatrix, 
     const XMMATRIX & projectionMatrix, 
     ID3D11ShaderResourceView * texture,
-    ILight* pLight
-    /*XMFLOAT3 lightDirection, 
-	XMFLOAT4 diffuseColor*/) const
+    ILight* pLight) const
 {
-    // TODO: Copied from shader_lighting - compare w shader_color function
     D3D11_MAPPED_SUBRESOURCE mappedResource{};
     /////////////////
     // WRITE to GPU
@@ -146,6 +143,7 @@ bool Shader::SetShaderParameters(
     ILightDirection* pLightDiffuse = (ILightDirection*)pLight;
 
     LightBufferType LightBuff{
+        pLightDiffuse->GetAmbient(),
         pLightDiffuse->GetColor(),
         pLightDiffuse->GetDirection(),
         0.f };
