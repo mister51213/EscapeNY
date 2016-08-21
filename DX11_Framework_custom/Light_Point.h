@@ -25,15 +25,15 @@ public:
     float randF = static_cast<float>(rand() % 100)*.01f; // get random float from 0~1.0
 
     //TEST
-    m_colors.diffuseColor[0] = { 1.f,0.f,0.f,1.f };
-    m_colors.diffuseColor[1] = { 0.f,1.f,0.f,1.f };
+    m_colors.diffuseColor[0] = { 1.f,1.f,1.f,1.f };
+    m_colors.diffuseColor[1] = { 1.f,1.f,1.f,1.f };
     m_colors.diffuseColor[2] = { 0.f,0.f,1.f,1.f };
-    m_colors.diffuseColor[3] = { 1.f,1.f,0.f,1.f };
+    m_colors.diffuseColor[3] = { 0.f,0.f,1.f,1.f };
 
-    m_positions.lightPosition[0] = { -50.f,50.f,-5.f,1.f };
-    m_positions.lightPosition[1] = { 50.f,50.f,-5.f,1.f };
-    m_positions.lightPosition[2] = { -50.f,100.f,5.f,1.f };
-    m_positions.lightPosition[3] = { 50.f,50.f,5.f,1.f };
+    m_positions.lightPosition[0] = { -100.f,100.f,-100.f,1.f };
+    m_positions.lightPosition[1] = { 100.f,100.f,-100.f,1.f };
+    m_positions.lightPosition[2] = { -100.f,100.f,100.f,1.f };
+    m_positions.lightPosition[3] = { 100.f,100.f,100.f,1.f };
 
     //for (int i = 0; i < m_numLights; i++)
         //{
