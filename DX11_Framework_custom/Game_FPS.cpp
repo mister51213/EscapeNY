@@ -61,7 +61,7 @@ void Game_FPS::reset()
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
       { 10.f, 8.f, 8.f } };
-    aTest1 = Actor_NPC(wSpecs1, SharkSkin, ModelSpecs_L(), CUBE/*CUSTOM_MESH*/);
+    aTest1 = Actor_NPC(wSpecs1, SharkSkin, ModelSpecs_L(), CUSTOM_MESH);
     // 
     ModelSpecs_W wSpecs2 = 
     { { 20.f, -.5f, 20.f },
@@ -101,7 +101,12 @@ void Game_FPS::reset()
     }
 }
 
-void Game_FPS::doVisualFX()
+void Game_FPS::VisualFX()
+{
+    VisualFX_Disco();
+}
+
+void Game_FPS::VisualFX_Disco() 
 {
     XMFLOAT4 color = m_pLight->GetColor();
     XMFLOAT3 direction = m_pLight->GetDirection();
@@ -112,11 +117,13 @@ void Game_FPS::doVisualFX()
         if (direction.x < 1.f)
         {
             direction.x += .01f;
-            direction.y += .03f;
+            direction.y += .02f;
+            direction.z += .03f;
 
-            color.y += .01f;
-            color.y += m_offset;
-            m_offset += .0005f;
+            color.x += m_offset;
+            color.y -= m_offset;
+            color.z += m_offset;
+            m_offset += .001f;
         }
         else
             m_reverseL = true;
@@ -126,11 +133,14 @@ void Game_FPS::doVisualFX()
         if (direction.x > -1.f)
         {
             direction.x -= .01f;
-            direction.y -= .03f;
+            direction.y -= .02f;
+            direction.z -= .03f;
 
-            color.y -= .01f;
-            color.y -= m_offset;
-            m_offset -= .0005f;
+            color.x -= m_offset;
+            color.y += m_offset;
+            color.z -= m_offset;
+
+            m_offset -= .001f;
         }
         else
             m_reverseL = false;
@@ -143,7 +153,7 @@ void Game_FPS::doVisualFX()
 	// Use RenderFrame to render the list of actors or other game objects
 void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
-    doVisualFX();
+    //VisualFX();
     GameViewRef.UpdateView(m_pActorsMASTER, m_pLight.get());
    	m_Overlay.Render( *m_pGraphics );
 }

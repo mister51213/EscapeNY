@@ -3,8 +3,7 @@
 Shader_Lighting::Shader_Lighting()
     :
 Shader(L"Shaders/DiffuseLight_vs.cso", L"Shaders/DiffuseLight_ps.cso")
-{// TODO: copy cso's into Shader Folder
-}
+{}
 
 Shader_Lighting::Shader_Lighting(const Shader_Lighting &)
 {}

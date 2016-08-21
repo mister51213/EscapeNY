@@ -195,6 +195,9 @@
     <ClCompile Include="Shader_Lighting.cpp">
       <Filter>Source Files\Shader Files</Filter>
     </ClCompile>
+    <ClCompile Include="Shader_Sobel.cpp">
+      <Filter>Source Files\Shader Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -345,10 +348,10 @@
       <Filter>Header Files\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="Light_Diffuse.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Shader_Sobel.h">
+      <Filter>Header Files\Shader Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -366,12 +369,6 @@
     <FxCompile Include="Shaders\texture_vs.hlsl" />
     <FxCompile Include="DiffuseLight_ps.hlsl" />
     <FxCompile Include="DiffuseLight_vs.hlsl" />
-    <FxCompile Include="Light_and_Color_vs.hlsl" />
-    <FxCompile Include="Light_and_Color_ps.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="DX11_Framework_custom.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <FxCompile Include="Shaders\Sobel.hlsl" />
   </ItemGroup>
 </Project>

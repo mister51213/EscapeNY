@@ -21,7 +21,8 @@ public:
 private:
     void reset();
 
-    void doVisualFX();
+    void VisualFX();
+    void VisualFX_Disco();
 
 private:
     Graphics *m_pGraphics; // m_pGraphics and m_pDirect3D are created and passed to game without taking ownership

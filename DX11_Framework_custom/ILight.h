@@ -6,6 +6,9 @@
 class ILight
 {
 public:
+    virtual const DirectX::XMFLOAT4 &GetAmbient()const = 0;
+	virtual void SetAmbient( float R, float G, float B ) = 0;
+
 	virtual const DirectX::XMFLOAT4 &GetColor()const = 0;
 	virtual float GetIntensity()const = 0;
 
