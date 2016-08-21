@@ -30,10 +30,10 @@ public:
     m_colors.diffuseColor[2] = { 0.f,0.f,1.f,1.f };
     m_colors.diffuseColor[3] = { 1.f,1.f,0.f,1.f };
 
-    m_positions.lightPosition[0] = { -500.f,5.f,-5.f,1.f };
-    m_positions.lightPosition[1] = { 500.f,5.f,-5.f,1.f };
-    m_positions.lightPosition[2] = { -500.f,5.f,5.f,1.f };
-    m_positions.lightPosition[3] = { 500.f,5.f,5.f,1.f };
+    m_positions.lightPosition[0] = { -50.f,50.f,-5.f,1.f };
+    m_positions.lightPosition[1] = { 50.f,50.f,-5.f,1.f };
+    m_positions.lightPosition[2] = { -50.f,100.f,5.f,1.f };
+    m_positions.lightPosition[3] = { 50.f,50.f,5.f,1.f };
 
     //for (int i = 0; i < m_numLights; i++)
         //{

@@ -65,7 +65,7 @@ void Game_FPS::reset()
     ModelSpecs_W wSpecs1 = 
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
-      { 10.f, 8.f, 8.f } };
+      { 5.f, 5.f, 5.f } };
     aTest1 = Actor_NPC(wSpecs1, SharkSkin, ModelSpecs_L(), CUSTOM_MESH);
     // 
     ModelSpecs_W wSpecs2 = 

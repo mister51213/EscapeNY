@@ -58,6 +58,7 @@ struct PixelInputType
 ////////////////////////////////////////////////////////////////////////////////
 PixelInputType main(VertexInputType input)
 {
+    float lightRange = 0.9f; // for attenuation
     PixelInputType output;
     float4 worldPosition;
 

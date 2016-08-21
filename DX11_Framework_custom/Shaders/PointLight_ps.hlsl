@@ -43,6 +43,7 @@ struct PixelInputType
 ////////////////////////////////////////////////////////////////////////////////
 float4 main(PixelInputType input) : SV_TARGET
 {
+    float lightRange = .9f; // for attentuation
     float4 textureColor;
     float lightIntensity1, lightIntensity2, lightIntensity3, lightIntensity4;
     float4 color, color1, color2, color3, color4;
@@ -59,11 +60,27 @@ float4 main(PixelInputType input) : SV_TARGET
     color3 = diffuseColor[2] * lightIntensity3;
     color4 = diffuseColor[3] * lightIntensity4;
 
+    float3 attenuation1 = input.lightPos1 * lightRange;
+        float3 attenuation2 = input.lightPos2 * lightRange;
+            float3 attenuation3 = input.lightPos3 * lightRange;
+                float3 attenuation4 = input.lightPos4 * lightRange;
+
+    float4 attFinal1 = mul(attenuation1, attenuation1);
+        float4 attFinal2 = mul(attenuation2, attenuation2);
+            float4 attFinal3 = mul(attenuation3, attenuation3);
+                float4 attFinal4 = mul(attenuation4, attenuation4);
+
     // Sample the texture pixel at this location.
     textureColor = shaderTexture.Sample(SampleType, input.tex);
 
     // Multiply the texture pixel by the combination of all four light colors to get the final result.
-    color = saturate(color1 + color2 + color3 + color4) * textureColor;
+    //color = saturate(color1 + color2 + color3 + color4) * textureColor;
 	
+    color = saturate(
+        color1*(1 - attFinal1) + 
+        color2*(1 - attFinal2) + 
+        color3*(1 - attFinal3) + 
+        color4*(1 - attFinal4)) * textureColor;
+
     return color;
 }
