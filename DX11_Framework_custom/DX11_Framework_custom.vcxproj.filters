@@ -198,6 +198,9 @@
     <ClCompile Include="Shader_Sobel.cpp">
       <Filter>Source Files\Shader Files</Filter>
     </ClCompile>
+    <ClCompile Include="Shader_PtLight.cpp">
+      <Filter>Source Files\Shader Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -353,8 +356,11 @@
     <ClInclude Include="Shader_Sobel.h">
       <Filter>Header Files\Shader Files</Filter>
     </ClInclude>
+    <ClInclude Include="Shader_PtLight.h">
+      <Filter>Header Files\Shader Files</Filter>
+    </ClInclude>
     <ClInclude Include="Light_Point.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Lighting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

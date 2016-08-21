@@ -45,6 +45,10 @@ private:
     // LIGHTING EFFECTS variables
     float m_offset = .01f;
     unique_ptr<ILightDirection> m_pLight;
+    unique_ptr<ILightPoint> m_pLightPT;
+    
     bool m_reverseL = false;
+
+    
 
 };

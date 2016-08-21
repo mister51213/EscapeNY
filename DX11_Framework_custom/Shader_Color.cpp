@@ -116,55 +116,8 @@ Shader_Color::~Shader_Color()
 
 vector<D3D11_INPUT_ELEMENT_DESC> Shader_Color::InitChild(ID3D11Device * pDevice)
 {
-    // LIGHT BUFFER DESCRIPTION
-    //D3D11_BUFFER_DESC lightBufferDesc;
-    //lightBufferDesc = LightBufferType::CreateLightDescription();
-    //// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-    //HRESULT result = pDevice->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
-    //RETURN_IF_FAILED(result);
     return VertexPositionColorNormalType::CreateLayoutDescriptions();
 }
-
-//bool Shader_Color::SetShaderParameters_CHILD(
-//    ID3D11DeviceContext* deviceContext,
-//	const XMMATRIX &worldMatrix, 
-//    const XMMATRIX &viewMatrix, 
-//    const XMMATRIX &projectionMatrix,
-//    ID3D11ShaderResourceView* texture,
-//    FX* effect)const
-//{
-//	// Lock the constant buffer so it can be written to.
-//	D3D11_MAPPED_SUBRESOURCE mappedResource{};
-//	HRESULT result = deviceContext->Map(
-//		m_matrixBuffer.Get(),									// Subresource to be updated
-//		0,														// Subresource level
-//		D3D11_MAP_WRITE_DISCARD,								// Map type
-//		0,														// Map flag
-//		&mappedResource );										// Address of the mapped resource
-//	RETURN_IF_FAILED( result );
-//
-//    // TODO: Consolidate this into a common parent function
-//    // DirectX 11 requires transposing matrices before sending them into the shader
-//	MatrixBufferType matrixBuffer{
-//		worldMatrix,
-//		XMMatrixTranspose( viewMatrix ),
-//		XMMatrixTranspose( projectionMatrix )
-//	};
-//
-//	// Copy the matrices into the constant buffer. // unsigned int = size_t
-//	size_t bufferLength = sizeof( MatrixBufferType );
-//	CopyMemory( mappedResource.pData, &matrixBuffer, bufferLength );
-//
-//	// Unlock the constant buffer.
-//	deviceContext->Unmap( m_matrixBuffer.Get(), 0 );
-//
-//	// Set the position of the constant buffer in the HLSL vertex shader.
-//	UINT bufferNumber = 0;
-//	// Finanly set the constant buffer in the vertex shader with the updated values.
-//	deviceContext->VSSetConstantBuffers( bufferNumber, 1, m_matrixBuffer.GetAddressOf() );
-//
-//	return true;
-//}
 
 // in Shader_Color, theres no texture so this does nothing. just a dummy stand-in
 void Shader_Color::RenderChild( ID3D11DeviceContext* deviceContext )const

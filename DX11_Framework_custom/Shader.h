@@ -155,7 +155,7 @@ public:
         ID3D11ShaderResourceView* texture,
         ILight* pLight)const;
 
-    virtual bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture) const = 0;
+    virtual bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture, ILight* pLight) const = 0;
 
     virtual vector<D3D11_INPUT_ELEMENT_DESC> Shader::InitChild(ID3D11Device* pDevice) = 0;
 

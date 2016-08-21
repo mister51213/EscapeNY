@@ -30,19 +30,11 @@ public:
 	Shader_Color();
 	~Shader_Color();
 
-//virtual bool InitializeShader( 
-//       ID3D11Device*, 
-//       const std::wstring &,
-//       const std::wstring &) override;
-
     // no need for sampler description; only lighting.
     virtual vector<D3D11_INPUT_ELEMENT_DESC> InitChild(ID3D11Device* pDevice) override;
 
-    virtual bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture = 0)const {
+    virtual bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture = 0, ILight* pLight = 0)const {
         return true; }
 	
     virtual void RenderChild( ID3D11DeviceContext* )const override;
-
-//private:
-//    comptr<ID3D11Buffer> m_lightBuffer;
 };

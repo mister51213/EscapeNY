@@ -308,6 +308,11 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexPositionColorNormalType::CreateLayou
 	return eDesc;
 }
 
+////////////////////////////////////////////////////
+// TODO: Make generic function
+// CreateCBufferDescription(UINT size)
+// TODO: Make generic function CreateVertexBuffer(??)
+/////////////////////////////////////////////////////
 D3D11_BUFFER_DESC MatrixBufferType::CreateMatrixDescription()
 {
     D3D11_BUFFER_DESC matrixBufferDesc;
@@ -350,9 +355,4 @@ D3D11_SAMPLER_DESC CreateSamplerDescription()
 	samplerDesc.MinLOD = 0;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
     return samplerDesc;
-}
-
-D3D11_BUFFER_DESC PtLightBufferType::CreatePtLightDescription()
-{
-    return D3D11_BUFFER_DESC();
 }

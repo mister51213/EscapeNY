@@ -1,9 +1,10 @@
 #include "Game_FPS.h"
 #include "Light_Diffuse.h"
+#include "Light_Point.h"
 
 void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const pCamera) 
 {
-    srand( static_cast<unsigned int>( time( nullptr ) ) );
+    //srand( static_cast<unsigned int>( time( nullptr ) ) );
 
     // Take a copy of the graphics and direct3d pointers
 	m_pGraphics = pGraphics;
@@ -14,6 +15,8 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 
     // INITIALIZE LIGHT
     m_pLight.reset(new Light_Diffuse);
+    m_pLightPT.reset(new Light_Point);
+    m_pLightPT->InitLights(4);
 
 	reset();
 }
@@ -156,7 +159,7 @@ void Game_FPS::VisualFX_Disco()
 void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
     //VisualFX();
-    GameViewRef.UpdateView(m_pActorsMASTER, m_pLight.get());
+    GameViewRef.UpdateView(m_pActorsMASTER, /*m_pLight*/m_pLightPT.get());
    	m_Overlay.Render( *m_pGraphics );
 }
 
