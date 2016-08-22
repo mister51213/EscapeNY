@@ -155,17 +155,7 @@ public:
         ID3D11ShaderResourceView* texture,
         ILight* pLight)const;
 
-    virtual bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture) const = 0;
-
-//public:
-    //virtual bool InitializeShader(
-    //    ID3D11Device*,
-    //    const std::wstring &,
-    //    const std::wstring &) = 0;
-    //bool Shader::InitializeShaderCOMMON(
-    //    ID3D11Device* pDevice,
-    //    const std::wstring & vsFilename,
-    //    const std::wstring & psFilename);
+    virtual bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture, ILight* pLight) const = 0;
 
     virtual vector<D3D11_INPUT_ELEMENT_DESC> Shader::InitChild(ID3D11Device* pDevice) = 0;
 
