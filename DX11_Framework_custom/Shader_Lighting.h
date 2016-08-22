@@ -16,7 +16,7 @@ public:
     //    const std::wstring & vsFilename,
     //    const std::wstring & psFilename) override;
 
-    bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture) const;
+    bool SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture, ILight* pLight=0) const;
     
     //bool Render(
     //    ID3D11DeviceContext*, 

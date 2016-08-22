@@ -34,8 +34,10 @@ bool Shader::Initialize( ID3D11Device* pDevice )
         pPixelShaderBuffer->GetBufferSize(),NULL,m_pixelShader.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 
+    ////////////////////////////////////////////////
     // child-specific functionality
     auto polygonLayout = InitChild(pDevice);
+    ////////////////////////////////////////////////
 
 	// Create the vertex input layout.
 	hr = pDevice->CreateInputLayout(
@@ -52,8 +54,7 @@ bool Shader::Initialize( ID3D11Device* pDevice )
     RETURN_IF_FAILED( hr );
 
         // LIGHT BUFFER DESCRIPTION
-    D3D11_BUFFER_DESC lightBufferDesc;
-    lightBufferDesc = LightBufferType::CreateLightDescription();
+    D3D11_BUFFER_DESC lightBufferDesc = LightBufferType::CreateLightDescription();
     
     // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
     hr = pDevice->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
@@ -137,31 +138,30 @@ bool Shader::SetShaderParameters(
 // LIGHTING RELATED
 ////////////////////////////////////////////////////////////////////////
     // Lock the light constant buffer so it can be written to.
-	result = deviceContext->Map(m_lightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	if(FAILED(result)){return false;}
+	//result = deviceContext->Map(m_lightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	//if(FAILED(result)){return false;}
 
-    ILightDirection* pLightDiffuse = (ILightDirection*)pLight;
+ //   ILightDirection* pLightDiffuse = (ILightDirection*)pLight;
 
-    LightBufferType LightBuff{
-        pLightDiffuse->GetAmbient(),
-        pLightDiffuse->GetColor(),
-        pLightDiffuse->GetDirection(),
-        0.f };
+ //   LightBufferType LightBuff{
+ //       pLightDiffuse->GetAmbient(),
+ //       pLightDiffuse->GetColor(),
+ //       pLightDiffuse->GetDirection(),
+ //       0.f };
 
-	// Copy the LIGHTING variables into the constant buffer.
-    bufferLength = sizeof( LightBufferType );
-    CopyMemory(mappedResource.pData, &LightBuff, bufferLength);
+	//// Copy the LIGHTING variables into the constant buffer.
+ //   bufferLength = sizeof( LightBufferType );
+ //   CopyMemory(mappedResource.pData, &LightBuff, bufferLength);
 
-    // Unlock the constant buffer.
-	deviceContext->Unmap(m_lightBuffer.Get(), 0);
+ //   // Unlock the constant buffer.
+	//deviceContext->Unmap(m_lightBuffer.Get(), 0);
 
-	// Set the position of the light constant buffer in the pixel shader.
-	bufferNumber = 0;
+	//// Set the position of the light constant buffer in the pixel shader.
+	//bufferNumber = 0;
+	//// Finally set the light constant buffer in the pixel shader with the updated values.
+	//deviceContext->PSSetConstantBuffers(bufferNumber, 1, m_lightBuffer.GetAddressOf());
 
-	// Finally set the light constant buffer in the pixel shader with the updated values.
-	deviceContext->PSSetConstantBuffers(bufferNumber, 1, m_lightBuffer.GetAddressOf());
-
-    SetShaderParameters_CHILD(deviceContext, texture);
+    SetShaderParameters_CHILD(deviceContext, texture, pLight);
 
     return true;
 }

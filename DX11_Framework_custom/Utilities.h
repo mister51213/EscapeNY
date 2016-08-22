@@ -230,4 +230,24 @@ struct LightBufferType
     static D3D11_BUFFER_DESC CreateLightDescription();
 };
 
+// For point lighting
+	struct LightColorBufferType
+	{
+		XMFLOAT4 diffuseColor[4];
+	};
+
+	struct LightPositionBufferType
+	{
+		XMFLOAT4 lightPosition[4];
+	};
+
+//struct PtLightBufferType
+//{
+//    XMFLOAT4 color;
+//	XMFLOAT4 position;
+//	float intensity;
+//
+//    static D3D11_BUFFER_DESC CreatePtLightDescription();
+//};
+
 D3D11_SAMPLER_DESC CreateSamplerDescription();

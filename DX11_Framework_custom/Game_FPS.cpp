@@ -1,8 +1,11 @@
 #include "Game_FPS.h"
 #include "Light_Diffuse.h"
+#include "Light_Point.h"
 
 void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const pCamera) 
 {
+    //srand( static_cast<unsigned int>( time( nullptr ) ) );
+
     // Take a copy of the graphics and direct3d pointers
 	m_pGraphics = pGraphics;
 	m_pDirect3D = pGraphics->GetDirect3D();
@@ -12,6 +15,8 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 
     // INITIALIZE LIGHT
     m_pLight.reset(new Light_Diffuse);
+    m_pLightPT.reset(new Light_Point);
+    m_pLightPT->InitLights(4);
 
 	reset();
 }
@@ -60,7 +65,7 @@ void Game_FPS::reset()
     ModelSpecs_W wSpecs1 = 
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
-      { 10.f, 8.f, 8.f } };
+      { 5.f, 5.f, 5.f } };
     aTest1 = Actor_NPC(wSpecs1, SharkSkin, ModelSpecs_L(), CUSTOM_MESH);
     // 
     ModelSpecs_W wSpecs2 = 
@@ -154,7 +159,7 @@ void Game_FPS::VisualFX_Disco()
 void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
     //VisualFX();
-    GameViewRef.UpdateView(m_pActorsMASTER, m_pLight.get());
+    GameViewRef.UpdateView(m_pActorsMASTER, /*m_pLight*/m_pLightPT.get());
    	m_Overlay.Render( *m_pGraphics );
 }
 

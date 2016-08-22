@@ -21,13 +21,6 @@ vector<D3D11_INPUT_ELEMENT_DESC> Shader_Lighting::InitChild(ID3D11Device * pDevi
     samplerDesc = CreateSamplerDescription();
     pDevice->CreateSamplerState(&samplerDesc, &m_sampleState);
 
-    // LIGHT BUFFER DESCRIPTION
-    //D3D11_BUFFER_DESC lightBufferDesc;
-    //lightBufferDesc = LightBufferType::CreateLightDescription();
-    //// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-    //result = pDevice->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
-    //RETURN_IF_FAILED(result);
-
     return VertexPositionUVNormalType::CreateLayoutDescriptions();
 }
 //
@@ -96,7 +89,7 @@ vector<D3D11_INPUT_ELEMENT_DESC> Shader_Lighting::InitChild(ID3D11Device * pDevi
 //	return true;
 //    }
 
-bool Shader_Lighting::SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView * texture) const
+bool Shader_Lighting::SetShaderParameters_CHILD(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView * texture, ILight* pLight) const
 {
     // Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);
