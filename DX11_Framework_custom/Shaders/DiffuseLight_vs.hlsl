@@ -9,15 +9,15 @@
 // This will be INITIALIZED differently for EACH OBJECT
 cbuffer WMatBuffer
 {
-    matrix objectWorldMatrix;
+    matrix objectWorldMatrix; // for objects - CHANGEs FOR EACH OBJECT / FRAME
 };
 
 // this is only INITIALIZED once per frame (for the camera)
 cbuffer MatrixBuffer
 {
-    matrix worldMatrix; // TODO: remove this after implementing above cbuffer
-    matrix viewMatrix;
-    matrix projectionMatrix;
+    matrix worldMatrix; // for objects - CHANGEs FOR EACH OBJECT / FRAME
+    matrix viewMatrix; // for camera - ONLY CHANGES ONCE PER FRAME
+    matrix projectionMatrix; // for screen size - ONLY CHANGES ONCE
 };
 
 //////////////
@@ -51,8 +51,12 @@ PixelInputType main(VertexInputType input)
 
     // Calculate the position of the vertex against the world, view, and projection matrices.
     //output.position = mul(input.position, worldMatrix);
+    // VERTICES FOR INDIVIDUAL OBJECTS
     output.position = mul(output.position, worldMatrix);
+
+    // REPOSITIONING RELATIVE TO CAMERA
     output.position = mul(output.position, viewMatrix);
+    // SCALING TO SCREEN RATIO (not size) - Vanishing point, view clipping NOT YET APPLIED
     output.position = mul(output.position, projectionMatrix);
 
     // Store the texture coordinates for the pixel shader.

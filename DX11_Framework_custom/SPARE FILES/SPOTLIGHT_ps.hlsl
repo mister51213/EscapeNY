@@ -29,15 +29,20 @@ float4 main(PixelInputType Input) : SV_Target
 
 	// Calculate distance to light
 	float3 distanceToLight = Input.world.xyz - g_lightPosition;
-	float recipLen = 1.0f / length(distanceToLight);
+	float recipLen = 1.0f / length(distanceToLight); // get the length (magnitude) of that vector
 
 	// Calculate the direction of the light to the point on the surface
-	float3 lightToPixelDir = distanceToLight * recipLen;
+	float3 lightToPixelDir = distanceToLight * recipLen; // normalize this vector by dividing by its magnitude
 
 	// Determine if the direction of the light lines up with the direction
 	// of the light to surface vector
 	float dp = dot(lightToPixelDir, g_lightDrection);
-	
+    // dot product value tells you HOW ON TARGET is the spotlight (target is the pixel)
+
+    // WAY w/ FEWEST POSSIBLE STEPS:
+    dpSaturated = saturate(dp); // clamps a value between 0.0 and 1.0
+    return textureColor*dpSaturated;
+
 	// Since a dot-product result of 1.f would mean the light is facing the 
 	// pixel directly, we invert the values to correspond with the intent of 
 	// the variables in the main program.
