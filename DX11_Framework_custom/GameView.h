@@ -15,10 +15,10 @@
 #include "Shader_Lighting.h"
 #include "Shader_PtLight.h"
 #include "Actor.h"
-#include "Actor_Player.h"
-#include "Actor_NPC.h"
 #include <string>
 #include "ILight.h"
+#include "ILightSet.h"
+
 
 using namespace std;
 
@@ -30,11 +30,13 @@ public:
 	 
     void Initialize();
 	void UpdateView( const vector<Actor*>& actors, ILight* pLight) const;
+	void UpdateView( const vector<Actor*>& actors, ILightSet* pLight ) const;
     void initModelPool();
 private:
 	void initTexturePool();
 	void initializeShader();
 	void drawModel( const Actor& actor, ILight* pLight) const;
+	void drawModel( const Actor& actor, ILightSet* pLightSet ) const;
 
 private:
     Graphics* m_pGfx;

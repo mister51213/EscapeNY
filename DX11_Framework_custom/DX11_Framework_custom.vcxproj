@@ -154,10 +154,13 @@
     <ClCompile Include="Game_FPS.cpp" />
     <ClCompile Include="Game_Maze.cpp" />
     <ClCompile Include="Algorithm_Maze.cpp" />
+    <ClCompile Include="LightPoint.cpp" />
+    <ClCompile Include="LightSet_Night.cpp" />
     <ClCompile Include="MessageBox_Goal.cpp" />
     <ClCompile Include="MessageBox_Title.cpp" />
     <ClCompile Include="Overlay_Base.cpp" />
     <ClCompile Include="Overlay_Title.cpp" />
+    <ClCompile Include="Scene_Night.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shader_Color.cpp" />
     <ClCompile Include="COMHandler.cpp" />
@@ -174,6 +177,7 @@
     <ClCompile Include="Overlay.cpp" />
     <ClCompile Include="PrimitiveFactory.cpp" />
     <ClCompile Include="Shader_Lighting.cpp" />
+    <ClCompile Include="Shader_LightSet_Night.cpp" />
     <ClCompile Include="Shader_PtLight.cpp" />
     <ClCompile Include="Shader_Sobel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -181,6 +185,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Shader_StateMachine.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="TestBoard.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -204,18 +209,22 @@
     <ClInclude Include="ILight.h" />
     <ClInclude Include="ILightDirection.h" />
     <ClInclude Include="ILightPoint.h" />
+    <ClInclude Include="ILightSet.h" />
     <ClInclude Include="ILightSpot.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="IOverlay.h" />
     <ClInclude Include="ISubGame.h" />
     <ClInclude Include="Game_Maze.h" />
     <ClInclude Include="Algorithm_Maze.h" />
+    <ClInclude Include="LightPoint.h" />
+    <ClInclude Include="LightSet_Night.h" />
     <ClInclude Include="Light_Diffuse.h" />
     <ClInclude Include="Light_Point.h" />
     <ClInclude Include="MessageBox_Goal.h" />
     <ClInclude Include="MessageBox_Title.h" />
     <ClInclude Include="Overlay_Base.h" />
     <ClInclude Include="Overlay_Title.h" />
+    <ClInclude Include="Scene_Night.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shader_Color.h" />
     <ClInclude Include="COMHandler.h" />
@@ -232,6 +241,7 @@
     <ClInclude Include="Overlay.h" />
     <ClInclude Include="PrimitiveFactory.h" />
     <ClInclude Include="Shader_Lighting.h" />
+    <ClInclude Include="Shader_LightSet_Night.h" />
     <ClInclude Include="Shader_PtLight.h" />
     <ClInclude Include="Shader_Sobel.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -239,6 +249,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Shader_StateMachine.h" />
     <ClInclude Include="Shader_Texture.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="TestBoard.h" />
@@ -253,6 +264,11 @@
     <Text Include="Devel_Template.txt" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Night_ps.hlsl" />
+    <FxCompile Include="Night_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Shaders\Color_ps.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>

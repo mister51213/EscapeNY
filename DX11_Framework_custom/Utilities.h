@@ -98,7 +98,6 @@ template<typename T>
 
 ////////////////////////////////////////////////////////////////
 // STRUCTS CONTAINING MODEL INFO for gameplay and rendering
-// TODO: make it global; see which is faster
 ////////////////////////////////////////////////////////////////
 struct ModelSpecs_W
 {
@@ -207,7 +206,7 @@ struct VertexPositionNormalType
 	DirectX::XMFLOAT3 position;
 	DirectX::XMFLOAT3 normal;
 
-	// Input layout descriptions for position, normal and texture coordinates
+	// Input layout descriptions for position, normal coordinates
 	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
 };
 
@@ -222,32 +221,32 @@ struct MatrixBufferType
 
 struct LightBufferType
 {
-    XMFLOAT4 ambientColor;
-	XMFLOAT4 diffuseColor; // should be XMFLOAT3?
-	XMFLOAT3 lightDirection; // should be XMFLOAT4?
-	float padding;  // Added extra padding so structure is a multiple of 16 for CreateBuffer function requirements.
+	// Added extra padding so structure is a multiple of 16 for 
+	// CreateBuffer function requirements.
+	XMFLOAT4 ambientColor;
+	XMFLOAT4 diffuseColor; 
+	XMFLOAT3 lightDirection;
+	float padding;	
 
     static D3D11_BUFFER_DESC CreateLightDescription();
 };
 
+struct LightPointBufferType
+{
+	DirectX::XMFLOAT4 m_diffuse;
+	DirectX::XMFLOAT4 m_ambient;
+	DirectX::XMFLOAT3 m_position;
+	float m_intensity;
+};
 // For point lighting
-	struct LightColorBufferType
-	{
-		XMFLOAT4 diffuseColor[4];
-	};
+struct LightColorBufferType
+{
+	XMFLOAT4 diffuseColor[ 4 ];
+};
 
-	struct LightPositionBufferType
-	{
-		XMFLOAT4 lightPosition[4];
-	};
-
-//struct PtLightBufferType
-//{
-//    XMFLOAT4 color;
-//	XMFLOAT4 position;
-//	float intensity;
-//
-//    static D3D11_BUFFER_DESC CreatePtLightDescription();
-//};
+struct LightPositionBufferType
+{
+	XMFLOAT4 lightPosition[ 4 ];
+};
 
 D3D11_SAMPLER_DESC CreateSamplerDescription();

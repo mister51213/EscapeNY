@@ -6,6 +6,7 @@
 #include "Algorithm_Maze.h"
 #include "Actor_Player_Alt.h"
 #include "ResourceManager.h"
+#include "ILightPoint.h"
 
 class Game_Maze:
 	public ISubGame
@@ -45,7 +46,7 @@ private: // Private members
 
 	Actor_Player_Alt m_player;
 	std::vector<Actor*> m_pActorDrawList;
-
+	std::unique_ptr<ILightPoint> m_pPtLight;
 
 	bool m_endReached = false;
 };

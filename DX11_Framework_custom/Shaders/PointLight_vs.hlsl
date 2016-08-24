@@ -81,7 +81,7 @@ PixelInputType main(VertexInputType input)
     output.normal = normalize(output.normal);
 
     // Calculate the position of the vertex in the world.
-    worldPosition = mul(input.position, worldMatrix);
+    worldPosition = mul(input.position, (float3x3)worldMatrix);
 
     // Determine the light positions based on the position of the lights and the position of the vertex in the world.
     output.lightPos1.xyz = lightPosition[0].xyz - worldPosition.xyz;

@@ -201,6 +201,21 @@
     <ClCompile Include="Shader_PtLight.cpp">
       <Filter>Source Files\Shader Files</Filter>
     </ClCompile>
+    <ClCompile Include="LightPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LightSet_Night.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader_LightSet_Night.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader_StateMachine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Night.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -362,6 +377,24 @@
     <ClInclude Include="Light_Point.h">
       <Filter>Header Files\Lighting</Filter>
     </ClInclude>
+    <ClInclude Include="LightPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ILightSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LightSet_Night.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_LightSet_Night.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_StateMachine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Night.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Development Guidelines.txt">
@@ -381,5 +414,7 @@
     <FxCompile Include="Shaders\DiffuseLight_vs.hlsl" />
     <FxCompile Include="Shaders\PointLight_ps.hlsl" />
     <FxCompile Include="Shaders\PointLight_vs.hlsl" />
+    <FxCompile Include="Night_vs.hlsl" />
+    <FxCompile Include="Night_ps.hlsl" />
   </ItemGroup>
 </Project>

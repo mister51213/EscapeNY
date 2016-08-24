@@ -18,7 +18,7 @@ void Game_Maze::Initialize(
 	m_pGame = pGame;
 	m_pGraphics = pGraphics;
 	m_pCamera = pCamera;
-
+	m_pCamera->SetPosition( { 0.f, 30.f, 0.f } );
 	// Initialize camera
 	/*m_pCamera.Initialize(
 	{ 0.f,0.f,0.f }, { 0.f,0.f,0.f },
@@ -127,7 +127,7 @@ void Game_Maze::reset()
 
 void Game_Maze::RenderFrame( const GameView &GameViewRef )
 {
-	//GameViewRef.UpdateView( m_pActorDrawList, FX_Light());
+	GameViewRef.UpdateView( m_pActorDrawList, m_pPtLight.get());
 
 	// Overlay must be drawn last, since it draws directly to 
 	// back buffer
