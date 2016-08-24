@@ -13,7 +13,7 @@
 Texture2D shaderTexture;
 SamplerState SampleType;
 
-// This will be INITIALIZED differently for EACH OBJECT
+// will convey the unique position, rotation, and scale data for each actor
 //cbuffer WMatBuffer
 //{
 //    matrix objectWorldMatrix;
