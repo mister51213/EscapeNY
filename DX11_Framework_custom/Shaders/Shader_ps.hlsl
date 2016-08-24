@@ -65,8 +65,7 @@ float4 main(PixelInputType input) : SV_TARGET
 	// Set ambient color here
 	float4 ambientColor = { 0.15f, 0.3f, 0.3f, 1.0f };
 
-	// TODO:CREATE a BufferedStructure in Shader class
-	// for example:
+	// TODO:CREATE a BufferedStructure in Shader class; for example:
 	// color = lightList[0].lightDirection;
 
     // Sample the pixel color from the texture using the sampler at this texture coordinate location.
