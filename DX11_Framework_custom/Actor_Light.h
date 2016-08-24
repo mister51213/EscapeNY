@@ -11,7 +11,7 @@ public:
 
     void Initialize()
     {
-        m_spotLight.SetColor(1.f, 1.f, 1.f);
+        m_spotLight.SetColor(.8f, .8f, .8f);
     }
 
     const ILight* GetLight() const
