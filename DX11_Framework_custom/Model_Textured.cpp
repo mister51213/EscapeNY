@@ -11,7 +11,7 @@ bool Model_Textured::Initialize(
     const PrimitiveFactory &PrimMaker, const Graphics & Gfx)
 {
 	// Set the stride for this model type
-	m_Stride = sizeof( VertexPositionUVNormalType );
+	m_Stride = sizeof( VertexBufferTypeAllInOne );
 
 	// Create the vertex array.
 	auto verts = PrimMaker.GetVertices();
@@ -46,9 +46,4 @@ bool Model_Textured::Initialize(
 	RETURN_MESSAGE_IF_FALSE( result, L"Could not initialize the model's buffers." );
 
 	return true;
-}
-
-std::vector<D3D11_INPUT_ELEMENT_DESC> Model_Textured::GetInputElementDescriptions() const
-{
-	return VertexPositionUVType::CreateLayoutDescriptions();
 }

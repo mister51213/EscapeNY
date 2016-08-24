@@ -33,7 +33,6 @@ public:
     // This pure virtual initializer takes into account different types of models
     // (textured and primitive, for example)
     virtual bool Initialize(const PrimitiveFactory &PrimMaker, const Graphics &Gfx) = 0;
-    virtual std::vector<D3D11_INPUT_ELEMENT_DESC> GetInputElementDescriptions() const = 0;
 
     // Returns the number of vertices, sometimes may be different than 
 // the index count

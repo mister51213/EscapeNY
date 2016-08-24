@@ -32,10 +32,10 @@ struct VertexInputType
 
 struct PixelInputType
 {
-	float4 position : SV_POSITION;
+	float4 position : SV_POSITION; // do the math to make it relative to screen coordinates
 	float2 tex : TEXCOORD0;
 	float3 normal : NORMAL;
-	float4 world : TEXCOORD1;
+	float4 world : TEXCOORD1; // tells us the world position of the point on the surface
 };
 
 
@@ -53,6 +53,7 @@ PixelInputType main(VertexInputType input)
     // Calculate the position of the vertex against the world, view, and projection matrices.
     //output.position = mul(input.position, worldMatrix);
     output.position = mul(output.position, worldMatrix);
+    // tells us the world position of the point on the surface
 	output.world = output.position;
     output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
