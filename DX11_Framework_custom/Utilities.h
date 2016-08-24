@@ -162,54 +162,58 @@ void Transpose( std::vector<XMMATRIX> & matrices );
 
 // Common vertex buffer types and corresponding input element descriptions
 
+#pragma region OLD VERTEX TYPES
+
 // Position and Color 
-struct VertexPositionColorType
-{
-	DirectX::XMFLOAT3 position;
-	DirectX::XMFLOAT4 color;
-	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
-};
-
-struct VertexPositionColorNormalType
-{
-	DirectX::XMFLOAT3 position;
-	DirectX::XMFLOAT4 color;
-   	DirectX::XMFLOAT3 normal;
-
-	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
-};
+//struct VertexPositionColorType
+//{
+//	DirectX::XMFLOAT3 position;
+//	DirectX::XMFLOAT4 color;
+//	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
+//};
+//
+//struct VertexPositionColorNormalType
+//{
+//	DirectX::XMFLOAT3 position;
+//	DirectX::XMFLOAT4 color;
+//   	DirectX::XMFLOAT3 normal;
+//
+//	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
+//};
 
 // Position and texture coordinates
-struct VertexPositionUVType
-{
-	DirectX::XMFLOAT3 position;
-	DirectX::XMFLOAT2 uv;
-
-	// Input layout descriptions for position and texture coordinates
-	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
-
-};
+//struct VertexPositionUVType
+//{
+//	DirectX::XMFLOAT3 position;
+//	DirectX::XMFLOAT2 uv;
+//
+//	// Input layout descriptions for position and texture coordinates
+//	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
+//
+//};
 
 // Position, normal and texture coordinates
-struct VertexPositionUVNormalType
-{
-	DirectX::XMFLOAT3 position;
-	DirectX::XMFLOAT2 uv;
-	DirectX::XMFLOAT3 normal;
-
-	// Input layout descriptions for position, normal and texture coordinates
-	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
-};
+//struct VertexPositionUVNormalType
+//{
+//	DirectX::XMFLOAT3 position;
+//	DirectX::XMFLOAT2 uv;
+//	DirectX::XMFLOAT3 normal;
+//
+//	// Input layout descriptions for position, normal and texture coordinates
+//	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
+//};
 
 // Position and normal coordinates
-struct VertexPositionNormalType
-{
-	DirectX::XMFLOAT3 position;
-	DirectX::XMFLOAT3 normal;
+//struct VertexPositionNormalType
+//{
+//	DirectX::XMFLOAT3 position;
+//	DirectX::XMFLOAT3 normal;
+//
+//	// Input layout descriptions for position, normal and texture coordinates
+//	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
+//};
 
-	// Input layout descriptions for position, normal and texture coordinates
-	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
-};
+#pragma endregion
 
 struct MatrixBufferType
 {
@@ -220,34 +224,35 @@ struct MatrixBufferType
     static D3D11_BUFFER_DESC CreateMatrixDescription();
 };
 
-struct LightBufferType
-{
-    XMFLOAT4 ambientColor;
-	XMFLOAT4 diffuseColor; // should be XMFLOAT3?
-	XMFLOAT3 lightDirection; // should be XMFLOAT4?
-	float padding;  // Added extra padding so structure is a multiple of 16 for CreateBuffer function requirements.
+// Common vertex buffer types and corresponding input element descriptions
+constexpr DWORD appendAlignment = D3D11_APPEND_ALIGNED_ELEMENT;
+constexpr DXGI_FORMAT float2Format = DXGI_FORMAT_R32G32_FLOAT;
+constexpr DXGI_FORMAT float3Format = DXGI_FORMAT_R32G32B32_FLOAT;
+constexpr DXGI_FORMAT float4Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+constexpr D3D11_INPUT_CLASSIFICATION vertexDataType = D3D11_INPUT_PER_VERTEX_DATA;
 
-    static D3D11_BUFFER_DESC CreateLightDescription();
+struct VertexBufferTypeAllInOne
+{
+	DirectX::XMFLOAT3 position;
+	DirectX::XMFLOAT2 uv;
+	DirectX::XMFLOAT3 normal;
+	DirectX::XMFLOAT4 color;
+
+	// Input layout descriptions for position, texcoord, normals and color
+	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
+
 };
 
-// For point lighting
-	struct LightColorBufferType
-	{
-		XMFLOAT4 diffuseColor[4];
-	};
+// Use this one type for ALL different lights
+struct LightBufferType
+{
+	XMFLOAT4 lightColor; // should be XMFLOAT3?
+   	XMFLOAT3 lightPosition;
+    float coneAngle;  // Added extra padding so structure is a multiple of 16 for CreateBuffer function requirements.
+    XMFLOAT3 lightDirection; // should be XMFLOAT4?
+    float padding;
 
-	struct LightPositionBufferType
-	{
-		XMFLOAT4 lightPosition[4];
-	};
-
-//struct PtLightBufferType
-//{
-//    XMFLOAT4 color;
-//	XMFLOAT4 position;
-//	float intensity;
-//
-//    static D3D11_BUFFER_DESC CreatePtLightDescription();
-//};
+    static D3D11_BUFFER_DESC CreateLightDescription(unsigned int ByteWidth);
+};
 
 D3D11_SAMPLER_DESC CreateSamplerDescription();

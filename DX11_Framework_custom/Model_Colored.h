@@ -10,8 +10,7 @@ public:
 	~Model_Colored();
 
 	bool Initialize( const PrimitiveFactory &PrimMaker, const Graphics &Gfx )override;
-	std::vector<D3D11_INPUT_ELEMENT_DESC> GetInputElementDescriptions() const override;
 
 private:
-	std::vector<VertexPositionColorNormalType> m_vertices;
+	std::vector<VertexBufferTypeAllInOne> m_vertices;
 };

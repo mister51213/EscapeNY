@@ -14,9 +14,13 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
     m_Overlay.Initialize( *m_pGraphics );
 
     // INITIALIZE LIGHT
-    m_pLight.reset(new Light_Diffuse);
-    m_pLightPT.reset(new Light_Point);
-    m_pLightPT->InitLights(4);
+    m_spotLights.resize(m_numLights);
+    for (Actor_Light& light: m_spotLights)
+    {
+        light.Initialize();
+    }
+
+        m_lightSet.resize(m_numLights);
 
 	reset();
 }
@@ -106,60 +110,94 @@ void Game_FPS::reset()
     }
 }
 
-void Game_FPS::VisualFX()
+void Game_FPS::LightingFX()
 {
-    VisualFX_Disco();
+    //VisualFX_Disco();
+    
+    // TODO: UPDATE SPOTLIGHT WORLD SPECS
+
+    // TODO: manipulate the actors containing the lights
+    // > extract the lights from the actors, and put them in a LIGHT SET
+    // > PAss the light set to the GameView::Update for rendering    
 }
 
-void Game_FPS::VisualFX_Disco() 
-{
-    XMFLOAT4 color = m_pLight->GetColor();
-    XMFLOAT3 direction = m_pLight->GetDirection();
-
-    // MOVE LIGHTING    
-    if (!m_reverseL)
-    {
-        if (direction.x < 1.f)
-        {
-            direction.x += .01f;
-            direction.y += .02f;
-            direction.z += .03f;
-
-            color.x += m_offset;
-            color.y -= m_offset;
-            color.z += m_offset;
-            m_offset += .001f;
-        }
-        else
-            m_reverseL = true;
-    }
-    else
-    {
-        if (direction.x > -1.f)
-        {
-            direction.x -= .01f;
-            direction.y -= .02f;
-            direction.z -= .03f;
-
-            color.x -= m_offset;
-            color.y += m_offset;
-            color.z -= m_offset;
-
-            m_offset -= .001f;
-        }
-        else
-            m_reverseL = false;
-    }
-
-    m_pLight->SetColor(color.x, color.y, color.z);
-    m_pLight->SetDirection(direction.x, direction.y, direction.z);
-}
-
+//
+//void Game_FPS::VisualFX_Disco() 
+//{
+//    XMFLOAT4 color = m_pLight->GetColor();
+//    XMFLOAT3 direction = m_pLight->GetDirection();
+//
+//    // MOVE LIGHTING    
+//    if (!m_reverseL)
+//    {
+//        if (direction.x < 1.f)
+//        {
+//            direction.x += .01f;
+//            direction.y += .02f;
+//            direction.z += .03f;
+//
+//            color.x += m_offset;
+//            color.y -= m_offset;
+//            color.z += m_offset;
+//            m_offset += .001f;
+//        }
+//        else
+//            m_reverseL = true;
+//    }
+//    else
+//    {
+//        if (direction.x > -1.f)
+//        {
+//            direction.x -= .01f;
+//            direction.y -= .02f;
+//            direction.z -= .03f;
+//
+//            color.x -= m_offset;
+//            color.y += m_offset;
+//            color.z -= m_offset;
+//
+//            m_offset -= .001f;
+//        }
+//        else
+//            m_reverseL = false;
+//    }
+//
+//    m_pLight->SetColor(color.x, color.y, color.z);
+//    m_pLight->SetDirection(direction.x, direction.y, direction.z);
+//}
+//
 	// Use RenderFrame to render the list of actors or other game objects
+
+// TODO: ADD SCENE CLASS. Includes:
+/*
+    > Light set
+    > Camera set
+        (a collection of camera objects, each w their own
+         settings [3rd, 1st person, difft angles, etc])
+    >Actor set (difft NPCS, scenery, architecture, etc)
+    >Texture set (difft rooms, difft terrains)
+        
+        ex.)
+        > STATIC SCENE (only initialized in beginning)
+        > DYNAMIC SCENE (updated every frame)
+
+    > Then let it get updated every time
+*/
+    
 void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
-    //VisualFX();
-    GameViewRef.UpdateView(m_pActorsMASTER, /*m_pLight*/m_pLightPT.get());
+    LightingFX();
+
+    for (int i = 0; i < m_numLights; i++)
+    {
+        m_lightSet[i] = m_spotLights[i].GetLight()->GetLightBufferType();
+    }
+
+    // TODO: make it take a whole VECTOR of LightBufferTypes
+    // TODO: refactor the shader to have that array of 300 lights and
+    // initialize them as needed
+
+    GameViewRef.UpdateView(m_pActorsMASTER, m_lightSet);
    	m_Overlay.Render( *m_pGraphics );
 }
 

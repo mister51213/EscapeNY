@@ -21,71 +21,53 @@ void GameView::Initialize()
 	initializeShader();
 }
 
-void GameView::UpdateView(const vector<Actor*>& actors, ILight* pLight) const
+// TODO: this should not directly take LightBufferType; it needs one level up (LightSpot type), 
+// TODO: so it can pass world position info to shader for directional lighting
+void GameView::UpdateView(const vector<Actor*>& actors, const vector<LightBufferType>& lightSet) const
+{ 
+    bool result = m_activeShader.UpdateLightBuffer(
+        m_pD3D->GetDeviceContext(),
+        &(lightSet[0]));
+    // TODO: update the ShaderTEMPLATE to handle MULTPILE LIGHTS
+
+    if (!result)
     {
-        for each (Actor* actor in actors)
-        {
-            drawModel(*actor, pLight);
-        }
+        MessageBox(nullptr, L"Failed to update light buffer.", L"Problem...", MB_OK);
+        PostQuitMessage(0);
+        return;
     }
 
-void GameView::drawModel( const Actor & actor, ILight* pLight ) const
+    // Transpose the matrices HERE now to adhere to the GPU column matrix convention
+    MatrixBufferType transforms{};
+    transforms.view = XMMatrixTranspose(m_pCam->GetViewMatrix());
+    transforms.projection = XMMatrixTranspose(m_pCam->GetProjectionMatrix());
+
+    for each (Actor* actor in actors)
+    {
+        drawModel(*actor, transforms);
+    }
+}
+
+void GameView::drawModel( const Actor & actor, MatrixBufferType &Transforms ) const
 {
-    // UNTextured cube index is 0, so if > 0, use tex shader
-    if (actor.GetModelType() > 0)
-    {
-        //// texture the actor
-        //m_shader_Texture.Render(
-        //    m_pD3D->GetDeviceContext(),
-        //    GetWorldMatrix(actor.GetWorldSpecs()),
-        //    m_pCam->GetViewMatrix(),
-        //    m_pCam->GetProjectionMatrix(),
-        //    (m_TexturePool[actor.GetTexIndex()]).GetTextureView());
+  	// Prepare the graphics pipeline for this actor
+	auto pContext = m_pD3D->GetDeviceContext();
+	auto pTextureView = ( m_TexturePool[ actor.GetTexIndex() ] ).GetTextureView();
+	Transforms.world = GetWorldMatrix( actor.GetWorldSpecs() );
 
-        // lighting effects
-        // TODO: Shader base should take a parameter that decides which effects to turn on and off,
-        // TODO: which will be dictated by bool effectOn in FX_ struct
-        //int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
-        //m_shader_Lighting.Render(
-        //    m_pD3D->GetDeviceContext(),
-        //    GetWorldMatrix(actor.GetWorldSpecs()),
-        //    m_pCam->GetViewMatrix(),
-        //    m_pCam->GetProjectionMatrix(),
-        //    (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
-        //    pLight);
+	// Update the vertex shader's constant buffer
+	bool result = m_activeShader.UpdateTransformBuffer( pContext, Transforms );
+	if( !result )
+	{
+		MessageBox( nullptr, L"Failed to update Matrix buffer.", L"Problem...", MB_OK );
+		PostQuitMessage( 0 );
+		return;
+	}
+	
+	// Set the shader and its resources
+	m_activeShader.Render( pContext, pTextureView );
 
-        m_shader_LightingPT.Render(
-            m_pD3D->GetDeviceContext(),
-            GetWorldMatrix(actor.GetWorldSpecs()),
-            m_pCam->GetViewMatrix(),
-            m_pCam->GetProjectionMatrix(),
-            (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
-            pLight);
-    }
-    else
-    {   
-        // TODO: ALSO Update Color hlsl shaders to use lighting.
-        // color the actor
-        //m_shader_Color.Render(
-        //    m_pD3D->GetDeviceContext(),
-        //    GetWorldMatrix(actor.GetWorldSpecs()),
-        //    m_pCam->GetViewMatrix(),
-        //    m_pCam->GetProjectionMatrix(),
-        //    NULL,
-        //    pLight);
-
-       // LIGHTING
-        int indexCount = m_ModelPool[actor.GetModelType()]->GetIndexCount();
-        m_shader_Lighting.Render(
-            m_pD3D->GetDeviceContext(),
-           // indexCount,
-            GetWorldMatrix(actor.GetWorldSpecs()),
-            m_pCam->GetViewMatrix(),
-            m_pCam->GetProjectionMatrix(),
-            (m_TexturePool[actor.GetTexIndex()]).GetTextureView(),
-            pLight);
-    }
-    // TODO: there seems to be an error here with new FX* parameter
+    // DRAW CALL
     m_pGfx->RenderModel(*(m_ModelPool[actor.GetModelType()]));
 }
 
@@ -99,7 +81,7 @@ void GameView::initModelPool()
 
     prim.CreateCube(defaultSpecs);
     prim.CreateColor(1.f,0.f,0.f,.5f);
-    m_ModelPool[CUBE].reset(new Model_Colored);
+    m_ModelPool[CUBE].reset(new Model_Textured);
     m_ModelPool[CUBE]->Initialize(prim, *m_pGfx);
 
     prim.CreateCube(defaultSpecs);
@@ -158,8 +140,5 @@ void GameView::initTexturePool()
 
 void GameView::initializeShader()
 {
-	// m_shader_Texture.Initialize( m_pD3D->GetDevice() );
-    m_shader_Color.Initialize( m_pD3D->GetDevice() );    
-    m_shader_Lighting.Initialize(m_pD3D->GetDevice());
-    m_shader_LightingPT.Initialize(m_pD3D->GetDevice());
+    m_activeShader.Initialize(m_pD3D->GetDevice());
 }

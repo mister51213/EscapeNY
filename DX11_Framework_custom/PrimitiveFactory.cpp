@@ -357,8 +357,9 @@ void PrimitiveFactory::CreateMesh(
         file.read(reinterpret_cast<char*>(&vertexCount), sizeof(int));
 
         // pack into vector of structs
-        vector<VertexPositionUVNormalType> vertList(vertexCount);
-        file.read(reinterpret_cast<char*>(vertList.data()), sizeof(VertexPositionUVNormalType)*vertexCount);
+        // TODO: change OBJ to BINARY LOADER
+        vector<VertexBufferTypeAllInOne> vertList(vertexCount);
+        file.read(reinterpret_cast<char*>(vertList.data()), sizeof(VertexBufferTypeAllInOne)*vertexCount);
 
 
         // Pack into member variables of PrimFactory

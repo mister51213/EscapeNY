@@ -163,6 +163,7 @@ protected:
 	comptr<ID3D11VertexShader> m_vertexShader;
 	comptr<ID3D11PixelShader> m_pixelShader;
 	comptr<ID3D11InputLayout> m_layout;
+
 	comptr<ID3D11Buffer> m_matrixBuffer;
     comptr<ID3D11Buffer> m_lightBuffer;
 

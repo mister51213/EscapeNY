@@ -4,13 +4,13 @@
 #include "ILightDirection.h"
 
 class ILightSpot:
-	public ILightPoint, public ILightDirection
+	public ILightPoint
 {
 public:
-	virtual void SetInnerConeAngle(float InnerAngle) = 0;
-	virtual void SetOuterConeAngle(float OuterAndle) = 0;
+	virtual float GetConeAngle() const = 0;
+	virtual void SetConeAngle(float Angle) = 0;
 
-	virtual float GetInnerConeAngle()const = 0;
-	virtual float GetOuterConeAngle()const = 0;
+   	virtual const DirectX::XMFLOAT3 &GetDirection()const = 0;
+	virtual void SetDirection( float X, float Y, float Z ) = 0;
 };
 
