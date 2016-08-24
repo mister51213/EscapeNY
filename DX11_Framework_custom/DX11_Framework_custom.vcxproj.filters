@@ -67,6 +67,9 @@
     <Filter Include="Header Files\Lighting">
       <UniqueIdentifier>{dfef4832-f806-4e77-bfef-7c80e7c77156}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Shader Files\OBSOLETE">
+      <UniqueIdentifier>{d963667b-1449-43bb-a654-e9d99909352b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -201,6 +204,9 @@
     <ClCompile Include="Shader_PtLight.cpp">
       <Filter>Source Files\Shader Files</Filter>
     </ClCompile>
+    <ClCompile Include="Actor_Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -248,17 +254,8 @@
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shader_Color.h">
-      <Filter>Header Files\Shader Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader_Texture.h">
-      <Filter>Header Files\Shader Files</Filter>
-    </ClInclude>
     <ClInclude Include="COMHandler.h">
       <Filter>Header Files\Utility Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files\Shader Files</Filter>
     </ClInclude>
     <ClInclude Include="PrimitiveFactory.h">
       <Filter>Header Files</Filter>
@@ -335,9 +332,6 @@
     <ClInclude Include="Game_Maze.h">
       <Filter>Header Files\SubGames</Filter>
     </ClInclude>
-    <ClInclude Include="Shader_Lighting.h">
-      <Filter>Header Files\Shader Files</Filter>
-    </ClInclude>
     <ClInclude Include="ILight.h">
       <Filter>Header Files\Lighting</Filter>
     </ClInclude>
@@ -353,14 +347,41 @@
     <ClInclude Include="Light_Diffuse.h">
       <Filter>Header Files\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="Shader_Sobel.h">
-      <Filter>Header Files\Shader Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader_PtLight.h">
-      <Filter>Header Files\Shader Files</Filter>
-    </ClInclude>
     <ClInclude Include="Light_Point.h">
       <Filter>Header Files\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_Player.h">
+      <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_NPC.h">
+      <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\Shader Files\OBSOLETE</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_Color.h">
+      <Filter>Header Files\Shader Files\OBSOLETE</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_Lighting.h">
+      <Filter>Header Files\Shader Files\OBSOLETE</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_PtLight.h">
+      <Filter>Header Files\Shader Files\OBSOLETE</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_Sobel.h">
+      <Filter>Header Files\Shader Files\OBSOLETE</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_Texture.h">
+      <Filter>Header Files\Shader Files\OBSOLETE</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderTEMPLATE.h">
+      <Filter>Header Files\Shader Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Light_Spot.h">
+      <Filter>Header Files\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_Light.h">
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

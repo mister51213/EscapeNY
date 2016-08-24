@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Actor_Light.cpp" />
     <ClCompile Include="Actor_NPC.cpp" />
     <ClCompile Include="actor_player.cpp" />
     <ClCompile Include="Actor_Player_Alt.cpp" />
@@ -192,6 +193,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="Actor_Light.h" />
+    <ClInclude Include="Actor_NPC.h" />
+    <ClInclude Include="Actor_Player.h" />
     <ClInclude Include="Actor_Player_Alt.h" />
     <ClInclude Include="Algorithm_Grid3D.h" />
     <ClInclude Include="Algorithm_Random.h" />
@@ -212,6 +216,7 @@
     <ClInclude Include="Algorithm_Maze.h" />
     <ClInclude Include="Light_Diffuse.h" />
     <ClInclude Include="Light_Point.h" />
+    <ClInclude Include="Light_Spot.h" />
     <ClInclude Include="MessageBox_Goal.h" />
     <ClInclude Include="MessageBox_Title.h" />
     <ClInclude Include="Overlay_Base.h" />
@@ -232,6 +237,7 @@
     <ClInclude Include="Overlay.h" />
     <ClInclude Include="PrimitiveFactory.h" />
     <ClInclude Include="Shader_Lighting.h" />
+    <ClInclude Include="ShaderTEMPLATE.h" />
     <ClInclude Include="Shader_PtLight.h" />
     <ClInclude Include="Shader_Sobel.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

@@ -220,34 +220,16 @@ struct MatrixBufferType
     static D3D11_BUFFER_DESC CreateMatrixDescription();
 };
 
+// Use this one type for ALL different lights
 struct LightBufferType
 {
-    XMFLOAT4 ambientColor;
-	XMFLOAT4 diffuseColor; // should be XMFLOAT3?
-	XMFLOAT3 lightDirection; // should be XMFLOAT4?
-	float padding;  // Added extra padding so structure is a multiple of 16 for CreateBuffer function requirements.
+	XMFLOAT4 lightColor; // should be XMFLOAT3?
+   	XMFLOAT3 lightPosition;
+    float coneAngle;  // Added extra padding so structure is a multiple of 16 for CreateBuffer function requirements.
+    XMFLOAT3 lightDirection; // should be XMFLOAT4?
+    float padding;
 
     static D3D11_BUFFER_DESC CreateLightDescription();
 };
-
-// For point lighting
-	struct LightColorBufferType
-	{
-		XMFLOAT4 diffuseColor[4];
-	};
-
-	struct LightPositionBufferType
-	{
-		XMFLOAT4 lightPosition[4];
-	};
-
-//struct PtLightBufferType
-//{
-//    XMFLOAT4 color;
-//	XMFLOAT4 position;
-//	float intensity;
-//
-//    static D3D11_BUFFER_DESC CreatePtLightDescription();
-//};
 
 D3D11_SAMPLER_DESC CreateSamplerDescription();
