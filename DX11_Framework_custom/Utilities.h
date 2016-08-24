@@ -248,7 +248,7 @@ struct LightBufferType
     XMFLOAT3 lightDirection; // should be XMFLOAT4?
     float padding;
 
-    static D3D11_BUFFER_DESC CreateLightDescription();
+    static D3D11_BUFFER_DESC CreateLightDescription(unsigned int ByteWidth);
 };
 
 D3D11_SAMPLER_DESC CreateSamplerDescription();

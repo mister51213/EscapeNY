@@ -339,11 +339,11 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexBufferTypeAllInOne::CreateLayoutDesc
     return desc;
 }
 
-D3D11_BUFFER_DESC LightBufferType::CreateLightDescription()
+D3D11_BUFFER_DESC LightBufferType::CreateLightDescription(unsigned int ByteWidth)
 {
     D3D11_BUFFER_DESC lightBufferDesc;
     lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	lightBufferDesc.ByteWidth = sizeof(LightBufferType);
+	lightBufferDesc.ByteWidth = ByteWidth;
 	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	lightBufferDesc.MiscFlags = 0;

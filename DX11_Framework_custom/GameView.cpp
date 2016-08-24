@@ -21,12 +21,13 @@ void GameView::Initialize()
 	initializeShader();
 }
 
+// TODO: this should not directly take LightBufferType; it needs one level up (LightSpot type), 
+// TODO: so it can pass world position info to shader for directional lighting
 void GameView::UpdateView(const vector<Actor*>& actors, const vector<LightBufferType>& lightSet) const
-{
+{ 
     bool result = m_activeShader.UpdateLightBuffer(
         m_pD3D->GetDeviceContext(),
         &(lightSet[0]));
-
     // TODO: update the ShaderTEMPLATE to handle MULTPILE LIGHTS
 
     if (!result)
@@ -66,7 +67,7 @@ void GameView::drawModel( const Actor & actor, MatrixBufferType &Transforms ) co
 	// Set the shader and its resources
 	m_activeShader.Render( pContext, pTextureView );
 
-    // ACTUAL DRAW CALL
+    // DRAW CALL
     m_pGfx->RenderModel(*(m_ModelPool[actor.GetModelType()]));
 }
 

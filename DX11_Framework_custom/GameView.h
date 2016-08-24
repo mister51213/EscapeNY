@@ -6,14 +6,9 @@
 
 #include "Camera.h"
 #include "Model_Textured.h"
-//#include "Model_Colored.h"
 #include "Model.h"
 #include "Graphics.h"
 #include "Texture.h"
-//#include "Shader_Color.h"
-//#include "Shader_Texture.h"
-//#include "Shader_Lighting.h"
-//#include "Shader_PtLight.h"
 #include "Actor.h"
 #include "Actor_Player.h"
 #include "Actor_NPC.h"
@@ -42,10 +37,6 @@ private:
     D3DGraphics* m_pD3D;
 
     std::shared_ptr<Camera> m_pCam;
-
-    /*Shader_Color m_shader_Color;
-    Shader_Lighting m_shader_Lighting;
-    Shader_PtLight m_shader_LightingPT;*/
 
     ShaderT<MatrixBufferType, LightBufferType> m_activeShader;
 

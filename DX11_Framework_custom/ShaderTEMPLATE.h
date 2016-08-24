@@ -16,28 +16,15 @@ public:
 		// Initialize the vertex and pixel shaders.
 		bool result = InitializeShaderCommon(
 			pDevice,
-			L"Shaders/DiffuseLight_vs.cso",
-			L"Shaders/DiffuseLight_ps.cso" );
+			L"Shaders/Shader_vs.cso",
+			L"Shaders/Shader_ps.cso" );
 		RETURN_IF_FALSE( result );
 
 		///////////////////////////////////////////////////////////
 		// Texture shader setup
 		///////////////////////////////////////////////////////////
 		// Create a texture sampler state description.
-		D3D11_SAMPLER_DESC samplerDesc{};
-		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.MipLODBias = 0.0f;
-		samplerDesc.MaxAnisotropy = 1;
-		samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-		samplerDesc.BorderColor[ 0 ] = 0;
-		samplerDesc.BorderColor[ 1 ] = 0;
-		samplerDesc.BorderColor[ 2 ] = 0;
-		samplerDesc.BorderColor[ 3 ] = 0;
-		samplerDesc.MinLOD = 0;
-		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+        D3D11_SAMPLER_DESC samplerDesc = CreateSamplerDescription();
 
 		// Create the texture sampler state.
 		HRESULT hr = pDevice->CreateSamplerState( &samplerDesc, &m_sampleState );
@@ -46,24 +33,14 @@ public:
 		///////////////////////////////////////////////////////////
 		// Light shader setup
 		///////////////////////////////////////////////////////////
-		// Light constant buffer description
-		D3D11_BUFFER_DESC lightBufferDesc{};
-		lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-		//lightBufferDesc.ByteWidth = sizeof( LightBufferType );
 
-		//DWORD test = sizeof( XMFLOAT4 ) + ( sizeof( XMFLOAT3 ) * 2 ) + ( sizeof( float ) * 2 );
-
-		//lightBufferDesc.ByteWidth = sizeof( LightBuffer );
-        lightBufferDesc.ByteWidth = sizeof( LightBuffer )*lightCount; // for multiple lights
-		lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+        D3D11_BUFFER_DESC lightBufferDesc = LightBufferType::CreateLightDescription(sizeof(LightBuffer));
 
 		// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 		hr = pDevice->CreateBuffer( &lightBufferDesc, NULL, &m_lightBuffer );
 		RETURN_IF_FAILED( hr );
 
 		return result;
-
 	}
 
 	bool UpdateTransformBuffer(
@@ -133,8 +110,6 @@ public:
 		pContext->VSSetShader( m_vertexShader.Get(), NULL, 0 );
 		pContext->PSSetShader( m_pixelShader.Get(), NULL, 0 );
 	}
-
-
 
 protected:
 	bool UpdateConstantBuffer(
