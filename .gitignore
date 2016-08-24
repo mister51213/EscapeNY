@@ -244,3 +244,4 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 *.db
+/DX11_Framework_custom/Shaders/spare

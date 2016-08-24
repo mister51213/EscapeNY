@@ -13,7 +13,7 @@ Shader::Shader( const std::wstring &vs, const std::wstring &ps)
 	m_psFilename = ps;
 }
 
-bool Shader::Initialize( ID3D11Device* pDevice )
+bool Shader::Initialize( ID3D11Device* pDevice, int LightCount )
 {
     // Initialize the pointers this function will use to null.
 	comptr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer;
@@ -54,7 +54,7 @@ bool Shader::Initialize( ID3D11Device* pDevice )
     RETURN_IF_FAILED( hr );
 
         // LIGHT BUFFER DESCRIPTION
-    D3D11_BUFFER_DESC lightBufferDesc = LightBufferType::CreateLightDescription();
+	D3D11_BUFFER_DESC lightBufferDesc = LightBufferType::CreateLightDescription( LightCount );
     
     // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
     hr = pDevice->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
