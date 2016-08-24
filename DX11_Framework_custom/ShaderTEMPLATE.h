@@ -11,7 +11,7 @@ public:
 	ShaderT() = default;
 	~ShaderT() = default;
 
-	bool Initialize( ID3D11Device* pDevice )
+	bool Initialize( ID3D11Device* pDevice, int lightCount = 1)
 	{
 		// Initialize the vertex and pixel shaders.
 		bool result = InitializeShaderCommon(
@@ -51,8 +51,10 @@ public:
 		lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 		//lightBufferDesc.ByteWidth = sizeof( LightBufferType );
 
-		DWORD test = sizeof( XMFLOAT4 ) + ( sizeof( XMFLOAT3 ) * 2 ) + ( sizeof( float ) * 2 );
-		lightBufferDesc.ByteWidth = sizeof( LightBuffer );
+		//DWORD test = sizeof( XMFLOAT4 ) + ( sizeof( XMFLOAT3 ) * 2 ) + ( sizeof( float ) * 2 );
+
+		//lightBufferDesc.ByteWidth = sizeof( LightBuffer );
+        lightBufferDesc.ByteWidth = sizeof( LightBuffer )*lightCount; // for multiple lights
 		lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 

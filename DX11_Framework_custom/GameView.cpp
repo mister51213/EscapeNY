@@ -80,7 +80,7 @@ void GameView::initModelPool()
 
     prim.CreateCube(defaultSpecs);
     prim.CreateColor(1.f,0.f,0.f,.5f);
-    m_ModelPool[CUBE].reset(new Model_Colored);
+    m_ModelPool[CUBE].reset(new Model_Textured);
     m_ModelPool[CUBE]->Initialize(prim, *m_pGfx);
 
     prim.CreateCube(defaultSpecs);

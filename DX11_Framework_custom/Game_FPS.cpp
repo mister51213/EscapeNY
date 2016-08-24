@@ -15,6 +15,11 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 
     // INITIALIZE LIGHT
     m_spotLights.resize(m_numLights);
+    for (Actor_Light& light: m_spotLights)
+    {
+        light.Initialize();
+    }
+
         m_lightSet.resize(m_numLights);
 
 	reset();

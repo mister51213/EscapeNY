@@ -11,7 +11,7 @@ Model_Colored::~Model_Colored()
 bool Model_Colored::Initialize( const PrimitiveFactory & PrimMaker, const Graphics & Gfx )
 {
 	// Set the stride for this model type
-	m_Stride = sizeof( VertexPositionColorNormalType );
+	m_Stride = sizeof( VertexBufferTypeAllInOne );
 
 	// Load the vertex array with data.
 	auto verts = PrimMaker.GetVertices();
@@ -33,6 +33,8 @@ bool Model_Colored::Initialize( const PrimitiveFactory & PrimMaker, const Graphi
 		++idx;
 	}
 
+    // TODO: get tex coords too up above.
+
 	// Load the index array with data.
 	auto indices = PrimMaker.GetIndices();
 
@@ -44,9 +46,4 @@ bool Model_Colored::Initialize( const PrimitiveFactory & PrimMaker, const Graphi
 	RETURN_IF_FALSE( result );
 
 	return true;
-}
-
-std::vector<D3D11_INPUT_ELEMENT_DESC> Model_Colored::GetInputElementDescriptions() const
-{
-	return VertexPositionColorType::CreateLayoutDescriptions();
 }

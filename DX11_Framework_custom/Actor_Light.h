@@ -9,6 +9,11 @@ public:
     Actor_Light();
     ~Actor_Light();
 
+    void Initialize()
+    {
+        m_spotLight.SetColor(1.f, 1.f, 1.f);
+    }
+
     const ILight* GetLight() const
     {
         return &m_spotLight;

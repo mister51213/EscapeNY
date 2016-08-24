@@ -14,7 +14,7 @@ cbuffer WMatBuffer
     matrix objectWorldMatrix;
 };
 
-// this is only INITIALIZED once per frame (for the camera)
+// TODO: change this to LightBufferType
 cbuffer LightBuffer
 {
     float4 ambientColor;
@@ -22,6 +22,16 @@ cbuffer LightBuffer
     float3 lightDirection;
     float padding;
 };
+
+struct LightTemplate
+{
+    float4 ambientColor;
+    float4 diffuseColor;
+    float3 lightDirection;
+    float padding;
+};
+
+StructuredBuffer<LightTemplate> lightList;
 
 //////////////
 // TYPEDEFS //
@@ -42,6 +52,10 @@ float4 main(PixelInputType input) : SV_TARGET
     float3 lightDir;
     float lightIntensity;
     float4 color;
+
+	// TODO:CREATE a BufferedStructure in Shader class
+	// for example:
+	// color = lightList[0].lightDirection;
 
     // Sample the pixel color from the texture using the sampler at this texture coordinate location.
     textureColor = shaderTexture.Sample(SampleType, input.tex);

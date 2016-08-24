@@ -6,7 +6,7 @@
 
 #include "Camera.h"
 #include "Model_Textured.h"
-#include "Model_Colored.h"
+//#include "Model_Colored.h"
 #include "Model.h"
 #include "Graphics.h"
 #include "Texture.h"
