@@ -162,6 +162,8 @@ void Transpose( std::vector<XMMATRIX> & matrices );
 
 // Common vertex buffer types and corresponding input element descriptions
 
+#pragma region OLD VERTEX TYPES
+
 // Position and Color 
 //struct VertexPositionColorType
 //{
@@ -210,6 +212,8 @@ void Transpose( std::vector<XMMATRIX> & matrices );
 //	// Input layout descriptions for position, normal and texture coordinates
 //	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
 //};
+
+#pragma endregion
 
 struct MatrixBufferType
 {

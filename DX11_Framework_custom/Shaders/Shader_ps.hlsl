@@ -15,23 +15,32 @@ cbuffer WMatBuffer
 };
 
 // TODO: change this to LightBufferType
-cbuffer LightBuffer
-{
-    float4 ambientColor;
-    float4 diffuseColor;
-    float3 lightDirection;
-    float padding;
-};
+//cbuffer LightBuffer
+//{
+//    float4 ambientColor;
+//    float4 diffuseColor;
+//    float3 lightDirection;
+//    float padding;
+//};
 
-struct LightTemplate
+cbuffer LightBufferType
 {
-    float4 ambientColor;
-    float4 diffuseColor;
-    float3 lightDirection;
-    float padding;
-};
+	float4 lightColor;
+	float3 lightPosition;
+	float coneAngle;
+	float3 lightDirection;
+	float padding;
+}
 
-StructuredBuffer<LightTemplate> lightList;
+//struct LightTemplate
+//{
+//    float4 ambientColor;
+//    float4 diffuseColor;
+//    float3 lightDirection;
+//    float padding;
+//};
+
+//StructuredBuffer<LightTemplate> lightList;
 
 //////////////
 // TYPEDEFS //
@@ -53,6 +62,9 @@ float4 main(PixelInputType input) : SV_TARGET
     float lightIntensity;
     float4 color;
 
+	// Set ambient color here
+	float4 ambientColor = { 0.15f, 0.3f, 0.3f, 1.0f };
+
 	// TODO:CREATE a BufferedStructure in Shader class
 	// for example:
 	// color = lightList[0].lightDirection;
@@ -73,7 +85,7 @@ float4 main(PixelInputType input) : SV_TARGET
     if(lightIntensity > 0.0f)
     {
         // Determine the final diffuse color based on the diffuse color and the amount of light intensity.
-        color += (diffuseColor * lightIntensity);
+        color += (lightColor * lightIntensity);
     }
 
     // Saturate final light color
