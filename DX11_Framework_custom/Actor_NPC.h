@@ -21,6 +21,7 @@ public:
         //srand( static_cast<unsigned int>( time( nullptr ) ) );
         //int dieRoll = rand() % 3;
         //float randNum = (rand()%50)/10.0f; // get random float from 0~10.0
+
         if (pInput.IsKeyDown(VK_RIGHT))
         {
             //if(randI == 0)
@@ -53,12 +54,14 @@ public:
 
         if (pInput.IsKeyDown(VK_SPACE))
         {
-            Rotate({ 1.f,1.f,1.f });
+			// Rotate({ 1.f,1.f,1.f});
+            Rotate({ 0.f,1.f,0.f });
         }
 
         if (pInput.IsKeyDown(VK_CONTROL))
         {
-            Rotate({ -1.f,-1.f,-1.f });
+			//Rotate({ -1.f,-1.f,-1.f });
+            Rotate({ 0.f,-1.f,0.f });
         }
     }
 
