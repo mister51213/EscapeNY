@@ -148,7 +148,6 @@ enum eTexture
 	SharkSkin = 13
 };
 
-
 ////////////////////////////////////////////////////////////////
 // FUNCTION FOR GETTING WORLD MATRIX
 // TODO: make it global; see which is faster

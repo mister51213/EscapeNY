@@ -6,6 +6,9 @@
 // GLOBALS //
 /////////////
 Texture2D shaderTexture;
+// TODO: use second texture as normal map
+Texture2D shaderTextures[2];
+
 SamplerState SampleType;
 
 // This will be INITIALIZED differently for EACH OBJECT
@@ -52,14 +55,18 @@ float4 main(PixelInputType input) : SV_TARGET
 	// color = lightList[0].lightDirection;
 
     // Sample the pixel color from the texture using the sampler at this texture coordinate location.
-    float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
-	float4 ambientColor = textureColor*float4( 0.5f, 0.1f, 0.0f, 1.0f );
+    //float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
+    float4 textureColor = shaderTextures[0].Sample(SampleType, input.tex);
+    float4 normalMap = shaderTextures[1].Sample(SampleType, input.tex);
+
+	float4 ambientColor = textureColor*float4( 0.3f, 0.3f, 0.3f, 1.0f );
 	
     // Invert the light direction for calculations.
-    float3 lightDir = -lightDirection;
+    float3 lightDir = -(lightDirection* normalMap.xyz);
 
+    float lightIntensity = dot(input.normal, lightDir)*lightColor;
     // Calculate the amount of light on this pixel.
-    float lightIntensity = saturate(dot(input.normal, lightDir))*lightColor;
-
-    return (textureColor * lightIntensity) + ambientColor;
+    float4 finalColor = saturate(textureColor * lightIntensity) + ambientColor;
+    
+    return finalColor;
 }

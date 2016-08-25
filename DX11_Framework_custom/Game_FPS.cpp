@@ -70,7 +70,7 @@ void Game_FPS::reset()
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
       { 5.f, 5.f, 5.f } };
-    aTest1 = Actor_NPC(wSpecs1, SharkSkin, ModelSpecs_L(), CUSTOM_MESH);
+    aTest1 = Actor_NPC(wSpecs1, Water1, ModelSpecs_L(), CUSTOM_MESH);
     // 
     ModelSpecs_W wSpecs2 = 
     { { 20.f, -.5f, 20.f },
@@ -186,7 +186,7 @@ void Game_FPS::LightingFX()
     
 void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
-    LightingFX();
+    //LightingFX();
 
     for (int i = 0; i < m_numLights; i++)
     {

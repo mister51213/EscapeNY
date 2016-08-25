@@ -18,6 +18,7 @@ void GameView::Initialize()
 {
     initModelPool();
 	initTexturePool();
+    initNormalMapPool();
 	initializeShader();
 }
 
@@ -64,8 +65,16 @@ void GameView::drawModel( const Actor & actor, MatrixBufferType &Transforms ) co
 		return;
 	}
 	
+    // TODO: pass an array of Textures instead here:
+    
+    ID3D11ShaderResourceView* texArray[2];
+
+    texArray[0] = ( m_TexturePool[ actor.GetTexIndex() ] ).GetTextureView();
+    texArray[1] = ( m_NormalPool[ actor.GetTexIndex() ] ).GetTextureView();
+
 	// Set the shader and its resources
-	m_activeShader.Render( pContext, pTextureView );
+//	m_activeShader.Render( pContext, pTextureView );
+    m_activeShader.Render( pContext, texArray );
 
     // DRAW CALL
     m_pGfx->RenderModel(*(m_ModelPool[actor.GetModelType()]));
@@ -122,9 +131,9 @@ void GameView::initTexturePool()
 {
 	const int numTextures = 14;
 	m_TexturePool.resize( numTextures );
-	m_TexturePool[ AsphaltFresh ].Initialize( *m_pGfx, L"Textures\\fresh-black-asphalt-texture.jpg" );
+	m_TexturePool[ AsphaltFresh ].Initialize( *m_pGfx, L"Textures\\asphaltFresh.jpg" );
 	m_TexturePool[ AsphaltTGA ].Initialize( *m_pGfx, L"Textures\\asphalt.tga" );
-	m_TexturePool[ AsphaltOld ].Initialize( *m_pGfx, L"Textures\\old-asphalt-texture.jpg" );
+	m_TexturePool[ AsphaltOld ].Initialize( *m_pGfx, L"Textures\\asphaltOld.jpg" );
     m_TexturePool[ Water1 ].Initialize( *m_pGfx, L"Textures\\water1.jpg" );
     m_TexturePool[ Water2 ].Initialize( *m_pGfx, L"Textures\\water2.jpg" );
     m_TexturePool[ Water3 ].Initialize( *m_pGfx, L"Textures\\water3.jpg" );
@@ -136,6 +145,26 @@ void GameView::initTexturePool()
     m_TexturePool[ Underwater6 ].Initialize( *m_pGfx, L"Textures\\underwater6.jpg" );
     m_TexturePool[ Underwater7 ].Initialize( *m_pGfx, L"Textures\\underwater7.jpg" );
     m_TexturePool[ SharkSkin ].Initialize( *m_pGfx, L"Textures\\sharkskin1.jpg" );
+}
+
+void GameView::initNormalMapPool()
+{
+    const int numTextures = 14;
+	m_NormalPool.resize( numTextures );
+	m_NormalPool[ AsphaltFresh ].Initialize( *m_pGfx, L"Textures\\asphaltFreshN.jpg" );
+	m_NormalPool[ AsphaltTGA ].Initialize( *m_pGfx, L"Textures\\asphaltN.tga" );
+	m_NormalPool[ AsphaltOld ].Initialize( *m_pGfx, L"Textures\\asphaltOldN.jpg" );
+    m_NormalPool[ Water1 ].Initialize( *m_pGfx, L"Textures\\water1N.jpg" );
+    m_NormalPool[ Water2 ].Initialize( *m_pGfx, L"Textures\\water2N.jpg" );
+    m_NormalPool[ Water3 ].Initialize( *m_pGfx, L"Textures\\water3N.jpg" );
+	m_NormalPool[ Underwater1 ].Initialize( *m_pGfx, L"Textures\\underwater1N.jpg" );
+    m_NormalPool[ Underwater2 ].Initialize( *m_pGfx, L"Textures\\underwater2N.jpg" );
+    m_NormalPool[ Underwater3 ].Initialize( *m_pGfx, L"Textures\\underwater3N.jpg" );
+    m_NormalPool[ Underwater4 ].Initialize( *m_pGfx, L"Textures\\underwater4N.jpg" );
+    m_NormalPool[ Underwater5 ].Initialize( *m_pGfx, L"Textures\\underwater5N.jpg" );
+    m_NormalPool[ Underwater6 ].Initialize( *m_pGfx, L"Textures\\underwater6N.jpg" );
+    m_NormalPool[ Underwater7 ].Initialize( *m_pGfx, L"Textures\\underwater7N.jpg" );
+    m_NormalPool[SharkSkin].Initialize(*m_pGfx, L"Textures\\sharkskin1N.jpg");
 }
 
 void GameView::initializeShader()

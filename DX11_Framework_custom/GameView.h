@@ -29,6 +29,7 @@ public:
     void initModelPool();
 private:
 	void initTexturePool();
+    void initNormalMapPool();
 	void initializeShader();
 	void drawModel( const Actor& actor, MatrixBufferType &Transforms) const;
 
@@ -41,6 +42,7 @@ private:
     ShaderT<MatrixBufferType, LightBufferType> m_activeShader;
 
     vector<Texture> m_TexturePool;
+    vector<Texture> m_NormalPool;
     vector<std::shared_ptr<Model>> m_ModelPool;
 
     std::shared_ptr<Model_Textured> m_pModTEST = 0;

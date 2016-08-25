@@ -81,7 +81,8 @@ public:
 
 	void Render(
 		ID3D11DeviceContext* pContext,
-		ID3D11ShaderResourceView *pTextureView )const
+		/*ID3D11ShaderResourceView *pTextureView*/ 
+        ID3D11ShaderResourceView *const *ppTextureViews )const
 	{
 		//////////////////////////////////////////////////////
 		//				Set shader resources				//
@@ -103,8 +104,16 @@ public:
 		// Set the sampler state in the pixel shader.
 		pContext->PSSetSamplers( 0, 1, m_sampleState.GetAddressOf() );
 
-		// Set shader resources
-		pContext->PSSetShaderResources( 0, 1, &pTextureView );
+        // TODO: MAKE THIS TAKE AN ARRAY of shaders for multitexturing and normal mapping
+        // TODO: vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+        // Set shader resources
+		//pContext->PSSetShaderResources( 0, 1, &pTextureView );
+
+   		pContext->PSSetShaderResources( 0, 2, ppTextureViews );
+
+          // TODO: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          // TODO: MAKE THIS TAKE AN ARRAY of shaders for multitexturing and normal mapping
 
 		// Set the vertex and pixel shaders that will be used to render this triangle.
 		pContext->VSSetShader( m_vertexShader.Get(), NULL, 0 );
