@@ -58,15 +58,23 @@ float4 main(PixelInputType input) : SV_TARGET
     //float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
     float4 textureColor = shaderTextures[0].Sample(SampleType, input.tex);
     float4 normalMap = shaderTextures[1].Sample(SampleType, input.tex);
-
-	float4 ambientColor = textureColor*float4( 0.3f, 0.3f, 0.3f, 1.0f );
+	normalMap.rgb = normalMap.rgb - float3(.5f, .5f, .5f);
+	float3 nMap = normalize(normalMap.rgb);
+	float4 ambientColor = textureColor*float4( 0.1f, 0.1f, 0.1f, 1.0f );
 	
     // Invert the light direction for calculations.
-    float3 lightDir = -(lightDirection* normalMap.xyz);
+    float3 lightDir = -(lightDirection);
 
-    float lightIntensity = dot(input.normal, lightDir)*lightColor;
+	float nLightIntensity = dot(nMap, lightDir);
+	float lightIntensity = dot(input.normal, lightDir) * nLightIntensity;
+
+	float4 finalColor = { 0.f, 0.f, 0.f, 0.f };
+	if(lightIntensity > 0.f)
+	{
+		finalColor = (textureColor * lightColor) * lightIntensity;
+	}
     // Calculate the amount of light on this pixel.
-    float4 finalColor = saturate(textureColor * lightIntensity) + ambientColor;
+    finalColor = saturate(finalColor + ambientColor);
     
     return finalColor;
 }

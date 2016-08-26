@@ -15,6 +15,7 @@
 #include <string>
 #include "ILight.h"
 #include "ShaderTEMPLATE.h"
+#include "Shader_NMap.h"
 
 using namespace std;
 
@@ -39,8 +40,16 @@ private:
 
     std::shared_ptr<Camera> m_pCam;
 
-    ShaderT<MatrixBufferType, LightBufferType> m_activeShader;
-
+    ShaderT<
+		VertexBufferTypeAllInOne, 
+		MatrixBufferType, 
+		LightBufferType> m_activeShader;
+	ShaderT<
+		VertexBufferTypeAllInOneNMap, 
+		MatrixBufferType, 
+		LightBufferTypeNMap> m_NMapShader;
+	Shader_NMap m_shader_nMap;
+	
     vector<Texture> m_TexturePool;
     vector<Texture> m_NormalPool;
     vector<std::shared_ptr<Model>> m_ModelPool;

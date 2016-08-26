@@ -1,4 +1,5 @@
 #include "GameView.h"
+#include "Model_TexturedNM.h"
 
 GameView::GameView()
 	:
@@ -26,9 +27,13 @@ void GameView::Initialize()
 // TODO: so it can pass world position info to shader for directional lighting
 void GameView::UpdateView(const vector<Actor*>& actors, const vector<LightBufferType>& lightSet) const
 { 
-    bool result = m_activeShader.UpdateLightBuffer(
+	
+    /*bool result = m_activeShader.UpdateLightBuffer(
         m_pD3D->GetDeviceContext(),
-        &(lightSet[0]));
+        &(lightSet[0]));*/
+	bool result = m_shader_nMap.UpdateLightBuffer( 
+		m_pD3D->GetDeviceContext(), 
+		lightSet[ 0 ] );
     // TODO: update the ShaderTEMPLATE to handle MULTPILE LIGHTS
 
     if (!result)
@@ -57,7 +62,8 @@ void GameView::drawModel( const Actor & actor, MatrixBufferType &Transforms ) co
 	Transforms.world = GetWorldMatrix( actor.GetWorldSpecs() );
 
 	// Update the vertex shader's constant buffer
-	bool result = m_activeShader.UpdateTransformBuffer( pContext, Transforms );
+	bool result = m_shader_nMap.UpdateTransformBuffer( pContext, Transforms );
+	//bool result = m_activeShader.UpdateTransformBuffer( pContext, Transforms );
 	if( !result )
 	{
 		MessageBox( nullptr, L"Failed to update Matrix buffer.", L"Problem...", MB_OK );
@@ -74,7 +80,8 @@ void GameView::drawModel( const Actor & actor, MatrixBufferType &Transforms ) co
 
 	// Set the shader and its resources
 //	m_activeShader.Render( pContext, pTextureView );
-    m_activeShader.Render( pContext, texArray );
+    //m_activeShader.Render( pContext, texArray );
+	m_shader_nMap.Render( pContext, texArray );
 
     // DRAW CALL
     m_pGfx->RenderModel(*(m_ModelPool[actor.GetModelType()]));
@@ -87,22 +94,22 @@ void GameView::initModelPool()
     m_ModelPool.resize(numModels);
 
     PrimitiveFactory prim;
-
-    prim.CreateCube(defaultSpecs);
+    prim.CreateCubeNM(defaultSpecs);
     prim.CreateColor(1.f,0.f,0.f,.5f);
-    m_ModelPool[CUBE].reset(new Model_Textured);
+    m_ModelPool[CUBE].reset(new Model_TexturedNM );
     m_ModelPool[CUBE]->Initialize(prim, *m_pGfx);
 
-    prim.CreateCube(defaultSpecs);
-    m_ModelPool[CUBE_TEXTURED].reset(new Model_Textured);
+    prim.CreateCubeNM(defaultSpecs);
+	prim.CreateColor( 1.f, 1.f, 1.f, 1.f );
+    m_ModelPool[CUBE_TEXTURED].reset(new Model_TexturedNM );
     m_ModelPool[CUBE_TEXTURED]->Initialize(prim, *m_pGfx);
 
     prim.CreatePlane(defaultSpecs);
     m_ModelPool[PLANE].reset(new Model_Textured);
     m_ModelPool[PLANE]->Initialize(prim, *m_pGfx);
     
-    prim.CreateCube(defaultSpecs); // TODO: Change to CreateSphere
-    m_ModelPool[SPHERE].reset(new Model_Textured);
+    prim.CreateCubeNM(defaultSpecs); // TODO: Change to CreateSphere
+    m_ModelPool[SPHERE].reset(new Model_TexturedNM );
     m_ModelPool[SPHERE]->Initialize(prim, *m_pGfx);
 
     prim.CreateTriangle(defaultSpecs);
@@ -169,5 +176,6 @@ void GameView::initNormalMapPool()
 
 void GameView::initializeShader()
 {
-    m_activeShader.Initialize(m_pD3D->GetDevice());
+	m_activeShader.Initialize( m_pD3D->GetDevice() );
+	m_shader_nMap.Initialize( m_pD3D->GetDevice() );
 }

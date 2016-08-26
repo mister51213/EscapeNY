@@ -3,7 +3,7 @@
 #include "Includes.h"
 #include "Utilities.h"
 
-template<class MatBuffer, class LightBuffer>
+template<class VertexBuffer, class MatBuffer, class LightBuffer>
 class ShaderT
 {
 public:
@@ -11,13 +11,14 @@ public:
 	ShaderT() = default;
 	~ShaderT() = default;
 
-	bool Initialize( ID3D11Device* pDevice, int lightCount = 1)
+	virtual bool Initialize( ID3D11Device* pDevice, int MaxLightCount = 1)
 	{
 		// Initialize the vertex and pixel shaders.
 		bool result = InitializeShaderCommon(
 			pDevice,
 			L"Shaders/Shader_vs.cso",
-			L"Shaders/Shader_ps.cso" );
+			L"Shaders/Shader_ps.cso"
+			);
 		RETURN_IF_FALSE( result );
 
 		///////////////////////////////////////////////////////////
@@ -34,7 +35,7 @@ public:
 		// Light shader setup
 		///////////////////////////////////////////////////////////
 
-        D3D11_BUFFER_DESC lightBufferDesc = LightBufferType::CreateLightDescription(sizeof(LightBuffer));
+		D3D11_BUFFER_DESC lightBufferDesc = LightBuffer::CreateLightDescription( MaxLightCount );
 
 		// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 		hr = pDevice->CreateBuffer( &lightBufferDesc, NULL, &m_lightBuffer );
@@ -43,7 +44,7 @@ public:
 		return result;
 	}
 
-	bool UpdateTransformBuffer(
+	virtual bool UpdateTransformBuffer(
 		ID3D11DeviceContext *pContext,
 		const MatBuffer &BufferData )const
 	{
@@ -68,17 +69,7 @@ public:
 
 		return result;
 	}
-
-	/*bool UpdateLightBuffer(
-	ID3D11DeviceContext *pContext,
-	const LightBufferType &BufferData )const;
-	bool UpdateLightBuffer(
-	ID3D11DeviceContext *pContext,
-	const SpotLightBuffer &BufferData )const;
-	bool UpdateLightBuffer(
-	ID3D11DeviceContext *pContext,
-	const LightSpotBase &BufferData )const;*/
-
+	
 	void Render(
 		ID3D11DeviceContext* pContext,
 		/*ID3D11ShaderResourceView *pTextureView*/ 
@@ -183,7 +174,7 @@ protected:
 		RETURN_IF_FAILED( result );
 
 		// Get appropiate layout description for this shader
-		auto layoutDesciptions = VertexBufferTypeAllInOne::CreateLayoutDescriptions();
+		auto layoutDesciptions = VertexBuffer::CreateLayoutDescriptions();
 
 		// Create the vertex input layout.
 		result = pDevice->CreateInputLayout(

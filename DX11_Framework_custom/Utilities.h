@@ -33,6 +33,10 @@ else int a = 0
 ////////////////////////////////////////////////////
 // Vector Math Operator Overloads
 ///////////////////////////////////////////////////
+// Add more when/if needed
+XMFLOAT2 operator+( const XMFLOAT2 &V1, const XMFLOAT2 &V2 );
+XMFLOAT2 operator-( const XMFLOAT2 &V );
+XMFLOAT2 operator-( const XMFLOAT2 &V1, const XMFLOAT2 &V2 );
 
 // Keep operator overloads out of namespace so we can access them
 // without having to declare: using namespace
@@ -242,6 +246,18 @@ struct VertexBufferTypeAllInOne
 
 };
 
+struct VertexBufferTypeAllInOneNMap
+{
+	DirectX::XMFLOAT3 position;
+	DirectX::XMFLOAT2 uv;
+	DirectX::XMFLOAT3 normal;
+	DirectX::XMFLOAT4 color;
+	DirectX::XMFLOAT3X3 TBN;
+
+	// Input layout descriptions for position, texcoord, normals and color
+	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
+};
+
 // Use this one type for ALL different lights
 struct LightBufferType
 {
@@ -251,7 +267,16 @@ struct LightBufferType
     XMFLOAT3 lightDirection; // should be XMFLOAT4?
     float padding;
 
-    static D3D11_BUFFER_DESC CreateLightDescription(unsigned int ByteWidth);
+    static D3D11_BUFFER_DESC CreateLightDescription( unsigned int MaxLightCount );
 };
 
+struct LightBufferTypeNMap
+{
+	LightBufferType lights;
+	XMFLOAT4 ambientColor;
+	int lightCount;
+	XMFLOAT3 padding;
+
+	static D3D11_BUFFER_DESC CreateLightDescription( unsigned int MaxLightCount = 1 );
+};
 D3D11_SAMPLER_DESC CreateSamplerDescription();

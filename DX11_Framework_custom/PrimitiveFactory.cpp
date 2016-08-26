@@ -270,10 +270,44 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 	Common( Specs );
 }
 
+void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )
+{
+	CreateCube( Specs );
+
+	auto vertPos = vertices;
+	auto texCoord = uvs;
+	int vertCount = vertices.size();
+
+	tangent.resize( vertCount );
+	biTangent.resize( vertCount );
+	coNormals.resize( vertCount );
+
+	// Create the tangent matrix for each face (set of three vertex positions)
+	for( int i = 0; i < vertCount; i += 3 )
+	{
+		auto &position0 = vertices[ i + 0 ];
+		auto &position1 = vertices[ i + 1 ];
+		auto &position2 = vertices[ i + 2 ];
+		auto &tex0 = uvs[ i + 0 ];
+		auto &tex1 = uvs[ i + 1 ];
+		auto &tex2 = uvs[ i + 2 ];
+		auto edge10 = position1 - position0;
+		auto edge20 = position2 - position0;
+		auto tEdge10 = tex1 - tex0;
+		auto tEdge20 = tex2 - tex0;
+
+		tangent[ i ] = Normalize( edge10 / tEdge10.x );
+		coNormals[ i ] = Normalize( CrossProduct( edge10, edge20 ) );
+		biTangent[ i ] = CrossProduct( tangent[ i ], coNormals[ i ] );
+
+		tangent[ i + 2 ] = tangent[ i + 1 ] = tangent[ i ];
+		biTangent[ i + 2 ] = biTangent[ i + 1 ] = biTangent[ i ];
+		coNormals[ i + 2 ] = coNormals[ i + 1 ] = coNormals[ i ];
+	}
+}
+
 // Custom file format - Each line contains position vector(x, y, z), texture coordinates(tu, tv), and normal vector(nx, ny, nz). 
 void PrimitiveFactory::CreateMesh(
-    //const ModelSpecs_L & Specs,
-    //const ModelType & type, 
     const wstring& fileName)
 {
     ////////////////////////////////  
@@ -419,6 +453,21 @@ std::vector<DirectX::XMFLOAT2> PrimitiveFactory::GetUVs()
 	return PrimitiveFactory::uvs;
 }
 
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetTangent()
+{
+	return tangent;
+}
+
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetBiTangent()
+{
+	return biTangent;
+}
+
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetCoNormal()
+{
+	return coNormals;
+}
+
 std::vector<DWORD> PrimitiveFactory::GetIndices() 
 {
 	return PrimitiveFactory::indices;
@@ -464,10 +513,17 @@ void PrimitiveFactory::ClearAllBuffers()
 	PrimitiveFactory::normals.clear();
 	PrimitiveFactory::uvs.clear();
 	PrimitiveFactory::indices.clear();
+	tangent.clear();
+	biTangent.clear();
+	coNormals.clear();
 }
 
 std::vector<DirectX::XMFLOAT3> PrimitiveFactory::vertices;
 std::vector<DirectX::XMFLOAT3> PrimitiveFactory::normals;
 std::vector<DirectX::XMFLOAT2> PrimitiveFactory::uvs; 
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::tangent;
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::biTangent;
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::coNormals;
+
 std::vector<DWORD> PrimitiveFactory::indices;
 DirectX::XMFLOAT4 PrimitiveFactory::color;

@@ -210,6 +210,12 @@
     <ClCompile Include="Shader_Texture.cpp">
       <Filter>Source Files\Shader Files\Obsolete</Filter>
     </ClCompile>
+    <ClCompile Include="Shader_NMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Model_TexturedNM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -383,6 +389,12 @@
     <ClInclude Include="Actor_Light.h">
       <Filter>Header Files\Actors</Filter>
     </ClInclude>
+    <ClInclude Include="Shader_NMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model_TexturedNM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Development Guidelines.txt">
@@ -416,5 +428,7 @@
     </FxCompile>
     <FxCompile Include="Shaders\Shader_ps.hlsl" />
     <FxCompile Include="Shaders\Shader_vs.hlsl" />
+    <FxCompile Include="Shaders\NMap_vs.hlsl" />
+    <FxCompile Include="Shaders\NMap_ps.hlsl" />
   </ItemGroup>
 </Project>
