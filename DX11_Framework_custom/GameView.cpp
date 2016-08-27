@@ -151,7 +151,7 @@ void GameView::initTexturePool()
     m_TexturePool[ Underwater5 ].Initialize( *m_pGfx, L"Textures\\underwater5.jpg" );
     m_TexturePool[ Underwater6 ].Initialize( *m_pGfx, L"Textures\\underwater6.jpg" );
     m_TexturePool[ Underwater7 ].Initialize( *m_pGfx, L"Textures\\underwater7.jpg" );
-    m_TexturePool[ SharkSkin ].Initialize( *m_pGfx, L"Textures\\sharkskin1.jpg" );
+    m_TexturePool[ SharkSkin ].Initialize( *m_pGfx, L"Textures\\sharkskin5.jpg" );
 }
 
 void GameView::initNormalMapPool()
@@ -171,7 +171,7 @@ void GameView::initNormalMapPool()
     m_NormalPool[ Underwater5 ].Initialize( *m_pGfx, L"Textures\\underwater5N.jpg" );
     m_NormalPool[ Underwater6 ].Initialize( *m_pGfx, L"Textures\\underwater6N.jpg" );
     m_NormalPool[ Underwater7 ].Initialize( *m_pGfx, L"Textures\\underwater7N.jpg" );
-    m_NormalPool[SharkSkin].Initialize(*m_pGfx, L"Textures\\sharkskin1N.jpg");
+    m_NormalPool[SharkSkin].Initialize(*m_pGfx, L"Textures\\sharkskin5N.jpg");
 }
 
 void GameView::initializeShader()
