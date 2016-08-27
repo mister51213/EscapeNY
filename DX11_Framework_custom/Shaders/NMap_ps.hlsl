@@ -35,9 +35,9 @@ float4 main(PixelBuffer input):SV_Target
 	float4 nMapColor = textures[1].Sample(samp, input.texcoord);
 
 	float3 nMap = nMapColor.rgb - float3(0.5f, 0.5f, 0.5f);
-	float3 lightTan = mul(g_lights.direction, input.tbc);
+	float3 lightTan = mul(nMap, input.tbc);
 
-	float intensity = dot(nMap, lightTan);
+	float intensity = dot(g_lights.direction, lightTan);
 	float4 color = g_ambientColor;
 	if(color.r > .5f)
 	{
