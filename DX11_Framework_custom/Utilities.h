@@ -270,6 +270,7 @@ struct LightBufferType
     static D3D11_BUFFER_DESC CreateLightDescription( unsigned int MaxLightCount );
 };
 
+        // TODO: rename to "SCENE BUFFER TYPE"
 struct LightBufferTypeNMap
 {
 	LightBufferType lights;
