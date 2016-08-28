@@ -306,6 +306,122 @@ void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )
 	}
 }
 
+void PrimitiveFactory::CreateMeshNM( const wstring & Filename )
+{
+	///////////////////////////
+	// LOAD MODEL FROM FILE  //
+	///////////////////////////
+	int vertexCount, indexCount;
+
+	auto VertsFromF = [ &Filename, &vertexCount, &indexCount ]()->bool
+	{
+		ifstream file;
+		char input;
+		int i;
+
+		// Open the model file.
+		file.open( Filename );
+
+		// If it could not open the file then exit.
+		if( file.fail() )
+		{
+			return false;
+		}
+
+		// Read up to the value of vertex count.
+		file.get( input );
+		while( input != ':' )
+		{
+			file.get( input );
+		}
+
+		// Read in the vertex count.
+		file >> vertexCount;
+
+		// Set the number of indices to be the same as the vertex count.
+		indexCount = vertexCount;
+
+		// Read up to the beginning of the data.
+		file.get( input );
+		while( input != ':' )
+		{
+			file.get( input );
+		}
+		file.get( input );
+		file.get( input );
+
+		// load straight into static members
+		vertices.resize( vertexCount );
+		uvs.resize( vertexCount );
+		normals.resize( vertexCount );
+
+		for( i = 0; i < vertexCount; i++ )
+		{
+			file >> vertices[ i ].x >> vertices[ i ].y >> vertices[ i ].z;
+			file >> uvs[ i ].x >> uvs[ i ].y;
+			file >> normals[ i ].x >> normals[ i ].y >> normals[ i ].z;
+		}
+
+		// Close the model file.
+		file.close();
+
+		return true;
+	};
+
+	auto VertsFromB = [ &Filename, &vertexCount, &indexCount ]()->bool
+	{
+		ifstream file( Filename, std::ios::binary ); // open file in binary mode
+		if( !file.is_open() )
+		{
+			return false;
+		}
+
+		vertexCount = 0; // read first 32 bits into vertexCount
+		file.read( reinterpret_cast<char*>( &vertexCount ), sizeof( int ) );
+
+		// pack into vector of structs
+		// TODO: change OBJ to BINARY LOADER
+		vector<VertexBufferTypeAllInOne> vertList( vertexCount );
+		file.read( reinterpret_cast<char*>( vertList.data() ), sizeof( VertexBufferTypeAllInOne )*vertexCount );
+
+
+		// Pack into member variables of PrimFactory
+		vertices.resize( vertexCount );
+		uvs.resize( vertexCount );
+		normals.resize( vertexCount );
+		indices.resize( vertexCount );
+
+		for( int i = 0; i < vertexCount; i++ )
+		{
+			vertices[ i ] = vertList[ i ].position;
+			uvs[ i ] = vertList[ i ].uv;
+			normals[ i ] = vertList[ i ].normal;
+			indices[ i ] = i; // TODO: not sure about this
+		}
+
+		file.close();
+		return true;
+	};
+
+	PrimitiveFactory::ClearAllBuffers();
+
+	// TODO: Check GameView lines 60~82 for exact data it needs to load a model.
+	// store file data into ModelType pModel list of verts,uvs,norms
+	//bool result = VertsFromF();
+	bool result = VertsFromB();
+
+	///////////////////////////////////////  
+	// LOAD MODEL DATA into vertex array //
+	///////////////////////////////////////
+	indexCount = vertexCount;
+	indices.resize( indexCount );
+
+	for( int i = 0; i < indexCount; i++ )
+	{
+		indices[ i ] = i;
+	}
+}
+
 // Custom file format - Each line contains position vector(x, y, z), texture coordinates(tu, tv), and normal vector(nx, ny, nz). 
 void PrimitiveFactory::CreateMesh(
     const wstring& fileName)
