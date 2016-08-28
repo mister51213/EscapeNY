@@ -262,17 +262,19 @@ struct VertexBufferTypeAllInOneNMap
 // Use this one type for ALL different lights
 struct LightBufferType
 {
-	XMFLOAT4 lightColor; // should be XMFLOAT3?
+	XMFLOAT4 lightColor;
    	XMFLOAT3 lightPosition;
-    float coneAngle;  // Added extra padding so structure is a multiple of 16 for CreateBuffer function requirements.
-    XMFLOAT3 lightDirection; // should be XMFLOAT4?
+    float coneAngle;  
+    XMFLOAT3 lightDirection;
+	// Added extra padding so structure is a multiple of 16 for 
+	// CreateBuffer function requirements.
     float padding;
 
     static D3D11_BUFFER_DESC CreateLightDescription( unsigned int MaxLightCount );
 };
 
         // TODO: rename to "SCENE BUFFER TYPE"
-struct LightBufferTypeNMap
+struct SceneBufferType
 {
 	LightBufferType lights;
 	XMFLOAT4 ambientColor;
