@@ -19,9 +19,9 @@ const DirectX::XMFLOAT3 & Light_Spot::GetDirection() const override
 	return m_lightBuffer.lightDirection;
 }
 
-void Light_Spot::SetDirection( float X, float Y, float Z ) override
+void Light_Spot::SetDirection( const XMFLOAT3& direction ) override
 {
-	m_lightBuffer.lightDirection = { X, Y, Z };
+	m_lightBuffer.lightDirection = direction;
 }
 
 const DirectX::XMFLOAT3 & Light_Spot::GetPosition() const override

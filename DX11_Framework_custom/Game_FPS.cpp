@@ -14,13 +14,19 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
     m_Overlay.Initialize( *m_pGraphics );
 
     // INITIALIZE LIGHT
+    XMUINT2 ScreenSize = { 800,600 };
+ 
     m_spotLights.resize(m_numLights);
     for (Actor_Light& light: m_spotLights)
     {
-        light.Initialize();
+        light.Initialize(m_pCamera->GetPosition(),
+            m_pCamera->GetRotation(),
+            // NOT USED:
+            ScreenSize, { 800.0,600.0 });
+        light.InitSpotLight();
     }
 
-        m_lightSet.resize(m_numLights);
+    m_lightSet.resize(m_numLights);
 
 	reset();
 }
@@ -37,6 +43,11 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
     //////////////////////
     m_pCamera->GetInput(InputRef);
     m_pCamera->GetMouseInput(InputRef);
+
+    // TODO: make this a for loop when adding additional lights
+    m_spotLights[0].GetKeyInput_Light(InputRef);
+    m_spotLights[0].GetMouseInput_Light(InputRef);
+
     m_player.GetInput(InputRef);
     for (auto& pActor : m_actorsSUB1)
     {

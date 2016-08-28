@@ -65,7 +65,8 @@ public:
 
 	void Render();
 
-private:
+//private:
+protected:
 	XMFLOAT3 m_Position = { 0.0f, 200.0f, 0.0f };
 	// How many degrees is it rotated on the x, y, z axes
 	// JUST a collection of three different angles

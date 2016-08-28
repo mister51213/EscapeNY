@@ -11,6 +11,6 @@ public:
 	virtual void SetConeAngle(float Angle) = 0;
 
    	virtual const DirectX::XMFLOAT3 &GetDirection()const = 0;
-	virtual void SetDirection( float X, float Y, float Z ) = 0;
+	virtual void SetDirection( const XMFLOAT3& direction ) = 0;
 };
 
