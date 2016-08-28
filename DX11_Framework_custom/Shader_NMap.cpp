@@ -117,7 +117,11 @@ bool Shader_NMap::UpdateLightBuffer( ID3D11DeviceContext * pContext, const Light
 		0, &ms );
 	assert( SUCCEEDED( hr ) );
 
-	CopyMemory( ms.pData, &Lights, sizeof( SceneBufferType ) );
+	SceneBufferType scene{};
+	scene.ambientColor = { .1f, .1f, .1f, 1.f };
+	scene.lightCount = 1;
+	scene.lights = Lights;
+	CopyMemory( ms.pData, &scene, sizeof( SceneBufferType ) );
 
 	pContext->Unmap( m_pLightBuffer.Get(), 0 );
 

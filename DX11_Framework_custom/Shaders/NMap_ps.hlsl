@@ -41,7 +41,7 @@ float4 main(PixelBuffer input):SV_Target
 	float3 lightTan = mul(nMap, tanMatrix);
 
 	float intensity = dot(g_lights.direction, lightTan);
-	float4 color = g_ambientColor;
+	float4 color = g_ambientColor * texColor;
 	if(color.r > .5f)
 	{
 		color = float4(.1f, .1f, .1f, .1f);

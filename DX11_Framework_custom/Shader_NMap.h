@@ -4,7 +4,7 @@
 #include "Utilities.h"
 #include "ShaderTEMPLATE.h"
 
-class Shader_NMap: public ShaderT<VertexBufferTypeAllInOneNMap, MatrixBufferType, LightBufferTypeNMap>
+class Shader_NMap: public ShaderT<VertexBufferTypeAllInOneNMap, MatrixBufferType, SceneBufferType>
 {
 public:
 	Shader_NMap();

@@ -44,10 +44,10 @@ private:
 		VertexBufferTypeAllInOne, 
 		MatrixBufferType, 
 		LightBufferType> m_activeShader;
-	ShaderT<
+	/*ShaderT<
 		VertexBufferTypeAllInOneNMap, 
 		MatrixBufferType, 
-		LightBufferTypeNMap> m_NMapShader;
+		SceneBufferType> m_NMapShader;*/
 	Shader_NMap m_shader_nMap;
 	
     vector<Texture> m_TexturePool;
