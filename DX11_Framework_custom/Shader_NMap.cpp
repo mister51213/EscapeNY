@@ -80,7 +80,7 @@ bool Shader_NMap::Initialize( ID3D11Device * pDevice, int MaxLightCount )
 	{
 		// Function takes in max light count as param, default is 1
         // TODO: rename to "SCENE BUFFER TYPE"
-		auto lightBufferDesc = LightBufferTypeNMap::CreateLightDescription();
+		auto lightBufferDesc = SceneBufferType::CreateLightDescription();
 		HRESULT hr = pDevice->CreateBuffer(
 			&lightBufferDesc,
 			nullptr,
@@ -117,7 +117,7 @@ bool Shader_NMap::UpdateLightBuffer( ID3D11DeviceContext * pContext, const Light
 		0, &ms );
 	assert( SUCCEEDED( hr ) );
 
-	CopyMemory( ms.pData, &Lights, sizeof( LightBufferTypeNMap ) );
+	CopyMemory( ms.pData, &Lights, sizeof( SceneBufferType ) );
 
 	pContext->Unmap( m_pLightBuffer.Get(), 0 );
 
@@ -142,16 +142,7 @@ void Shader_NMap::Render( ID3D11DeviceContext * pContext, ID3D11ShaderResourceVi
 	// Set the sampler state in the pixel shader.
 	pContext->PSSetSamplers( 0, 1, m_pSampleState.GetAddressOf() );
 
-	// TODO: MAKE THIS TAKE AN ARRAY of shaders for multitexturing and normal mapping
-	// TODO: vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-
-	// Set shader resources
-	//pContext->PSSetShaderResources( 0, 1, &pTextureView );
-
 	pContext->PSSetShaderResources( 0, 2, ppShaderResources );
-
-	// TODO: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	// TODO: MAKE THIS TAKE AN ARRAY of shaders for multitexturing and normal mapping
 
 	// Set the vertex and pixel shaders that will be used to render this triangle.
 	pContext->VSSetShader( m_pVertexShader.Get(), NULL, 0 );

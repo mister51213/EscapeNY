@@ -13,10 +13,10 @@ struct LightTemplate
 
 cbuffer LightBuffer
 {
-	LightTemplate g_lights;
 	float4 g_ambientColor;
 	int g_lightCount;
 	float3 g_padding;
+	LightTemplate g_lights;
 }
 
 struct PixelBuffer

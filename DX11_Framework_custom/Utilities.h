@@ -276,10 +276,10 @@ struct LightBufferType
         // TODO: rename to "SCENE BUFFER TYPE"
 struct SceneBufferType
 {
-	LightBufferType lights;
 	XMFLOAT4 ambientColor;
 	int lightCount;
 	XMFLOAT3 padding;
+	LightBufferType lights;
 
 	static D3D11_BUFFER_DESC CreateLightDescription( unsigned int MaxLightCount = 1 );
 };
