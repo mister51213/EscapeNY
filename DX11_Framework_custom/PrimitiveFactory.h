@@ -53,11 +53,19 @@ public:
 	static std::vector<DirectX::XMFLOAT2> GetUVs();
 	static std::vector<DirectX::XMFLOAT3> GetTangent();
 	static std::vector<DirectX::XMFLOAT3> GetBiTangent();
-	static std::vector<DirectX::XMFLOAT3> GetCoNormal();
 	static std::vector<DWORD> GetIndices();
     static DirectX::XMFLOAT4 GetColor();
 
 private:
+	static XMFLOAT3 CalculateTangent( 
+		const XMFLOAT3 &Edge10, 
+		const XMFLOAT2& tEdge10 );
+	static XMFLOAT3 CalculateNormal(
+		const XMFLOAT3 &Edge10,
+		const XMFLOAT3 &Edge20 );
+	static XMFLOAT3 CalculateBiNormal(
+		const XMFLOAT3 &Tangent,
+		const XMFLOAT3 &Normal );
 	static void Common( const ModelSpecs_L &Specs );
 	static void ClearAllBuffers();
 private:
@@ -70,9 +78,6 @@ private:
 	 // Suppose to be called binormal, runs parallel to surface in the V
 	 // coord of the texture coordinates UV
 	 static std::vector<DirectX::XMFLOAT3> biTangent;
-	 // coNormal is actually the same as the normal vector and runs
-	 // perpendicular to the surface.
-	 static std::vector<DirectX::XMFLOAT3> coNormals;
 
 	 static std::vector<DWORD> indices;
    	 static DirectX::XMFLOAT4 color;

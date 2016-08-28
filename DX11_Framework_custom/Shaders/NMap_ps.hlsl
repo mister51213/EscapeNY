@@ -23,10 +23,11 @@ struct PixelBuffer
 {
 	float4 position : SV_Position;
 	float2 texcoord : TEXCOORD;
-	float3 normal : NORMAL;
 	float4 color : COLOR;
 	float4 worldPosition : POSITION;
-	float3x3 tbc : TBC;
+	float3 tangent : TANGENT;
+	float3 Binormal : BINORMAL;
+	float3 normal : NORMAL;
 };
 
 float4 main(PixelBuffer input):SV_Target
@@ -34,8 +35,10 @@ float4 main(PixelBuffer input):SV_Target
 	float4 texColor = textures[0].Sample(samp, input.texcoord);
 	float4 nMapColor = textures[1].Sample(samp, input.texcoord);
 
-	float3 nMap = nMapColor.rgb - float3(0.5f, 0.5f, 0.5f);
-	float3 lightTan = mul(nMap, input.tbc);
+	float3 nMap = (nMapColor.rgb * 2.f) - float3(1.f, 1.f, 1.f);
+	
+	float3x3 tanMatrix = float3x3(input.tangent, input.Binormal, input.normal);
+	float3 lightTan = mul(nMap, tanMatrix);
 
 	float intensity = dot(g_lights.direction, lightTan);
 	float4 color = g_ambientColor;

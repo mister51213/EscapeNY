@@ -280,7 +280,7 @@ void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )
 
 	tangent.resize( vertCount );
 	biTangent.resize( vertCount );
-	coNormals.resize( vertCount );
+	normals.resize( vertCount );
 
 	// Create the tangent matrix for each face (set of three vertex positions)
 	for( int i = 0; i < vertCount; i += 3 )
@@ -296,13 +296,13 @@ void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )
 		auto tEdge10 = tex1 - tex0;
 		auto tEdge20 = tex2 - tex0;
 
-		tangent[ i ] = Normalize( edge10 / tEdge10.x );
-		coNormals[ i ] = Normalize( CrossProduct( edge10, edge20 ) );
-		biTangent[ i ] = CrossProduct( tangent[ i ], coNormals[ i ] );
+		tangent[ i ] = CalculateTangent( edge10, tEdge10 );
+		normals[ i ] = CalculateNormal( edge10, edge20 );
+		biTangent[ i ] = CalculateBiNormal( tangent[ i ], normals[ i ] );
 
 		tangent[ i + 2 ] = tangent[ i + 1 ] = tangent[ i ];
 		biTangent[ i + 2 ] = biTangent[ i + 1 ] = biTangent[ i ];
-		coNormals[ i + 2 ] = coNormals[ i + 1 ] = coNormals[ i ];
+		normals[ i + 2 ] = normals[ i + 1 ] = normals[ i ];
 	}
 }
 
@@ -463,11 +463,6 @@ std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetBiTangent()
 	return biTangent;
 }
 
-std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetCoNormal()
-{
-	return coNormals;
-}
-
 std::vector<DWORD> PrimitiveFactory::GetIndices() 
 {
 	return PrimitiveFactory::indices;
@@ -476,6 +471,25 @@ std::vector<DWORD> PrimitiveFactory::GetIndices()
 DirectX::XMFLOAT4 PrimitiveFactory::GetColor() 
 {
 	return PrimitiveFactory::color;
+}
+
+XMFLOAT3 PrimitiveFactory::CalculateTangent(
+	const XMFLOAT3 &Edge10,
+	const XMFLOAT2& tEdge10 )
+{	
+	return Normalize( Edge10 / tEdge10.x );
+}
+
+XMFLOAT3 PrimitiveFactory::CalculateNormal(
+	const XMFLOAT3 &Edge10,
+	const XMFLOAT3 &Edge20 )
+{
+	return Normalize( CrossProduct( Edge10, Edge20 ) );
+}
+
+XMFLOAT3 PrimitiveFactory::CalculateBiNormal( const XMFLOAT3 & Tangent, const XMFLOAT3 & Normal )
+{
+	return CrossProduct( Tangent, Normal );
 }
 
 void PrimitiveFactory::Common( const ModelSpecs_L & Specs )
@@ -513,9 +527,8 @@ void PrimitiveFactory::ClearAllBuffers()
 	PrimitiveFactory::normals.clear();
 	PrimitiveFactory::uvs.clear();
 	PrimitiveFactory::indices.clear();
-	tangent.clear();
-	biTangent.clear();
-	coNormals.clear();
+	PrimitiveFactory::tangent.clear();
+	PrimitiveFactory::biTangent.clear();
 }
 
 std::vector<DirectX::XMFLOAT3> PrimitiveFactory::vertices;
@@ -523,7 +536,6 @@ std::vector<DirectX::XMFLOAT3> PrimitiveFactory::normals;
 std::vector<DirectX::XMFLOAT2> PrimitiveFactory::uvs; 
 std::vector<DirectX::XMFLOAT3> PrimitiveFactory::tangent;
 std::vector<DirectX::XMFLOAT3> PrimitiveFactory::biTangent;
-std::vector<DirectX::XMFLOAT3> PrimitiveFactory::coNormals;
 
 std::vector<DWORD> PrimitiveFactory::indices;
 DirectX::XMFLOAT4 PrimitiveFactory::color;

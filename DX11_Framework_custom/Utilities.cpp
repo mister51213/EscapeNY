@@ -255,11 +255,10 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexBufferTypeAllInOneNMap::CreateLayout
 	{
 		{ "POSITION", 0, float3Format, 0, 0, vertexDataType, 0 },
 		{ "TEXCOORD", 0, float2Format, 0, appendAlignment, vertexDataType, 0 },
-		{ "NORMAL", 0, float3Format, 0, appendAlignment, vertexDataType, 0 },
 		{ "COLOR", 0, float4Format, 0, appendAlignment, vertexDataType, 0 },
-		{ "TANGENT", 0, float3Format, 0, appendAlignment, vertexDataType, 0 },
-		{ "BITANGENT", 0, float3Format, 0, appendAlignment, vertexDataType, 0 },
-		{ "CONORMAL", 0, float3Format, 0, appendAlignment, vertexDataType, 0 }
+		{ "TANGENT", 0, float3Format, 0, appendAlignment, vertexDataType, 0 },		
+		{ "BINORMAL", 0, float3Format, 0, appendAlignment, vertexDataType, 0 },
+		{ "NORMAL", 0, float3Format, 0, appendAlignment, vertexDataType, 0 }
 	};
 
 	return desc;

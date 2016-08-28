@@ -11,21 +11,21 @@ struct VertexBuffer
 {
 	float3 position : POSITION;
 	float2 texcoord : TEXCOORD;
-	float3 normal : NORMAL;
 	float4 color : COLOR;
 	float3 tangent : TANGENT;
-	float3 bitangent : BITANGENT;
-	float3 conormal : CONORMAL;
+	float3 binormal : BINORMAL;
+	float3 normal : NORMAL;
 };
 
 struct PixelBuffer
 {
 	float4 position : SV_Position;
 	float2 texcoord : TEXCOORD;
-	float3 normal : NORMAL;
 	float4 color : COLOR;
 	float4 worldPosition : POSITION;
-	float3x3 tbc : TBC;
+	float3 tangent: TANGENT;
+	float3 Binormal : BINORMAL;
+	float3 normal : NORMAL;
 };
 
 PixelBuffer main(VertexBuffer input)
@@ -39,10 +39,9 @@ PixelBuffer main(VertexBuffer input)
 	output.position = mul(output.position, g_proj);
 
 	float3x3 rotation = (float3x3) g_world;
+	output.tangent = normalize(mul(input.tangent, rotation));
+	output.Binormal = normalize(mul(input.binormal, rotation));
 	output.normal = normalize(mul(input.normal, rotation));
-	output.tbc[0] = normalize(mul(input.tangent, rotation));
-	output.tbc[1] = normalize(mul(input.bitangent, rotation));
-	output.tbc[2] = normalize(mul(input.conormal, rotation));
 
 	output.color = input.color;
 	output.texcoord = input.texcoord;

@@ -29,23 +29,18 @@ bool Model_TexturedNM::Initialize( const PrimitiveFactory & PrimMaker, const Gra
 	auto normals = PrimMaker.GetNormals();
 	// Get precalculated Tangent, biTangent and CoNormal
 	auto tangent = PrimMaker.GetTangent();
-	auto bitangent = PrimMaker.GetBiTangent();
-	auto conormal = PrimMaker.GetCoNormal();
+	auto binormal = PrimMaker.GetBiTangent();
 	// TODO: later add functionality to deal w files w NO normals
 	// Load the vertex buffer array with data.
 	std::vector<VertexBufferTypeAllInOneNMap> pVertices( m_vertexCount );
 	for( UINT idx = 0; idx < m_vertexCount; ++idx )
 	{
-		
 		pVertices[ idx ].color = color;
-		pVertices[ idx ].normal = normals[ idx ];
 		pVertices[ idx ].position = vertPosition[ idx ];
 		pVertices[ idx ].uv = uvs[ idx ];
-		pVertices[ idx ].TBN = XMFLOAT3X3(
-			tangent[ idx ].x, tangent[ idx ].y, tangent[ idx ].z,
-			bitangent[ idx ].x, bitangent[ idx ].y, bitangent[ idx ].z,
-			conormal[ idx ].x, conormal[ idx ].y, conormal[ idx ].z );
-
+		pVertices[ idx ].tangent = tangent[ idx ];
+		pVertices[ idx ].binormal = binormal[ idx ];
+		pVertices[ idx ].normal = normals[ idx ];
 	}
 
 	// Load the index array with data.
