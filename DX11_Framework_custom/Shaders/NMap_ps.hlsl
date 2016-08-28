@@ -51,7 +51,31 @@ float4 main(PixelBuffer input):SV_Target
 	{
 		color = saturate(color + (texColor * (g_lights.color * intensity)));
 	}
+//    	return color;
 
-	return color;
+        /******************* SPOTLIGHT **************************/
+   	float4 ambientColor = texColor*float4( 0.13f, 0.13f, 0.13f, 1.0f );
 
+    float4 lightIntensity_N = saturate(dot(nMapColor.xyz, g_lights.direction)*g_lights.color);
+    float4 lightIntensity = saturate(dot(input.normal, g_lights.direction)*g_lights.color);
+    float4 lightIntensityFINAL = lightIntensity * lightIntensity_N;
+
+    // Calculate the vector of light to the point on the surface
+    float3 lightToSurfV = input.worldPosition.xyz - g_lights.position;
+	float lightToSurfVN = normalize(lightToSurfV ); // normalize this vector by dividing by its magnitude
+    float dotP = dot(lightToSurfVN, input.normal);
+
+    float coneAngleDP = dot(lightToSurfVN, g_lights.direction);
+    float4 finalColor = color;
+    if(coneAngleDP < 0.8f )
+    {
+        finalColor = ambientColor;
+    }
+    else
+    {
+    // Calculate the amount of light on this pixel.
+    finalColor = saturate( texColor * lightIntensityFINAL * (coneAngleDP/length(lightToSurfV))+ambientColor);
+    }
+
+    return finalColor;
 }

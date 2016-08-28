@@ -15,7 +15,6 @@ struct VertexBuffer
 	float3 tangent : TANGENT;
 	float3 binormal : BINORMAL;
 	float3 normal : NORMAL;
-    float4x4 worldMatrix : WORLDMAT;
 };
 
 struct PixelBuffer
@@ -27,6 +26,7 @@ struct PixelBuffer
 	float3 tangent: TANGENT;
 	float3 Binormal : BINORMAL;
 	float3 normal : NORMAL;
+    float4x4 worldMatrix : WORLDMAT;
 };
 
 PixelBuffer main(VertexBuffer input)

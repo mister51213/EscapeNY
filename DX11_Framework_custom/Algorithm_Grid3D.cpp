@@ -43,7 +43,7 @@ vector<Actor_NPC> Algorithm_Grid3D::MakePatternNPC( int numActors )
 				specs.scale.z += .02f;
 
 				int index = actorsSUB.size();
-				actorsSUB.push_back( Actor_NPC(specs, AsphaltFresh, ModelSpecs_L() ) );
+				actorsSUB.push_back( Actor_NPC(specs, Underwater6, ModelSpecs_L() ) );
 			}
 		}
 	}

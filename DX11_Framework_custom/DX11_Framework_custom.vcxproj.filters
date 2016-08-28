@@ -189,9 +189,6 @@
     <ClCompile Include="Game_Maze.cpp">
       <Filter>Source Files\SubGames</Filter>
     </ClCompile>
-    <ClCompile Include="Actor_Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\Shader Files\Obsolete</Filter>
     </ClCompile>
@@ -215,6 +212,9 @@
     </ClCompile>
     <ClCompile Include="Model_TexturedNM.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor_Light.cpp">
+      <Filter>Source Files\Actors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
