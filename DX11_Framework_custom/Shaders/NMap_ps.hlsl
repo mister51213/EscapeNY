@@ -24,11 +24,10 @@ struct PixelBuffer
 	float4 position : SV_Position;
 	float2 texcoord : TEXCOORD;
 	float4 color : COLOR;
-	float4 worldPosition : POSITION;
+	float4 worldPixelPosition : POSITION;
 	float3 tangent : TANGENT;
 	float3 Binormal : BINORMAL;
 	float3 normal : NORMAL;
-    float4x4 worldMatrix : WORLDMAT;
 };
 
 float4 main(PixelBuffer input):SV_Target
@@ -56,26 +55,26 @@ float4 main(PixelBuffer input):SV_Target
         /******************* SPOTLIGHT **************************/
    	float4 ambientColor = texColor*float4( 0.13f, 0.13f, 0.13f, 1.0f );
 
-    float4 lightIntensity_N = saturate(dot(nMapColor.xyz, g_lights.direction)*g_lights.color);
-    float4 lightIntensity = saturate(dot(input.normal, g_lights.direction)*g_lights.color);
-    float4 lightIntensityFINAL = lightIntensity * lightIntensity_N;
+    // TODO: transform light direction first
 
-    // Calculate the vector of light to the point on the surface
-    float3 lightToSurfV = input.worldPosition.xyz - g_lights.position;
-	float lightToSurfVN = normalize(lightToSurfV ); // normalize this vector by dividing by its magnitude
-    float dotP = dot(lightToSurfVN, input.normal);
+    // Calculate the vector of pixel to light
+    float3 surfToLight = input.worldPixelPosition.xyz - g_lights.position;
+    float3 surfToLightN = normalize(surfToLight);
+    float DP = saturate(dot(surfToLightN, g_lights.direction));
 
-    float coneAngleDP = dot(lightToSurfVN, g_lights.direction);
-    float4 finalColor = color;
-    if(coneAngleDP < 0.8f )
-    {
-        finalColor = ambientColor;
-    }
-    else
-    {
+    float coneAngleDP = saturate(dot(surfToLightN, g_lights.direction));
+    
+    float4 finalColor;
+    //if(coneAngleDP < 0.9f )
+    //{
+    //    finalColor = ambientColor;
+    //}
+    //else
+    //{
     // Calculate the amount of light on this pixel.
-    finalColor = saturate( texColor * lightIntensityFINAL * (coneAngleDP/length(lightToSurfV))+ambientColor);
-    }
+    float intensityL = coneAngleDP / length(surfToLight);
+    finalColor = saturate( color * intensityL + ambientColor);
+    //}
 
     return finalColor;
 }

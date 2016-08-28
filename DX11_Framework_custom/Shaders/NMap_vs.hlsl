@@ -22,11 +22,10 @@ struct PixelBuffer
 	float4 position : SV_Position;
 	float2 texcoord : TEXCOORD;
 	float4 color : COLOR;
-	float4 worldPosition : POSITION;
+	float4 worldPixelPosition : POSITION;
 	float3 tangent: TANGENT;
 	float3 Binormal : BINORMAL;
 	float3 normal : NORMAL;
-    float4x4 worldMatrix : WORLDMAT;
 };
 
 PixelBuffer main(VertexBuffer input)
@@ -35,7 +34,7 @@ PixelBuffer main(VertexBuffer input)
 
 	output.position = float4(input.position, 1.f);
 	output.position = mul(output.position, g_world);
-	output.worldPosition = output.position;
+	output.worldPixelPosition = output.position;
 	output.position = mul(output.position, g_view);
 	output.position = mul(output.position, g_proj);
 
