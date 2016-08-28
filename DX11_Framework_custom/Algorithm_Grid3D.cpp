@@ -41,6 +41,8 @@ Algorithm_Grid3D::Algorithm_Grid3D()
 {
 }
 
+//TEST//
+
 vector<Actor_NPC> Algorithm_Grid3D::MakePatternNPC( int numActors )
 {
 	int m_numColumns;
