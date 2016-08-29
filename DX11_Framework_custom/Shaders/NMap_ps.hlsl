@@ -30,7 +30,7 @@ struct PixelBuffer
 	float3 normal : NORMAL;
 };
 
-float4 main(PixelBuffer input):SV_Target
+float4 main(PixelBuffer input) : SV_Target
 {
 	float4 texColor = textures[0].Sample(samp, input.texcoord);
 	float4 nMapColor = textures[1].Sample(samp, input.texcoord);
@@ -40,45 +40,35 @@ float4 main(PixelBuffer input):SV_Target
 	float3x3 tanMatrix = float3x3(input.tangent, input.Binormal, input.normal);
 	float3 lightTan = mul(nMap, tanMatrix);
 
-	float intensity = dot(g_lights.direction, lightTan);
-	float4 color = g_ambientColor * texColor;
-	if(color.r > .5f)
-	{
-		color = float4(.1f, .1f, .1f, .1f);
-	}
-	if(intensity > 0.f)
-	{
-		color = saturate(color + (texColor * (g_lights.color * intensity)));
-	}
-    	//return color;
+	float3 lightDirection = -g_lights.direction;
 
         /******************* SPOTLIGHT **************************/
-   	float4 ambientColor = texColor*float4( 0.13f, 0.13f, 0.13f, 1.0f );
+	float4 ambientColor = texColor * float4(0.13f, 0.13f, 0.13f, 1.0f);
 
     // TODO: transform light direction first
 
     // Calculate the vector of pixel to light
-    float3 surfToLight = input.worldPixelPosition.xyz - g_lights.position;
-    float3 surfToLightN = normalize(surfToLight);
+	float3 surfToLight = g_lights.position - input.worldPixelPosition.xyz;
+	float3 surfToLightN = normalize(surfToLight);
 
+	float4 finalColor = ambientColor;
 
-    float DP = saturate(dot(surfToLightN, g_lights.direction));
-    
-    float4 finalColor;
+	// This calculates the angle between the surface normal and the light direction
+	float DP = saturate(dot(surfToLightN, lightDirection));
 
-    //float cAngle = 1.0f / 180.0f;
+	float coneAngle = 0.9f;
+	// This clips all points outside of range
+	if (DP > coneAngle) // CUTOFF RANGE
+	{
+		// Range of light from center to outer
+		float range = 1.f - coneAngle;
+		// Calculate the intensity at distance from outer edge
+		float gradientIntensity = (DP - coneAngle) / range;
+		// Calculate the amount of light on this pixel.
+		float intensity = dot(lightDirection, lightTan) * gradientIntensity;
+		intensity *= 1.f / length(surfToLight);
+		finalColor = saturate(g_lights.color * intensity + ambientColor);
+	}
 
-    if (DP < 0.9f) // CUTOFF RANGE
-    {
-        finalColor = ambientColor;
-    }
-    else
-    {
-    // Calculate the amount of light on this pixel.
-        float intensityL = DP;
-        // / length(surfToLight)*10.0f;
-    finalColor = saturate( color * intensityL + ambientColor);
-    }
-
-    return finalColor;
+	return finalColor;
 }

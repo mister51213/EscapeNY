@@ -22,6 +22,15 @@ public:
 
     ILight* GetLight()
     {
+		auto xmOriV = XMLoadFloat3( &m_Orientation );
+		xmOriV = ConvertToRadians( xmOriV );
+		auto xmRotM = XMMatrixRotationRollPitchYawFromVector( xmOriV );
+		auto xmForwardV = XMVectorSet( 0.f, 0.f, 1.f, 0.f );
+		xmOriV = XMVector3Transform( xmForwardV, xmRotM );
+		XMFLOAT3 oriV{};
+		XMStoreFloat3( &oriV, xmOriV );
+		m_spotLight.SetDirection( oriV );
+		
         // transform the direction first
         //XMVECTOR posV = XMLoadFloat3(&m_spotLight.GetPosition());
         //XMVECTOR rotV = XMLoadFloat3(&m_spotLight.GetDirection());
@@ -51,7 +60,7 @@ public:
         
 //        m_spotLight.SetDirection(m_Orientation);
 //        m_spotLight.SetPosition(m_Position);
-        m_spotLight.SetDirection(ConvertToRadians(m_spotLight.GetDirection()));
+        //m_spotLight.SetDirection(ConvertToRadians(m_spotLight.GetDirection()));
         return &m_spotLight;
     }
 
