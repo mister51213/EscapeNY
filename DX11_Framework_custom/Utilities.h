@@ -30,7 +30,6 @@ if(!(Result))\
 else int a = 0
 #define RETURN_IF_FAILED(Result) RETURN_IF_FALSE( SUCCEEDED( ( Result ) ) )
 
-#define MAX_SHADER_LIGHTS 10
 ////////////////////////////////////////////////////
 // Vector Math Operator Overloads
 ///////////////////////////////////////////////////
@@ -260,6 +259,8 @@ struct VertexBufferTypeAllInOneNMap
 	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
 };
 
+// Use these light types so the shader can determine which light calculations
+// need to be done and what values it can use.
 enum eLightType
 {
 	INFINITE_LIGHT, POINT_LIGHT, SPOT_LIGHT
@@ -276,6 +277,10 @@ struct LightBufferType
     static D3D11_BUFFER_DESC CreateLightDescription( unsigned int MaxLightCount );
 };
 
+// This must match the number of lights in the shader (hlsl) array or
+// be less than it.  Can/Will be used to make sure we don't try copying
+// more light data than shader is meant to process.
+#define MAX_SHADER_LIGHTS 10
 struct SceneBufferType
 {
 	XMFLOAT4 ambientColor;
@@ -285,4 +290,5 @@ struct SceneBufferType
 
 	static D3D11_BUFFER_DESC CreateLightDescription();
 };
+
 D3D11_SAMPLER_DESC CreateSamplerDescription();

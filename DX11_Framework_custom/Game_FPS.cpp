@@ -17,15 +17,28 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
     m_spotLights.resize(m_numLights);
     for (Actor_Light& light: m_spotLights)
     {
+		// Randomly create positions for new spot lights
 		float x = static_cast<float>( rand() % 300 - 150 );
 		float z = static_cast<float>( rand() % 300 - 150 );
 		light.Initialize( { x, 150.f, z}, { 0.f, 0.f, 0.f } );
 
+		// Randomly create colors for new spot lights
 		float r = static_cast<float>(rand() % 100) * .01f;
 		float g = static_cast<float>(rand() % 100) * .01f;
 		float b = static_cast<float>(rand() % 100) * .01f;
 
+		// Some functions aren't working with polymorphism unless you 
+		// cast to concrete class instead of interface, which is fine
+		// they are still ILight children, so can pass if needed to 
+		// ILight * parameters.
+		// This should probably be part of the Actor_LightSpot class or 
+		// whatever we get around to naming it, so their is less of a chance
+		// for casting to the incorrect type, which dynamic_cast "SHOULDN'T"
+		// allow anyway.  It will return nullptr, if it can't cast to desired
+		// light type.
 		auto* pLight = dynamic_cast<Light_Spot*>( light.GetLight() );
+
+		// Set the color for the newly created light.
 		pLight->SetColor( r, g, b );
     }
 
