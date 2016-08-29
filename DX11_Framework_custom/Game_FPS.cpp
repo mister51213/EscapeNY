@@ -92,7 +92,7 @@ void Game_FPS::reset()
     ModelSpecs_W wSpecs3 = 
     { { -10.f, 0.f, -30.f },
       { 0.f,0.f,0.f },
-      { 80.f, 1.f, 80.f } };
+      { 500.f, 1.f, 500.f } };
     aTest3 = Actor_NPC(wSpecs3, Underwater3, ModelSpecs_L(), CUBE_TEXTURED);
 
     // MAKE m_actorsSUB1 (ONE SUBSET OF ACTORS)

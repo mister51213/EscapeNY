@@ -61,23 +61,24 @@ float4 main(PixelBuffer input):SV_Target
     float3 surfToLight = input.worldPixelPosition.xyz - g_lights.position;
     float3 surfToLightN = normalize(surfToLight);
 
+
     float DP = saturate(dot(surfToLightN, g_lights.direction));
     
     float4 finalColor;
 
-    float cAngle = 1.0f / 180.0f;
+    //float cAngle = 1.0f / 180.0f;
 
-    //if (DP <= cAngle) // CUTOFF RANGE
-    //{
-    //    finalColor = ambientColor;
-    //}
-    //else
-    //{
-        finalColor = color;
+    if (DP < 0.9f) // CUTOFF RANGE
+    {
+        finalColor = ambientColor;
+    }
+    else
+    {
     // Calculate the amount of light on this pixel.
-    float intensityL = DP / length(surfToLight);
+        float intensityL = DP;
+        // / length(surfToLight)*10.0f;
     finalColor = saturate( color * intensityL + ambientColor);
-    //}
+    }
 
     return finalColor;
 }
