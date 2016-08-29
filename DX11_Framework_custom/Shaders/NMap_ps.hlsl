@@ -50,7 +50,7 @@ float4 main(PixelBuffer input):SV_Target
 	{
 		color = saturate(color + (texColor * (g_lights.color * intensity)));
 	}
-//    	return color;
+    	//return color;
 
         /******************* SPOTLIGHT **************************/
    	float4 ambientColor = texColor*float4( 0.13f, 0.13f, 0.13f, 1.0f );
@@ -60,19 +60,22 @@ float4 main(PixelBuffer input):SV_Target
     // Calculate the vector of pixel to light
     float3 surfToLight = input.worldPixelPosition.xyz - g_lights.position;
     float3 surfToLightN = normalize(surfToLight);
-    float DP = saturate(dot(surfToLightN, g_lights.direction));
 
-    float coneAngleDP = saturate(dot(surfToLightN, g_lights.direction));
+    float DP = saturate(dot(surfToLightN, g_lights.direction));
     
     float4 finalColor;
-    //if(coneAngleDP < 0.9f )
+
+    float cAngle = 1.0f / 180.0f;
+
+    //if (DP <= cAngle) // CUTOFF RANGE
     //{
     //    finalColor = ambientColor;
     //}
     //else
     //{
+        finalColor = color;
     // Calculate the amount of light on this pixel.
-    float intensityL = coneAngleDP / length(surfToLight);
+    float intensityL = DP / length(surfToLight);
     finalColor = saturate( color * intensityL + ambientColor);
     //}
 

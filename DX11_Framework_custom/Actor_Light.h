@@ -26,22 +26,26 @@ public:
         //XMVECTOR posV = XMLoadFloat3(&m_spotLight.GetPosition());
         //XMVECTOR rotV = XMLoadFloat3(&m_spotLight.GetDirection());
 
-        XMVECTOR posV = XMLoadFloat3(&Camera::GetPosition());
+        //XMVECTOR posV = XMLoadFloat3(&Camera::GetPosition());
         XMVECTOR rotV = XMLoadFloat3(&Camera::GetRotation());
 
         // Convert rotV vector to radians
         rotV = ConvertToRadians(rotV);
 
         // Build view matrix from position and rotation
-        XMMATRIX translationMat = XMMatrixTranslationFromVector(posV);
+        //XMMATRIX translationMat = XMMatrixTranslationFromVector(posV);
         XMMATRIX rotationMat = XMMatrixRotationRollPitchYawFromVector(rotV);
 
-        XMVECTOR dirTrans = XMVector3Transform(rotV, rotationMat);
-        dirTrans = XMVector3TransformCoord(dirTrans, translationMat);
+        XMVECTOR dirRot = XMVector3Transform(XMVectorSet(0.0f, 0.0f, 0.1f, 0.0f), rotationMat);
+       // XMVECTOR dirTrans = XMVector3TransformCoord(posV, translationMat);
 
-        XMFLOAT3 dirFinal;
-        XMStoreFloat3(&dirFinal, dirTrans);
+        XMFLOAT3 dirFinal, posFinal;
+        XMStoreFloat3(&dirFinal, dirRot);
+        //XMStoreFloat3(&posFinal, dirTrans);
+
         m_spotLight.SetDirection(dirFinal);
+//        m_spotLight.SetPosition(posFinal);
+        m_spotLight.SetPosition(m_Position);
 
         return &m_spotLight;
     }
