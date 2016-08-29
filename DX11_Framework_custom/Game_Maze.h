@@ -5,6 +5,7 @@
 #include "TestBoard.h"
 #include "Algorithm_Maze.h"
 #include "Actor_Player_Alt.h"
+#include "Actor_Light.h"
 #include "ResourceManager.h"
 
 class Game_Maze:
@@ -46,6 +47,8 @@ private: // Private members
 	Actor_Player_Alt m_player;
 	std::vector<Actor*> m_pActorDrawList;
 
+	std::vector<Actor_Light> m_pLights;
+	SceneBufferType m_scene;
 
 	bool m_endReached = false;
 };

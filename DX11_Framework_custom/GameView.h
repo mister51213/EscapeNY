@@ -26,7 +26,7 @@ public:
 	GameView( Graphics* pGfx, D3DGraphics* pD3D, std::shared_ptr<Camera> &pCam );
 	 
     void Initialize();
-	void UpdateView( const vector<Actor*>& actors, const vector<LightBufferType>& lightSet) const;
+	void UpdateView( const vector<Actor*>& actors, const SceneBufferType& SceneLights ) const;
     void initModelPool();
 private:
 	void initTexturePool();
@@ -40,10 +40,10 @@ private:
 
     std::shared_ptr<Camera> m_pCam;
 
-    ShaderT<
+    /*ShaderT<
 		VertexBufferTypeAllInOne, 
 		MatrixBufferType, 
-		LightBufferType> m_activeShader;
+		LightBufferType> m_activeShader;*/
 	/*ShaderT<
 		VertexBufferTypeAllInOneNMap, 
 		MatrixBufferType, 

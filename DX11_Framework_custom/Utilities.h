@@ -30,6 +30,7 @@ if(!(Result))\
 else int a = 0
 #define RETURN_IF_FAILED(Result) RETURN_IF_FALSE( SUCCEEDED( ( Result ) ) )
 
+#define MAX_SHADER_LIGHTS 10
 ////////////////////////////////////////////////////
 // Vector Math Operator Overloads
 ///////////////////////////////////////////////////
@@ -259,28 +260,29 @@ struct VertexBufferTypeAllInOneNMap
 	static std::vector<D3D11_INPUT_ELEMENT_DESC> CreateLayoutDescriptions();
 };
 
+enum eLightType
+{
+	INFINITE_LIGHT, POINT_LIGHT, SPOT_LIGHT
+};
 // Use this one type for ALL different lights
 struct LightBufferType
 {
 	XMFLOAT4 lightColor;
    	XMFLOAT3 lightPosition;
     float coneAngle;  
-    XMFLOAT3 lightDirection;
-	// Added extra padding so structure is a multiple of 16 for 
-	// CreateBuffer function requirements.
-    float padding;
+    XMFLOAT3 lightDirection;	
+	eLightType type;
 
     static D3D11_BUFFER_DESC CreateLightDescription( unsigned int MaxLightCount );
 };
 
-        // TODO: rename to "SCENE BUFFER TYPE"
 struct SceneBufferType
 {
 	XMFLOAT4 ambientColor;
 	int lightCount;
 	XMFLOAT3 padding;
-	LightBufferType lights;
+	LightBufferType lights[ MAX_SHADER_LIGHTS ];
 
-	static D3D11_BUFFER_DESC CreateLightDescription( unsigned int MaxLightCount = 1 );
+	static D3D11_BUFFER_DESC CreateLightDescription();
 };
 D3D11_SAMPLER_DESC CreateSamplerDescription();

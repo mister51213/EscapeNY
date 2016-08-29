@@ -108,7 +108,7 @@ bool Shader_NMap::UpdateTransformBuffer( ID3D11DeviceContext * pContext, const M
 	return true;
 }
 
-bool Shader_NMap::UpdateLightBuffer( ID3D11DeviceContext * pContext, const LightBufferType & Lights )const
+bool Shader_NMap::UpdateLightBuffer( ID3D11DeviceContext * pContext, const SceneBufferType& SceneLights )const
 {
 	D3D11_MAPPED_SUBRESOURCE ms{};
 	HRESULT hr = pContext->Map(
@@ -116,12 +116,8 @@ bool Shader_NMap::UpdateLightBuffer( ID3D11DeviceContext * pContext, const Light
 		0, D3D11_MAP_WRITE_DISCARD,
 		0, &ms );
 	assert( SUCCEEDED( hr ) );
-
-	SceneBufferType scene{};
-	scene.ambientColor = { .1f, .1f, .1f, 1.f };
-	scene.lightCount = 1;
-	scene.lights = Lights;
-	CopyMemory( ms.pData, &scene, sizeof( SceneBufferType ) );
+		
+	CopyMemory( ms.pData, &SceneLights, sizeof( SceneBufferType ) );
 
 	pContext->Unmap( m_pLightBuffer.Get(), 0 );
 

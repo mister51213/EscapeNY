@@ -12,7 +12,7 @@ public:
 	
 	bool Initialize( ID3D11Device* pDevice, int MaxLightCount = 1 )override;
 	bool UpdateTransformBuffer( ID3D11DeviceContext *pContext, const MatrixBufferType &Transforms )const;
-	bool UpdateLightBuffer( ID3D11DeviceContext *pContext, const LightBufferType &Lights )const;
+	bool UpdateLightBuffer( ID3D11DeviceContext *pContext, const SceneBufferType& SceneLights )const;
 	void Render( ID3D11DeviceContext *pContext, ID3D11ShaderResourceView **ppShaderResources )const;
 
 private:

@@ -102,6 +102,32 @@ void PrimitiveFactory::CreatePlane( const ModelSpecs_L &Specs )
 	Common( Specs );
 }
 
+void PrimitiveFactory::CreatePlaneNM( const ModelSpecs_L & Specs )
+{
+	CreatePlane( Specs );
+
+	auto vertCount = vertices.size();
+	tangents.resize( vertCount );
+	binormals.resize( vertCount );
+	normals.resize( vertCount );
+
+	for( int i = 0; i < vertCount; i += 3 )
+	{
+		auto edge10 = vertices[ i + 1 ] - vertices[ i ];
+		auto edge20 = vertices[ i + 2 ] - vertices[ i ];
+
+		auto tEdge10 = uvs[ i + 1 ] - uvs[ i ];
+		auto tEdge20 = uvs[ i + 2 ] - uvs[ i ];
+
+		tangents[ i ] = CalculateTangent( edge10, tEdge10 );
+		binormals[ i ] = CalculateBiNormal( tangents[ i ], normals[ i ] );
+
+		tangents[ i + 2 ] = tangents[ i + 1 ] = tangents[ i ];
+		binormals[ i + 2 ] = binormals[ i + 1 ] = binormals[ i ];
+		normals[ i + 2 ] = normals[ i + 1 ] = normals[ i ];
+	}
+}
+
 void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 {    
 	auto CreateVertexList = [&Specs]()->std::vector<DirectX::XMFLOAT3>
@@ -274,34 +300,26 @@ void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )
 {
 	CreateCube( Specs );
 
-	auto vertPos = vertices;
-	auto texCoord = uvs;
 	int vertCount = vertices.size();
-
-	tangent.resize( vertCount );
-	biTangent.resize( vertCount );
+	tangents.resize( vertCount );
+	binormals.resize( vertCount );
 	normals.resize( vertCount );
 
 	// Create the tangent matrix for each face (set of three vertex positions)
 	for( int i = 0; i < vertCount; i += 3 )
 	{
-		auto &position0 = vertices[ i + 0 ];
-		auto &position1 = vertices[ i + 1 ];
-		auto &position2 = vertices[ i + 2 ];
-		auto &tex0 = uvs[ i + 0 ];
-		auto &tex1 = uvs[ i + 1 ];
-		auto &tex2 = uvs[ i + 2 ];
-		auto edge10 = position1 - position0;
-		auto edge20 = position2 - position0;
-		auto tEdge10 = tex1 - tex0;
-		auto tEdge20 = tex2 - tex0;
+		auto edge10 = vertices[ i + 1 ] - vertices[ i + 0 ];
+		auto edge20 = vertices[ i + 2 ] - vertices[ i + 0 ];
+		
+		auto tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ];
+		auto tEdge20 = uvs[ i + 2 ] - uvs[ i + 0 ];
 
-		tangent[ i ] = CalculateTangent( edge10, tEdge10 );
+		tangents[ i ] = CalculateTangent( edge10, tEdge10 );
 		normals[ i ] = CalculateNormal( edge10, edge20 );
-		biTangent[ i ] = CalculateBiNormal( tangent[ i ], normals[ i ] );
+		binormals[ i ] = CalculateBiNormal( tangents[ i ], normals[ i ] );
 
-		tangent[ i + 2 ] = tangent[ i + 1 ] = tangent[ i ];
-		biTangent[ i + 2 ] = biTangent[ i + 1 ] = biTangent[ i ];
+		tangents[ i + 2 ] = tangents[ i + 1 ] = tangents[ i ];
+		binormals[ i + 2 ] = binormals[ i + 1 ] = binormals[ i ];
 		normals[ i + 2 ] = normals[ i + 1 ] = normals[ i ];
 	}
 }
@@ -571,12 +589,12 @@ std::vector<DirectX::XMFLOAT2> PrimitiveFactory::GetUVs()
 
 std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetTangent()
 {
-	return tangent;
+	return tangents;
 }
 
 std::vector<DirectX::XMFLOAT3> PrimitiveFactory::GetBiTangent()
 {
-	return biTangent;
+	return binormals;
 }
 
 std::vector<DWORD> PrimitiveFactory::GetIndices() 
@@ -643,15 +661,15 @@ void PrimitiveFactory::ClearAllBuffers()
 	PrimitiveFactory::normals.clear();
 	PrimitiveFactory::uvs.clear();
 	PrimitiveFactory::indices.clear();
-	PrimitiveFactory::tangent.clear();
-	PrimitiveFactory::biTangent.clear();
+	PrimitiveFactory::tangents.clear();
+	PrimitiveFactory::binormals.clear();
 }
 
 std::vector<DirectX::XMFLOAT3> PrimitiveFactory::vertices;
 std::vector<DirectX::XMFLOAT3> PrimitiveFactory::normals;
 std::vector<DirectX::XMFLOAT2> PrimitiveFactory::uvs; 
-std::vector<DirectX::XMFLOAT3> PrimitiveFactory::tangent;
-std::vector<DirectX::XMFLOAT3> PrimitiveFactory::biTangent;
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::tangents;
+std::vector<DirectX::XMFLOAT3> PrimitiveFactory::binormals;
 
 std::vector<DWORD> PrimitiveFactory::indices;
 DirectX::XMFLOAT4 PrimitiveFactory::color;

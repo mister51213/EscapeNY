@@ -17,10 +17,19 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
     m_spotLights.resize(m_numLights);
     for (Actor_Light& light: m_spotLights)
     {
-        light.Initialize();
+		float x = static_cast<float>( rand() % 300 - 150 );
+		float z = static_cast<float>( rand() % 300 - 150 );
+		light.Initialize( { x, 150.f, z}, { 0.f, 0.f, 0.f } );
+
+		float r = static_cast<float>(rand() % 100) * .01f;
+		float g = static_cast<float>(rand() % 100) * .01f;
+		float b = static_cast<float>(rand() % 100) * .01f;
+
+		auto* pLight = dynamic_cast<Light_Spot*>( light.GetLight() );
+		pLight->SetColor( r, g, b );
     }
 
-        m_lightSet.resize(m_numLights);
+    m_lightSet.resize(m_numLights);
 
 	reset();
 }
@@ -187,17 +196,20 @@ void Game_FPS::LightingFX()
 void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
     //LightingFX();
+	SceneBufferType scene{};
+	scene.ambientColor = { .1f, .1f, .1f, .1f };
+	scene.lightCount = min( m_spotLights.size(), MAX_SHADER_LIGHTS );
 
-    for (int i = 0; i < m_numLights; i++)
+    for (int i = 0; i < m_spotLights.size(); i++)
     {
-        m_lightSet[i] = m_spotLights[i].GetLight()->GetLightBufferType();
+        scene.lights[i] = m_spotLights[i].GetLight()->GetLightBufferType();
     }
 
     // TODO: make it take a whole VECTOR of LightBufferTypes
     // TODO: refactor the shader to have that array of 300 lights and
     // initialize them as needed
 
-    GameViewRef.UpdateView(m_pActorsMASTER, m_lightSet);
+    GameViewRef.UpdateView(m_pActorsMASTER, scene);
    	m_Overlay.Render( *m_pGraphics );
 }
 

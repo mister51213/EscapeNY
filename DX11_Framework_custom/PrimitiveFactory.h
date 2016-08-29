@@ -39,6 +39,7 @@ public:
     // Take center, size, and orientation of primitive to be created
 	static void CreateTriangle( const ModelSpecs_L &Specs );
 	static void CreatePlane( const ModelSpecs_L &Specs );
+	static void CreatePlaneNM( const ModelSpecs_L &Specs );
 	static void CreateCube( const ModelSpecs_L &Specs );
 	static void CreateCubeNM( const ModelSpecs_L &Specs );
 	static void CreateMeshNM( const wstring&Filename );
@@ -75,10 +76,10 @@ private:
 	 static std::vector<DirectX::XMFLOAT2> uvs; 
 	 // Tangent runs parallel to surface in the U coord of texture 
 	 // coordinates UV
-	 static std::vector<DirectX::XMFLOAT3> tangent;	  
+	 static std::vector<DirectX::XMFLOAT3> tangents;	  
 	 // Suppose to be called binormal, runs parallel to surface in the V
 	 // coord of the texture coordinates UV
-	 static std::vector<DirectX::XMFLOAT3> biTangent;
+	 static std::vector<DirectX::XMFLOAT3> binormals;
 
 	 static std::vector<DWORD> indices;
    	 static DirectX::XMFLOAT4 color;

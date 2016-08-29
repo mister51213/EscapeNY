@@ -25,7 +25,7 @@ void GameView::Initialize()
 
 // TODO: this should not directly take LightBufferType; it needs one level up (LightSpot type), 
 // TODO: so it can pass world position info to shader for directional lighting
-void GameView::UpdateView(const vector<Actor*>& actors, const vector<LightBufferType>& lightSet) const
+void GameView::UpdateView(const vector<Actor*>& actors, const SceneBufferType& SceneLights ) const
 { 
 	
     /*bool result = m_activeShader.UpdateLightBuffer(
@@ -33,7 +33,7 @@ void GameView::UpdateView(const vector<Actor*>& actors, const vector<LightBuffer
         &(lightSet[0]));*/
 	bool result = m_shader_nMap.UpdateLightBuffer( 
 		m_pD3D->GetDeviceContext(), 
-		lightSet[ 0 ] );
+		SceneLights );
     // TODO: update the ShaderTEMPLATE to handle MULTPILE LIGHTS
 
     if (!result)
@@ -104,8 +104,8 @@ void GameView::initModelPool()
     m_ModelPool[CUBE_TEXTURED].reset(new Model_TexturedNM );
     m_ModelPool[CUBE_TEXTURED]->Initialize(prim, *m_pGfx);
 
-    prim.CreatePlane(defaultSpecs);
-    m_ModelPool[PLANE].reset(new Model_Textured);
+    prim.CreatePlaneNM(defaultSpecs);
+    m_ModelPool[PLANE].reset(new Model_TexturedNM );
     m_ModelPool[PLANE]->Initialize(prim, *m_pGfx);
     
     prim.CreateCubeNM(defaultSpecs); // TODO: Change to CreateSphere
@@ -176,6 +176,6 @@ void GameView::initNormalMapPool()
 
 void GameView::initializeShader()
 {
-	m_activeShader.Initialize( m_pD3D->GetDevice() );
-	m_shader_nMap.Initialize( m_pD3D->GetDevice() );
+	//m_activeShader.Initialize( m_pD3D->GetDevice() );
+	m_shader_nMap.Initialize( m_pD3D->GetDevice(), 10 );
 }

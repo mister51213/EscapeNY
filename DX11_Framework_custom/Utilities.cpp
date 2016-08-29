@@ -264,11 +264,11 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexBufferTypeAllInOneNMap::CreateLayout
 	return desc;
 }
 
-D3D11_BUFFER_DESC SceneBufferType::CreateLightDescription( unsigned int MaxLightCount )
+D3D11_BUFFER_DESC SceneBufferType::CreateLightDescription( )
 {
 	D3D11_BUFFER_DESC lightBufferDesc{};
 	lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	lightBufferDesc.ByteWidth = sizeof( SceneBufferType ) * MaxLightCount;
+	lightBufferDesc.ByteWidth = sizeof( SceneBufferType );
 	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	return lightBufferDesc;

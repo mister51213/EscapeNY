@@ -6,7 +6,7 @@ using namespace DirectX;
 
 TestBoard::TestBoard()
 	:
-	Actor( { { 0.f, 0.f, 0.f },{ 0.f, 0.f, 0.f },{ 5.f, 5.f, 5.f } }, AsphaltOld, ModelSpecs_L(), PLANE )
+	Actor( { { 0.f, 0.f, 0.f },{ 90.f, 0.f, 0.f },{ 5.f, 5.f, 5.f } }, eTexture::Underwater3, ModelSpecs_L(), PLANE )
 {
 }
 
@@ -20,16 +20,13 @@ void TestBoard::Initialize( UINT Width, UINT Height, Graphics *const pGraphics )
 	m_width = Width;
 	m_height = Height;
 
+	m_worldSpecs.position = { ( m_width * .5f ) * 5.f, 1.f, ( m_height * .5f ) * 5.f};
+	m_worldSpecs.scale = { m_width * 5.f, 1.f, m_height * 5.f };
+
 	m_startCell =	{ rand() % m_width, m_height - 1 };
 	m_endCell =		{ rand() % m_width, 0 };
-
-	m_localSpecs.size = {
-		static_cast<float>( m_width ),
-		static_cast<float>( m_height ), 1.f };
-	m_localSpecs.orientation = { 90.f, 0.f,0.f };
-
-	m_cellSize = { 5.f, 1.f, 5.f };
 	
+	m_cellSize = { 5.f, 1.f, 5.f };	
 }
 
 DirectX::XMUINT2 TestBoard::GetStartCellCoord() const
@@ -44,22 +41,24 @@ DirectX::XMUINT2 TestBoard::GetEndCellCoord() const
 
 DirectX::XMFLOAT3 TestBoard::GetStartPosition() const
 {
-	float multiplier = m_pCells[ 0 ].GetLocalSpecs().size.x;
-	XMFLOAT3 res;
-	res.x = static_cast<float>(m_startCell.x) * multiplier;
-	res.y = 1.f;
-	res.z = static_cast<float>(m_startCell.y) * multiplier;
-	return res;
+	XMFLOAT3 result{
+		static_cast<float>( m_startCell.x ) * m_cellSize.x,
+		1.f,
+		static_cast<float>( m_startCell.y ) * m_cellSize.z
+	};
+
+	return result;	
 }
 
 DirectX::XMFLOAT3 TestBoard::GetEndPosition() const
 {
-	float multiplier = m_pCells[ 0 ].GetLocalSpecs().size.x;
-	XMFLOAT3 res;
-	res.x = static_cast<float>( m_endCell.x ) * multiplier;
-	res.y = 1.f;
-	res.z = static_cast<float>( m_endCell.y ) * multiplier;
-	return res;
+	XMFLOAT3 result{
+		static_cast<float>( m_endCell.x ) * m_cellSize.x,
+		1.f,
+		static_cast<float>( m_endCell.y ) * m_cellSize.z
+	};
+	
+	return result;
 }
 
 UINT TestBoard::GetWidth() const

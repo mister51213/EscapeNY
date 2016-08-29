@@ -35,7 +35,7 @@ public:
 		// Light shader setup
 		///////////////////////////////////////////////////////////
 
-		D3D11_BUFFER_DESC lightBufferDesc = LightBuffer::CreateLightDescription( MaxLightCount );
+		D3D11_BUFFER_DESC lightBufferDesc = LightBuffer::CreateLightDescription();
 
 		// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 		hr = pDevice->CreateBuffer( &lightBufferDesc, NULL, &m_lightBuffer );

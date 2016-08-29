@@ -1,13 +1,8 @@
 #pragma once
 
-#include "ILight.h"
-#include <vector>
 #include "Utilities.h"
 
-using namespace std;
-
-class ILightPoint:
-	public ILight
+class ILightPoint
 {
 public:
     virtual const XMFLOAT3& GetPosition() const = 0;
