@@ -79,7 +79,6 @@ bool Shader_NMap::Initialize( ID3D11Device * pDevice, int MaxLightCount )
 	// Load light constant buffer
 	{
 		// Function takes in max light count as param, default is 1
-        // TODO: rename to "SCENE BUFFER TYPE"
 		auto lightBufferDesc = SceneBufferType::CreateLightDescription();
 		HRESULT hr = pDevice->CreateBuffer(
 			&lightBufferDesc,

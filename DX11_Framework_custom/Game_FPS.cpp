@@ -92,13 +92,13 @@ void Game_FPS::reset()
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
       { 5.f, 5.f, 5.f } };
-    aTest1 = Actor_NPC(wSpecs1, Water1, ModelSpecs_L(), CUSTOM_MESH);
+    aTest1 = Actor_NPC(wSpecs1, Water1, ModelSpecs_L(), CUBE_TEXTURED);
     // 
     ModelSpecs_W wSpecs2 = 
     { { 20.f, -.5f, 20.f },
       { 0.f,0.f,0.f },
       { 0.5f, 0.5f, 0.5f } };
-    aTest2 = Actor_NPC(wSpecs2, Water3, ModelSpecs_L(), CUSTOM_MESH2);
+    aTest2 = Actor_NPC(wSpecs2, Water3, ModelSpecs_L(), CUBE_TEXTURED);
     // GAME BOARD
     ModelSpecs_W wSpecs3 = 
     { { -10.f, 0.f, -30.f },

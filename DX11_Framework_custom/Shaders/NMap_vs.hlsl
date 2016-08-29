@@ -2,9 +2,9 @@
 
 cbuffer Transforms
 {
-	matrix g_world;
-	matrix g_view;
-	matrix g_proj;
+	matrix g_world; // world matrix for each
+	matrix g_view; // view matrix for camera
+	matrix g_proj; // projection matrix for screen
 };
 
 struct VertexBuffer
