@@ -117,8 +117,8 @@ void GameView::initModelPool()
     m_ModelPool[POLYGON]->Initialize(prim, *m_pGfx);
 
     //prim.CreateMesh(L"Meshes\\Cube.txt");
-    prim.CreateMesh(L"Meshes\\model.BinaryMesh");
-    m_ModelPool[CUSTOM_MESH].reset(new Model_Textured);
+    prim.CreateMeshNM(L"Meshes\\model.BinaryMesh");
+    m_ModelPool[CUSTOM_MESH].reset(new Model_TexturedNM );
     m_ModelPool[CUSTOM_MESH]->Initialize(prim, *m_pGfx);
 
     prim.CreateMesh(L"Meshes\\model2.BinaryMesh");
@@ -132,6 +132,10 @@ void GameView::initModelPool()
     prim.CreateMesh(L"Meshes\\model4.BinaryMesh");
     m_ModelPool[CUSTOM_MESH4].reset(new Model_Textured);
     m_ModelPool[CUSTOM_MESH4]->Initialize(prim, *m_pGfx);
+
+	prim.CreateMeshNM( L"Meshes/SomeEdiface.BinaryMesh" );
+	m_ModelPool[ SOME_EDIFACE ].reset( new Model_TexturedNM );
+	m_ModelPool[ SOME_EDIFACE ]->Initialize( prim, *m_pGfx );
 }
 
 void GameView::initTexturePool()

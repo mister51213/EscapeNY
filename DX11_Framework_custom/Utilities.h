@@ -131,7 +131,8 @@ enum eModType
     CUSTOM_MESH,
     CUSTOM_MESH2,
     CUSTOM_MESH3,
-    CUSTOM_MESH4
+    CUSTOM_MESH4,
+	SOME_EDIFACE
 };
 
 enum eTexture
@@ -234,6 +235,12 @@ constexpr DXGI_FORMAT float3Format = DXGI_FORMAT_R32G32B32_FLOAT;
 constexpr DXGI_FORMAT float4Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 constexpr D3D11_INPUT_CLASSIFICATION vertexDataType = D3D11_INPUT_PER_VERTEX_DATA;
 
+struct VertexBufferTypePosUvNormal
+{
+	DirectX::XMFLOAT3 position;
+	DirectX::XMFLOAT2 uv;
+	DirectX::XMFLOAT3 normal;
+};
 struct VertexBufferTypeAllInOne
 {
 	DirectX::XMFLOAT3 position;

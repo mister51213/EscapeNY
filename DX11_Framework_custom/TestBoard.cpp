@@ -6,7 +6,7 @@ using namespace DirectX;
 
 TestBoard::TestBoard()
 	:
-	Actor( { { 0.f, 0.f, 0.f },{ 90.f, 0.f, 0.f },{ 5.f, 5.f, 5.f } }, eTexture::Underwater3, ModelSpecs_L(), PLANE )
+	Actor( { { 0.f, 0.f, 0.f },{ 90.f, 0.f, 0.f },{ 5.f, 5.f, 5.f } }, eTexture::AsphaltOld, ModelSpecs_L(), PLANE )
 {
 }
 

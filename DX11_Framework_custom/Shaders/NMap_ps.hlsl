@@ -66,7 +66,7 @@ float4 CalculatePointLight(
 {
 	// Calculate the direction of the light pointing to the surface
 	// position
-	float3 surfaceToLightDir = normalize(SurfacePosition - LightPosition);
+	float3 surfaceToLightDir = normalize(LightPosition - SurfacePosition);
 
 	// Calculate the amount of light hitting the point on the surface
 	float intensity = saturate(dot(surfaceToLightDir, SurfaceNormal));
@@ -86,12 +86,10 @@ float4 CalculateSpotLight(
 	float ConeAngle)
 {
 	// Calculate the direction of the light to the surface
-	float3 surfaceToLightDir = normalize(SurfacePosition - LightPosition);
+	float3 surfaceToLightVector = SurfacePosition - LightPosition;
+	float3 surfaceToLightDir = normalize(surfaceToLightVector);
 	// Calculate how much of light is reaching point on surface
-	float ptLightIntensity = saturate(dot(surfaceToLightDir, LightDirection));
-
-	// Calculate how much the surface is facing the light
-	float dirLightIntensity = saturate(dot(-LightDirection, SurfaceNormal));
+	float cuttoff = saturate(dot(surfaceToLightDir, LightDirection));
 
 	// make sure ConeAngle is set properly between 1 and 180
 	ConeAngle = min(180.f, max(1.f, ConeAngle));
@@ -101,10 +99,13 @@ float4 CalculateSpotLight(
 	float4 color = float4(0.f, 0.f, 0.f, 0.f);
 	// test to see if light is in the cone of light, 
 	// 1 - ConeAngle so increasing cone angle increases light disc
-	if (ptLightIntensity >= 1.f - ConeAngle)
-	{		
-		// Calculate final intensity
-		float intensity = ptLightIntensity * dirLightIntensity;
+	if (cuttoff >= 1.f - ConeAngle)
+	{
+		float range = 1.f - cuttoff;
+		float gradientIntensity = (cuttoff - (1.f - ConeAngle)) / range;
+		// Calculate how much the surface is facing the light
+		float intensity = saturate(dot(-LightDirection, SurfaceNormal)) * gradientIntensity;
+		intensity *= 1.f / length(surfaceToLightVector);
 		// set color to scaled color
 		color = LightColor * intensity;
 	}
@@ -153,7 +154,7 @@ float4 main(PixelBuffer input):SV_Target
 		{
 			lColor = saturate(CalculateSpotLight(g_lights[idx].color, g_lights[idx].position, g_lights[idx].direction, input.worldPosition.xyz, lightTan, g_lights[idx].coneAngle));
 		}
-
+		lColor *= g_lights[idx].color.w;
 		// lights are additive, so add temp light color to return color value
 		color += lColor;
 	}

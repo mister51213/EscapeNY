@@ -40,6 +40,7 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 
 		// Set the color for the newly created light.
 		pLight->SetColor( r, g, b );
+		pLight->SetConeAngle( 45.f );
     }
 
     m_lightSet.resize(m_numLights);
@@ -92,7 +93,7 @@ void Game_FPS::reset()
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
       { 5.f, 5.f, 5.f } };
-    aTest1 = Actor_NPC(wSpecs1, Water1, ModelSpecs_L(), CUBE_TEXTURED);
+    aTest1 = Actor_NPC(wSpecs1, AsphaltOld, ModelSpecs_L(), CUSTOM_MESH);
     // 
     ModelSpecs_W wSpecs2 = 
     { { 20.f, -.5f, 20.f },
@@ -104,24 +105,33 @@ void Game_FPS::reset()
     { { -10.f, 0.f, -30.f },
       { 0.f,0.f,0.f },
       { 80.f, 1.f, 80.f } };
-    aTest3 = Actor_NPC(wSpecs3, Underwater3, ModelSpecs_L(), CUBE_TEXTURED);
+	/*ModelSpecs_W wSpecs3{
+		{ 0.f, 0.f, 0.f },
+		{ 0.f, 0.f, 0.f },
+		{ 1.f, 1.f, 1.f }
+	};*/
+    aTest3 = Actor_NPC( wSpecs3, Underwater3, ModelSpecs_L(), CUBE_TEXTURED);
 
     // MAKE m_actorsSUB1 (ONE SUBSET OF ACTORS)
-    const int numRows = 5, numColumns = 5, numZ = 5;
-    const int numActors1 = numRows * numColumns * numZ;
-    Algorithm_Grid3D alg;
-    m_actorsSUB1 = alg.MakePatternNPC(numActors1);
-    // MAKE m_actorsSUB2 (ONE SUBSET OF ACTORS)
-    const int numActors2 = 100;
-    Algorithm_Spiral3D alg2(this);
-    //m_actorsSUB2 = makeActorSet(numActors2, &alg2);
-    m_actorsSUB2 = alg2.MakePatternNPC(numActors2);
+    //const int numRows = 5, numColumns = 5, numZ = 5;
+    //const int numActors1 = numRows * numColumns * numZ;
+    //Algorithm_Grid3D alg;
+    //m_actorsSUB1 = alg.MakePatternNPC(numActors1);
+    //// MAKE m_actorsSUB2 (ONE SUBSET OF ACTORS)
+    //const int numActors2 = 100;
+    //Algorithm_Spiral3D alg2(this);
+    ////m_actorsSUB2 = makeActorSet(numActors2, &alg2);
+    //m_actorsSUB2 = alg2.MakePatternNPC(numActors2);
 
+	auto numActors1 = m_actorsSUB1.size();
+	auto numActors2 = m_actorsSUB2.size();
     m_pActorsMASTER.reserve(4 + numActors1 + numActors2);
+
     m_pActorsMASTER.push_back(&m_player);
     m_pActorsMASTER.push_back(&aTest1);
     m_pActorsMASTER.push_back(&aTest2);
     m_pActorsMASTER.push_back(&aTest3);
+
     for (int i = 0; i < numActors1; i++)
     {
         m_pActorsMASTER.push_back(&(m_actorsSUB1[i]));

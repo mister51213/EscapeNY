@@ -147,12 +147,13 @@ void Game_Maze::reset()
 			light.Initialize( pos, { 0.f, 0.f, 0.f } );
 
 			auto *pLight = dynamic_cast<Light_Spot*>( light.GetLight() );
+			
 
-			// ConeAngle can be between 10.f and 180.f...min/max'd in shader
+			// ConeAngle can be between 1.f and 180.f...min/max'd in shader
 			// The angle is divided by 180.f to normalize the value, then 
 			// compared against the dot product of surface to light direction
 			// and the light direction to test if it's in the cone of light.
-			pLight->SetConeAngle( 1.f );
+			pLight->SetConeAngle( 15.f );
 			switch( count )
 			{
 				case 0:

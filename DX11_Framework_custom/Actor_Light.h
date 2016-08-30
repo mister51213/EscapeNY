@@ -11,8 +11,7 @@ public:
 
     void Initialize(const XMFLOAT3 &Position, const XMFLOAT3 &LookAt)
     {
-		m_spotLight.SetIntensity( 1.f );
-		m_spotLight.SetColor(.25f, .25f, .25f);
+		m_spotLight.SetIntensity( .5f );
 		m_spotLight.SetPosition( Position );
 		auto dir = Normalize( LookAt - Position );
         m_spotLight.SetDirection( dir.x, dir.y, dir.z);

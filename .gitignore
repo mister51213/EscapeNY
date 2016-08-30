@@ -246,3 +246,5 @@ ModelManifest.xml
 *.db
 *.cso
 *.cso
+/DX11_Framework_custom/Meshes/auvBG.png
+/DX11_Framework_custom/Meshes/SomeEdiface.mtl
