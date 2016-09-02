@@ -92,7 +92,7 @@ void Game_FPS::reset()
     ModelSpecs_W wSpecs1 = 
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
-      { 5.f, 5.f, 5.f } };
+      { .5f, .5f, .5f } };
     aTest1 = Actor_NPC(wSpecs1, AsphaltOld, ModelSpecs_L(), CUSTOM_MESH);
     // 
     ModelSpecs_W wSpecs2 = 
@@ -101,16 +101,16 @@ void Game_FPS::reset()
       { 0.5f, 0.5f, 0.5f } };
     aTest2 = Actor_NPC(wSpecs2, Water3, ModelSpecs_L(), CUBE_TEXTURED);
     // GAME BOARD
-    ModelSpecs_W wSpecs3 = 
+   /* ModelSpecs_W wSpecs3 = 
     { { -10.f, 0.f, -30.f },
       { 0.f,0.f,0.f },
-      { 80.f, 1.f, 80.f } };
-	/*ModelSpecs_W wSpecs3{
+      { 80.f, 1.f, 80.f } };*/
+	ModelSpecs_W wSpecs3{
 		{ 0.f, 0.f, 0.f },
 		{ 0.f, 0.f, 0.f },
-		{ 1.f, 1.f, 1.f }
-	};*/
-    aTest3 = Actor_NPC( wSpecs3, Underwater3, ModelSpecs_L(), CUBE_TEXTURED);
+		{ 100.f, 30.f, 100.f }
+	};
+    aTest3 = Actor_NPC( wSpecs3, Underwater3, ModelSpecs_L(), SOME_EDIFACE);
 
     // MAKE m_actorsSUB1 (ONE SUBSET OF ACTORS)
     //const int numRows = 5, numColumns = 5, numZ = 5;

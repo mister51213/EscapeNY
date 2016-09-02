@@ -133,7 +133,7 @@ void GameView::initModelPool()
     m_ModelPool[CUSTOM_MESH4].reset(new Model_Textured);
     m_ModelPool[CUSTOM_MESH4]->Initialize(prim, *m_pGfx);
 
-	prim.CreateMeshNM( L"Meshes/SomeEdiface.BinaryMesh" );
+	prim.CreateMeshNM( L"Meshes/cube_inverted.BinaryMesh" );
 	m_ModelPool[ SOME_EDIFACE ].reset( new Model_TexturedNM );
 	m_ModelPool[ SOME_EDIFACE ]->Initialize( prim, *m_pGfx );
 }
