@@ -94,7 +94,7 @@ void Game_FPS::reset()
     Algorithm_Spiral3D alg2(this);
     //m_actorsSUB2 = makeActorSet(numActors2, &alg2);
     m_actorsSUB2 = alg2.MakePatternNPC(numActors2);
-
+	// test comment
     m_pActorsMASTER.reserve(4 + numActors1 + numActors2);
     m_pActorsMASTER.push_back(&m_player);
     m_pActorsMASTER.push_back(&aTest1);
