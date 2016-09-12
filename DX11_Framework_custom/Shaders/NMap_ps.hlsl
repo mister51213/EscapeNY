@@ -43,7 +43,7 @@ float4 main(PixelBuffer input) : SV_Target
 	float3 lightDirection = -g_lights.direction;
 
         /******************* SPOTLIGHT **************************/
-	float4 ambientColor = texColor * float4(0.13f, 0.13f, 0.13f, 1.0f);
+	float4 ambientColor = texColor * float4(0.06f, 0.06f, 0.06f, 1.0f);
 
     // TODO: transform light direction first
 
@@ -54,18 +54,22 @@ float4 main(PixelBuffer input) : SV_Target
 	float4 finalColor = ambientColor;
 
 	// This calculates the angle between the surface normal and the light direction
-	float DP = saturate(dot(surfToLightN, lightDirection));
+    	float coneAngle = 0.9f;
 
-	float coneAngle = 0.9f;
+	float DP1 = saturate(dot(surfToLightN, lightDirection));
+    float DP2 = saturate(dot(surfToLightN, input.normal));
+
+    float DPdiff = abs(DP1 - DP2);
+
 	// This clips all points outside of range
-	if (DP > coneAngle) // CUTOFF RANGE
+	if (DP1 > coneAngle && DPdiff > 0.7) // CUTOFF RANGE
 	{
 		// Range of light from center to outer
 		float range = 1.f - coneAngle;
 		// Calculate the intensity at distance from outer edge
-		float gradientIntensity = (DP - coneAngle) / range;
+		float gradientIntensity = (DP1 - coneAngle) / range;
 		// Calculate the amount of light on this pixel.
-		float intensity = dot(lightDirection, lightTan) * gradientIntensity;
+		float intensity = 10.0f* dot(lightDirection, lightTan) * gradientIntensity;
 		intensity *= 1.f / length(surfToLight);
 		finalColor = saturate(g_lights.color * intensity + ambientColor);
 	}

@@ -24,7 +24,11 @@ public:
     {
 		auto xmOriV = XMLoadFloat3( &m_Orientation );
 		xmOriV = ConvertToRadians( xmOriV );
+
 		auto xmRotM = XMMatrixRotationRollPitchYawFromVector( xmOriV );
+
+
+
 		auto xmForwardV = XMVectorSet( 0.f, 0.f, 1.f, 0.f );
 		xmOriV = XMVector3Transform( xmForwardV, xmRotM );
 		XMFLOAT3 oriV{};

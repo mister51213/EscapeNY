@@ -211,17 +211,22 @@ void Camera::Strafe( float distance )
 
 void Camera::Render()
 {
-	// Load/Initialize SIMD registers
-	XMVECTOR posV = XMLoadFloat3( &m_Position );
 	XMVECTOR rotV = XMLoadFloat3( &m_Orientation );
-
-	// Convert rotV vector to radians
 	rotV = ConvertToRadians( rotV );
 
-	// Build view matrix from position and rotation
-	XMMATRIX translationMat = XMMatrixTranslationFromVector( posV );
-	XMMATRIX rotationMat = XMMatrixRotationRollPitchYawFromVector( rotV );
+    //XMVECTOR posV = XMLoadFloat3( &m_Position );
+    //XMMATRIX translationMat = XMMatrixTranslationFromVector( posV );
+    //XMMATRIX translationMat = { 
+    //    {1.f,0.f,0.f,0.f},  // ROW 1 (transformed basis vector 1)
+    //    {0.f,1.f,0.f,0.f},  // ROW 2 (transformed basis vector 2)
+    //    {0.f,0.f,1.f,0.f},  // ROW 3 (transformed basis vector 3) 
+    //    {m_Position.x,m_Position.y,m_Position.z,1.f} }; // ROW 4
 
-	// ORDER of multiplication matters here:
-	m_ViewMatrix = XMMatrixInverse( 0, rotationMat*translationMat );
+	// TODO: create this matrix by hand
+    XMMATRIX rotationMat = XMMatrixRotationRollPitchYawFromVector( rotV );
+
+	// COULD ALSO: 
+    // TODO: add posV x,y,z values to the BOTTOM ROW of the rotationMat
+    rotationMat.r[3] = { m_Position.x,m_Position.y,m_Position.z,1.f };
+	m_ViewMatrix = XMMatrixInverse( 0, rotationMat/**translationMat*/ );
 }
