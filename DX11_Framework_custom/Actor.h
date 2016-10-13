@@ -39,20 +39,7 @@ public:
     //////////////////////////////////////
     // GAME LOGIC AND PHYSICS FUNCTIONS //
     //////////////////////////////////////
-    void UpdateState(float timeElapsed)
-    {
-        switch (m_state)
-        {
-        case Stationary:
-        return;
-        case Falling:
-            DoGravity(timeElapsed);
-        case Moving:
-            Move(timeElapsed);
-        default:
-        return;
-        }
-    }
+    void UpdateState(eState state, float deltaT = 1.0f);
 
     // This doesn't need to be implemented by most objects in the scene, 
     // maybe multiple inhertance would serve our purposes, have the
@@ -62,8 +49,8 @@ public:
     virtual void GetInput(const Input& pInput, int randI = 0.f, float randF = 0.f) {}
 
 protected:
-    void Move(float& const time);
-    void DoGravity(float & const deltaT);
+    void Move(const float time);
+    void DoGravity(const float deltaT);
 
 protected:
     eModType m_modType;
@@ -76,10 +63,10 @@ protected:
     // PHYSICS / MOVEMENT RELATED //
     ////////////////////////////////
     eState m_state;
-    XMFLOAT3 m_velocity = {0.f, 0.f, 0.f};
+    XMFLOAT3 m_velocity = {0.f, 0.0f, 0.f};
     // "downward" acceleration on the Y axis
-    const float m_gravity = -9.8; // units are meters/second^2
+    float m_gravity = -9.8; // units are meters/second^2
     // Given no mass, drag, area, or fluid density info, use an arbitrary value for 
     // terminal velocity; would need to calculate this for more realistic physics.
-    const float terminalVelocity = 50.0f;
+    float terminalVelocity = 50.0f;
 };
