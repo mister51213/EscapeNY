@@ -15,12 +15,19 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 
     // INITIALIZE LIGHT
     m_spotLights.resize(m_numLights);
+
+    // manually position lights
+    //m_spotLights[0].Initialize( {30.f, 50.f, 30.f}, { 0.f, 0.f, 0.f } );
+    //m_spotLights[0].Initialize( {-30.f, -20.f, -30.f}, { 0.f, 0.f, 0.f } );
+    //m_spotLights[0].Initialize( {-30.f, 50.f, 30.f}, { 0.f, 0.f, 0.f } );
+
     for (Actor_Light& light: m_spotLights)
     {
 		// Randomly create positions for new spot lights
 		float x = static_cast<float>( rand() % 300 - 150 );
-		float z = static_cast<float>( rand() % 300 - 150 );
-		light.Initialize( { x, 1050.f, z}, { 0.f, 0.f, 0.f } );
+   		float y = static_cast<float>( rand() % 300 - 150 );
+        float z = static_cast<float>( rand() % 300 - 150 );
+		light.Initialize( { x, y, z}, { 0.f, 0.f, 0.f } );
 
 		// Randomly create colors for new spot lights
 		float r = static_cast<float>(rand() % 100) * .01f;
@@ -108,7 +115,7 @@ void Game_FPS::reset()
 	ModelSpecs_W wSpecs3{
 		{ 0.f, 0.f, 0.f },
 		{ 0.f, 0.f, 0.f },
-		{ 100.f, 30.f, 100.f }
+		{ 70.f, 30.f, 70.f }
 	};
     aTest3 = Actor_NPC( wSpecs3, Underwater3, ModelSpecs_L(), SOME_EDIFACE);
 
@@ -218,7 +225,7 @@ void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
     //LightingFX();
 	SceneBufferType scene{};
-	scene.ambientColor = { .3f, .3f, .3f, .3f };
+	scene.ambientColor = { .15f, .15f, .15f, .1f };
 	scene.lightCount = min( m_spotLights.size(), MAX_SHADER_LIGHTS );
 
     for (int i = 0; i < m_spotLights.size(); i++)
