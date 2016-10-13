@@ -39,7 +39,8 @@ public:
     //////////////////////////////////////
     // GAME LOGIC AND PHYSICS FUNCTIONS //
     //////////////////////////////////////
-    void UpdateState(eState state, float deltaT = 1.0f);
+    // TODO: CHANGE THIS TO TAKE REAL TIME!!!!!!!!!!
+    void UpdateState(eState state, float deltaT = 0.0f);
 
     // This doesn't need to be implemented by most objects in the scene, 
     // maybe multiple inhertance would serve our purposes, have the

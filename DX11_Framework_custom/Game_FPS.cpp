@@ -68,13 +68,11 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
     m_pCamera->GetInput(InputRef);
     m_pCamera->GetMouseInput(InputRef);
     m_player.GetInput(InputRef);
-    m_player.UpdateState(Falling, 0.007f);
-    // TODO: incorporate this w actual game timer
 
     for (auto& pActor : m_actorsSUB1)
     {
         pActor.GetInput(InputRef, randInt, randFloat);
-        pActor.UpdateState(Falling, 1.0f);
+        pActor.UpdateState(Falling, 0.007f);
     }
 
     randInt = rand() % 3;
@@ -82,6 +80,19 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
     for (auto& pActor : m_actorsSUB2)
     {
         pActor.GetInput(InputRef, randInt, randFloat);
+    }
+
+    /////////////////////////////
+    // PHYSICS //////////////////
+    /////////////////////////////
+    m_player.UpdateState(Falling, 0.007f);
+    // TODO: incorporate this w actual game timer
+
+    for (int i = 0; i < m_actorsSUB1.size(); i++)
+    {
+        // random number 0~.1
+       float randFloatS = static_cast<float>(rand() % 1000)* 0.00001f;
+       m_actorsSUB1[i].UpdateState(Falling, randFloatS);
     }
 }
 
@@ -124,16 +135,18 @@ void Game_FPS::reset()
     aTest3 = Actor_NPC( wSpecs3, Underwater3, ModelSpecs_L(), SOME_EDIFACE);
 
     // TEST SUBSETS OF ACTORS
-    //Algorithm_Grid3D alg;
-    //const int numRows = 5, numColumns = 5, numZ = 5;
-    //m_actorsSUB1 = alg.MakePatternNPC(numRows * numColumns * numZ);    
+    Algorithm_Grid3D alg;
+    const int numRows = 5, numColumns = 5, numZ = 5;
+    m_actorsSUB1 = alg.MakePatternNPC(numRows * numColumns * numZ, { 0.0f,100.0f,0.0f });
+    auto numActors1 = m_actorsSUB1.size();
+
+
     //Algorithm_Spiral3D alg2(this);    
     //m_actorsSUB2 = alg2.MakePatternNPC(100);
-
-    // GET SIZE OF DRAW OBJECT LISTS and reserve size for draw list
-	auto numActors1 = m_actorsSUB1.size();
 	auto numActors2 = m_actorsSUB2.size();
-    m_pActorsMASTER.reserve(4/* + numActors1 + numActors2*/);
+
+    // CRUCIAL!! //
+    m_pActorsMASTER.reserve(4 + numActors1 /*+ numActors2*/);
 
     m_pActorsMASTER.push_back(&m_player);
     m_pActorsMASTER.push_back(&aTest1);
@@ -145,10 +158,10 @@ void Game_FPS::reset()
     {
         m_pActorsMASTER.push_back(&(m_actorsSUB1[i]));
     }
-    for (int i = 0; i < numActors2; i++)
-    {
-        m_pActorsMASTER.push_back(&(m_actorsSUB2[i]));
-    }
+    //for (int i = 0; i < numActors2; i++)
+    //{
+    //    m_pActorsMASTER.push_back(&(m_actorsSUB2[i]));
+    //}
 }
 
 void Game_FPS::LightingFX()

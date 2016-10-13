@@ -43,7 +43,7 @@ Algorithm_Grid3D::Algorithm_Grid3D()
 
 //TEST//
 
-vector<Actor_NPC> Algorithm_Grid3D::MakePatternNPC( int numActors )
+vector<Actor_NPC> Algorithm_Grid3D::MakePatternNPC( int numActors, XMFLOAT3 worldOffset )
 {
 	int m_numColumns;
 	int m_numRows;
@@ -65,16 +65,17 @@ vector<Actor_NPC> Algorithm_Grid3D::MakePatternNPC( int numActors )
 	vector<Actor_NPC> actorsSUB;
 	actorsSUB.reserve( numActors );
 
-	ModelSpecs_W specs = { { 0.f, 0.f, 0.f },{ 0.f,0.f,0.f },{ .3f,.4f,.5f } };
+
+	ModelSpecs_W specs = { { 0.f,0.f,0.f }, { 0.f,0.f,0.f },{ .3f,.4f,.5f } };
 	for( float i = 0; i < m_numColumns; i++ )
 	{
 		for( float j = 0; j < m_numRows; j++ )
 		{
 			for( float k = 0; k < m_numZ; k++ )
 			{
-				specs.position.x = i*15.f;
-				specs.position.y = j*15.f;
-				specs.position.z = k*15.f;
+				specs.position.x = i*15.f + worldOffset.x;
+				specs.position.y = j*15.f + worldOffset.y;
+				specs.position.z = k*15.f + worldOffset.z;
 				specs.scale.x += .01f;
 				specs.scale.y += .015f;
 				specs.scale.z += .02f;
