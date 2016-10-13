@@ -6,7 +6,7 @@ using namespace DirectX;
 
 TestBoard::TestBoard()
 	:
-	Actor( { { 0.f, 0.f, 0.f },{ 90.f, 0.f, 0.f },{ 5.f, 5.f, 5.f } }, eTexture::AsphaltOld, ModelSpecs_L(), PLANE )
+	Actor( { { 0.f, 0.f, 0.f },{ 90.f, 0.f, 0.f },{ 1.f, 1.f, 1.f } }, eTexture::AsphaltOld, ModelSpecs_L(), PLANE )
 {
 }
 
@@ -21,7 +21,11 @@ void TestBoard::Initialize( UINT Width, UINT Height, Graphics *const pGraphics )
 	m_height = Height;
 
 	m_worldSpecs.position = { ( m_width * .5f ) * 5.f, 1.f, ( m_height * .5f ) * 5.f};
-	m_worldSpecs.scale = { m_width * 5.f, 1.f, m_height * 5.f };
+	m_worldSpecs.scale = 
+	{ 
+		static_cast<float>( m_width ), 1.f, 
+		static_cast<float>( m_height ) 
+	};
 
 	m_startCell =	{ rand() % m_width, m_height - 1 };
 	m_endCell =		{ rand() % m_width, 0 };
