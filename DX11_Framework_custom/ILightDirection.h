@@ -1,7 +1,6 @@
 #pragma once
-#include "ILight.h"
-class ILightDirection:
-	public ILight
+
+class ILightDirection
 {
 public:
 	virtual const DirectX::XMFLOAT3 &GetDirection()const = 0;

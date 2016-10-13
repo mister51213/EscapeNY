@@ -15,6 +15,7 @@
 #include <string>
 #include "ILight.h"
 #include "ShaderTEMPLATE.h"
+#include "Shader_NMap.h"
 
 using namespace std;
 
@@ -25,10 +26,11 @@ public:
 	GameView( Graphics* pGfx, D3DGraphics* pD3D, std::shared_ptr<Camera> &pCam );
 	 
     void Initialize();
-	void UpdateView( const vector<Actor*>& actors, const vector<LightBufferType>& lightSet) const;
+	void UpdateView( const vector<Actor*>& actors, const SceneBufferType& SceneLights ) const;
     void initModelPool();
 private:
 	void initTexturePool();
+    void initNormalMapPool();
 	void initializeShader();
 	void drawModel( const Actor& actor, MatrixBufferType &Transforms) const;
 
@@ -38,9 +40,18 @@ private:
 
     std::shared_ptr<Camera> m_pCam;
 
-    ShaderT<MatrixBufferType, LightBufferType> m_activeShader;
-
+    /*ShaderT<
+		VertexBufferTypeAllInOne, 
+		MatrixBufferType, 
+		LightBufferType> m_activeShader;*/
+	/*ShaderT<
+		VertexBufferTypeAllInOneNMap, 
+		MatrixBufferType, 
+		SceneBufferType> m_NMapShader;*/
+	Shader_NMap m_shader_nMap;
+	
     vector<Texture> m_TexturePool;
+    vector<Texture> m_NormalPool;
     vector<std::shared_ptr<Model>> m_ModelPool;
 
     std::shared_ptr<Model_Textured> m_pModTEST = 0;

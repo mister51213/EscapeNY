@@ -70,7 +70,8 @@ bool Camera::Initialize(
 
 void Camera::GetInput( const Input & pInput )
 {
-	const float time = 1.f;
+	const float time = 0.16f;
+	// const float time = 1.f;
 	const float camSpeed = 2.f;
 	float displacement = time*camSpeed;
 

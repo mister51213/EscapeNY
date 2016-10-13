@@ -3,7 +3,7 @@
 #include "Includes.h"
 #include "Utilities.h"
 
-template<class MatBuffer, class LightBuffer>
+template<class VertexBuffer, class MatBuffer, class LightBuffer>
 class ShaderT
 {
 public:
@@ -11,13 +11,14 @@ public:
 	ShaderT() = default;
 	~ShaderT() = default;
 
-	bool Initialize( ID3D11Device* pDevice, int lightCount = 1)
+	virtual bool Initialize( ID3D11Device* pDevice, int MaxLightCount = 1)
 	{
 		// Initialize the vertex and pixel shaders.
 		bool result = InitializeShaderCommon(
 			pDevice,
 			L"Shaders/Shader_vs.cso",
-			L"Shaders/Shader_ps.cso" );
+			L"Shaders/Shader_ps.cso"
+			);
 		RETURN_IF_FALSE( result );
 
 		///////////////////////////////////////////////////////////
@@ -34,7 +35,7 @@ public:
 		// Light shader setup
 		///////////////////////////////////////////////////////////
 
-        D3D11_BUFFER_DESC lightBufferDesc = LightBufferType::CreateLightDescription(sizeof(LightBuffer));
+		D3D11_BUFFER_DESC lightBufferDesc = LightBuffer::CreateLightDescription();
 
 		// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 		hr = pDevice->CreateBuffer( &lightBufferDesc, NULL, &m_lightBuffer );
@@ -43,7 +44,7 @@ public:
 		return result;
 	}
 
-	bool UpdateTransformBuffer(
+	virtual bool UpdateTransformBuffer(
 		ID3D11DeviceContext *pContext,
 		const MatBuffer &BufferData )const
 	{
@@ -68,20 +69,11 @@ public:
 
 		return result;
 	}
-
-	/*bool UpdateLightBuffer(
-	ID3D11DeviceContext *pContext,
-	const LightBufferType &BufferData )const;
-	bool UpdateLightBuffer(
-	ID3D11DeviceContext *pContext,
-	const SpotLightBuffer &BufferData )const;
-	bool UpdateLightBuffer(
-	ID3D11DeviceContext *pContext,
-	const LightSpotBase &BufferData )const;*/
-
+	
 	void Render(
 		ID3D11DeviceContext* pContext,
-		ID3D11ShaderResourceView *pTextureView )const
+		/*ID3D11ShaderResourceView *pTextureView*/ 
+        ID3D11ShaderResourceView *const *ppTextureViews )const
 	{
 		//////////////////////////////////////////////////////
 		//				Set shader resources				//
@@ -103,8 +95,16 @@ public:
 		// Set the sampler state in the pixel shader.
 		pContext->PSSetSamplers( 0, 1, m_sampleState.GetAddressOf() );
 
-		// Set shader resources
-		pContext->PSSetShaderResources( 0, 1, &pTextureView );
+        // TODO: MAKE THIS TAKE AN ARRAY of shaders for multitexturing and normal mapping
+        // TODO: vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+        // Set shader resources
+		//pContext->PSSetShaderResources( 0, 1, &pTextureView );
+
+   		pContext->PSSetShaderResources( 0, 2, ppTextureViews );
+
+          // TODO: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          // TODO: MAKE THIS TAKE AN ARRAY of shaders for multitexturing and normal mapping
 
 		// Set the vertex and pixel shaders that will be used to render this triangle.
 		pContext->VSSetShader( m_vertexShader.Get(), NULL, 0 );
@@ -174,7 +174,7 @@ protected:
 		RETURN_IF_FAILED( result );
 
 		// Get appropiate layout description for this shader
-		auto layoutDesciptions = VertexBufferTypeAllInOne::CreateLayoutDescriptions();
+		auto layoutDesciptions = VertexBuffer::CreateLayoutDescriptions();
 
 		// Create the vertex input layout.
 		result = pDevice->CreateInputLayout(

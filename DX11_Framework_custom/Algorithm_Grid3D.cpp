@@ -41,6 +41,8 @@ Algorithm_Grid3D::Algorithm_Grid3D()
 {
 }
 
+//TEST//
+
 vector<Actor_NPC> Algorithm_Grid3D::MakePatternNPC( int numActors )
 {
 	int m_numColumns;
@@ -78,7 +80,7 @@ vector<Actor_NPC> Algorithm_Grid3D::MakePatternNPC( int numActors )
 				specs.scale.z += .02f;
 
 				int index = actorsSUB.size();
-				actorsSUB.push_back( Actor_NPC(/*m_pInput, */specs, AsphaltFresh, ModelSpecs_L() ) );
+				actorsSUB.push_back( Actor_NPC(/*m_pInput, */specs, SharkSkin, ModelSpecs_L() ) );
 			}
 		}
 	}

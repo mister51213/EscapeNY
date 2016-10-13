@@ -35,6 +35,7 @@ struct PixelInputType
     float4 position : SV_POSITION;
     float2 tex : TEXCOORD0;
     float3 normal : NORMAL;
+	float4 world : TEXCOORD1; // NEW
 };
 
 
@@ -47,17 +48,17 @@ PixelInputType main(VertexInputType input)
     
     // Change the position vector to be 4 units for proper matrix calculations.
     output.position = float4(input.position, 1.0f);
-    //input.position.w = 1.0f;
 
     // Calculate the position of the vertex against the world, view, and projection matrices.
     //output.position = mul(input.position, worldMatrix);
     // VERTICES FOR INDIVIDUAL OBJECTS
     output.position = mul(output.position, worldMatrix);
-
+	output.world = output.position; // preserve relative to worldMatrix only
     // REPOSITIONING RELATIVE TO CAMERA
     output.position = mul(output.position, viewMatrix);
     // SCALING TO SCREEN RATIO (not size) - Vanishing point, view clipping NOT YET APPLIED
     output.position = mul(output.position, projectionMatrix);
+
 
     // Store the texture coordinates for the pixel shader.
     output.tex = input.tex;

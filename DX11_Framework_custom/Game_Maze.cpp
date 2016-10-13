@@ -3,12 +3,6 @@
 #include "Algorithm_Random.h"
 
 
-// Game and Camera are passed in as const pointer since we are wanting to 
-// make a separate copy and we aren't using the constructor to initialize
-// so can't use const &.  *const is kind of like a reference and const *const
-// would be like const &.  It assures that the pointers passed in won't be 
-// changed to point to something else, though the data that they point to 
-// can be changed unless you use at least const *.
 void Game_Maze::Initialize(
 	Graphics *pGraphics,
 	class Game *const pGame,
@@ -18,16 +12,14 @@ void Game_Maze::Initialize(
 	m_pGame = pGame;
 	m_pGraphics = pGraphics;
 	m_pCamera = pCamera;
-
-	// Initialize camera
-	/*m_pCamera.Initialize(
-	{ 0.f,0.f,0.f }, { 0.f,0.f,0.f },
-	{ g_screenWidth, g_screenHeight },
-	{ g_screenNear, g_screenDepth } );*/
+	
 
 	m_pCamera->SetRotation( { 90.f, 0.f, 0.f } );
-		
-	m_Overlay.Initialize( *pGraphics );	
+	
+	m_scene.ambientColor = { 0.1f, 0.1f, 0.1f, 0.1f };
+	m_scene.lightCount = 4;
+	
+	//m_Overlay.Initialize( *pGraphics );	
 	reset();
 }
 
@@ -38,13 +30,20 @@ void Game_Maze::UpdateScene( const Input &InputRef, Camera *const pCamera )
 	// MAKE CAMERA FOLLOW THE PLAYER
 	// Get player position, offset camera, set camera position
 	auto camOffset = m_player.GetWorldSpecs().position;
-	camOffset.y += 30.f;
+	camOffset.y += 70.f;
 	pCamera->SetPosition( camOffset );
 
 	pCamera->GetInput( InputRef );
 
+	for( int i = 0; i < m_pLights.size(); ++i )
+	{
+		auto *pLight = reinterpret_cast<Light_Spot*>( m_pLights[ i ].GetLight() );
+		auto lightPos = pLight->GetPosition(); 
+		auto lightDir = Normalize( m_player.GetPosition() - lightPos );
+		pLight->SetDirection( lightDir.x, lightDir.y, lightDir.z );
+	}
 	// Pass input to overlay to check if player wants to regenerate the maze
-	m_Overlay.Update( InputRef );
+	//m_Overlay.Update( InputRef );
 
 	// Check if player has reached the end of the maze
 	bool goalReached = m_board.HasReachedEnd( m_player );
@@ -56,17 +55,30 @@ void Game_Maze::UpdateScene( const Input &InputRef, Camera *const pCamera )
 		if( goalReached )
 		{
 			m_endReached = goalReached;
-			m_Overlay.PlayerReachGoal();
+			//m_Overlay.PlayerReachGoal();
 		}
 	}
 	else
 	{
 		// If player has reached end and flag is set, ask for reset
-		if( m_Overlay.WantsReset() )
+		/*if( m_Overlay.WantsReset() )
 		{
 			reset();
-		}
+		}*/
 	}
+}
+
+void Game_Maze::RenderFrame( const GameView &GameViewRef )
+{
+	for( int i = 0; i < m_pLights.size(); ++i )
+	{
+		m_scene.lights[ i ] = m_pLights[ i ].GetLight()->GetLightBufferType();
+	}
+	GameViewRef.UpdateView( m_pActorDrawList, m_scene );
+
+	// Overlay must be drawn last, since it draws directly to 
+	// back buffer
+	//m_Overlay.Render( *m_pGraphics );
 }
 
 void Game_Maze::reset()
@@ -78,12 +90,13 @@ void Game_Maze::reset()
 	// Initialize the board object
 	m_board.Initialize( 9, 9, m_pGraphics );
 
+
 	// Initialize the test player actor
 	ModelSpecs_W wSpecs
 	{
 		{ 0.f, 0.f, 0.f },
 		{ 0.f, 0.f, 0.f },
-		{ .5f, .5f, .5f } 
+		{ .5f, .5f, .5f }
 	};
 
 	m_player = Actor_Player_Alt( wSpecs, SharkSkin, ModelSpecs_L() );
@@ -122,16 +135,46 @@ void Game_Maze::reset()
 	auto startPos = m_board.GetStartPosition();
 	m_player.SetPosition( startPos );
 
+	m_pLights.resize( 4 );
+
+	int count = 0;
+	for( float j = -10.f; j <= 10.f; j += 20.f )
+	{
+		for( float i = -10.f; i <= 10.f; i += 20.f )
+		{
+			auto pos = XMFLOAT3{ i * 5.f, 20.f, j * 5.f };
+			auto &light = m_pLights[ count ];
+			light.Initialize( pos, { 0.f, 0.f, 0.f } );
+
+			auto *pLight = dynamic_cast<Light_Spot*>( light.GetLight() );
+			
+
+			// ConeAngle can be between 1.f and 180.f...min/max'd in shader
+			// The angle is divided by 180.f to normalize the value, then 
+			// compared against the dot product of surface to light direction
+			// and the light direction to test if it's in the cone of light.
+			pLight->SetConeAngle( 15.f );
+			switch( count )
+			{
+				case 0:
+					pLight->SetColor( 1.f, 0.f, 0.f );
+					break;
+				case 1:
+					pLight->SetColor( 0.f, 1.f, 0.f );
+					break;
+				case 2:
+					pLight->SetColor( 0.f, 0.f, 1.f );
+					break;
+				case 3:
+					pLight->SetColor( 1.f, 0.f, 1.f );
+			}
+
+			++count;
+		}
+	}
+
+
 	m_endReached = false;
-}
-
-void Game_Maze::RenderFrame( const GameView &GameViewRef )
-{
-	//GameViewRef.UpdateView( m_pActorDrawList, FX_Light());
-
-	// Overlay must be drawn last, since it draws directly to 
-	// back buffer
-	m_Overlay.Render( *m_pGraphics );
 }
 
 const TestBoard & Game_Maze::GetBoard()
