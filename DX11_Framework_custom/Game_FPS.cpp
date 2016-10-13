@@ -20,7 +20,7 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 		// Randomly create positions for new spot lights
 		float x = static_cast<float>( rand() % 300 - 150 );
 		float z = static_cast<float>( rand() % 300 - 150 );
-		light.Initialize( { x, 150.f, z}, { 0.f, 0.f, 0.f } );
+		light.Initialize( { x, 1050.f, z}, { 0.f, 0.f, 0.f } );
 
 		// Randomly create colors for new spot lights
 		float r = static_cast<float>(rand() % 100) * .01f;
@@ -112,17 +112,14 @@ void Game_FPS::reset()
 	};
     aTest3 = Actor_NPC( wSpecs3, Underwater3, ModelSpecs_L(), SOME_EDIFACE);
 
-    // MAKE m_actorsSUB1 (ONE SUBSET OF ACTORS)
-    //const int numRows = 5, numColumns = 5, numZ = 5;
-    //const int numActors1 = numRows * numColumns * numZ;
-    //Algorithm_Grid3D alg;
-    //m_actorsSUB1 = alg.MakePatternNPC(numActors1);
-    //// MAKE m_actorsSUB2 (ONE SUBSET OF ACTORS)
-    //const int numActors2 = 100;
-    //Algorithm_Spiral3D alg2(this);
-    ////m_actorsSUB2 = makeActorSet(numActors2, &alg2);
-    //m_actorsSUB2 = alg2.MakePatternNPC(numActors2);
+    // TEST SUBSETS OF ACTORS
+    Algorithm_Grid3D alg;
+    const int numRows = 5, numColumns = 5, numZ = 5;
+    m_actorsSUB1 = alg.MakePatternNPC(numRows * numColumns * numZ);
+    Algorithm_Spiral3D alg2(this);    
+    m_actorsSUB2 = alg2.MakePatternNPC(100);
 
+    // GET SIZE OF DRAW OBJECT LISTS and reserve size for draw list
 	auto numActors1 = m_actorsSUB1.size();
 	auto numActors2 = m_actorsSUB2.size();
     m_pActorsMASTER.reserve(4 + numActors1 + numActors2);
@@ -132,6 +129,7 @@ void Game_FPS::reset()
     m_pActorsMASTER.push_back(&aTest2);
     m_pActorsMASTER.push_back(&aTest3);
 
+    // Load up draw list
     for (int i = 0; i < numActors1; i++)
     {
         m_pActorsMASTER.push_back(&(m_actorsSUB1[i]));
@@ -220,7 +218,7 @@ void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
     //LightingFX();
 	SceneBufferType scene{};
-	scene.ambientColor = { .1f, .1f, .1f, .1f };
+	scene.ambientColor = { .3f, .3f, .3f, .3f };
 	scene.lightCount = min( m_spotLights.size(), MAX_SHADER_LIGHTS );
 
     for (int i = 0; i < m_spotLights.size(); i++)

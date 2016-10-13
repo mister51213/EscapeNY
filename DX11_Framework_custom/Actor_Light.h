@@ -9,13 +9,7 @@ public:
     Actor_Light();
     ~Actor_Light();
 
-    void Initialize(const XMFLOAT3 &Position, const XMFLOAT3 &LookAt)
-    {
-		m_spotLight.SetIntensity( .5f );
-		m_spotLight.SetPosition( Position );
-		auto dir = Normalize( LookAt - Position );
-        m_spotLight.SetDirection( dir.x, dir.y, dir.z);
-    }
+    void Initialize(const XMFLOAT3 &Position, const XMFLOAT3 &LookAt);
 
     const ILight* GetLight() const
     {

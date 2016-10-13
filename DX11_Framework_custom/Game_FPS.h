@@ -53,7 +53,7 @@ private:
     // LIGHTING
     vector<Actor_Light> m_spotLights; // manipulates lights
     vector<LightBufferType> m_lightSet; // passed to GameView
-    int m_numLights = 10;
+    int m_numLights = 1;
 
     // TODO: ENCAPSULATE this into a bigger SCENE object down the road
     

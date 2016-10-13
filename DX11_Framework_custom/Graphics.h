@@ -9,7 +9,7 @@
 /////////////
 // GLOBALS //
 /////////////
-const bool g_fullScreen = true;
+const bool g_fullScreen = false;
 const bool g_vsyncEnabled = true;
 const float g_screenDepth = 1000.0f;
 const float g_screenNear = 0.1f;
