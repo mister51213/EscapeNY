@@ -30,7 +30,7 @@ void Game_Maze::UpdateScene( const Input &InputRef, Camera *const pCamera )
 	// MAKE CAMERA FOLLOW THE PLAYER
 	// Get player position, offset camera, set camera position
 	auto camOffset = m_player.GetWorldSpecs().position;
-	camOffset.y += 100.f;
+	camOffset.y += 70.f;
 	pCamera->SetPosition( camOffset );
 
 	pCamera->GetInput( InputRef );

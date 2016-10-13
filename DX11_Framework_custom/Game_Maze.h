@@ -40,7 +40,6 @@ private: // Private members
 	Graphics *m_pGraphics;
 	Camera *m_pCamera;
 
-
 	Overlay m_Overlay;
 	TestBoard m_board;
 
