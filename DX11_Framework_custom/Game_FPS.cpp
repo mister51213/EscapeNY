@@ -93,7 +93,7 @@ void Game_FPS::reset()
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
       { .5f, .5f, .5f } };
-    aTest1 = Actor_NPC(wSpecs1, AsphaltOld, ModelSpecs_L(), CUSTOM_MESH);
+    aTest1 = Actor_NPC(wSpecs1, AsphaltFresh, ModelSpecs_L(), CUSTOM_MESH);
     // 
     ModelSpecs_W wSpecs2 = 
     { { 20.f, -.5f, 20.f },
