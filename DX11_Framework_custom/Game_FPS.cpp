@@ -58,6 +58,7 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 	// Use UpdateFrame to update actors, camera and anything else that needs updating.
 void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
 {
+
     int randInt = rand() % 3;
 	// NOTE: If you need a float between 0.f and 10.f, shouldn't the line say:
     float randFloat = static_cast<float>(rand() % 100)* 0.1f; // get random float from 0~10.0
@@ -120,16 +121,16 @@ void Game_FPS::reset()
     aTest3 = Actor_NPC( wSpecs3, Underwater3, ModelSpecs_L(), SOME_EDIFACE);
 
     // TEST SUBSETS OF ACTORS
-    Algorithm_Grid3D alg;
-    const int numRows = 5, numColumns = 5, numZ = 5;
-    m_actorsSUB1 = alg.MakePatternNPC(numRows * numColumns * numZ);
-    Algorithm_Spiral3D alg2(this);    
-    m_actorsSUB2 = alg2.MakePatternNPC(100);
+    //Algorithm_Grid3D alg;
+    //const int numRows = 5, numColumns = 5, numZ = 5;
+    //m_actorsSUB1 = alg.MakePatternNPC(numRows * numColumns * numZ);    
+    //Algorithm_Spiral3D alg2(this);    
+    //m_actorsSUB2 = alg2.MakePatternNPC(100);
 
     // GET SIZE OF DRAW OBJECT LISTS and reserve size for draw list
 	auto numActors1 = m_actorsSUB1.size();
 	auto numActors2 = m_actorsSUB2.size();
-    m_pActorsMASTER.reserve(4 + numActors1 + numActors2);
+    m_pActorsMASTER.reserve(4/* + numActors1 + numActors2*/);
 
     m_pActorsMASTER.push_back(&m_player);
     m_pActorsMASTER.push_back(&aTest1);

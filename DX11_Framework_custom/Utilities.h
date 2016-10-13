@@ -121,6 +121,25 @@ struct ModelSpecs_L
    	XMFLOAT3 size;
 };
 
+////////////////////////
+// GAME LOGIC RELATED //
+////////////////////////
+
+enum eState
+{
+Stationary, Falling, Moving
+};
+
+
+
+
+
+
+
+
+//////////////////////
+// GRAPHICS RELATED //
+//////////////////////
 enum eModType 
 { 
     CUBE, 
