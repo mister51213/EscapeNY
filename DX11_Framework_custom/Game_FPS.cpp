@@ -85,7 +85,7 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
     /////////////////////////////
     // PHYSICS //////////////////
     /////////////////////////////
-    m_player.UpdateState(Move_PID, 0.0007f);
+    m_player.UpdateState(Move_PID, .0007f);
     // TODO: incorporate this w actual game timer
 
     for (int i = 0; i < m_actorsSUB1.size(); i++)

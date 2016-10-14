@@ -25,7 +25,7 @@ void Actor::UpdateState(eState state, float deltaT)
         case Move_PID:
             {
                 m_state = Move_PID;
-                MovePID(m_target, 0.007f); // TODO: change this to non-default parameter
+                MovePID(m_target, deltaT); // TODO: change this to non-default parameter
             }
         default:
             return;
@@ -67,7 +67,7 @@ void Actor::MovePID(XMFLOAT3 targetPos, float deltaT)
         //if (distToTarget > 50.0f)
         //{
             float recipTime = 1.0f / deltaT;
-            XMFLOAT3 requiredVeloc = m_posError * recipTime;
+            XMFLOAT3 requiredVeloc = m_posError * recipTime; // need to multiply this here?
             XMFLOAT3 requiredAccel = (requiredVeloc - m_velocity) * recipTime;
             
             // Apply required accel and velocity and calculate displacement
