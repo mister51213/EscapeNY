@@ -127,14 +127,8 @@ struct ModelSpecs_L
 
 enum eState
 {
-Stationary, Falling, Moving
+Stationary, Falling, Moving, Move_PID
 };
-
-
-
-
-
-
 
 
 //////////////////////

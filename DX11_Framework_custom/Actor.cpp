@@ -16,9 +16,17 @@ void Actor::UpdateState(eState state, float deltaT)
         case Stationary:
             return;
         case Falling:
-            DoGravity(deltaT);
+            {
+                m_state = Falling;
+                DoGravity(deltaT);
+            }
         case Moving:
             Move(deltaT);
+        case Move_PID:
+            {
+                m_state = Move_PID;
+                MovePID(m_target, 0.007f); // TODO: change this to non-default parameter
+            }
         default:
             return;
         }
@@ -33,6 +41,44 @@ void Actor::Move( const float deltaT)
     XMFLOAT3 deltaPos = m_velocity * deltaT;
     m_worldSpecs.position += deltaPos;
 }
+
+void Actor::MovePID(XMFLOAT3 targetPos, float deltaT)
+    {
+        // will calculate and add this displacement to actual position
+        XMFLOAT3 deltaPos = { 0.0f, 0.0f, 0.0f };
+
+        // Store current position
+        XMFLOAT3 currPos = m_worldSpecs.position;
+
+        // How far do we still have to travel?
+        m_posError = targetPos - currPos;
+        float distToTarget = abs(Magnitude(m_posError));
+
+        // displacement by next frame if we continue traveling at current speed
+        XMFLOAT3 potentialDisp = m_velocity*deltaT;
+        XMFLOAT3 potentialPos = currPos + potentialDisp;
+
+        //float potentialDist = abs(Magnitude(potentialPos - currPos));
+        // Would we overshoot it traveling at this speed?
+        /*if (abs(potentialDist) > abs(distToTarget))
+        m_worldSpecs.position = targetPos;*/ // then just move us to the target
+
+        // while further away than 20, full throttle toward target
+        //if (distToTarget > 50.0f)
+        //{
+            float recipTime = 1.0f / deltaT;
+            XMFLOAT3 requiredVeloc = m_posError * recipTime;
+            XMFLOAT3 requiredAccel = (requiredVeloc - m_velocity) * recipTime;
+            
+            // Apply required accel and velocity and calculate displacement
+            deltaPos = (m_velocity*deltaT) + (requiredAccel*(deltaT*deltaT)) * 0.5f;
+        //}
+        //else // kick in the integrator for fine tuning
+        //{
+        //}
+        // Add displacement to ACTUAL position
+        m_worldSpecs.position += deltaPos;
+    }
 
 // TODO:
 /* Review this function: 
@@ -52,7 +98,7 @@ void Actor::DoGravity( const float deltaT)
         // calculate incremental displacement
     if (m_velocity.y < terminalVelocity)
     {
-        float deltaPosY = (m_velocity.y*deltaT) + (m_gravity*(deltaT*deltaT)) / 2.0f;
+        float deltaPosY = (m_velocity.y*deltaT) + (m_gravity*(deltaT*deltaT)) * 0.5f;
         m_worldSpecs.position.y += deltaPosY;
     }
     else // Stop accelerating at terminal velocity

@@ -85,7 +85,7 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
     /////////////////////////////
     // PHYSICS //////////////////
     /////////////////////////////
-    m_player.UpdateState(Falling, 0.007f);
+    m_player.UpdateState(Move_PID, 0.0007f);
     // TODO: incorporate this w actual game timer
 
     for (int i = 0; i < m_actorsSUB1.size(); i++)
@@ -103,20 +103,20 @@ void Game_FPS::reset()
     m_actorsSUB3.clear();
     m_actorsSUB4.clear();
     m_pActorsMASTER.clear();
-    //1
+    //1 - PLAYER
     m_player = Actor_Player(
     { { 0.f, 70.f, 0.f },
     { 0.f, 0.f, 0.f },
     { .5f, .5f, .5f } },
         eTexture::SharkSkin,
         ModelSpecs_L());
-    // BEAR
+    //2 - BEAR
     ModelSpecs_W wSpecs1 = 
     { { 0.f, -1.f, 0.f },
       { 0.f,0.f,0.f },
       { .5f, .5f, .5f } };
     aTest1 = Actor_NPC(wSpecs1, AsphaltFresh, ModelSpecs_L(), CUSTOM_MESH);
-    // 
+    //3 - ? 
     ModelSpecs_W wSpecs2 = 
     { { 20.f, -.5f, 20.f },
       { 0.f,0.f,0.f },
@@ -127,6 +127,7 @@ void Game_FPS::reset()
     { { -10.f, 0.f, -30.f },
       { 0.f,0.f,0.f },
       { 80.f, 1.f, 80.f } };*/
+    //4 - ???
 	ModelSpecs_W wSpecs3{
 		{ 0.f, 0.f, 0.f },
 		{ 0.f, 0.f, 0.f },
@@ -135,29 +136,27 @@ void Game_FPS::reset()
     aTest3 = Actor_NPC( wSpecs3, Underwater3, ModelSpecs_L(), SOME_EDIFACE);
 
     // TEST SUBSETS OF ACTORS
-    Algorithm_Grid3D alg;
-    const int numRows = 5, numColumns = 5, numZ = 5;
-    m_actorsSUB1 = alg.MakePatternNPC(numRows * numColumns * numZ, { 0.0f,100.0f,0.0f });
-    auto numActors1 = m_actorsSUB1.size();
-
+    //Algorithm_Grid3D alg;
+    //const int numRows = 5, numColumns = 5, numZ = 5;
+    //m_actorsSUB1 = alg.MakePatternNPC(numRows * numColumns * numZ, { 0.0f,100.0f,0.0f });
+    //auto numActors1 = m_actorsSUB1.size();
 
     //Algorithm_Spiral3D alg2(this);    
     //m_actorsSUB2 = alg2.MakePatternNPC(100);
 	auto numActors2 = m_actorsSUB2.size();
 
     // CRUCIAL!! //
-    m_pActorsMASTER.reserve(4 + numActors1 /*+ numActors2*/);
-
-    m_pActorsMASTER.push_back(&m_player);
-    m_pActorsMASTER.push_back(&aTest1);
-    m_pActorsMASTER.push_back(&aTest2);
-    m_pActorsMASTER.push_back(&aTest3);
+    m_pActorsMASTER.reserve(2 /*+ numActors1 + numActors2*/);
 
     // Load up draw list
-    for (int i = 0; i < numActors1; i++)
-    {
-        m_pActorsMASTER.push_back(&(m_actorsSUB1[i]));
-    }
+    m_pActorsMASTER.push_back(&m_player);
+    //m_pActorsMASTER.push_back(&aTest1);
+    //m_pActorsMASTER.push_back(&aTest2);
+    m_pActorsMASTER.push_back(&aTest3);
+    //for (int i = 0; i < numActors1; i++)
+    //{
+    //    m_pActorsMASTER.push_back(&(m_actorsSUB1[i]));
+    //}
     //for (int i = 0; i < numActors2; i++)
     //{
     //    m_pActorsMASTER.push_back(&(m_actorsSUB2[i]));

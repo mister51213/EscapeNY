@@ -22,20 +22,27 @@ public:
     {
         if (pInput.IsKeyDown(VK_RIGHT))
         {
-            Move({ .6f, 0.f, 0.f });
+            m_state = Move_PID;
+            m_target = { 50.f, 0.f, 0.0f };
+            //Move({ .6f, 0.f, 0.f });
         }
         if (pInput.IsKeyDown(VK_LEFT))
         {
-            Move({ -.6f, 0.f, 0.f });
+            m_state = Move_PID;
+            m_target = { -50.f, 0.f, 0.0f };
+            //Move({ -.6f, 0.f, 0.f });
         }
-
         if (pInput.IsKeyDown(VK_UP))
         {
-            Move({ 0.f, 0.f, .6f });
+            m_state = Move_PID;
+            m_target = { 0.f, 0.f, 50.0f };            
+           //Move({ 0.f, 0.f, .6f });
         }
         if (pInput.IsKeyDown(VK_DOWN))
         {
-            Move({ 0.f, 0.f, -.6f });
+            m_state = Move_PID;
+            m_target = { 0.f, 0.f, -50.0f };
+            //Move({ 0.f, 0.f, -.6f });
         }
 
         m_worldSpecs.orientation.y += pInput.GetRelativeX();

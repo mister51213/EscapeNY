@@ -49,6 +49,8 @@ public:
     // controllable actors.
     virtual void GetInput(const Input& pInput, int randI = 0.f, float randF = 0.f) {}
 
+    void MovePID(XMFLOAT3 targetPos, float deltaT = 0.0f);
+    
 protected:
     void Move(const float time);
     void DoGravity(const float deltaT);
@@ -70,4 +72,7 @@ protected:
     // Given no mass, drag, area, or fluid density info, use an arbitrary value for 
     // terminal velocity; would need to calculate this for more realistic physics.
     float terminalVelocity = 50.0f;
+
+    XMFLOAT3 m_posError;
+    XMFLOAT3 m_target = { 0.0f,0.0f,0.0f };
 };
