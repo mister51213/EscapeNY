@@ -85,7 +85,9 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
     /////////////////////////////
     // PHYSICS //////////////////
     /////////////////////////////
-    m_player.UpdateState(Move_PID, .0007f);
+    // TODO: Error keeps infinitely decreasing, then wavering around 0, so it ends up getting wound up
+    // TODO: and producing strange results. Tell it if within 0.001 of accuracy, to stop homing in on target.
+    m_player.UpdateState(Move_PID, 0.0007f);
     // TODO: incorporate this w actual game timer
 
     for (int i = 0; i < m_actorsSUB1.size(); i++)

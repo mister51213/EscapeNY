@@ -17,14 +17,14 @@ void Actor::UpdateState(eState state, float deltaT)
             return;
         case Falling:
             {
-                m_state = Falling;
                 DoGravity(deltaT);
             }
         case Moving:
-            Move(deltaT);
+            {
+                Move(deltaT);
+            }
         case Move_PID:
             {
-                m_state = Move_PID;
                 MovePID(m_target, deltaT); // TODO: change this to non-default parameter
             }
         default:
@@ -55,8 +55,8 @@ void Actor::MovePID(XMFLOAT3 targetPos, float deltaT)
         float distToTarget = abs(Magnitude(m_posError));
 
         // displacement by next frame if we continue traveling at current speed
-        XMFLOAT3 potentialDisp = m_velocity*deltaT;
-        XMFLOAT3 potentialPos = currPos + potentialDisp;
+        //XMFLOAT3 potentialDisp = m_velocity*deltaT;
+        //XMFLOAT3 potentialPos = currPos + potentialDisp;
 
         //float potentialDist = abs(Magnitude(potentialPos - currPos));
         // Would we overshoot it traveling at this speed?
@@ -70,14 +70,23 @@ void Actor::MovePID(XMFLOAT3 targetPos, float deltaT)
             XMFLOAT3 requiredVeloc = m_posError * recipTime; // need to multiply this here?
             XMFLOAT3 requiredAccel = (requiredVeloc - m_velocity) * recipTime;
             
+            float dampener = 0.03f;
             // Apply required accel and velocity and calculate displacement
-            deltaPos = (m_velocity*deltaT) + (requiredAccel*(deltaT*deltaT)) * 0.5f;
+            deltaPos = ((m_velocity*deltaT) + (requiredAccel*(deltaT*deltaT)) * 0.5f) * dampener;
+            m_velocity += (requiredAccel*deltaT);
         //}
         //else // kick in the integrator for fine tuning
         //{
         //}
         // Add displacement to ACTUAL position
-        m_worldSpecs.position += deltaPos;
+            if (distToTarget > 0.01)
+            {
+                m_worldSpecs.position += deltaPos;
+            }
+        else
+        {
+        m_worldSpecs.position = targetPos;
+        }
     }
 
 // TODO:
