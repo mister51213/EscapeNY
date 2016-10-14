@@ -70,7 +70,7 @@ void Actor::MovePID(XMFLOAT3 targetPos, float deltaT)
             XMFLOAT3 requiredVeloc = m_posError * recipTime; // need to multiply this here?
             XMFLOAT3 requiredAccel = (requiredVeloc - m_velocity) * recipTime;
             
-            float dampener = 0.03f;
+            float dampener = 0.01f;
             // Apply required accel and velocity and calculate displacement
             deltaPos = ((m_velocity*deltaT) + (requiredAccel*(deltaT*deltaT)) * 0.5f) * dampener;
             m_velocity += (requiredAccel*deltaT);

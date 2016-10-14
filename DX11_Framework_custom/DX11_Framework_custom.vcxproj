@@ -145,7 +145,7 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Actor_Light.cpp" />
     <ClCompile Include="Actor_NPC.cpp" />
-    <ClCompile Include="actor_player.cpp" />
+    <ClCompile Include="Actor_Player.cpp" />
     <ClCompile Include="Actor_Player_Alt.cpp" />
     <ClCompile Include="Algorithm_Grid3D.cpp" />
     <ClCompile Include="Algorithm_Random.cpp" />

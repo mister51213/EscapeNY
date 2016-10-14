@@ -177,9 +177,6 @@
     <ClCompile Include="Actor_NPC.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
-    <ClCompile Include="actor_player.cpp">
-      <Filter>Source Files\Actors</Filter>
-    </ClCompile>
     <ClCompile Include="Algorithm_Grid3D.cpp">
       <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
@@ -221,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="Light_Spot.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor_Player.cpp">
+      <Filter>Source Files\Actors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
