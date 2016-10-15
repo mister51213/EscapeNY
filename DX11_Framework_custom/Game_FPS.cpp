@@ -209,6 +209,9 @@ void Game_FPS::RenderFrame(const GameView &GameViewRef)
     // initialize them as needed
 
     GameViewRef.UpdateView(m_pActorsMASTER, m_lightSet);
-   	m_Overlay.Render( *m_pGraphics );
+
+	// TODO: Uncomment after testing
+	// Overlay not working right now anyway
+   	//m_Overlay.Render( *m_pGraphics );
 }
 
