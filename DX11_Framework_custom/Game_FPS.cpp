@@ -87,7 +87,7 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
     /////////////////////////////
     // TODO: Error keeps infinitely decreasing, then wavering around 0, so it ends up getting wound up
     // TODO: and producing strange results. Tell it if within 0.001 of accuracy, to stop homing in on target.
-    m_player.UpdateState(Move_PID, 0.0007f);
+    m_player.UpdateState(Move_PID, 0.007f);
     // TODO: incorporate this w actual game timer
 
     for (int i = 0; i < m_actorsSUB1.size(); i++)
@@ -107,11 +107,11 @@ void Game_FPS::reset()
     m_pActorsMASTER.clear();
     //1 - PLAYER
     m_player = Actor_Player(
-    { { 0.f, 70.f, 0.f },
+    { { 0.f, 150.f, 0.f },
     { 0.f, 0.f, 0.f },
-    { .5f, .5f, .5f } },
-        eTexture::SharkSkin,
-        ModelSpecs_L());
+    { 1.0f, 1.0f, 1.0f } },
+        eTexture::AsphaltFresh,
+        ModelSpecs_L(), CAR);
     //2 - BEAR
     ModelSpecs_W wSpecs1 = 
     { { 0.f, -1.f, 0.f },
@@ -135,7 +135,7 @@ void Game_FPS::reset()
 		{ 0.f, 0.f, 0.f },
 		{ 70.f, 30.f, 70.f }
 	};
-    aTest3 = Actor_NPC( wSpecs3, Underwater3, ModelSpecs_L(), SOME_EDIFACE);
+    aTest3 = Actor_NPC( wSpecs3, Underwater2, ModelSpecs_L(), SOME_EDIFACE);
 
     // TEST SUBSETS OF ACTORS
     //Algorithm_Grid3D alg;
@@ -243,7 +243,7 @@ void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
     //LightingFX();
 	SceneBufferType scene{};
-	scene.ambientColor = { .15f, .15f, .15f, .1f };
+	scene.ambientColor = { .35f, .35f, .35f, .35f };
 	scene.lightCount = min( m_spotLights.size(), MAX_SHADER_LIGHTS );
 
     for (int i = 0; i < m_spotLights.size(); i++)

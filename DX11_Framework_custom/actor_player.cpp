@@ -10,25 +10,25 @@ void Actor_Player::GetInput(const Input& pInput, int randI, float randF)
         if (pInput.IsKeyDown(VK_RIGHT))
         {
             //m_state = Move_PID;
-            m_target += { 3.f, 0.f, 0.0f };
+            m_target = { 60.f, 0.f, 0.0f };
             //Move({ .6f, 0.f, 0.f });
         }
         if (pInput.IsKeyDown(VK_LEFT))
         {
 //            m_state = Move_PID;
-            m_target += { -3.f, 0.f, 0.0f };
+            m_target = { -60.f, 0.f, 0.0f };
             //Move({ -.6f, 0.f, 0.f });
         }
         if (pInput.IsKeyDown(VK_UP))
         {
 //            m_state = Move_PID;
-            m_target += { 0.f, 0.f, 3.0f };            
+            m_target = { 0.f, 0.f, 60.0f };            
            //Move({ 0.f, 0.f, .6f });
         }
         if (pInput.IsKeyDown(VK_DOWN))
         {
 //            m_state = Move_PID;
-            m_target += { 0.f, 0.f, -3.0f };
+            m_target = { 0.f, 0.f, -60.0f };
             //Move({ 0.f, 0.f, -.6f });
         }
 

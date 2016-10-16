@@ -89,7 +89,7 @@ void GameView::drawModel( const Actor & actor, MatrixBufferType &Transforms ) co
 
 void GameView::initModelPool()
 {
-    char numModels = 10;
+    char numModels = 11;
     ModelSpecs_L defaultSpecs;
     m_ModelPool.resize(numModels);
 
@@ -136,6 +136,10 @@ void GameView::initModelPool()
 	prim.CreateMeshNM( L"Meshes/cube_inverted.BinaryMesh" );
 	m_ModelPool[ SOME_EDIFACE ].reset( new Model_TexturedNM );
 	m_ModelPool[ SOME_EDIFACE ]->Initialize( prim, *m_pGfx );
+
+    prim.CreateMeshNM( L"Meshes/car.BinaryMesh" );
+	m_ModelPool[ CAR ].reset( new Model_TexturedNM );
+	m_ModelPool[ CAR ]->Initialize( prim, *m_pGfx );
 }
 
 void GameView::initTexturePool()

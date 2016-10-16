@@ -145,7 +145,8 @@ enum eModType
     CUSTOM_MESH2,
     CUSTOM_MESH3,
     CUSTOM_MESH4,
-	SOME_EDIFACE
+	SOME_EDIFACE,
+    CAR
 };
 
 enum eTexture
