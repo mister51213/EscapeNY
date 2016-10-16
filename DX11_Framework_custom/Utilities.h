@@ -164,7 +164,10 @@ enum eTexture
     Underwater5 = 10,
     Underwater6 = 11,
     Underwater7 = 12,
-	SharkSkin = 13
+	SharkSkin = 13,
+    Aluminum = 14,
+    Lava = 15,
+    Lava2 = 16
 };
 
 ////////////////////////////////////////////////////////////////

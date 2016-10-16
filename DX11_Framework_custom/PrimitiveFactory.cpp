@@ -296,6 +296,275 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 	Common( Specs );
 }
 
+void PrimitiveFactory::CreateSphere( const ModelSpecs_L &Specs, const float radius, int vertices)
+{
+    // NOTE: trigIndex value refers to these arrays for looping purposes
+    int trigIndex = 0;
+    // cos values 0,15,30,45,60,75,90
+    float cosValues[7] =
+    { 
+      1.0f,
+      0.9659258f,
+      0.8660254f,
+      0.707106f,
+      0.5f,
+      0.258819f,
+      0.0f
+    };
+    // sin values 0,15,30,45,60,75,90    
+    float sinValues[7] =
+    {
+    0.0f,
+    0.258819f,
+    0.5f,
+    0.707106f,
+    0.8660254f,
+    0.9659258f,
+    1.0f
+    };
+
+    // TODO: Loop from -z to z, each new point =
+    // (cos(theta)*radius, sin(theta)*radius, z).
+    vector<DirectX::XMFLOAT3> sphere;
+
+    // TODO: WARNING! each of these slices will have a different radius;
+    // can't use same radius!
+
+    // start with a vertex at center of sphere:
+    sphere.push_back({ 0.0f,0.0f,-radius });
+
+    // slice at z = cos15(-r)
+    // radius = sin15
+    for (int i = 0; i < 24; i++)
+    {
+    sphere.push_back({ 0.0f,0.0f,-radius*cosValues[trigIndex]});
+    }
+    trigIndex = 0; // must reset every time
+
+    // slice at z = cos30(-r)
+
+    // slice at z = cos45(-r)
+
+    // slice at z = cos60(-r)
+
+    // slice at z = cos75(-r)
+
+    // slice at z = cos90(r)
+
+    // slice at z = cos75(r)
+
+    // slice at z = cos60(r)
+
+    // slice at z = cos45(r)
+
+    // slice atz =  cos30(r)
+
+    // slice at z = cos15(r)
+
+    // end with a vertex at far end of sphere:
+    sphere.push_back({ 0.0f,0.0f,radius });
+
+
+
+                // NOTE: there are 24 "notches" around the circle in the x/y plane:
+             for (int i = 0; i < 24; i++)
+             {
+                 for (int j = 0; j < 24; j++)
+                 {
+                     sphere.push_back({});
+
+
+                 }
+             }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    auto CreateVertexList = [ &Specs, radius ]()->std::vector<DirectX::XMFLOAT3>
+	{
+        return std::vector<DirectX::XMFLOAT3>
+		{
+         // Define a "loom" in the x-y plane
+         {Specs.center.x + radius, Specs.center.y, Specs.center.z },
+         {Specs.center.x - radius, Specs.center.y, Specs.center.z },
+         {Specs.center.x, Specs.center.y + radius, Specs.center.z },
+         {Specs.center.x, Specs.center.y - radius, Specs.center.z },
+
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+
+				// Right
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+
+				// Bottom
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+
+				// Top
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+
+				// Front
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+
+				// Back
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z }
+		};
+	};
+
+	auto CreateNormalsList = []()->std::vector<DirectX::XMFLOAT3>
+	{
+		return std::vector<DirectX::XMFLOAT3>
+		{
+			// Left
+			{ -1.f, 0.f, 0.f },
+			{ -1.f, 0.f, 0.f },
+			{ -1.f, 0.f, 0.f },
+			{ -1.f, 0.f, 0.f },
+			{ -1.f, 0.f, 0.f },
+			{ -1.f, 0.f, 0.f },
+
+				// Right
+			{ 1.f, 0.f, 0.f },
+			{ 1.f, 0.f, 0.f },
+			{ 1.f, 0.f, 0.f },
+			{ 1.f, 0.f, 0.f },
+			{ 1.f, 0.f, 0.f },
+			{ 1.f, 0.f, 0.f },
+
+				// Bottom
+			{ 0.f, -1.f, 0.f },
+			{ 0.f, -1.f, 0.f },
+			{ 0.f, -1.f, 0.f },
+			{ 0.f, -1.f, 0.f },
+			{ 0.f, -1.f, 0.f },
+			{ 0.f, -1.f, 0.f },
+
+				// Top
+			{ 0.f, 1.f, 0.f },
+			{ 0.f, 1.f, 0.f },
+			{ 0.f, 1.f, 0.f },
+			{ 0.f, 1.f, 0.f },
+			{ 0.f, 1.f, 0.f },
+			{ 0.f, 1.f, 0.f },
+
+				// Front
+			{ 0.f, 0.f, -1.f },
+			{ 0.f, 0.f, -1.f },
+			{ 0.f, 0.f, -1.f },
+			{ 0.f, 0.f, -1.f },
+			{ 0.f, 0.f, -1.f },
+			{ 0.f, 0.f, -1.f },
+
+				// Back
+			{ 0.f, 0.f, 1.f },
+			{ 0.f, 0.f, 1.f },
+			{ 0.f, 0.f, 1.f },
+			{ 0.f, 0.f, 1.f },
+			{ 0.f, 0.f, 1.f },
+			{ 0.f, 0.f, 1.f }
+		};
+	};
+	auto CreateUVList = []()
+	{
+		return std::vector<XMFLOAT2>
+		{
+			// Left
+			{ 0.f, 0.f },
+			{ 1.f, 0.f },
+			{ 0.f, 1.f },
+			{ 0.f, 1.f },
+			{ 1.f, 0.f },
+			{ 1.f, 1.f },
+				// Right
+			{ 0.f, 0.f },
+			{ 1.f, 0.f },
+			{ 0.f, 1.f },
+			{ 0.f, 1.f },
+			{ 1.f, 0.f },
+			{ 1.f, 1.f },
+				// Bottom
+			{ 0.f, 0.f },
+			{ 1.f, 0.f },
+			{ 0.f, 1.f },
+			{ 0.f, 1.f },
+			{ 1.f, 0.f },
+			{ 1.f, 1.f },
+				// Top
+			{ 0.f, 0.f },
+			{ 1.f, 0.f },
+			{ 0.f, 1.f },
+			{ 0.f, 1.f },
+			{ 1.f, 0.f },
+			{ 1.f, 1.f },
+				// Front
+			{ 0.f, 0.f },
+			{ 1.f, 0.f },
+			{ 0.f, 1.f },
+			{ 0.f, 1.f },
+			{ 1.f, 0.f },
+			{ 1.f, 1.f },
+				// Back
+			{ 0.f, 0.f },
+			{ 1.f, 0.f },
+			{ 0.f, 1.f },
+			{ 0.f, 1.f },
+			{ 1.f, 0.f },
+			{ 1.f, 1.f }
+		};
+	};
+
+	PrimitiveFactory::ClearAllBuffers();
+
+	PrimitiveFactory::vertices = CreateVertexList();
+	PrimitiveFactory::normals = CreateNormalsList();
+	PrimitiveFactory::uvs = CreateUVList();
+
+	Common( Specs );
+}
+
 void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )
 {
 	CreateCube( Specs );

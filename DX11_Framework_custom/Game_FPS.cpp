@@ -110,8 +110,7 @@ void Game_FPS::reset()
     { { 0.f, 150.f, 0.f },
     { 0.f, 0.f, 0.f },
     { 1.0f, 1.0f, 1.0f } },
-        eTexture::AsphaltFresh,
-        ModelSpecs_L(), CAR);
+        eTexture::Water2, ModelSpecs_L(), CAR);
     //2 - BEAR
     ModelSpecs_W wSpecs1 = 
     { { 0.f, -1.f, 0.f },
@@ -129,13 +128,13 @@ void Game_FPS::reset()
     { { -10.f, 0.f, -30.f },
       { 0.f,0.f,0.f },
       { 80.f, 1.f, 80.f } };*/
-    //4 - ???
+    //4 - World Space
 	ModelSpecs_W wSpecs3{
 		{ 0.f, 0.f, 0.f },
 		{ 0.f, 0.f, 0.f },
 		{ 70.f, 30.f, 70.f }
 	};
-    aTest3 = Actor_NPC( wSpecs3, Underwater2, ModelSpecs_L(), SOME_EDIFACE);
+    aTest3 = Actor_NPC( wSpecs3, Lava2, ModelSpecs_L(), SOME_EDIFACE);
 
     // TEST SUBSETS OF ACTORS
     //Algorithm_Grid3D alg;

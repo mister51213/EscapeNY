@@ -144,7 +144,7 @@ void GameView::initModelPool()
 
 void GameView::initTexturePool()
 {
-	const int numTextures = 14;
+	const int numTextures = 17;
 	m_TexturePool.resize( numTextures );
 	m_TexturePool[ AsphaltFresh ].Initialize( *m_pGfx, L"Textures\\asphaltFresh.jpg" );
 	m_TexturePool[ AsphaltTGA ].Initialize( *m_pGfx, L"Textures\\asphalt.tga" );
@@ -160,11 +160,14 @@ void GameView::initTexturePool()
     m_TexturePool[ Underwater6 ].Initialize( *m_pGfx, L"Textures\\underwater6.jpg" );
     m_TexturePool[ Underwater7 ].Initialize( *m_pGfx, L"Textures\\underwater7.jpg" );
     m_TexturePool[ SharkSkin ].Initialize( *m_pGfx, L"Textures\\sharkskin5.jpg" );
+    m_TexturePool[ Aluminum ].Initialize( *m_pGfx, L"Textures\\aluminum.jpg" );
+    m_TexturePool[ Lava ].Initialize( *m_pGfx, L"Textures\\lava5.jpg" );
+    m_TexturePool[ Lava2 ].Initialize( *m_pGfx, L"Textures\\lava9.jpg" );
 }
 
 void GameView::initNormalMapPool()
 {
-    const int numTextures = 14;
+    const int numTextures = 17;
 	m_NormalPool.resize( numTextures );
 	m_NormalPool[ AsphaltFresh ].Initialize( *m_pGfx, L"Textures\\asphaltFreshN.jpg" );
 	m_NormalPool[ AsphaltTGA ].Initialize( *m_pGfx, L"Textures\\asphaltN.tga" );
@@ -179,7 +182,10 @@ void GameView::initNormalMapPool()
     m_NormalPool[ Underwater5 ].Initialize( *m_pGfx, L"Textures\\underwater5N.jpg" );
     m_NormalPool[ Underwater6 ].Initialize( *m_pGfx, L"Textures\\underwater6N.jpg" );
     m_NormalPool[ Underwater7 ].Initialize( *m_pGfx, L"Textures\\underwater7N.jpg" );
-    m_NormalPool[SharkSkin].Initialize(*m_pGfx, L"Textures\\sharkskin5N.jpg");
+    m_NormalPool[ SharkSkin ].Initialize(*m_pGfx, L"Textures\\sharkskin5N.jpg");
+    m_NormalPool[ Aluminum ].Initialize( *m_pGfx, L"Textures\\aluminumN.jpg" );
+    m_NormalPool[ Lava ].Initialize( *m_pGfx, L"Textures\\lava5N.jpg" );
+    m_NormalPool[ Lava2 ].Initialize( *m_pGfx, L"Textures\\lava9N.jpg" );
 }
 
 void GameView::initializeShader()
