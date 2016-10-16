@@ -383,186 +383,173 @@ void PrimitiveFactory::CreateSphere( const ModelSpecs_L &Specs, const float radi
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    auto CreateVertexList = [ &Specs, radius ]()->std::vector<DirectX::XMFLOAT3>
-	{
-        return std::vector<DirectX::XMFLOAT3>
-		{
-         // Define a "loom" in the x-y plane
-         {Specs.center.x + radius, Specs.center.y, Specs.center.z },
-         {Specs.center.x - radius, Specs.center.y, Specs.center.z },
-         {Specs.center.x, Specs.center.y + radius, Specs.center.z },
-         {Specs.center.x, Specs.center.y - radius, Specs.center.z },
+ //   auto CreateVertexList = [ &Specs, radius ]()->std::vector<DirectX::XMFLOAT3>
+	//{
+ //       return std::vector<DirectX::XMFLOAT3>
+	//	{
+ //        // Define a "loom" in the x-y plane
+ //        {Specs.center.x + radius, Specs.center.y, Specs.center.z },
+ //        {Specs.center.x - radius, Specs.center.y, Specs.center.z },
+ //        {Specs.center.x, Specs.center.y + radius, Specs.center.z },
+ //        {Specs.center.x, Specs.center.y - radius, Specs.center.z },
 
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
 
-				// Right
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+	//			// Right
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
 
-				// Bottom
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+	//			// Bottom
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
 
-				// Top
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+	//			// Top
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
 
-				// Front
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+	//			// Front
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
 
-				// Back
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z }
-		};
-	};
+	//			// Back
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z }
+	//	};
+	//};
 
-	auto CreateNormalsList = []()->std::vector<DirectX::XMFLOAT3>
-	{
-		return std::vector<DirectX::XMFLOAT3>
-		{
-			// Left
-			{ -1.f, 0.f, 0.f },
-			{ -1.f, 0.f, 0.f },
-			{ -1.f, 0.f, 0.f },
-			{ -1.f, 0.f, 0.f },
-			{ -1.f, 0.f, 0.f },
-			{ -1.f, 0.f, 0.f },
+	//auto CreateNormalsList = []()->std::vector<DirectX::XMFLOAT3>
+	//{
+	//	return std::vector<DirectX::XMFLOAT3>
+	//	{
+	//		// Left
+	//		{ -1.f, 0.f, 0.f },
+	//		{ -1.f, 0.f, 0.f },
+	//		{ -1.f, 0.f, 0.f },
+	//		{ -1.f, 0.f, 0.f },
+	//		{ -1.f, 0.f, 0.f },
+	//		{ -1.f, 0.f, 0.f },
 
-				// Right
-			{ 1.f, 0.f, 0.f },
-			{ 1.f, 0.f, 0.f },
-			{ 1.f, 0.f, 0.f },
-			{ 1.f, 0.f, 0.f },
-			{ 1.f, 0.f, 0.f },
-			{ 1.f, 0.f, 0.f },
+	//			// Right
+	//		{ 1.f, 0.f, 0.f },
+	//		{ 1.f, 0.f, 0.f },
+	//		{ 1.f, 0.f, 0.f },
+	//		{ 1.f, 0.f, 0.f },
+	//		{ 1.f, 0.f, 0.f },
+	//		{ 1.f, 0.f, 0.f },
 
-				// Bottom
-			{ 0.f, -1.f, 0.f },
-			{ 0.f, -1.f, 0.f },
-			{ 0.f, -1.f, 0.f },
-			{ 0.f, -1.f, 0.f },
-			{ 0.f, -1.f, 0.f },
-			{ 0.f, -1.f, 0.f },
+	//			// Bottom
+	//		{ 0.f, -1.f, 0.f },
+	//		{ 0.f, -1.f, 0.f },
+	//		{ 0.f, -1.f, 0.f },
+	//		{ 0.f, -1.f, 0.f },
+	//		{ 0.f, -1.f, 0.f },
+	//		{ 0.f, -1.f, 0.f },
 
-				// Top
-			{ 0.f, 1.f, 0.f },
-			{ 0.f, 1.f, 0.f },
-			{ 0.f, 1.f, 0.f },
-			{ 0.f, 1.f, 0.f },
-			{ 0.f, 1.f, 0.f },
-			{ 0.f, 1.f, 0.f },
+	//			// Top
+	//		{ 0.f, 1.f, 0.f },
+	//		{ 0.f, 1.f, 0.f },
+	//		{ 0.f, 1.f, 0.f },
+	//		{ 0.f, 1.f, 0.f },
+	//		{ 0.f, 1.f, 0.f },
+	//		{ 0.f, 1.f, 0.f },
 
-				// Front
-			{ 0.f, 0.f, -1.f },
-			{ 0.f, 0.f, -1.f },
-			{ 0.f, 0.f, -1.f },
-			{ 0.f, 0.f, -1.f },
-			{ 0.f, 0.f, -1.f },
-			{ 0.f, 0.f, -1.f },
+	//			// Front
+	//		{ 0.f, 0.f, -1.f },
+	//		{ 0.f, 0.f, -1.f },
+	//		{ 0.f, 0.f, -1.f },
+	//		{ 0.f, 0.f, -1.f },
+	//		{ 0.f, 0.f, -1.f },
+	//		{ 0.f, 0.f, -1.f },
 
-				// Back
-			{ 0.f, 0.f, 1.f },
-			{ 0.f, 0.f, 1.f },
-			{ 0.f, 0.f, 1.f },
-			{ 0.f, 0.f, 1.f },
-			{ 0.f, 0.f, 1.f },
-			{ 0.f, 0.f, 1.f }
-		};
-	};
-	auto CreateUVList = []()
-	{
-		return std::vector<XMFLOAT2>
-		{
-			// Left
-			{ 0.f, 0.f },
-			{ 1.f, 0.f },
-			{ 0.f, 1.f },
-			{ 0.f, 1.f },
-			{ 1.f, 0.f },
-			{ 1.f, 1.f },
-				// Right
-			{ 0.f, 0.f },
-			{ 1.f, 0.f },
-			{ 0.f, 1.f },
-			{ 0.f, 1.f },
-			{ 1.f, 0.f },
-			{ 1.f, 1.f },
-				// Bottom
-			{ 0.f, 0.f },
-			{ 1.f, 0.f },
-			{ 0.f, 1.f },
-			{ 0.f, 1.f },
-			{ 1.f, 0.f },
-			{ 1.f, 1.f },
-				// Top
-			{ 0.f, 0.f },
-			{ 1.f, 0.f },
-			{ 0.f, 1.f },
-			{ 0.f, 1.f },
-			{ 1.f, 0.f },
-			{ 1.f, 1.f },
-				// Front
-			{ 0.f, 0.f },
-			{ 1.f, 0.f },
-			{ 0.f, 1.f },
-			{ 0.f, 1.f },
-			{ 1.f, 0.f },
-			{ 1.f, 1.f },
-				// Back
-			{ 0.f, 0.f },
-			{ 1.f, 0.f },
-			{ 0.f, 1.f },
-			{ 0.f, 1.f },
-			{ 1.f, 0.f },
-			{ 1.f, 1.f }
-		};
-	};
+	//			// Back
+	//		{ 0.f, 0.f, 1.f },
+	//		{ 0.f, 0.f, 1.f },
+	//		{ 0.f, 0.f, 1.f },
+	//		{ 0.f, 0.f, 1.f },
+	//		{ 0.f, 0.f, 1.f },
+	//		{ 0.f, 0.f, 1.f }
+	//	};
+	//};
+	//auto CreateUVList = []()
+	//{
+	//	return std::vector<XMFLOAT2>
+	//	{
+	//		// Left
+	//		{ 0.f, 0.f },
+	//		{ 1.f, 0.f },
+	//		{ 0.f, 1.f },
+	//		{ 0.f, 1.f },
+	//		{ 1.f, 0.f },
+	//		{ 1.f, 1.f },
+	//			// Right
+	//		{ 0.f, 0.f },
+	//		{ 1.f, 0.f },
+	//		{ 0.f, 1.f },
+	//		{ 0.f, 1.f },
+	//		{ 1.f, 0.f },
+	//		{ 1.f, 1.f },
+	//			// Bottom
+	//		{ 0.f, 0.f },
+	//		{ 1.f, 0.f },
+	//		{ 0.f, 1.f },
+	//		{ 0.f, 1.f },
+	//		{ 1.f, 0.f },
+	//		{ 1.f, 1.f },
+	//			// Top
+	//		{ 0.f, 0.f },
+	//		{ 1.f, 0.f },
+	//		{ 0.f, 1.f },
+	//		{ 0.f, 1.f },
+	//		{ 1.f, 0.f },
+	//		{ 1.f, 1.f },
+	//			// Front
+	//		{ 0.f, 0.f },
+	//		{ 1.f, 0.f },
+	//		{ 0.f, 1.f },
+	//		{ 0.f, 1.f },
+	//		{ 1.f, 0.f },
+	//		{ 1.f, 1.f },
+	//			// Back
+	//		{ 0.f, 0.f },
+	//		{ 1.f, 0.f },
+	//		{ 0.f, 1.f },
+	//		{ 0.f, 1.f },
+	//		{ 1.f, 0.f },
+	//		{ 1.f, 1.f }
+	//	};
+	//};
 
-	PrimitiveFactory::ClearAllBuffers();
+	//PrimitiveFactory::ClearAllBuffers();
 
-	PrimitiveFactory::vertices = CreateVertexList();
-	PrimitiveFactory::normals = CreateNormalsList();
-	PrimitiveFactory::uvs = CreateUVList();
+	//PrimitiveFactory::vertices = CreateVertexList();
+	//PrimitiveFactory::normals = CreateNormalsList();
+	//PrimitiveFactory::uvs = CreateUVList();
 
-	Common( Specs );
+	//Common( Specs );
 }
 
 void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )
