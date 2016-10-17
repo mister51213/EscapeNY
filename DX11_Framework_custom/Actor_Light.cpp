@@ -1,24 +1,35 @@
 #include "Actor_Light.h"
 
-Actor_Light::Actor_Light()
-{
+void Actor_Light::InitSpotLight(const Camera & Cam)
+{	
+	SetPosition(Cam.GetPosition());
+	SetOrientation(Cam.GetRotation());
+	m_spotLight.SetColor(1.0f, 1.0f, 1.0f);
 }
 
-void Actor_Light::GetKeyInput_Light(const Input & pInput)
+void Actor_Light::SetPosition(const XMFLOAT3 &Pos)
 {
-    Camera::GetInput(pInput);
-    m_spotLight.SetDirection(m_Orientation);
-    m_spotLight.SetPosition(m_Position);
+	m_worldSpecs.position = Pos + XMFLOAT3(1.f, -1.f, 0.f);
 }
 
-void Actor_Light::GetMouseInput_Light(const Input & pInput)
+void Actor_Light::SetOrientation(const XMFLOAT3 &Dir)
 {
-    Camera::GetMouseInput(pInput);
-    m_spotLight.SetDirection(m_Orientation);
-    m_spotLight.SetPosition(m_Position);
+	m_worldSpecs.orientation = Dir;
 }
 
-Actor_Light::~Actor_Light()
+ILight * Actor_Light::GetLight()
 {
-}
+	auto xmOriV = XMLoadFloat3(&m_worldSpecs.orientation);
+	xmOriV = ConvertToRadians(xmOriV);
 
+	auto xmRotM = XMMatrixRotationRollPitchYawFromVector(xmOriV);
+
+	auto xmForwardV = XMVectorSet(0.f, 0.f, 1.f, 0.f);
+	xmOriV = XMVector3Transform(xmForwardV, xmRotM);
+
+	XMFLOAT3 oriV{};
+	XMStoreFloat3(&oriV, xmOriV);
+	m_spotLight.SetDirection(oriV);
+
+	return &m_spotLight;
+}

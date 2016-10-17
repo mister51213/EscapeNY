@@ -45,6 +45,7 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
     m_pCamera->GetMouseInput(InputRef);
 
     // TODO: make this a for loop when adding additional lights
+	
     m_spotLights[0].GetKeyInput_Light(InputRef);
     m_spotLights[0].GetMouseInput_Light(InputRef);
 
