@@ -245,3 +245,9 @@ ModelManifest.xml
 .fake/
 *.db
 *.cso
+/DX11_Framework_custom/Meshes/cube_v_n.mtl
+/DX11_Framework_custom/Meshes/cube_v.mtl
+/DX11_Framework_custom/Meshes/Boeing 747
+/DX11_Framework_custom/Meshes/Beautiful Girl
+/DX11_Framework_custom/Meshes/Aphrodite_Girl_1
+/DX11_Framework_custom/Meshes/aphrodite.mtl
