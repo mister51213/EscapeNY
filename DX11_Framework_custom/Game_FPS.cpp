@@ -107,9 +107,9 @@ void Game_FPS::reset()
     m_pActorsMASTER.clear();
     //1 - PLAYER
     m_player = Actor_Player(
-    { { 0.f, 150.f, 0.f },
+    { { 0.f, 10.f, 0.f },
     { 0.f, 0.f, 0.f },
-    { 1.0f, 1.0f, 1.0f } },
+    { 10.f, 10.f, 10.f } },
         eTexture::Water2, ModelSpecs_L(), SPHERE);
     //2 - BEAR
     ModelSpecs_W wSpecs1 = 

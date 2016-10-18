@@ -299,7 +299,7 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float radiusGlobe, int vertices)
 {
     // NOTE: trigIndex value refers to these arrays for looping purposes
-    int trigIndex = 0;
+    //int trigIndex = 0;
     // cos values 0,15,30,45,60,75,90
     float cosValues[7] =
     { 
@@ -328,7 +328,8 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	// TODO: OFFSET ALL OF THESE POINTS BY LOCAL SPECS VALUES
 	
 	// Scale main globe radius by average of local specs
-	float gRadius = radiusGlobe*Magnitude(Specs.size)*0.33;
+	//float gRadius = radiusGlobe*Magnitude(Specs.size)*0.33;
+	float gRadius = 100.0f;
 
 	// Master and quadrants
 	vector<DirectX::XMFLOAT3> quadrant1(49);

@@ -89,7 +89,7 @@ void GameView::drawModel( const Actor & actor, MatrixBufferType &Transforms ) co
 
 void GameView::initModelPool()
 {
-    char numModels = 12;
+    char numModels = 11;
     ModelSpecs_L defaultSpecs;
     m_ModelPool.resize(numModels);
 
@@ -108,7 +108,7 @@ void GameView::initModelPool()
     m_ModelPool[PLANE].reset(new Model_TexturedNM );
     m_ModelPool[PLANE]->Initialize(prim, *m_pGfx);
     
-    prim.CreateCubeNM(defaultSpecs); // TODO: Change to CreateSphere
+	prim.CreateSphereNM( defaultSpecs, 10.0f); // TODO: Change to CreateSphere
     m_ModelPool[SPHERE].reset(new Model_TexturedNM );
     m_ModelPool[SPHERE]->Initialize(prim, *m_pGfx);
 
@@ -141,10 +141,10 @@ void GameView::initModelPool()
 	m_ModelPool[ CAR ].reset( new Model_TexturedNM );
 	m_ModelPool[ CAR ]->Initialize( prim, *m_pGfx );
 
-	prim.CreateSphereNM( defaultSpecs, 50.0f );
-	prim.CreateColor( 1.f, 0.f, 0.f, 1.f );
-	m_ModelPool[ SPHERE ].reset( new Model_TexturedNM );
-	m_ModelPool[ SPHERE ]->Initialize( prim, *m_pGfx );
+	//prim.CreateSphereNM( defaultSpecs, 10.0f );
+	//prim.CreateColor( 1.f, 0.f, 0.f, 1.f );
+	//m_ModelPool[ SPHERE ].reset( new Model_TexturedNM );
+	//m_ModelPool[ SPHERE ]->Initialize( prim, *m_pGfx );
 }
 
 void GameView::initTexturePool()
