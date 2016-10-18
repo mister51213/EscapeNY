@@ -296,7 +296,7 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 	Common( Specs );
 }
 
-void PrimitiveFactory::CreateSphere( const ModelSpecs_L &Specs, const float radius, int vertices)
+void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float radiusGlobe, int vertices)
 {
     // NOTE: trigIndex value refers to these arrays for looping purposes
     int trigIndex = 0;
@@ -323,233 +323,100 @@ void PrimitiveFactory::CreateSphere( const ModelSpecs_L &Specs, const float radi
     1.0f
     };
 
-    // TODO: Loop from -z to z, each new point =
-    // (cos(theta)*radius, sin(theta)*radius, z).
-    vector<DirectX::XMFLOAT3> sphere;
+	// TODO: optimize by adding array of const pre-multiplied squares of cos and sin values
 
-    // TODO: WARNING! each of these slices will have a different radius;
-    // can't use same radius!
+	// TODO: OFFSET ALL OF THESE POINTS BY LOCAL SPECS VALUES
+	
+	// Scale main globe radius by local specs
+	float gRadius = radiusGlobe*Magnitude(Specs.size);
 
-    // start with a vertex at center of sphere:
-    sphere.push_back({ 0.0f,0.0f,-radius });
+	// Master and quadrants
+    vector<DirectX::XMFLOAT3> masterSphere(196+2);
+	vector<DirectX::XMFLOAT3> quadrant1(49);
 
-    // slice at z = cos15(-r)
-    // radius = sin15
-    for (int i = 0; i < 24; i++)
-    {
-    sphere.push_back({ 0.0f,0.0f,-radius*cosValues[trigIndex]});
-    }
-    trigIndex = 0; // must reset every time
+    /////////////// START W VERTEX AT FAR POLE OF SPHERE ////////
+	masterSphere.push_back({ 0.0f,0.0f,gRadius });
 
-    // slice at z = cos30(-r)
+	///////////////// Make one positive quadrant ///////////////////
+	// loop through cos values along z axis (from far pole of globe to its center)
+	for( int z = 7; z > 0; z-- )
+	{
+		// radius of each slice = sin of angle PHI at that slice
+		float sliceRadius = sinValues[ z ] * gRadius;
+		float slicePosZ = cosValues[ z ] * gRadius;
 
-    // slice at z = cos45(-r)
+		for( int i = 7; i > 0; i-- )
+		{
+			quadrant1.push_back( { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ } );
+		}
+	}
+	//////////////////////////////////////////////////////////
+	////////////// REFLECT TO MAKE OTHER 7 QUADRANTS /////////
+	//////////////////////////////////////////////////////////
+	int quadSize = quadrant1.size();
+	int masterSize = masterSphere.size();
+	////////////////// TOP HALF //////////////////////////////
+	for( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( quadrant1[ i ] );
+	}
+	for( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, quadrant1[ i ].z, } );
+	}
+	for( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	}
+	for( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	}
 
-    // slice at z = cos60(-r)
+	////////////////// BOTTOM HALF //////////////////////////////
+	for( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
+	}
+	for( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
+	}
+	for( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	}
+	for( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	}
+    /////////////// END W VERTEX AT OPPOSITE POLE ///////////////////
+    masterSphere.push_back({ 0.0f,0.0f,-radiusGlobe });    
 
-    // slice at z = cos75(-r)
+	PrimitiveFactory::ClearAllBuffers();
 
-    // slice at z = cos90(r)
+	// LOAD VERTICES INTO PRIMITIVE FACTORY LIST //
+	PrimitiveFactory::vertices.resize( masterSize);
+	PrimitiveFactory::vertices = masterSphere;
 
-    // slice at z = cos75(r)
+	////////////// CREATE UVs ///////////////////////////////////////
+	PrimitiveFactory::uvs.resize( masterSize);
 
-    // slice at z = cos60(r)
+	for each ( auto vertex in masterSphere )
+	{
+		PrimitiveFactory::uvs.push_back( { vertex.x, vertex.y } );
+	}
 
-    // slice at z = cos45(r)
+	////////////// CREATE NORMALs ///////////////////////////////////////
+	PrimitiveFactory::normals.resize( masterSize );
 
-    // slice atz =  cos30(r)
+	for ( int i = 0; i < masterSize; i++ )
+	{
+		XMFLOAT3 radiusVector = masterSphere[ i ] - Specs.center;
+		PrimitiveFactory::normals.push_back( Normalize( radiusVector ));
+	}
 
-    // slice at z = cos15(r)
-
-    // end with a vertex at far end of sphere:
-    sphere.push_back({ 0.0f,0.0f,radius });
-
-
-
-                // NOTE: there are 24 "notches" around the circle in the x/y plane:
-             for (int i = 0; i < 24; i++)
-             {
-                 for (int j = 0; j < 24; j++)
-                 {
-                     sphere.push_back({});
-
-
-                 }
-             }
-
-    
-    
-    
-    
-    
-    
- //   auto CreateVertexList = [ &Specs, radius ]()->std::vector<DirectX::XMFLOAT3>
-	//{
- //       return std::vector<DirectX::XMFLOAT3>
-	//	{
- //        // Define a "loom" in the x-y plane
- //        {Specs.center.x + radius, Specs.center.y, Specs.center.z },
- //        {Specs.center.x - radius, Specs.center.y, Specs.center.z },
- //        {Specs.center.x, Specs.center.y + radius, Specs.center.z },
- //        {Specs.center.x, Specs.center.y - radius, Specs.center.z },
-
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-
-	//			// Right
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-
-	//			// Bottom
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-
-	//			// Top
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-
-	//			// Front
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-
-	//			// Back
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-	//		{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z }
-	//	};
-	//};
-
-	//auto CreateNormalsList = []()->std::vector<DirectX::XMFLOAT3>
-	//{
-	//	return std::vector<DirectX::XMFLOAT3>
-	//	{
-	//		// Left
-	//		{ -1.f, 0.f, 0.f },
-	//		{ -1.f, 0.f, 0.f },
-	//		{ -1.f, 0.f, 0.f },
-	//		{ -1.f, 0.f, 0.f },
-	//		{ -1.f, 0.f, 0.f },
-	//		{ -1.f, 0.f, 0.f },
-
-	//			// Right
-	//		{ 1.f, 0.f, 0.f },
-	//		{ 1.f, 0.f, 0.f },
-	//		{ 1.f, 0.f, 0.f },
-	//		{ 1.f, 0.f, 0.f },
-	//		{ 1.f, 0.f, 0.f },
-	//		{ 1.f, 0.f, 0.f },
-
-	//			// Bottom
-	//		{ 0.f, -1.f, 0.f },
-	//		{ 0.f, -1.f, 0.f },
-	//		{ 0.f, -1.f, 0.f },
-	//		{ 0.f, -1.f, 0.f },
-	//		{ 0.f, -1.f, 0.f },
-	//		{ 0.f, -1.f, 0.f },
-
-	//			// Top
-	//		{ 0.f, 1.f, 0.f },
-	//		{ 0.f, 1.f, 0.f },
-	//		{ 0.f, 1.f, 0.f },
-	//		{ 0.f, 1.f, 0.f },
-	//		{ 0.f, 1.f, 0.f },
-	//		{ 0.f, 1.f, 0.f },
-
-	//			// Front
-	//		{ 0.f, 0.f, -1.f },
-	//		{ 0.f, 0.f, -1.f },
-	//		{ 0.f, 0.f, -1.f },
-	//		{ 0.f, 0.f, -1.f },
-	//		{ 0.f, 0.f, -1.f },
-	//		{ 0.f, 0.f, -1.f },
-
-	//			// Back
-	//		{ 0.f, 0.f, 1.f },
-	//		{ 0.f, 0.f, 1.f },
-	//		{ 0.f, 0.f, 1.f },
-	//		{ 0.f, 0.f, 1.f },
-	//		{ 0.f, 0.f, 1.f },
-	//		{ 0.f, 0.f, 1.f }
-	//	};
-	//};
-	//auto CreateUVList = []()
-	//{
-	//	return std::vector<XMFLOAT2>
-	//	{
-	//		// Left
-	//		{ 0.f, 0.f },
-	//		{ 1.f, 0.f },
-	//		{ 0.f, 1.f },
-	//		{ 0.f, 1.f },
-	//		{ 1.f, 0.f },
-	//		{ 1.f, 1.f },
-	//			// Right
-	//		{ 0.f, 0.f },
-	//		{ 1.f, 0.f },
-	//		{ 0.f, 1.f },
-	//		{ 0.f, 1.f },
-	//		{ 1.f, 0.f },
-	//		{ 1.f, 1.f },
-	//			// Bottom
-	//		{ 0.f, 0.f },
-	//		{ 1.f, 0.f },
-	//		{ 0.f, 1.f },
-	//		{ 0.f, 1.f },
-	//		{ 1.f, 0.f },
-	//		{ 1.f, 1.f },
-	//			// Top
-	//		{ 0.f, 0.f },
-	//		{ 1.f, 0.f },
-	//		{ 0.f, 1.f },
-	//		{ 0.f, 1.f },
-	//		{ 1.f, 0.f },
-	//		{ 1.f, 1.f },
-	//			// Front
-	//		{ 0.f, 0.f },
-	//		{ 1.f, 0.f },
-	//		{ 0.f, 1.f },
-	//		{ 0.f, 1.f },
-	//		{ 1.f, 0.f },
-	//		{ 1.f, 1.f },
-	//			// Back
-	//		{ 0.f, 0.f },
-	//		{ 1.f, 0.f },
-	//		{ 0.f, 1.f },
-	//		{ 0.f, 1.f },
-	//		{ 1.f, 0.f },
-	//		{ 1.f, 1.f }
-	//	};
-	//};
-
-	//PrimitiveFactory::ClearAllBuffers();
-
-	//PrimitiveFactory::vertices = CreateVertexList();
-	//PrimitiveFactory::normals = CreateNormalsList();
-	//PrimitiveFactory::uvs = CreateUVList();
-
-	//Common( Specs );
+	Common( Specs );
 }
 
 void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )
