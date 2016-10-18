@@ -298,10 +298,8 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 
 void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float radiusGlobe, int vertices)
 {
-    // NOTE: trigIndex value refers to these arrays for looping purposes
-    //int trigIndex = 0;
-    // cos values 0,15,30,45,60,75,90
-    float cosValues[7] =
+   // sin values for theta = 90, 75, 60, 45, 30, 15, 0
+    float sinValues[7] =
     { 
       1.0f,
       0.9659258f,
@@ -311,8 +309,9 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
       0.258819f,
       0.0f
     };
-    // sin values 0,15,30,45,60,75,90    
-    float sinValues[7] =
+
+	// cos values for theta = 90, 75, 60, 45, 30, 15, 0
+    float cosValues[7] =
     {
     0.0f,
     0.258819f,
@@ -328,31 +327,32 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	// TODO: OFFSET ALL OF THESE POINTS BY LOCAL SPECS VALUES
 	
 	// Scale main globe radius by average of local specs
-	//float gRadius = radiusGlobe*Magnitude(Specs.size)*0.33;
-	float gRadius = 100.0f;
+	float gRadius = radiusGlobe*Magnitude(Specs.size);
+	//float gRadius = 100.0f;
 
 	// Master and quadrants
-	vector<DirectX::XMFLOAT3> quadrant1(49);
+	vector<DirectX::XMFLOAT3> quadrant1(37);
 	vector<DirectX::XMFLOAT3> masterSphere;
-//	masterSphere.resize( quadrant1.size() * 8 + 2 );
+	//	masterSphere.resize( quadrant1.size() * 8 + 2 );
 
-    /////////////// START W VERTEX AT FAR POLE OF SPHERE ////////
-	//masterSphere[0] = { 0.0f,0.0f,gRadius };
+    /////////////// ADD VERTEX AT FAR POLE OF SPHERE ////////
 	masterSphere.push_back({ 0.0f,0.0f,gRadius });
 
 	///////////////// Make one positive quadrant ///////////////////
 	// loop through cos values along z axis (from far pole of globe to its center)
-	for( int z = 6; z > -1; z-- )
+	for( int z = 0; z < 6; z++ ) // NOTE: end at 6, because we don't need the single point at the pole.
 	{
 		// radius of each slice = sin of angle PHI at that slice
-		float sliceRadius = sinValues[ z ] * gRadius;
+		float sliceRadius = sinValues[ z ] * gRadius; // scale down radius by sin of the slice
 		float slicePosZ = cosValues[ z ] * gRadius;
 
-		for( int i = 6; i > -1; i-- )
+		for( int i = 0; i < 7; i++ )
 		{
-			quadrant1[i] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };
+			int index = z*6 + i;
+			quadrant1[index] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };
 		}
 	}
+
 	//////////////////////////////////////////////////////////
 	////////////// REFLECT TO MAKE OTHER 7 QUADRANTS /////////
 	//////////////////////////////////////////////////////////

@@ -41,7 +41,7 @@ public:
 	static void CreatePlane( const ModelSpecs_L &Specs );
 	static void CreatePlaneNM( const ModelSpecs_L &Specs );
 	static void CreateCube( const ModelSpecs_L &Specs );
-    static void CreateSphereNM(const ModelSpecs_L & Specs, const float radius, int vertices = 0);
+    static void CreateSphereNM(const ModelSpecs_L & Specs, const float radiusGlobe = 50.0f, int vertices = 0);
 	static void CreateCubeNM( const ModelSpecs_L &Specs );
 	static void CreateMeshNM( const wstring&Filename );
 	static void PrimitiveFactory::CreateColor( float R, float G, float B, float A );

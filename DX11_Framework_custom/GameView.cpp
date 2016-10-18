@@ -108,7 +108,7 @@ void GameView::initModelPool()
     m_ModelPool[PLANE].reset(new Model_TexturedNM );
     m_ModelPool[PLANE]->Initialize(prim, *m_pGfx);
     
-	prim.CreateSphereNM( defaultSpecs, 10.0f); // TODO: Change to CreateSphere
+	prim.CreateSphereNM( defaultSpecs, 50.0f); // TODO: Change to CreateSphere
     m_ModelPool[SPHERE].reset(new Model_TexturedNM );
     m_ModelPool[SPHERE]->Initialize(prim, *m_pGfx);
 
