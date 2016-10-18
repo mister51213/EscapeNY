@@ -327,34 +327,35 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 
 	// TODO: OFFSET ALL OF THESE POINTS BY LOCAL SPECS VALUES
 	
-	// Scale main globe radius by local specs
-	float gRadius = radiusGlobe*Magnitude(Specs.size);
+	// Scale main globe radius by average of local specs
+	float gRadius = radiusGlobe*Magnitude(Specs.size)*0.33;
 
 	// Master and quadrants
-    vector<DirectX::XMFLOAT3> masterSphere(196+2);
 	vector<DirectX::XMFLOAT3> quadrant1(49);
+	vector<DirectX::XMFLOAT3> masterSphere;
+//	masterSphere.resize( quadrant1.size() * 8 + 2 );
 
     /////////////// START W VERTEX AT FAR POLE OF SPHERE ////////
+	//masterSphere[0] = { 0.0f,0.0f,gRadius };
 	masterSphere.push_back({ 0.0f,0.0f,gRadius });
 
 	///////////////// Make one positive quadrant ///////////////////
 	// loop through cos values along z axis (from far pole of globe to its center)
-	for( int z = 7; z > 0; z-- )
+	for( int z = 6; z > -1; z-- )
 	{
 		// radius of each slice = sin of angle PHI at that slice
 		float sliceRadius = sinValues[ z ] * gRadius;
 		float slicePosZ = cosValues[ z ] * gRadius;
 
-		for( int i = 7; i > 0; i-- )
+		for( int i = 6; i > -1; i-- )
 		{
-			quadrant1.push_back( { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ } );
+			quadrant1[i] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };
 		}
 	}
 	//////////////////////////////////////////////////////////
 	////////////// REFLECT TO MAKE OTHER 7 QUADRANTS /////////
 	//////////////////////////////////////////////////////////
 	int quadSize = quadrant1.size();
-	int masterSize = masterSphere.size();
 	////////////////// TOP HALF //////////////////////////////
 	for( int i = 0; i < quadSize; i++ )
 	{
@@ -391,16 +392,18 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
 	}
     /////////////// END W VERTEX AT OPPOSITE POLE ///////////////////
-    masterSphere.push_back({ 0.0f,0.0f,-radiusGlobe });    
+    //masterSphere[masterSize-1]={ 0.0f,0.0f,-gRadius };
+	masterSphere.push_back( { 0.0f, 0.0f, -gRadius } );
 
 	PrimitiveFactory::ClearAllBuffers();
 
 	// LOAD VERTICES INTO PRIMITIVE FACTORY LIST //
-	PrimitiveFactory::vertices.resize( masterSize);
+	int masterSize = masterSphere.size();
+	//PrimitiveFactory::vertices.resize( masterSize);
 	PrimitiveFactory::vertices = masterSphere;
 
 	////////////// CREATE UVs ///////////////////////////////////////
-	PrimitiveFactory::uvs.resize( masterSize);
+	//PrimitiveFactory::uvs.resize( masterSize);
 
 	for each ( auto vertex in masterSphere )
 	{
@@ -408,7 +411,7 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	}
 
 	////////////// CREATE NORMALs ///////////////////////////////////////
-	PrimitiveFactory::normals.resize( masterSize );
+	//PrimitiveFactory::normals.resize( masterSize );
 
 	for ( int i = 0; i < masterSize; i++ )
 	{

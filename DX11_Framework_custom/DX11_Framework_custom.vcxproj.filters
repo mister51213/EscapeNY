@@ -398,11 +398,11 @@
     <ClInclude Include="Shader_NMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Model_TexturedNM.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Light_Base.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model_TexturedNM.h">
+      <Filter>Header Files\Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

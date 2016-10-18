@@ -110,7 +110,7 @@ void Game_FPS::reset()
     { { 0.f, 150.f, 0.f },
     { 0.f, 0.f, 0.f },
     { 1.0f, 1.0f, 1.0f } },
-        eTexture::Water2, ModelSpecs_L(), CAR);
+        eTexture::Water2, ModelSpecs_L(), SPHERE);
     //2 - BEAR
     ModelSpecs_W wSpecs1 = 
     { { 0.f, -1.f, 0.f },
