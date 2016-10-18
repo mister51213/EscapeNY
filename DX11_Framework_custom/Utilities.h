@@ -114,7 +114,7 @@ struct ModelSpecs_L
 	ModelSpecs_L(
 		const XMFLOAT3 &Center = { 0.f, 0.f, 0.f },
 		const XMFLOAT3 &Orientation = { 0.f,0.f,0.f },
-		const XMFLOAT3 &Size = { 5.f, 5.f, 5.f } );
+		const XMFLOAT3 &Size = { .5f, .5f, .5f } );
 
 	XMFLOAT3 center;
 	XMFLOAT3 orientation;

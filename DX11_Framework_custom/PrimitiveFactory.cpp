@@ -416,7 +416,35 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	for ( int i = 0; i < masterSize; i++ )
 	{
 		XMFLOAT3 radiusVector = masterSphere[ i ] - Specs.center;
-		PrimitiveFactory::normals.push_back( Normalize( radiusVector ));
+		XMFLOAT3 normal = Normalize( radiusVector );
+		PrimitiveFactory::normals.push_back(normal);
+
+		//// CREATE BINORMALS & TANGENTS (Just filler) ////
+		XMFLOAT3 edge10;
+		XMFLOAT3 edge20;
+		XMFLOAT2 tEdge10;
+		XMFLOAT2 tEdge20;
+
+		if( i + 3 < masterSize )
+		{
+			edge10 = masterSphere[ i + 1 ] - masterSphere[ i + 0 ];
+			edge20 = masterSphere[ i + 2 ] - masterSphere[ i + 0 ];
+			tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ];
+			tEdge20 = uvs[ i + 2 ] - uvs[ i + 0 ];
+		}
+		else // do it in reverse
+		{
+			edge10 = masterSphere[ i - 0 ] - masterSphere[ i - 1 ];
+			edge20 = masterSphere[ i + 0 ] - masterSphere[ i - 2 ];
+			tEdge10 = uvs[ i + 0 ] - uvs[ i - 1 ];
+			tEdge20 = uvs[ i + 0 ] - uvs[ i - 2 ];
+		}
+
+		XMFLOAT3 tangent = CalculateTangent( edge10, tEdge10 );
+		XMFLOAT3 binormal = CalculateBiNormal( tangent, normal );
+
+		PrimitiveFactory::binormals.push_back( tangent);
+		PrimitiveFactory::tangents.push_back( binormal);
 	}
 
 	Common( Specs );
