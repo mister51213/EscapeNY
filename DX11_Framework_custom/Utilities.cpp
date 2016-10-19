@@ -103,6 +103,7 @@ void Quicksort( XMFLOAT3 *arr, const int left, const int right, PartFn Fn )
 
 void Sort( std::vector<XMFLOAT3> &V )
 {
+	// Erase duplicate vertices from vertex list
 	/*for ( int j = V.size() - 1; j >= 0; --j )
 	{
 		for ( int i = j - 1; i >= 0; --i )
