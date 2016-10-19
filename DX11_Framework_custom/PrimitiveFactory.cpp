@@ -397,7 +397,7 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		{
 			quadrant1[z][i] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };			
 
-			// FILL ALL 4 QUADRANTS EACH TIME
+			// FILL ALL 4 QUADRANTS of the corresponding slice of the "index sphere"
 			intermediateIndices[ z ][ i + 0] = i;
 			intermediateIndices[ z ][ i + 6 ] = i + 6;
 			intermediateIndices[ z ][ i + 12 ] = i + 12;
@@ -408,50 +408,50 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	////////////////////////////////////////////////////////////
 	//////////////// REFLECT TO MAKE OTHER 7 QUADRANTS /////////
 	////////////////////////////////////////////////////////////
-	//int quadSize = quadrant1.size();
+	int quadSize = quadrant1.size();
 
-	//////////////////// FAR TOP RIGHT //////////////////////////////
-	//for ( int i = 0; i < quadSize; i++ )
-	//{
-	//	masterSphere.push_back( quadrant1[ i ] );
-	//}
-	//////////////////// FAR TOP LEFT //////////////////////////////
+	////////////////// FAR TOP RIGHT //////////////////////////////
+	for ( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( quadrant1[ i ] );
+	}
+	////////////////// FAR TOP LEFT //////////////////////////////
 
-	//for ( int i = 0; i < quadSize; i++ )
-	//{
-	//	masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, quadrant1[ i ].z, } );
-	//}
-	//////////////////// FAR BOTTOM LEFT //////////////////////////////
-	//for ( int i = 0; i < quadSize; i++ )
-	//{
-	//	masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
-	//}
-	//////////////////// FAR BOTTOM RIGHT //////////////////////////////
-	//for ( int i = 0; i < quadSize; i++ )
-	//{
-	//	masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
-	//}
+	for ( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, quadrant1[ i ].z, } );
+	}
+	////////////////// FAR BOTTOM LEFT //////////////////////////////
+	for ( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
+	}
+	////////////////// FAR BOTTOM RIGHT //////////////////////////////
+	for ( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
+	}
 
-	//////////////////// NEAR TOP RIGHT //////////////////////////////
-	//for ( int i = 0; i < quadSize; i++ )
-	//{
-	//	masterSphere.push_back( { quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	//}
-	//////////////////// NEAR TOP LEFT //////////////////////////////
-	//for ( int i = 0; i < quadSize; i++ )
-	//{
-	//	masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	//}
-	//////////////////// NEAR BOTTOM LEFT //////////////////////////////
-	//for ( int i = 0; i < quadSize; i++ )
-	//{
-	//	masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	//}
-	//////////////////// NEAR BOTTOM RIGHT //////////////////////////////
-	//for ( int i = 0; i < quadSize; i++ )
-	//{
-	//	masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	//}
+	////////////////// NEAR TOP RIGHT //////////////////////////////
+	for ( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	}
+	////////////////// NEAR TOP LEFT //////////////////////////////
+	for ( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	}
+	////////////////// NEAR BOTTOM LEFT //////////////////////////////
+	for ( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	}
+	////////////////// NEAR BOTTOM RIGHT //////////////////////////////
+	for ( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	}
 
 
 	/////////////// END W VERTEX AT OPPOSITE POLE ///////////////////
