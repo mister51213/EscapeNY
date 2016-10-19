@@ -330,7 +330,7 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	const float gRadius = radiusGlobe*Magnitude( Specs.size );
 
 	// Master and quadrants
-	vector<DirectX::XMFLOAT3> quadrant1( 37 );
+	//vector<DirectX::XMFLOAT3> quadrant1( 37 );
 	vector<DirectX::XMFLOAT3> masterSphere;
 	//	masterSphere.resize( quadrant1.size() * 8 + 2 );
 
@@ -339,81 +339,114 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 
 	vector<int> intermediateIndices;
 
+	/////////////////// Make one positive quadrant ///////////////////
+	//// loop through cos values along z axis (from far pole of globe to its center)
+	//for ( int z = 5; z >= 0; z-- ) // NOTE: end at 6, because we don't need the single point at the pole.
+	//{
+	//	// radius of each slice = sin of angle PHI at that slice
+	//	float sliceRadius = sinValues[ z ] * gRadius; // scale down radius by sin of the slice
+	//	float slicePosZ = cosValues[ z ] * gRadius;
+	//	// TODO: Each quadrant should only interate through 1ST 6 NUMBERS,
+	//	// because the starting vertex of next quadrant = ending vert of previous
+	//	for ( int i = 6; i >= 0; i-- )
+	//	{
+	//		int index = z * 6 + i;
+	//		quadrant1[ index ] = 
+	//		{ 
+	//			sliceRadius*cosValues[ i ], 
+	//			sliceRadius*sinValues[ i ], 
+	//			slicePosZ 
+	//		};			
+	//		// FIRST SLICE Q1
+	//		intermediateIndices.push_back(index);
+	//		// FIRST SLICE Q2
+	//		intermediateIndices.push_back(index+37);
+	//		// FIRST SLICE Q3
+	//		intermediateIndices.push_back(index+37*2);
+	//		// FIRST SLICE Q4
+	//		intermediateIndices.push_back(index+37*3);
+	//	}
+	//}
+
 	///////////////// Make one positive quadrant ///////////////////
+	vector<vector<DirectX::XMFLOAT3>> quadrant1;
+	quadrant1.resize( 6 );
+	for(auto& latitude: quadrant1 )
+	{
+		latitude.resize( 6 );
+	}
+
 	// loop through cos values along z axis (from far pole of globe to its center)
-	for ( int z = 5; z >= 0; z-- ) // NOTE: end at 6, because we don't need the single point at the pole.
+	for ( int z = 5; z >= 0; z-- ) // NOTE: We don't need the single point at the pole.
 	{
 		// radius of each slice = sin of angle PHI at that slice
 		float sliceRadius = sinValues[ z ] * gRadius; // scale down radius by sin of the slice
 		float slicePosZ = cosValues[ z ] * gRadius;
 
-		for ( int i = 6; i >= 0; i-- )
-		{
-			int index = z * 6 + i;
-			quadrant1[ index ] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };			
+		// TODO: Each quadrant should only interate through 1ST 6 NUMBERS,
+		// because the starting vertex of next quadrant = ending vert of previous
 
-		// FIRST SLICE Q1
-		intermediateIndices.push_back(index);
-		// FIRST SLICE Q2
-		intermediateIndices.push_back(index+37);
-		// FIRST SLICE Q3
-		intermediateIndices.push_back(index+37*2);
-		// FIRST SLICE Q4
-		intermediateIndices.push_back(index+37*3);
+		for ( int i = 5; i >= 0; i-- )
+		{
+			quadrant1[z][i] = {sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };			
+
+			// COMPLETE THE CIRCLE
+			int index = 6 * z + i;
+			intermediateIndices.push_back(index);
+			intermediateIndices.push_back(index+37);
+			intermediateIndices.push_back(index+37*2);
+			intermediateIndices.push_back(index+37*3);
 
 		}
 	}
 
+	////////////////////////////////////////////////////////////
+	//////////////// REFLECT TO MAKE OTHER 7 QUADRANTS /////////
+	////////////////////////////////////////////////////////////
+	//int quadSize = quadrant1.size();
 
-	//z * 28 + i ????
-	
-	//////////////////////////////////////////////////////////
-	////////////// REFLECT TO MAKE OTHER 7 QUADRANTS /////////
-	//////////////////////////////////////////////////////////
-	int quadSize = quadrant1.size();
+	//////////////////// FAR TOP RIGHT //////////////////////////////
+	//for ( int i = 0; i < quadSize; i++ )
+	//{
+	//	masterSphere.push_back( quadrant1[ i ] );
+	//}
+	//////////////////// FAR TOP LEFT //////////////////////////////
 
-	////////////////// FAR TOP RIGHT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( quadrant1[ i ] );
-	}
-	////////////////// FAR TOP LEFT //////////////////////////////
+	//for ( int i = 0; i < quadSize; i++ )
+	//{
+	//	masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, quadrant1[ i ].z, } );
+	//}
+	//////////////////// FAR BOTTOM LEFT //////////////////////////////
+	//for ( int i = 0; i < quadSize; i++ )
+	//{
+	//	masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
+	//}
+	//////////////////// FAR BOTTOM RIGHT //////////////////////////////
+	//for ( int i = 0; i < quadSize; i++ )
+	//{
+	//	masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
+	//}
 
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, quadrant1[ i ].z, } );
-	}
-	////////////////// FAR BOTTOM LEFT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
-	}
-	////////////////// FAR BOTTOM RIGHT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
-	}
-
-	////////////////// NEAR TOP RIGHT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	}
-	////////////////// NEAR TOP LEFT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	}
-	////////////////// NEAR BOTTOM LEFT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	}
-	////////////////// NEAR BOTTOM RIGHT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	}
+	//////////////////// NEAR TOP RIGHT //////////////////////////////
+	//for ( int i = 0; i < quadSize; i++ )
+	//{
+	//	masterSphere.push_back( { quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	//}
+	//////////////////// NEAR TOP LEFT //////////////////////////////
+	//for ( int i = 0; i < quadSize; i++ )
+	//{
+	//	masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	//}
+	//////////////////// NEAR BOTTOM LEFT //////////////////////////////
+	//for ( int i = 0; i < quadSize; i++ )
+	//{
+	//	masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	//}
+	//////////////////// NEAR BOTTOM RIGHT //////////////////////////////
+	//for ( int i = 0; i < quadSize; i++ )
+	//{
+	//	masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	//}
 
 
 	/////////////// END W VERTEX AT OPPOSITE POLE ///////////////////
@@ -428,7 +461,7 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 
 	// TODO: group indices into continuous loops first
 	//////////// DRAW TOP /////////////////
-	for( int i = 0; i < 28; i++ )
+	for( int i = 0; i < 24; i++ )
 	{
 		// All 7 triangles start with index of pole
 		sphereIndices.push_back( 0 );
@@ -442,20 +475,20 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 
 	bool flipFlag = false;
 	//////////// DRAW NEXT BELT /////////////////
-	for( int i = 0; i < 28; i++ )
+	for( int i = 0; i < 24; i++ )
 	{
 		if( !flipFlag )
 		{	
 			sphereIndices.push_back( intermediateIndices[ i ] );
-			sphereIndices.push_back( intermediateIndices[ i + 28 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 24 ] );
 			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
 			flipFlag = true;
 		}
 		else
 		{
 			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 28 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 29 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 24 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 25 ] );
 			flipFlag = false;
 		}
 	}
@@ -464,43 +497,84 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	// TODO: multiply by numslices
 		//////////// DRAW NEXT BELT /////////////////
 	int numslices=3;
-	for( int i = 0; i < 28; i++ )
+	for( int i = 0; i < 24; i++ )
 	{
 		if( !flipFlag )
 		{	
-			sphereIndices.push_back( intermediateIndices[ i + 28*numslices-1] );
-			sphereIndices.push_back( intermediateIndices[ i + 28*numslices ] );
-			sphereIndices.push_back( intermediateIndices[ i + 28*numslices-1] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices-1] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices ] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices-1] );
 			flipFlag = true;
 		}
 		else
 		{
 			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 28*numslices ] );
-			sphereIndices.push_back( intermediateIndices[ i + 29*numslices ] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices ] );
+			sphereIndices.push_back( intermediateIndices[ i + 25*numslices ] );
+			flipFlag = false;
+		}
+	}
+
+		//////////// DRAW NEXT BELT /////////////////
+	int numslices1=4;
+	for( int i = 0; i < 24; i++ )
+	{
+		if( !flipFlag )
+		{	
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1-1] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1-1] );
+			flipFlag = true;
+		}
+		else
+		{
+			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 25*numslices1 ] );
+			flipFlag = false;
+		}
+	}
+
+		//////////// DRAW NEXT BELT /////////////////
+	int numslices2=5;
+	for( int i = 0; i < 24; i++ )
+	{
+		if( !flipFlag )
+		{	
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1-1] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1-1] );
+			flipFlag = true;
+		}
+		else
+		{
+			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 25*numslices1 ] );
 			flipFlag = false;
 		}
 	}
 
 			//////////// DRAW NEXT BELT /////////////////
-	int numslices1=4;
-	for( int i = 0; i < 28; i++ )
+	int numslices3=6;
+	for( int i = 0; i < 24; i++ )
 	{
 		if( !flipFlag )
 		{	
-			sphereIndices.push_back( intermediateIndices[ i + 28*numslices1-1] );
-			sphereIndices.push_back( intermediateIndices[ i + 28*numslices1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 28*numslices1-1] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1-1] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1-1] );
 			flipFlag = true;
 		}
 		else
 		{
 			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 28*numslices1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 29*numslices1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 25*numslices1 ] );
 			flipFlag = false;
 		}
 	}
+
 
 
 	// TODO: Test to see if sorting helps
