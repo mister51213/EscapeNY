@@ -298,8 +298,8 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 
 void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float radiusGlobe, int vertices )
 {
-	// sin values for theta = 90, 75, 60, 45, 30, 15, 0
-	const float sinValues[ 7 ] =
+	// cos values for theta = 0,15,30,45,60,75,90
+	const float cosValues[ 7 ] =
 	{
 		1.0f,
 		0.9659258f,
@@ -310,8 +310,8 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		0.0f
 	};
 
-	// cos values for theta = 90, 75, 60, 45, 30, 15, 0
-	const float cosValues[ 7 ] =
+	// sin values for theta = 0,15,30,45,60,75,90
+	const float sinValues[ 7 ] =
 	{
 		0.0f,
 		0.258819f,
@@ -328,18 +328,15 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	// Scale main globe radius by average of local specs
 	const float gRadius = radiusGlobe*Magnitude( Specs.size );
 
-
-
-
-
 	/////// INTERMEDIATE INDICES /////////
 	//vector<int> intermediateIndices;
 	vector<vector<int>> intermediateIndices;
-	intermediateIndices.resize( 13 );
+	intermediateIndices.resize( 6 * 2 + 1 );
 	for(auto& latitude: intermediateIndices )
 	{
 		latitude.resize( 24 );
 	}
+	intermediateIndices[ 0 ][ 0 ] = 0;
 
 	///////// ADD VERTEX AT FAR POLE OF SPHERE //////////
 	vector<DirectX::XMFLOAT3> masterSphere;
@@ -385,25 +382,26 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	}
 
 	// loop through cos values along z axis (from far pole of globe to its center)
-	for ( int z = 5; z >= 0; z-- ) // NOTE: We don't need the single point at the pole.
+	for ( int z = 0; z < 6; z++ ) // NOTE: We don't need the single point at the pole.
 	{
 		// radius of each slice = sin of angle PHI at that slice
-		float sliceRadius = sinValues[ z ] * gRadius; // scale down radius by sin of the slice
-		float slicePosZ = cosValues[ z ] * gRadius;
+		float sliceRadius = sinValues[ z + 1] * gRadius; // scale down radius by sin of the slice
+		float slicePosZ = cosValues[ z + 1] * gRadius;
 
 		// TODO: Each quadrant should only interate through 1ST 6 NUMBERS,
-		// because the starting vertex of next quadrant = ending vert of previous
+		// because the first vertex of next quadrant = last vert of previous
+		// TODO: When we reflect this first quadrant into the next 7 quadrants,
+		// SWITCH its X and Y values so there won't be a gap in the middle of the sphere.
 
-		for ( int i = 5; i >= 0; i-- )
+		for ( int i = 0 ; i < 6; i++ )
 		{
 			quadrant1[z][i] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };			
 
-			// COMPLETE THE CIRCLE
-			int index = 6 * z + i;
-			intermediateIndices[ z ][ i ] = index;
-			intermediateIndices[ z ][ i + 37 ] = index + 37;
-			intermediateIndices[ z ][ i + 37 * 2 ] = index + 37 * 2;
-			intermediateIndices[ z ][ i + 37 * 3 ] = index + 37 * 3;
+			// FILL ALL 4 QUADRANTS EACH TIME
+			intermediateIndices[ z ][ i + 0] = i;
+			intermediateIndices[ z ][ i + 6 ] = i + 6;
+			intermediateIndices[ z ][ i + 12 ] = i + 12;
+			intermediateIndices[ z ][ i + 18 ] = i + 18;
 		}
 	}
 
