@@ -325,20 +325,28 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	// TODO: optimize by adding array of const pre-multiplied squares of cos and sin values
 
 	// TODO: OFFSET ALL OF THESE POINTS BY LOCAL SPECS VALUES
-
 	// Scale main globe radius by average of local specs
 	const float gRadius = radiusGlobe*Magnitude( Specs.size );
 
-	// Master and quadrants
-	//vector<DirectX::XMFLOAT3> quadrant1( 37 );
-	vector<DirectX::XMFLOAT3> masterSphere;
-	//	masterSphere.resize( quadrant1.size() * 8 + 2 );
 
-	/////////////// ADD VERTEX AT FAR POLE OF SPHERE ////////
+
+
+
+	/////// INTERMEDIATE INDICES /////////
+	//vector<int> intermediateIndices;
+	vector<vector<int>> intermediateIndices;
+	intermediateIndices.resize( 13 );
+	for(auto& latitude: intermediateIndices )
+	{
+		latitude.resize( 24 );
+	}
+
+	///////// ADD VERTEX AT FAR POLE OF SPHERE //////////
+	vector<DirectX::XMFLOAT3> masterSphere;
 	masterSphere.push_back( { 0.0f, 0.0f, gRadius } );
 
-	vector<int> intermediateIndices;
-
+	// OBSOLETE - one dimensional vector for quadrant 1
+	//vector<DirectX::XMFLOAT3> quadrant1( 37 );
 	/////////////////// Make one positive quadrant ///////////////////
 	//// loop through cos values along z axis (from far pole of globe to its center)
 	//for ( int z = 5; z >= 0; z-- ) // NOTE: end at 6, because we don't need the single point at the pole.
@@ -388,15 +396,14 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 
 		for ( int i = 5; i >= 0; i-- )
 		{
-			quadrant1[z][i] = {sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };			
+			quadrant1[z][i] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };			
 
 			// COMPLETE THE CIRCLE
 			int index = 6 * z + i;
-			intermediateIndices.push_back(index);
-			intermediateIndices.push_back(index+37);
-			intermediateIndices.push_back(index+37*2);
-			intermediateIndices.push_back(index+37*3);
-
+			intermediateIndices[ z ][ i ] = index;
+			intermediateIndices[ z ][ i + 37 ] = index + 37;
+			intermediateIndices[ z ][ i + 37 * 2 ] = index + 37 * 2;
+			intermediateIndices[ z ][ i + 37 * 3 ] = index + 37 * 3;
 		}
 	}
 
