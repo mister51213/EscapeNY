@@ -111,7 +111,7 @@ void PrimitiveFactory::CreatePlaneNM( const ModelSpecs_L & Specs )
 	binormals.resize( vertCount );
 	normals.resize( vertCount );
 
-	for( int i = 0; i < vertCount; i += 3 )
+	for ( int i = 0; i < vertCount; i += 3 )
 	{
 		auto edge10 = vertices[ i + 1 ] - vertices[ i ];
 		auto edge20 = vertices[ i + 2 ] - vertices[ i ];
@@ -296,60 +296,59 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 	Common( Specs );
 }
 
-void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float radiusGlobe, int vertices)
+void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float radiusGlobe, int vertices )
 {
-   // sin values for theta = 90, 75, 60, 45, 30, 15, 0
-    float sinValues[7] =
-    { 
-      1.0f,
-      0.9659258f,
-      0.8660254f,
-      0.707106f,
-      0.5f,
-      0.258819f,
-      0.0f
-    };
+	// sin values for theta = 90, 75, 60, 45, 30, 15, 0
+	const float sinValues[ 7 ] =
+	{
+		1.0f,
+		0.9659258f,
+		0.8660254f,
+		0.707106f,
+		0.5f,
+		0.258819f,
+		0.0f
+	};
 
 	// cos values for theta = 90, 75, 60, 45, 30, 15, 0
-    float cosValues[7] =
-    {
-    0.0f,
-    0.258819f,
-    0.5f,
-    0.707106f,
-    0.8660254f,
-    0.9659258f,
-    1.0f
-    };
+	const float cosValues[ 7 ] =
+	{
+		0.0f,
+		0.258819f,
+		0.5f,
+		0.707106f,
+		0.8660254f,
+		0.9659258f,
+		1.0f
+	};
 
 	// TODO: optimize by adding array of const pre-multiplied squares of cos and sin values
 
 	// TODO: OFFSET ALL OF THESE POINTS BY LOCAL SPECS VALUES
-	
+
 	// Scale main globe radius by average of local specs
-	float gRadius = radiusGlobe*Magnitude(Specs.size);
-	//float gRadius = 100.0f;
+	const float gRadius = radiusGlobe*Magnitude( Specs.size );
 
 	// Master and quadrants
-	vector<DirectX::XMFLOAT3> quadrant1(37);
+	vector<DirectX::XMFLOAT3> quadrant1( 37 );
 	vector<DirectX::XMFLOAT3> masterSphere;
 	//	masterSphere.resize( quadrant1.size() * 8 + 2 );
 
-    /////////////// ADD VERTEX AT FAR POLE OF SPHERE ////////
-	masterSphere.push_back({ 0.0f,0.0f,gRadius });
+	/////////////// ADD VERTEX AT FAR POLE OF SPHERE ////////
+	masterSphere.push_back( { 0.0f, 0.0f, gRadius } );
 
 	///////////////// Make one positive quadrant ///////////////////
 	// loop through cos values along z axis (from far pole of globe to its center)
-	for( int z = 0; z < 6; z++ ) // NOTE: end at 6, because we don't need the single point at the pole.
+	for ( int z = 0; z < 6; z++ ) // NOTE: end at 6, because we don't need the single point at the pole.
 	{
 		// radius of each slice = sin of angle PHI at that slice
 		float sliceRadius = sinValues[ z ] * gRadius; // scale down radius by sin of the slice
 		float slicePosZ = cosValues[ z ] * gRadius;
 
-		for( int i = 0; i < 7; i++ )
+		for ( int i = 0; i < 7; i++ )
 		{
-			int index = z*6 + i;
-			quadrant1[index] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };
+			int index = z * 6 + i;
+			quadrant1[ index ] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };
 		}
 	}
 
@@ -358,43 +357,49 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	//////////////////////////////////////////////////////////
 	int quadSize = quadrant1.size();
 	////////////////// TOP HALF //////////////////////////////
-	for( int i = 0; i < quadSize; i++ )
+	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( quadrant1[ i ] );
 	}
-	for( int i = 0; i < quadSize; i++ )
+	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, quadrant1[ i ].z, } );
 	}
-	for( int i = 0; i < quadSize; i++ )
+	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
 	}
-	for( int i = 0; i < quadSize; i++ )
+	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( { quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
 	}
 
 	////////////////// BOTTOM HALF //////////////////////////////
-	for( int i = 0; i < quadSize; i++ )
+	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
 	}
-	for( int i = 0; i < quadSize; i++ )
+	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
 	}
-	for( int i = 0; i < quadSize; i++ )
+	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
 	}
-	for( int i = 0; i < quadSize; i++ )
+	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
 	}
-    /////////////// END W VERTEX AT OPPOSITE POLE ///////////////////
-    //masterSphere[masterSize-1]={ 0.0f,0.0f,-gRadius };
+	/////////////// END W VERTEX AT OPPOSITE POLE ///////////////////
+	//masterSphere[masterSize-1]={ 0.0f,0.0f,-gRadius };
 	masterSphere.push_back( { 0.0f, 0.0f, -gRadius } );
+
+	// TODO: Test to see if sorting helps
+	// Sort algorithm is complete, but haven't implemented any triangle 
+	// creation.  First everything is sorted by Y (Top to Bottom) then by Z
+	// (Front to Back), then by X (Left to Right)
+	//Sort( masterSphere );
 
 	PrimitiveFactory::ClearAllBuffers();
 
@@ -406,9 +411,23 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	////////////// CREATE UVs ///////////////////////////////////////
 	//PrimitiveFactory::uvs.resize( masterSize);
 
-	for each ( auto vertex in masterSphere )
+	// UV coordinates are between 0 and 1, except when wrapping textures.
+	// The top and left of the texture are the origin and bottom right 
+	// are both 1.  To get the vertices in this range we:
+	// First normalize them.  This gets us between -1 and 1.  
+	// Second we invert the Y value so that the top of the sphere is 
+	//		drawn using the top of the texture.
+	// Third scale the image by half, giving us a range of 1 (-.5 to .5)
+	// Fourth add .5 to X and Y getting us between 0 and 1
+
+	// This means that the sphere will be flattened and the back and front 
+	// will show the same image.
+	const auto uvOffset = XMFLOAT2( .5f, .5f );
+	for ( const auto &vertex : masterSphere )
 	{
-		PrimitiveFactory::uvs.push_back( { vertex.x, vertex.y } );
+		const auto nVertex = Normalize( vertex );
+		const auto uv = ( XMFLOAT2( nVertex.x, -( nVertex.y ) ) * .5f ) + uvOffset;
+		PrimitiveFactory::uvs.push_back( uv );
 	}
 
 	////////////// CREATE NORMALs ///////////////////////////////////////
@@ -418,7 +437,7 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	{
 		XMFLOAT3 radiusVector = masterSphere[ i ] - Specs.center;
 		XMFLOAT3 normal = Normalize( radiusVector );
-		PrimitiveFactory::normals.push_back(normal);
+		PrimitiveFactory::normals.push_back( normal );
 
 		//// CREATE BINORMALS & TANGENTS (Just filler) ////
 		XMFLOAT3 edge10;
@@ -426,7 +445,7 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		XMFLOAT2 tEdge10;
 		XMFLOAT2 tEdge20;
 
-		if( i + 3 < masterSize )
+		if ( i + 3 < masterSize )
 		{
 			edge10 = masterSphere[ i + 1 ] - masterSphere[ i + 0 ];
 			edge20 = masterSphere[ i + 2 ] - masterSphere[ i + 0 ];
@@ -444,8 +463,8 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		XMFLOAT3 tangent = CalculateTangent( edge10, tEdge10 );
 		XMFLOAT3 binormal = CalculateBiNormal( tangent, normal );
 
-		PrimitiveFactory::binormals.push_back( tangent);
-		PrimitiveFactory::tangents.push_back( binormal);
+		PrimitiveFactory::binormals.push_back( tangent );
+		PrimitiveFactory::tangents.push_back( binormal );
 	}
 
 	Common( Specs );
@@ -461,7 +480,7 @@ void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )
 	normals.resize( vertCount );
 
 	// Create the tangent matrix for each face (set of three vertex positions)
-	for( int i = 0; i < vertCount; i += 3 )
+	for ( int i = 0; i < vertCount; i += 3 )
 	{
 		auto edge10 = vertices[ i + 1 ] - vertices[ i + 0 ];
 		auto edge20 = vertices[ i + 2 ] - vertices[ i + 0 ];
@@ -496,14 +515,14 @@ void PrimitiveFactory::CreateMeshNM( const wstring & Filename )
 		file.open( Filename );
 
 		// If it could not open the file then exit.
-		if( file.fail() )
+		if ( file.fail() )
 		{
 			return false;
 		}
 
 		// Read up to the value of vertex count.
 		file.get( input );
-		while( input != ':' )
+		while ( input != ':' )
 		{
 			file.get( input );
 		}
@@ -516,7 +535,7 @@ void PrimitiveFactory::CreateMeshNM( const wstring & Filename )
 
 		// Read up to the beginning of the data.
 		file.get( input );
-		while( input != ':' )
+		while ( input != ':' )
 		{
 			file.get( input );
 		}
@@ -528,7 +547,7 @@ void PrimitiveFactory::CreateMeshNM( const wstring & Filename )
 		uvs.resize( vertexCount );
 		normals.resize( vertexCount );
 
-		for( i = 0; i < vertexCount; i++ )
+		for ( i = 0; i < vertexCount; i++ )
 		{
 			file >> vertices[ i ].x >> vertices[ i ].y >> vertices[ i ].z;
 			file >> uvs[ i ].x >> uvs[ i ].y;
@@ -544,7 +563,7 @@ void PrimitiveFactory::CreateMeshNM( const wstring & Filename )
 	auto VertsFromB = [ &Filename, &vertexCount, &indexCount ]()->bool
 	{
 		ifstream file( Filename, std::ios::binary ); // open file in binary mode
-		if( !file.is_open() )
+		if ( !file.is_open() )
 		{
 			return false;
 		}
@@ -566,12 +585,12 @@ void PrimitiveFactory::CreateMeshNM( const wstring & Filename )
 		file.seekg( curFilePosition, std::ios::beg );
 
 		fileSize -= curFilePosition;
-		if( fileSize == altSize )
+		if ( fileSize == altSize )
 		{
 			vector<VertexBufferTypeAllInOne> vertList( vertexCount );
 			file.read( reinterpret_cast<char*>( vertList.data() ), sizeof( VertexBufferTypeAllInOne )*vertexCount );
 
-			for( int i = 0; i < vertexCount; i++ )
+			for ( int i = 0; i < vertexCount; i++ )
 			{
 				vertices[ i ] = vertList[ i ].position;
 				uvs[ i ] = vertList[ i ].uv;
@@ -584,7 +603,7 @@ void PrimitiveFactory::CreateMeshNM( const wstring & Filename )
 			vector<VertexBufferTypePosUvNormal> vertList( vertexCount );
 			file.read( reinterpret_cast<char*>( vertList.data() ), sizeof( VertexBufferTypePosUvNormal )*vertexCount );
 
-			for( int i = 0; i < vertexCount; i++ )
+			for ( int i = 0; i < vertexCount; i++ )
 			{
 				vertices[ i ] = vertList[ i ].position;
 				uvs[ i ] = vertList[ i ].uv;
@@ -592,7 +611,7 @@ void PrimitiveFactory::CreateMeshNM( const wstring & Filename )
 				indices[ i ] = i; // TODO: not sure about this
 			}
 		}
-		
+
 		file.close();
 		return true;
 	};
@@ -613,7 +632,7 @@ void PrimitiveFactory::CreateMeshNM( const wstring & Filename )
 	tangents.resize( vertexCount );
 	binormals.resize( vertexCount );
 
-	for( int i = 0; i < vertexCount; i += 3 )
+	for ( int i = 0; i < vertexCount; i += 3 )
 	{
 		auto edge10 = vertices[ i + 1 ] - vertices[ i ];
 		auto edge20 = vertices[ i + 2 ] - vertices[ i ];
@@ -621,7 +640,7 @@ void PrimitiveFactory::CreateMeshNM( const wstring & Filename )
 		auto tEdge20 = uvs[ i + 2 ] - uvs[ i ];
 
 		// Calculate the denominator of the tangent/binormal equation.
-		float den = 1.0f / ( 
+		float den = 1.0f / (
 			( tEdge10.x * tEdge20.y ) - ( tEdge10.y * tEdge20.x )
 			);
 
@@ -666,14 +685,14 @@ void PrimitiveFactory::CreateMesh(
 		fin.open( fileName );
 
 		// If it could not open the file then exit.
-		if( fin.fail() )
+		if ( fin.fail() )
 		{
 			return false;
 		}
 
 		// Read up to the value of vertex count.
 		fin.get( input );
-		while( input != ':' )
+		while ( input != ':' )
 		{
 			fin.get( input );
 		}
@@ -686,14 +705,14 @@ void PrimitiveFactory::CreateMesh(
 
 		// Create the model using the vertex count that was read in.
 		pModel = new ModelType[ vertexCount ];
-		if( !pModel )
+		if ( !pModel )
 		{
 			return false;
 		}
 
 		// Read up to the beginning of the data.
 		fin.get( input );
-		while( input != ':' )
+		while ( input != ':' )
 		{
 			fin.get( input );
 		}
@@ -705,7 +724,7 @@ void PrimitiveFactory::CreateMesh(
 		uvs.resize( vertexCount );
 		normals.resize( vertexCount );
 
-		for( i = 0; i < vertexCount; i++ )
+		for ( i = 0; i < vertexCount; i++ )
 		{
 			fin >> vertices[ i ].x >> vertices[ i ].y >> vertices[ i ].z;
 			fin >> uvs[ i ].x >> uvs[ i ].y;
@@ -722,7 +741,7 @@ void PrimitiveFactory::CreateMesh(
 	{
 		ifstream file( fileName, std::ios::binary ); // open file in binary mode
 
-		if( file.fail() )
+		if ( file.fail() )
 		{
 			return false;
 		}
@@ -742,7 +761,7 @@ void PrimitiveFactory::CreateMesh(
 		normals.resize( vertexCount );
 		indices.resize( vertexCount );
 
-		for( int i = 0; i < vertexCount; i++ )
+		for ( int i = 0; i < vertexCount; i++ )
 		{
 			vertices[ i ] = vertList[ i ].position;
 			uvs[ i ] = vertList[ i ].uv;
@@ -767,7 +786,7 @@ void PrimitiveFactory::CreateMesh(
 	indexCount = vertexCount;
 	indices.resize( indexCount );
 
-	for( int i = 0; i < indexCount; i++ )
+	for ( int i = 0; i < indexCount; i++ )
 	{
 		indices[ i ] = i;
 	}
@@ -835,7 +854,7 @@ XMFLOAT3 PrimitiveFactory::CalculateBiNormal( const XMFLOAT3 & Tangent, const XM
 void PrimitiveFactory::Common( const ModelSpecs_L & Specs )
 {
 	PrimitiveFactory::indices.resize( vertices.size() );
-	for( int i = 0; i < vertices.size(); ++i )
+	for ( int i = 0; i < vertices.size(); ++i )
 	{
 		indices[ i ] = i;
 	}
@@ -845,7 +864,7 @@ void PrimitiveFactory::Common( const ModelSpecs_L & Specs )
 	auto rotationMatrix = XMMatrixRotationRollPitchYawFromVector( rotationVector );
 
 	// Rotate each vertex
-	for( int i = 0; i < vertices.size(); ++i )
+	for ( int i = 0; i < vertices.size(); ++i )
 	{
 		auto &vertex = vertices[ i ];
 		auto &normal = normals[ i ];

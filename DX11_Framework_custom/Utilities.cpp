@@ -1,4 +1,153 @@
 #include "Utilities.h"
+#include <algorithm>
+
+using PartFn = int( *)( XMFLOAT3*, const int, const int );
+
+int PartitionY( XMFLOAT3* Array, const int Left, const int Right )
+{
+	const auto mid = Left + ( Right - Left ) / 2;
+	const auto pivot = Array[ mid ].y;
+	// move the mid point value to the front.
+	std::swap( Array[ mid ], Array[ Left ] );
+	int i = Left + 1;
+	int j = Right;
+	while ( i <= j )
+	{
+		while ( i <= j && Array[ i ].y <= pivot )
+		{
+			i++;
+		}
+
+		while ( i <= j && Array[ j ].y > pivot )
+		{
+			j--;
+		}
+
+		if ( i < j )
+		{
+			std::swap( Array[ i ], Array[ j ] );
+		}
+	}
+	std::swap( Array[ i - 1 ], Array[ Left ] );
+	return i - 1;
+}
+int PartitionZ( XMFLOAT3* Array, const int Left, const int Right )
+{
+	const auto mid = Left + ( Right - Left ) / 2;
+	const auto pivot = Array[ mid ].z;
+	// move the mid point value to the front.
+	std::swap( Array[ mid ], Array[ Left ] );
+	int i = Left + 1;
+	int j = Right;
+	while ( i <= j )
+	{
+		while ( i <= j && Array[ i ].z <= pivot )
+		{
+			i++;
+		}
+
+		while ( i <= j && Array[ j ].z > pivot )
+		{
+			j--;
+		}
+
+		if ( i < j )
+		{
+			std::swap( Array[ i ], Array[ j ] );
+		}
+	}
+	std::swap( Array[ i - 1 ], Array[ Left ] );
+	return i - 1;
+}
+int PartitionX( XMFLOAT3* Array, const int Left, const int Right )
+{
+	const auto mid = Left + ( Right - Left ) / 2;
+	const auto pivot = Array[ mid ].x;
+	// move the mid point value to the front.
+	std::swap( Array[ mid ], Array[ Left ] );
+	int i = Left + 1;
+	int j = Right;
+	while ( i <= j )
+	{
+		while ( i <= j && Array[ i ].x <= pivot )
+		{
+			i++;
+		}
+
+		while ( i <= j && Array[ j ].x > pivot )
+		{
+			j--;
+		}
+
+		if ( i < j )
+		{
+			std::swap( Array[ i ], Array[ j ] );
+		}
+	}
+	std::swap( Array[ i - 1 ], Array[ Left ] );
+	return i - 1;
+}
+
+void Quicksort( XMFLOAT3 *arr, const int left, const int right, PartFn Fn )
+{
+	if ( left >= right )
+	{
+		return;
+	}
+
+	int part = Fn( arr, left, right );
+
+	Quicksort( arr, left, part - 1, Fn );
+	Quicksort( arr, part + 1, right, Fn );
+}
+
+void Sort( std::vector<XMFLOAT3> &V )
+{
+	/*for ( int j = V.size() - 1; j >= 0; --j )
+	{
+		for ( int i = j - 1; i >= 0; --i )
+		{
+			if ( V[ i ] == V[ j ] )
+			{
+				V.erase( V.begin() + i );
+			}
+		}
+	}*/
+
+	// Sort by Y
+	Quicksort( V.data(), 0, V.size() - 1, PartitionY );
+
+	// Sort by Z
+	float Y = V[ 0 ].y;
+	int yStart = 0;	
+
+	for ( int i = 0; i < V.size(); ++i )
+	{
+		if ( V[ i ].y != Y )
+		{
+			const int yEnd = i - 1;
+			Quicksort( V.data(), yStart, yEnd, PartitionZ );
+			yStart = i;
+			Y = V[ yStart ].y;
+		}
+	}
+
+	// Sort by X
+	float Z = V[ 0 ].z;
+	int zStart = 0;
+
+	for ( int i = 0; i < V.size(); ++i )
+	{
+		if ( V[ i ].z != Z )
+		{
+			const int zEnd = i - 1;
+			Quicksort( V.data(), zStart, zEnd, PartitionX );
+			zStart = i;
+			Z = V[ zStart ].z;
+		}
+	}
+	int a = 0;
+}
 
 XMFLOAT2 operator+( const XMFLOAT2 & V1, const XMFLOAT2 & V2 )
 {
@@ -13,6 +162,11 @@ XMFLOAT2 operator-( const XMFLOAT2 & V )
 XMFLOAT2 operator-( const XMFLOAT2 & V1, const XMFLOAT2 & V2 )
 {
 	return XMFLOAT2( V1.x - V2.x, V1.y - V2.y );
+}
+
+XMFLOAT2 operator*( const XMFLOAT2 & V, const float S )
+{
+	return{ V.x * S, V.y * S };
 }
 
 XMFLOAT3 operator+( const XMFLOAT3 & V1, const XMFLOAT3 & V2 )
@@ -65,6 +219,11 @@ XMFLOAT3 & operator/=( XMFLOAT3 & V, const float S )
 	return V;
 }
 
+bool operator==( const XMFLOAT3 & A, const XMFLOAT3 & B )
+{
+	return A.x == B.x && A.y == B.y && A.z == B.z;
+}
+
 XMFLOAT3 CrossProduct( const XMFLOAT3 & V1, const XMFLOAT3 & V2 )
 {
 	return
@@ -75,9 +234,19 @@ XMFLOAT3 CrossProduct( const XMFLOAT3 & V1, const XMFLOAT3 & V2 )
 	};
 }
 
+float DotProduct( const XMFLOAT2 & V1, const XMFLOAT2 & V2 )
+{
+	return ( ( V1.x * V2.x ) + ( V1.y * V2.y ) );
+}
+
 float DotProduct( const XMFLOAT3 & V1, const XMFLOAT3 & V2 )
 {
 	return ( V1.x * V2.x ) + ( V1.y * V2.y ) + ( V1.z * V2.z );
+}
+
+float Magnitude( const XMFLOAT2 & V )
+{
+	return sqrt( DotProduct( V, V ) );
 }
 
 float Magnitude( const XMFLOAT3 & V )
@@ -88,11 +257,21 @@ float Magnitude( const XMFLOAT3 & V )
 	return sqrtf( DotProduct( V, V ) );
 }
 
+float Length( const XMFLOAT2 & V1, const XMFLOAT2 & V2 )
+{	
+	return Magnitude( V2 - V1 );
+}
+
 float Length( const XMFLOAT3 & V1, const XMFLOAT3 & V2 )
 {
 	// Length between two points is the magnitude of the vector
 	// that starts at point1 and goes to point2
 	return Magnitude( V2 - V1 );
+}
+
+XMFLOAT2 Normalize( const XMFLOAT2 & V )
+{	
+	return V * ( 1.f / Magnitude( V ) );
 }
 
 XMFLOAT3 Normalize( const XMFLOAT3 & V )

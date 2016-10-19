@@ -29,6 +29,11 @@ if(!(Result))\
 }\
 else int a = 0
 #define RETURN_IF_FAILED(Result) RETURN_IF_FALSE( SUCCEEDED( ( Result ) ) )
+////////////////////////////////////////////////////
+// Algorithms
+////////////////////////////////////////////////////
+
+void Sort( std::vector<XMFLOAT3> &V );
 
 ////////////////////////////////////////////////////
 // Vector Math Operator Overloads
@@ -37,6 +42,7 @@ else int a = 0
 XMFLOAT2 operator+( const XMFLOAT2 &V1, const XMFLOAT2 &V2 );
 XMFLOAT2 operator-( const XMFLOAT2 &V );
 XMFLOAT2 operator-( const XMFLOAT2 &V1, const XMFLOAT2 &V2 );
+XMFLOAT2 operator*( const XMFLOAT2 &V, const float S );
 
 // Keep operator overloads out of namespace so we can access them
 // without having to declare: using namespace
@@ -48,6 +54,8 @@ XMFLOAT3 &operator+= ( XMFLOAT3& V1, const XMFLOAT3& V2 );
 XMFLOAT3 &operator-= ( XMFLOAT3& V1, const XMFLOAT3& V2 );
 XMFLOAT3 &operator*= ( XMFLOAT3 &V, const float S );
 XMFLOAT3 &operator/= ( XMFLOAT3 &V, const float S );
+
+bool operator==( const XMFLOAT3 &A, const XMFLOAT3 &B );
 
 // PI is equal to 180 degrees
 constexpr float g_PI = 3.141592654f;
@@ -72,16 +80,20 @@ constexpr float g_degree = 180.f / g_PI;
 // Calculates the cross-product of two float3 vectors
 XMFLOAT3 CrossProduct( const XMFLOAT3 &V1, const XMFLOAT3 &V2 );
 
-// Calculates the dot-product of two float3 vectors
+// Calculates the dot-product of two vectors
+float DotProduct( const XMFLOAT2 &V1, const XMFLOAT2 &V2 );
 float DotProduct( const XMFLOAT3 &V1, const XMFLOAT3 &V2 );
 
-// Calculates the magnitude of a float3 vector
+// Calculates the magnitude of a vector
+float Magnitude( const XMFLOAT2 &V );
 float Magnitude( const XMFLOAT3 &V );
 
-// Calcualtes the length between two float3 point vectors
+// Calcualtes the length between two vectors
+float Length( const XMFLOAT2 &V1, const XMFLOAT2 &V2 );
 float Length( const XMFLOAT3 &V1, const XMFLOAT3 &V2 );
 
-// Normalizes a float3 vector
+// Normalizes a vector
+XMFLOAT2 Normalize( const XMFLOAT2 &V );
 XMFLOAT3 Normalize( const XMFLOAT3 &V );
 
 XMVECTOR ConvertToRadians( const XMVECTOR& angleInDegrees );
