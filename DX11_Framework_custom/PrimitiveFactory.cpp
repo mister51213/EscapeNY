@@ -339,13 +339,13 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 
 	///////////////// Make one positive quadrant ///////////////////
 	// loop through cos values along z axis (from far pole of globe to its center)
-	for ( int z = 0; z < 6; z++ ) // NOTE: end at 6, because we don't need the single point at the pole.
+	for ( int z = 5; z >= 0; z-- ) // NOTE: end at 6, because we don't need the single point at the pole.
 	{
 		// radius of each slice = sin of angle PHI at that slice
 		float sliceRadius = sinValues[ z ] * gRadius; // scale down radius by sin of the slice
 		float slicePosZ = cosValues[ z ] * gRadius;
 
-		for ( int i = 0; i < 7; i++ )
+		for ( int i = 6; i >= 0; i-- )
 		{
 			int index = z * 6 + i;
 			quadrant1[ index ] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };
@@ -449,7 +449,7 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		{
 			edge10 = masterSphere[ i + 1 ] - masterSphere[ i + 0 ];
 			edge20 = masterSphere[ i + 2 ] - masterSphere[ i + 0 ];
-			tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ];
+			tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ]; 
 			tEdge20 = uvs[ i + 2 ] - uvs[ i + 0 ];
 		}
 		else // do it in reverse
