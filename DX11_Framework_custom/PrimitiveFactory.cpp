@@ -337,6 +337,8 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	/////////////// ADD VERTEX AT FAR POLE OF SPHERE ////////
 	masterSphere.push_back( { 0.0f, 0.0f, gRadius } );
 
+	vector<int> intermediateIndices;
+
 	///////////////// Make one positive quadrant ///////////////////
 	// loop through cos values along z axis (from far pole of globe to its center)
 	for ( int z = 5; z >= 0; z-- ) // NOTE: end at 6, because we don't need the single point at the pole.
@@ -348,52 +350,158 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		for ( int i = 6; i >= 0; i-- )
 		{
 			int index = z * 6 + i;
-			quadrant1[ index ] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };
+			quadrant1[ index ] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };			
+
+		// FIRST SLICE Q1
+		intermediateIndices.push_back(index);
+		// FIRST SLICE Q2
+		intermediateIndices.push_back(index+37);
+		// FIRST SLICE Q3
+		intermediateIndices.push_back(index+37*2);
+		// FIRST SLICE Q4
+		intermediateIndices.push_back(index+37*3);
+
 		}
 	}
 
+
+	//z * 28 + i ????
+	
 	//////////////////////////////////////////////////////////
 	////////////// REFLECT TO MAKE OTHER 7 QUADRANTS /////////
 	//////////////////////////////////////////////////////////
 	int quadSize = quadrant1.size();
-	////////////////// TOP HALF //////////////////////////////
+
+	////////////////// FAR TOP RIGHT //////////////////////////////
 	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( quadrant1[ i ] );
 	}
+	////////////////// FAR TOP LEFT //////////////////////////////
+
 	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, quadrant1[ i ].z, } );
 	}
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	}
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	}
-
-	////////////////// BOTTOM HALF //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
-	}
+	////////////////// FAR BOTTOM LEFT //////////////////////////////
 	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
 	}
+	////////////////// FAR BOTTOM RIGHT //////////////////////////////
+	for ( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
+	}
+
+	////////////////// NEAR TOP RIGHT //////////////////////////////
+	for ( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	}
+	////////////////// NEAR TOP LEFT //////////////////////////////
+	for ( int i = 0; i < quadSize; i++ )
+	{
+		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
+	}
+	////////////////// NEAR BOTTOM LEFT //////////////////////////////
 	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
 	}
+	////////////////// NEAR BOTTOM RIGHT //////////////////////////////
 	for ( int i = 0; i < quadSize; i++ )
 	{
 		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
 	}
+
+
 	/////////////// END W VERTEX AT OPPOSITE POLE ///////////////////
 	//masterSphere[masterSize-1]={ 0.0f,0.0f,-gRadius };
 	masterSphere.push_back( { 0.0f, 0.0f, -gRadius } );
+
+	//////////////// MAKE INDICES /////////////////////////
+	// Reorder the vertices into index triplets corresponding to triangles
+	// for DirectX pipeline to draw
+
+	vector<DWORD> sphereIndices;
+
+	// TODO: group indices into continuous loops first
+	//////////// DRAW TOP /////////////////
+	for( int i = 0; i < 28; i++ )
+	{
+		// All 7 triangles start with index of pole
+		sphereIndices.push_back( 0 );
+		sphereIndices.push_back( intermediateIndices[i ] );
+		sphereIndices.push_back( intermediateIndices[i + 1] );
+	}
+	// knit together last and first vertices
+	sphereIndices.push_back( 0 );
+	sphereIndices.push_back( intermediateIndices[27] );
+    sphereIndices.push_back( intermediateIndices[0] );
+
+	bool flipFlag = false;
+	//////////// DRAW NEXT BELT /////////////////
+	for( int i = 0; i < 28; i++ )
+	{
+		if( !flipFlag )
+		{	
+			sphereIndices.push_back( intermediateIndices[ i ] );
+			sphereIndices.push_back( intermediateIndices[ i + 28 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
+			flipFlag = true;
+		}
+		else
+		{
+			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 28 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 29 ] );
+			flipFlag = false;
+		}
+	}
+
+	// TODO: make outer for loop, iterating thru number of slices
+	// TODO: multiply by numslices
+		//////////// DRAW NEXT BELT /////////////////
+	int numslices=3;
+	for( int i = 0; i < 28; i++ )
+	{
+		if( !flipFlag )
+		{	
+			sphereIndices.push_back( intermediateIndices[ i + 28*numslices-1] );
+			sphereIndices.push_back( intermediateIndices[ i + 28*numslices ] );
+			sphereIndices.push_back( intermediateIndices[ i + 28*numslices-1] );
+			flipFlag = true;
+		}
+		else
+		{
+			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 28*numslices ] );
+			sphereIndices.push_back( intermediateIndices[ i + 29*numslices ] );
+			flipFlag = false;
+		}
+	}
+
+			//////////// DRAW NEXT BELT /////////////////
+	int numslices1=4;
+	for( int i = 0; i < 28; i++ )
+	{
+		if( !flipFlag )
+		{	
+			sphereIndices.push_back( intermediateIndices[ i + 28*numslices1-1] );
+			sphereIndices.push_back( intermediateIndices[ i + 28*numslices1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 28*numslices1-1] );
+			flipFlag = true;
+		}
+		else
+		{
+			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 28*numslices1 ] );
+			sphereIndices.push_back( intermediateIndices[ i + 29*numslices1 ] );
+			flipFlag = false;
+		}
+	}
+
 
 	// TODO: Test to see if sorting helps
 	// Sort algorithm is complete, but haven't implemented any triangle 
@@ -405,8 +513,10 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 
 	// LOAD VERTICES INTO PRIMITIVE FACTORY LIST //
 	int masterSize = masterSphere.size();
-	//PrimitiveFactory::vertices.resize( masterSize);
 	PrimitiveFactory::vertices = masterSphere;
+
+	//////////// TEST //////////////
+	PrimitiveFactory::indices = sphereIndices;
 
 	////////////// CREATE UVs ///////////////////////////////////////
 	//PrimitiveFactory::uvs.resize( masterSize);
@@ -467,7 +577,7 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		PrimitiveFactory::tangents.push_back( binormal );
 	}
 
-	Common( Specs );
+	//Common( Specs );
 }
 
 void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )
