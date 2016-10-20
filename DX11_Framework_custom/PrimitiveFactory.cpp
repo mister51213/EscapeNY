@@ -384,10 +384,10 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	PrimitiveFactory::vertices.push_back( pVertices[ vertsInList ] );
 	PrimitiveFactory::vertices.push_back( pVertices[ 1 ] );
 
-	// ONE MORE MISSING PIECE in second band
-	PrimitiveFactory::vertices.push_back( pVertices[ vertsInList + 2 ] );
-	PrimitiveFactory::vertices.push_back( pVertices[ vertsInList ] );
-	PrimitiveFactory::vertices.push_back( pVertices[ vertsInList + 1] );
+	//// ONE MORE MISSING PIECE in second band
+	//PrimitiveFactory::vertices.push_back( pVertices[ vertsInList + 1 ] );
+	//PrimitiveFactory::vertices.push_back( pVertices[ vertsInList + 2] );
+	//PrimitiveFactory::vertices.push_back( pVertices[ vertsInList + 3] );
 
         // Middle sets
 	for ( int j = 0; j < 10; ++j )
@@ -478,8 +478,13 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		XMFLOAT3 tangent = CalculateTangent( edge10, tEdge10 );
 		XMFLOAT3 binormal = CalculateBiNormal( tangent, normal );
 
-		PrimitiveFactory::binormals.push_back( tangent );
-		PrimitiveFactory::tangents.push_back( binormal );
+		PrimitiveFactory::binormals.push_back( tangent*-1.0f );
+		PrimitiveFactory::binormals.push_back( tangent*-1.0f );
+//		PrimitiveFactory::binormals.push_back( tangent );
+
+		PrimitiveFactory::tangents.push_back( binormal*-1.0f );
+		PrimitiveFactory::tangents.push_back( binormal*-1.0f );
+//		PrimitiveFactory::tangents.push_back( binormal );
 	}
 
 	Common( Specs );
