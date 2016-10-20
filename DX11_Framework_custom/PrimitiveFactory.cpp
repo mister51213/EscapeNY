@@ -448,6 +448,8 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	////////////// CREATE NORMALs ///////////////////////////////////////
 	//PrimitiveFactory::normals.resize( masterSize );
 
+	bool flipFlag = false;
+	int windup = 1;
 	for ( int i = 0; i < PrimitiveFactory::vertices.size(); i++ )
 	{
 		XMFLOAT3 radiusVector = PrimitiveFactory::vertices[ i ] - Specs.center;
@@ -460,30 +462,56 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		XMFLOAT2 tEdge10;
 		XMFLOAT2 tEdge20;
 
-		if ( i + 3 < PrimitiveFactory::vertices.size() )
+		if( !flipFlag )
 		{
-			edge10 = PrimitiveFactory::vertices[ i + 1 ] - PrimitiveFactory::vertices[ i + 0 ];
-			edge20 = PrimitiveFactory::vertices[ i + 2 ] - PrimitiveFactory::vertices[ i + 0 ];
-			tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ];
-			tEdge20 = uvs[ i + 2 ] - uvs[ i + 0 ];
-		}
-		else // do it in reverse
-		{
-			edge10 = PrimitiveFactory::vertices[ i - 0 ] - PrimitiveFactory::vertices[ i - 1 ];
-			edge20 = PrimitiveFactory::vertices[ i + 0 ] - PrimitiveFactory::vertices[ i - 2 ];
-			tEdge10 = uvs[ i + 0 ] - uvs[ i - 1 ];
-			tEdge20 = uvs[ i + 0 ] - uvs[ i - 2 ];
+			if( i + 3 < PrimitiveFactory::vertices.size() )
+			{
+				edge10 = PrimitiveFactory::vertices[ i + 1 ] - PrimitiveFactory::vertices[ i + 0 ];
+				edge20 = PrimitiveFactory::vertices[ i + 2 ] - PrimitiveFactory::vertices[ i + 0 ];
+				tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ];
+				tEdge20 = uvs[ i + 2 ] - uvs[ i + 0 ];
+			}
+			else // do it in reverse
+			{
+				edge10 = PrimitiveFactory::vertices[ i - 0 ] - PrimitiveFactory::vertices[ i - 1 ];
+				edge20 = PrimitiveFactory::vertices[ i + 0 ] - PrimitiveFactory::vertices[ i - 2 ];
+				tEdge10 = uvs[ i + 0 ] - uvs[ i - 1 ];
+				tEdge20 = uvs[ i + 0 ] - uvs[ i - 2 ];
+			}
 		}
 
-		XMFLOAT3 tangent = CalculateTangent( edge10, tEdge10 );
+		else // calculate backwards every 3 vertices to align triangles
+		{
+			if( i + 3 < PrimitiveFactory::vertices.size() )
+			{
+				edge20 = PrimitiveFactory::vertices[ i + 1 ] - PrimitiveFactory::vertices[ i + 0 ];
+				edge10 = PrimitiveFactory::vertices[ i + 2 ] - PrimitiveFactory::vertices[ i + 0 ];
+				tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ];
+				tEdge20 = uvs[ i + 2 ] - uvs[ i + 0 ];
+			}
+			else // do it in reverse
+			{
+				edge20 = PrimitiveFactory::vertices[ i - 0 ] - PrimitiveFactory::vertices[ i - 1 ];
+				edge10 = PrimitiveFactory::vertices[ i + 0 ] - PrimitiveFactory::vertices[ i - 2 ];
+				tEdge10 = uvs[ i + 0 ] - uvs[ i - 1 ];
+				tEdge20 = uvs[ i + 0 ] - uvs[ i - 2 ];
+			}
+			flipFlag = false;
+		}
+
+		windup++;
+		if( windup % 3 == 0 )
+		flipFlag = true;
+
+		XMFLOAT3 tangent = CalculateTangent( edge20, tEdge20 );
 		XMFLOAT3 binormal = CalculateBiNormal( tangent, normal );
 
-		PrimitiveFactory::binormals.push_back( tangent*-1.0f );
-		PrimitiveFactory::binormals.push_back( tangent*-1.0f );
+		PrimitiveFactory::binormals.push_back( tangent);
+//		PrimitiveFactory::binormals.push_back( tangent*-1.0f );
 //		PrimitiveFactory::binormals.push_back( tangent );
 
-		PrimitiveFactory::tangents.push_back( binormal*-1.0f );
-		PrimitiveFactory::tangents.push_back( binormal*-1.0f );
+		PrimitiveFactory::tangents.push_back( binormal);
+//		PrimitiveFactory::tangents.push_back( binormal*-1.0f );
 //		PrimitiveFactory::tangents.push_back( binormal );
 	}
 
