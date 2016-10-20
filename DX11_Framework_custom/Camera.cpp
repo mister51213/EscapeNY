@@ -1,4 +1,8 @@
 #include "Camera.h"
+#include "Utilities.h"
+#include "MathUtils.h"
+
+using namespace DirectX;
 
 XMMATRIX Camera::GetViewMatrix() const
 {

@@ -1,9 +1,9 @@
 #pragma once
-#include <vector>
+
+#include "Includes.h"
 #include "Actor.h"
 #include "ISubGame.h"
 
-using namespace std;
 
 class Algorithm
 {
@@ -18,7 +18,7 @@ public:
 	Algorithm( ISubGame*const pGame )
     { m_pGame = pGame; }
 
-    virtual vector<Actor> MakePattern(int numActors) = 0;
+    virtual std::vector<Actor> MakePattern(int numActors) = 0;
     virtual void SetData() = 0;
 
 protected:

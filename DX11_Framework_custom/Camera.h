@@ -15,10 +15,7 @@
 // INCLUDES //
 //////////////
 #include "Includes.h"
-#include "Utilities.h"
 #include "Input.h"
-
-using namespace DirectX;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: Camera
@@ -30,19 +27,19 @@ public:
 	Camera() = default;
 	~Camera() = default;
 
-	XMMATRIX GetViewMatrix()const;
-	XMMATRIX GetProjectionMatrix()const;
-	XMMATRIX GetOrthoMatrix()const;
-	XMFLOAT3 GetPosition()const;
-	XMFLOAT3 GetRotation()const;
-	void SetPosition( const XMFLOAT3 &Position );
-	void SetRotation( const XMFLOAT3 &Rotation );
+	DirectX::XMMATRIX GetViewMatrix()const;
+	DirectX::XMMATRIX GetProjectionMatrix()const;
+	DirectX::XMMATRIX GetOrthoMatrix()const;
+	DirectX::XMFLOAT3 GetPosition()const;
+	DirectX::XMFLOAT3 GetRotation()const;
+	void SetPosition( const DirectX::XMFLOAT3 &Position );
+	void SetRotation( const DirectX::XMFLOAT3 &Rotation );
 
 	bool Initialize(
-		const XMFLOAT3 &Position,
-		const XMFLOAT3 &Rotation,
-		const XMUINT2 &ScreenSize,
-		const XMFLOAT2 &ScreenClipDepth );
+		const DirectX::XMFLOAT3 &Position,
+		const DirectX::XMFLOAT3 &Rotation,
+		const DirectX::XMUINT2 &ScreenSize,
+		const DirectX::XMFLOAT2 &ScreenClipDepth );
 
 	void GetInput( const Input& pInput );
 
@@ -66,12 +63,12 @@ public:
 	void Render();
 
 private:
-	XMFLOAT3 m_Position = { 0.0f, 500.0f, 0.0f };
+	DirectX::XMFLOAT3 m_Position = { 0.0f, 500.0f, 0.0f };
 	// How many degrees is it rotated on the x, y, z axes
 	// JUST a collection of three different angles
-	XMFLOAT3 m_Orientation = { 0.0f, 0.0f, 0.0f };
-	XMFLOAT3 m_RightDir = { 1.0f, 0.0f, 0.0f };
-	XMFLOAT3 m_UpDir = { 0.0f, 1.0f, 0.0f };
-	XMFLOAT3 m_LookDir = { 0.0f, 0.0f, 1.0f };
-	XMMATRIX m_ViewMatrix, m_ProjectionMatrix, m_OrthoMatrix;;
+	DirectX::XMFLOAT3 m_Orientation = { 0.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 m_RightDir = { 1.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 m_UpDir = { 0.0f, 1.0f, 0.0f };
+	DirectX::XMFLOAT3 m_LookDir = { 0.0f, 0.0f, 1.0f };
+	DirectX::XMMATRIX m_ViewMatrix, m_ProjectionMatrix, m_OrthoMatrix;;
 };

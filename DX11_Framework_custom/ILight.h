@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Includes.h"
-#include "Utilities.h"
+#include "DXUtils.h"
 
 class ILight
 {

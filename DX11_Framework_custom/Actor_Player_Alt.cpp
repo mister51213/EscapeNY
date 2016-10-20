@@ -1,6 +1,5 @@
 #include "Actor_Player_Alt.h"
-#include <math.h>
-
+#include "MathUtils.h"
 
 Actor_Player_Alt::Actor_Player_Alt()
 	:

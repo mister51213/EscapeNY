@@ -2,9 +2,9 @@
 #include "ISubGame.h";
 #include "Algorithm_Grid3D.h"
 #include "Algorithm_Spiral3D.h"
-//#include "ILightDirection.h"
 #include "Actor_Light.h"
 #include "Light_Spot.h"
+#include "Overlay.h"
 
 class Game_FPS:public ISubGame
 {

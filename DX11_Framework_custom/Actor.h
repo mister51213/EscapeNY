@@ -37,17 +37,18 @@ public:
     const XMFLOAT3 &GetPosition()const { return m_worldSpecs.position; }
     const XMFLOAT3 &GetRotation()const { return m_worldSpecs.orientation; }
 
-    //////////////////////////////////////
+
+	// This doesn't need to be implemented by most objects in the scene, 
+	// maybe multiple inhertance would serve our purposes, have the
+	// non controllable characters inherit from Actor and have a 
+	// Actor_Controllable child of Actor, but parent to Actor_Player and other
+	// controllable actors.
+	//////////////////////////////////////
     // GAME LOGIC AND PHYSICS FUNCTIONS //
     //////////////////////////////////////
     // TODO: CHANGE THIS TO TAKE REAL TIME!!!!!!!!!!
     void UpdateState(eState state, float deltaT = 0.0f);
 
-    // This doesn't need to be implemented by most objects in the scene, 
-    // maybe multiple inhertance would serve our purposes, have the
-    // non controllable characters inherit from Actor and have a 
-    // Actor_Controllable child of Actor, but parent to Actor_Player and other
-    // controllable actors.
     virtual void GetInput(const Input& pInput, int randI = 0.f, float randF = 0.f) {}
 
     void MovePID(float deltaT = 0.0f);

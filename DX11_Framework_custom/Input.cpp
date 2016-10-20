@@ -6,10 +6,6 @@
 // calling functions if a certain key is pressed.
 //////////////////////////////////////////////////////////
 
-Input::Input()
-{
-}
-
 Input::~Input()
 {
 	// Raw input test

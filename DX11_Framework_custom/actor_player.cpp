@@ -1,4 +1,7 @@
 #include "Actor_Player.h"
+#include "MathUtils.h"
+
+using namespace DirectX;
 
 Actor_Player::Actor_Player( const ModelSpecs_W & worldSpecs, eTexture tex, const ModelSpecs_L & localSpecs, eModType modType )
 	:

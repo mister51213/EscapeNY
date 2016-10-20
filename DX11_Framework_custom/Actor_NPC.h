@@ -1,6 +1,6 @@
 #pragma once
+
 #include "Actor.h"
-#include <time.h>
 
 class Actor_NPC : public Actor
 {
@@ -19,6 +19,6 @@ public:
 	void GetInput( const Input& pInput, int randI, float randF ) override;
 
 private:
-	void Move( const XMFLOAT3 &offset );
-	void Rotate( const XMFLOAT3 &rotation );
+	void Move( const DirectX::XMFLOAT3 &offset );
+	void Rotate( const DirectX::XMFLOAT3 &rotation );
 };

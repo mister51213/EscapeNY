@@ -1,7 +1,7 @@
 #include "Game_Maze.h"
 #include "Game.h"
 #include "Algorithm_Random.h"
-
+#include "MathUtils.h"
 
 void Game_Maze::Initialize(
 	Graphics *pGraphics,

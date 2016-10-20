@@ -1,6 +1,6 @@
 #include "Algorithm_Maze.h"
-#include <random>
 #include "Game_Maze.h"
+#include "MathUtils.h"
 
 using namespace DirectX;
 
@@ -160,7 +160,7 @@ std::vector<Actor> Algorithm_Maze::CreateActorList( const UINT Width, const UINT
 {
 	// Create offset vector so cells aren't created from 0,0,0; but instead
 	// created from (-width, 2, -height) / 2 to ( width, 2, height) / 2
-	XMFLOAT3 offset = XMFLOAT3( Width, 2.f, Height ) * .5f;
+	XMFLOAT3 offset = XMFLOAT3( static_cast<float>( Width ), 2.f, static_cast<float>( Height ) ) * .5f;
 
 	// Create actor list where walls are
 	vector<Actor> actorList;

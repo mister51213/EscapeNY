@@ -12,10 +12,7 @@
 //////////////
 #include "Graphics.h"
 #include "PrimitiveFactory.h"
-#include <fstream>
-
-using namespace std;
-using namespace DirectX;
+#include "DXUtils.h"
 
 ////////////////////////
 // Class name: Model

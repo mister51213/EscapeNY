@@ -13,7 +13,7 @@
 class Input
 {
 public:
-	Input();
+	Input() = default;
 	~Input();
 
 	void Initialize( HWND WinHandle );

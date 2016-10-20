@@ -1,4 +1,5 @@
 #include "Algorithm_Spiral3D.h"
+#include "MathUtils.h"
 
 Algorithm_Spiral3D::Algorithm_Spiral3D( ISubGame * pGame )
 	:

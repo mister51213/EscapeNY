@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Includes.h"
-#include "Utilities.h"
 #include "ShaderTEMPLATE.h"
+#include "DXUtils.h"
 
 class Shader_NMap: public ShaderT<VertexBufferTypeAllInOneNMap, MatrixBufferType, SceneBufferType>
 {

@@ -6,10 +6,10 @@ class Actor_Light :
     public Actor
 {
 public:
-    Actor_Light();
-    ~Actor_Light();
+    Actor_Light()  = default;
+    ~Actor_Light() = default;
 
-    void Initialize(const XMFLOAT3 &Position, const XMFLOAT3 &LookAt);
+    void Initialize(const DirectX::XMFLOAT3 &Position, const DirectX::XMFLOAT3 &LookAt);
 
     const ILight* GetLight() const
     {

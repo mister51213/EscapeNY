@@ -6,7 +6,10 @@ texture functionality for more detailed graphics.
 ***************************************************************************************/
 #include "PrimitiveFactory.h"
 #include "Utilities.h"
+#include "MathUtils.h"
+#include "DXUtils.h"
 
+using namespace std;
 using namespace DirectX;
 
 void PrimitiveFactory::CreateTriangle( const ModelSpecs_L &Specs )
@@ -296,54 +299,8 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 	Common( Specs );
 }
 
-void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float radiusGlobe, int vertices )
+void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float radiusGlobe )
 {
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// sin values for theta = 90, 75, 60, 45, 30, 15, 0
-	constexpr float sinValues[] =
-	{
-		1.0f,
-		0.9659258f,
-		0.8660254f,
-		0.707106f,
-		0.5f,
-		0.258819f,
-		0.0f
-	};
-	constexpr float sqSinValues[] =
-	{
-		sinValues[ 0 ] * sinValues[ 0 ],
-		sinValues[ 1 ] * sinValues[ 1 ],
-		sinValues[ 2 ] * sinValues[ 2 ],
-		sinValues[ 3 ] * sinValues[ 3 ],
-		sinValues[ 4 ] * sinValues[ 4 ],
-		sinValues[ 5 ] * sinValues[ 5 ],
-		sinValues[ 6 ] * sinValues[ 6 ],
-	};
-
-	// cos values for theta = 90, 75, 60, 45, 30, 15, 0
-	constexpr float cosValues[ 7 ] =
-	{
-		0.0f,
-		0.258819f,
-		0.5f,
-		0.707106f,
-		0.8660254f,
-		0.9659258f,
-		1.0f
-	};
-
-	constexpr float sqCosValues[] =
-	{
-		cosValues[ 0 ] * cosValues[ 0 ],
-		cosValues[ 1 ] * cosValues[ 1 ],
-		cosValues[ 2 ] * cosValues[ 2 ],
-		cosValues[ 3 ] * cosValues[ 3 ],
-		cosValues[ 4 ] * cosValues[ 4 ],
-		cosValues[ 5 ] * cosValues[ 5 ],
-		cosValues[ 6 ] * cosValues[ 6 ],
-	};
-
 	// Scale main globe radius by average of local specs
 	const float gRadius = radiusGlobe*Magnitude( Specs.size );
 	PrimitiveFactory::ClearAllBuffers();
@@ -417,8 +374,8 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	for ( int i = 1; i < vertsInList; ++i )
 	{
 		PrimitiveFactory::vertices.push_back( pVertices[ 0 ] );
-		PrimitiveFactory::vertices.push_back( pVertices[ i ] );
 		PrimitiveFactory::vertices.push_back( pVertices[ i + 1 ] );
+		PrimitiveFactory::vertices.push_back( pVertices[ i ] );
 	}
 	PrimitiveFactory::vertices.push_back( pVertices[ 0 ] );
 	PrimitiveFactory::vertices.push_back( pVertices[ vertsInList ] );
@@ -437,13 +394,13 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 			const auto idx2 =  curVertSet + k; // BL
 			const auto idx3 =  curVertSet + k + 1; // BR
 
-			PrimitiveFactory::vertices.push_back( pVertices[ idx0 ] );
-			PrimitiveFactory::vertices.push_back( pVertices[ idx2 ] );
-			PrimitiveFactory::vertices.push_back( pVertices[ idx1 ] );
+			vertices.push_back( pVertices[ idx0 ] );
+			vertices.push_back( pVertices[ idx2 ] );
+			vertices.push_back( pVertices[ idx1 ] );
 
-			PrimitiveFactory::vertices.push_back( pVertices[ idx1 ] );
-			PrimitiveFactory::vertices.push_back( pVertices[ idx2 ] );
-			PrimitiveFactory::vertices.push_back( pVertices[ idx3 ] );
+			vertices.push_back( pVertices[ idx1 ] );
+			vertices.push_back( pVertices[ idx2 ] );
+			vertices.push_back( pVertices[ idx3 ] );
 		}
 	}
 	// Bottom set of triangles

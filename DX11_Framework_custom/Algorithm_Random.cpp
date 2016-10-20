@@ -1,15 +1,10 @@
 #include "Algorithm_Random.h"
 #include "Game_Maze.h"
-
+#include "MathUtils.h"
 
 Algorithm_Random::Algorithm_Random( ISubGame*const pGame )
 	:
 	Algorithm( pGame )
-{
-}
-
-
-Algorithm_Random::~Algorithm_Random()
 {
 }
 
@@ -34,10 +29,10 @@ vector<Actor> Algorithm_Random::MakePattern( int numActors )
 		width = board.GetWidth();
 		height = board.GetHeight();
 
-		const UINT tileCount = width * height;
+		const auto tileCount = width * height;
 
-		auto start = board.GetStartCellCoord();
-		auto end = board.GetEndCellCoord();
+		const auto start = board.GetStartCellCoord();
+		const auto end = board.GetEndCellCoord();
 		const int startIndex = start.x + ( start.y * width );
 		const int endIndex = end.x + ( end.y * width );
 
@@ -48,14 +43,14 @@ vector<Actor> Algorithm_Random::MakePattern( int numActors )
 		tileTypes[ startIndex ] = WALL;
 		tileTypes[ endIndex ] = WALL;
 
-		XMFLOAT3 xmCellSize = board.GetCellSize();
+		const XMFLOAT3 xmCellSize = board.GetCellSize();
 		lSpecs.size = xmCellSize * 0.8f;
 		cellSize = xmCellSize.x;
 	}
 	
 	for( int i = 0; i < carCount; ++i )
 	{
-		auto dir = rand() % 2;
+		const auto dir = rand() % 2;
 
 		auto hIdxList = std::vector<uint32_t>();
 		auto vIdxList = std::vector<uint32_t>();
@@ -64,11 +59,11 @@ vector<Actor> Algorithm_Random::MakePattern( int numActors )
 		{
 			for( int x = 0; x < width; ++x )
 			{
-				uint32_t jx = x + 1;
-				uint32_t ky = y + 1;
-				uint32_t i = x + ( y * width );
-				uint32_t j = jx + ( y * width );
-				uint32_t k = x + ( ky * width );
+				const uint32_t jx = x + 1;
+				const uint32_t ky = y + 1;
+				const uint32_t i = x + ( y * width );
+				const uint32_t j = jx + ( y * width );
+				const uint32_t k = x + ( ky * width );
 
 				if( dir == horiz )
 				{
@@ -93,51 +88,57 @@ vector<Actor> Algorithm_Random::MakePattern( int numActors )
 			}
 		}
 
-		int idx0 = 0, idx1 = 0;
-		/*std::vector<uint32_t> *list[2];
-		list[ 0 ] = &hIdxList;
-		list[ 1 ] = &vIdxList;
-		int randIndex = list[ dir ]->size();
-		const int offset = dir == 0 ? 1 : width;
+		const auto idx0 = [ & ]()
+		{
+			if ( dir == horiz )
+			{
+				if ( !hIdxList.empty() )
+				{
+					return hIdxList[ rand() % hIdxList.size() ];
+				}
+			}
+			else
+			{
+				if ( !vIdxList.empty() )
+				{
+					return vIdxList[ rand() % vIdxList.size() ];
+				}
+			}
 
-		if( !list[ dir ]->empty() )
+			return 0u;
+		}( );
+		const auto idx1 = [ & ]()
 		{
-			idx0 = list[ dir ]->at( randIndex );
-			idx1 = idx0 + offset;
-		}*/
-		if( dir == horiz )
-		{
-			if( !hIdxList.empty() )
+			if ( dir == horiz )
 			{
-				idx0 = hIdxList[ rand() % hIdxList.size() ];
-				idx1 = idx0 + 1;
+				if ( !hIdxList.empty() )
+				{
+					return idx0 + 1;
+				}
 			}
-		}
-		else
-		{
-			if( !vIdxList.empty() )
+			else
 			{
-				idx0 = vIdxList[ rand() % vIdxList.size() ];
-				idx1 = idx0 + width;
+				if ( !vIdxList.empty() )
+				{
+					return idx0 + width;
+				}
 			}
-		}
+
+			return 0u;
+		}( );
 
 		tileTypes[ idx0 ] = WALL;
 		tileTypes[ idx1 ] = WALL;
 
-		ModelSpecs_W wSpecs{};
-		if( dir == horiz )
-		{
-			wSpecs.scale = { 2.f, 1.f, 1.f };
-		}
-		else
-		{
-			wSpecs.scale = { 1.f, 1.f, 2.f };
-		}
+		const auto x = static_cast<float>( idx0 % width ) * cellSize;
+		const auto z = static_cast<float>( idx0 / width ) * cellSize;
+		const auto pos = XMFLOAT3{ x, 1.f, z };
 
-		float x = ( idx0 % width ) * cellSize;
-		float z = ( idx0 / width ) * cellSize;
-		wSpecs.position = { x, 1.f, z };
+		const auto rot = XMFLOAT3{ 0.f, 0.f, 0.f };
+		const auto scale = dir == horiz ? 
+			XMFLOAT3( 2.F, 1.F, 1.F ) : XMFLOAT3( 1.f, 1.f, 2.f );
+
+		const auto wSpecs = ModelSpecs_W{ pos, rot, scale };
 
 		actors.push_back( Actor( wSpecs, Water1, lSpecs ) );
 	}

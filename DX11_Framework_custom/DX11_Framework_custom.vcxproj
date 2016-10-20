@@ -151,6 +151,7 @@
     <ClCompile Include="Algorithm_Random.cpp" />
     <ClCompile Include="Algorithm_Spiral3D.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DXUtils.cpp" />
     <ClCompile Include="GameView.cpp" />
     <ClCompile Include="Game_FPS.cpp" />
     <ClCompile Include="Game_Maze.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="Light_Diffuse.cpp" />
     <ClCompile Include="Light_Point.cpp" />
     <ClCompile Include="Light_Spot.cpp" />
+    <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="MessageBox_Goal.cpp" />
     <ClCompile Include="MessageBox_Title.cpp" />
     <ClCompile Include="Model_TexturedNM.cpp" />
@@ -239,6 +241,7 @@
     <ClInclude Include="Algorithm_Spiral3D.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Algorithm.h" />
+    <ClInclude Include="DXUtils.h" />
     <ClInclude Include="GameView.h" />
     <ClInclude Include="Game_FPS.h" />
     <ClInclude Include="IGameState.h" />
@@ -255,6 +258,7 @@
     <ClInclude Include="Light_Diffuse.h" />
     <ClInclude Include="Light_Point.h" />
     <ClInclude Include="Light_Spot.h" />
+    <ClInclude Include="MathUtils.h" />
     <ClInclude Include="MessageBox_Goal.h" />
     <ClInclude Include="MessageBox_Title.h" />
     <ClInclude Include="Model_TexturedNM.h" />

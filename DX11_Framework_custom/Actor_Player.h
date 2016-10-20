@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Actor.h"
 
 class Actor_Player : public Actor
@@ -14,18 +15,11 @@ public:
 		const ModelSpecs_L & localSpecs, 
 		eModType modType = CUBE_TEXTURED );
 
-
-public:
-	// Left this stuff here in case you are still testing it, just 
-	// try to remember to move to CPP file when you are done testing
     void GetInput(const Input& pInput, int randI = 0.f, float randF = 0.f) override;
 
 private:
-	void Move( const XMFLOAT3 &offset );
+	void Move( const DirectX::XMFLOAT3 &offset );
 
 
-	void Rotate( const XMFLOAT3 &rotation );
-
-private:
-    //std::shared_ptr<Input> m_pInput;
+	void Rotate( const DirectX::XMFLOAT3 &rotation );
 };

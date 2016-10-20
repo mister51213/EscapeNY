@@ -1,6 +1,7 @@
 #include "TestBoard.h"
 #include "PrimitiveFactory.h"
 #include "Model_Textured.h"
+#include "MathUtils.h"
 
 using namespace DirectX;
 

@@ -1,26 +1,31 @@
 #pragma once
 
+#define WIN32_LEAN_AND_MEAN
+
 //////////////
 // INCLUDES //
 //////////////
-#define WIN32_LEAN_AND_MEAN
 
 // C++ standard headers
-#include <memory>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <stdio.h>
 #include <algorithm>
+#include <fstream>
+#include <math.h>
+#include <memory>
+#include <random>
+#include <stack>
+#include <stdio.h>
+#include <string>
+#include <time.h>
+#include <vector>
 
 // Win API headers
 #include <windows.h>
-#include <wincodec.h>
 #include <d2d1_1.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <dwrite.h>
+#include <wincodec.h>
 
 // Microsoft helper headers
-#include <directxmath.h>
+#include <DirectXMath.h>
 #include <wrl.h>
