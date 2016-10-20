@@ -25,7 +25,7 @@ void Actor::UpdateState(eState state, float deltaT)
             }
         case Move_PID:
             {
-                MovePID(m_target, deltaT); // TODO: change this to non-default parameter
+                MovePID(physics.target, deltaT); // TODO: change this to non-default parameter
             }
         default:
             return;
@@ -38,7 +38,7 @@ void Actor::Move( const float deltaT)
     // 1. Properly implement time (get actual time elapsed from system)
     // 2. Need to initialize velocity elsewhere?
 
-    XMFLOAT3 deltaPos = m_velocity * deltaT;
+    XMFLOAT3 deltaPos = physics.velocity * deltaT;
     m_worldSpecs.position += deltaPos;
 }
 
@@ -51,8 +51,8 @@ void Actor::MovePID(XMFLOAT3 targetPos, float deltaT)
         XMFLOAT3 currPos = m_worldSpecs.position;
 
         // How far do we still have to travel?
-        m_posError = targetPos - currPos;
-        float distToTarget = abs(Magnitude(m_posError));
+        physics.posError = targetPos - currPos;
+        float distToTarget = abs(Magnitude(physics.posError));
 
         // displacement by next frame if we continue traveling at current speed
         //XMFLOAT3 potentialDisp = m_velocity*deltaT;
@@ -67,13 +67,13 @@ void Actor::MovePID(XMFLOAT3 targetPos, float deltaT)
         //if (distToTarget > 50.0f)
         //{
             float recipTime = 1.0f / deltaT;
-            XMFLOAT3 requiredVeloc = m_posError * recipTime; // need to multiply this here?
-            XMFLOAT3 requiredAccel = (requiredVeloc - m_velocity) * recipTime;
+            XMFLOAT3 requiredVeloc = physics.posError * recipTime; // need to multiply this here?
+            XMFLOAT3 requiredAccel = (requiredVeloc - physics.velocity) * recipTime;
             
             float dampener = 0.05f;
             // Apply required accel and velocity and calculate displacement
-            deltaPos = ((m_velocity*deltaT) + (requiredAccel*(deltaT*deltaT)) * 0.5f) * dampener;
-            m_velocity += (requiredAccel*deltaT);
+            deltaPos = ((physics.velocity*deltaT) + (requiredAccel*(deltaT*deltaT)) * 0.5f) * dampener;
+            physics.velocity += (requiredAccel*deltaT);
         //}
         //else // kick in the integrator for fine tuning
         //{
@@ -105,9 +105,9 @@ void Actor::DoGravity( const float deltaT)
 // time, use the displacement formula to calculate the new instantaneous position. 
 // *****Only acts on the Y component of the world position value of the object****
         // calculate incremental displacement
-    if (m_velocity.y < terminalVelocity)
+    if (physics.velocity.y < physics.terminalV)
     {
-        float deltaPosY = (m_velocity.y*deltaT) + (m_gravity*(deltaT*deltaT)) * 0.5f;
+        float deltaPosY = (physics.velocity.y*deltaT) + (Gravity*(deltaT*deltaT)) * 0.5f;
         m_worldSpecs.position.y += deltaPosY;
     }
     else // Stop accelerating at terminal velocity
@@ -116,5 +116,5 @@ void Actor::DoGravity( const float deltaT)
         m_worldSpecs.position.y += deltaPosY;
     }
     // update velocity
-    m_velocity.y += m_gravity * deltaT;
+    physics.velocity.y += Gravity * deltaT;
 }

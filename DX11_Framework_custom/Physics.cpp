@@ -21,3 +21,8 @@ XMFLOAT3 Physics::MoveToTarget()
 	return XMFLOAT3();
 }
 
+XMFLOAT3 Physics::Gravity( const float deltaT )
+{
+	return XMFLOAT3();
+}
+

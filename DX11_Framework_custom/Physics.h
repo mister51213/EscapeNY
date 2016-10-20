@@ -15,5 +15,6 @@ public:
 
 	XMFLOAT3 MoveToTarget();
 
+	XMFLOAT3 Gravity( const float deltaT );
 };
 

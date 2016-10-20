@@ -100,6 +100,33 @@ XMVECTOR ConvertToRadians( const XMVECTOR& angleInDegrees );
 
 XMFLOAT3 ConvertToRadians( const XMFLOAT3& angleInDegrees );
 
+//////////////////////////
+/// GAME LOGIC RELATED ///
+//////////////////////////
+
+enum eState
+{
+Stationary, Falling, Moving, Move_PID
+};
+
+////////////////////////
+/// PHYSICS RELATED  ///
+////////////////////////
+// "downward" acceleration on the Y axis
+const float Gravity = -9.8; // units are meters/second^2
+
+struct PhysAttributes
+{
+    // would need to calculate this for more realistic physics.
+	float terminalV = 50.0f;
+	XMFLOAT3 velocity = {0.f, 0.0f, 0.f};
+    XMFLOAT3 posError = { 0.0f,0.0f,0.0f };
+    XMFLOAT3 target = { 0.0f,0.0f,0.0f };
+};
+
+//////////////////////
+// GRAPHICS RELATED //
+//////////////////////
 /////////////////////////////
 // CLAMP FUNCTION
 // (for clamping angles)
@@ -133,19 +160,6 @@ struct ModelSpecs_L
    	XMFLOAT3 size;
 };
 
-////////////////////////
-// GAME LOGIC RELATED //
-////////////////////////
-
-enum eState
-{
-Stationary, Falling, Moving, Move_PID
-};
-
-
-//////////////////////
-// GRAPHICS RELATED //
-//////////////////////
 enum eModType 
 { 
     CUBE, 

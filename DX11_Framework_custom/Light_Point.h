@@ -18,7 +18,6 @@ public:
 
 	const XMFLOAT3& GetPosition() const override;
 
-
 	void SetPosition( const XMFLOAT3& position ) override;
 
 

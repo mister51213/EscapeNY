@@ -62,17 +62,20 @@ protected:
     ModelSpecs_W m_worldSpecs;
     ModelSpecs_L m_localSpecs;
 
-    ////////////////////////////////
+    eState m_state;
+
+	////////////////////////////////
     // PHYSICS / MOVEMENT RELATED //
     ////////////////////////////////
-    eState m_state;
-    XMFLOAT3 m_velocity = {0.f, 0.0f, 0.f};
-    // "downward" acceleration on the Y axis
-    float m_gravity = -9.8; // units are meters/second^2
-    // Given no mass, drag, area, or fluid density info, use an arbitrary value for 
-    // terminal velocity; would need to calculate this for more realistic physics.
-    float terminalVelocity = 50.0f;
+	PhysAttributes physics;
 
-    XMFLOAT3 m_posError;
-    XMFLOAT3 m_target = { 0.0f,0.0f,0.0f };
+    //XMFLOAT3 m_velocity = {0.f, 0.0f, 0.f};
+    //// "downward" acceleration on the Y axis
+    //float m_gravity = -9.8; // units are meters/second^2
+    //// Given no mass, drag, area, or fluid density info, use an arbitrary value for 
+    //// terminal velocity; would need to calculate this for more realistic physics.
+    //float terminalVelocity = 50.0f;
+
+    //XMFLOAT3 m_posError;
+    //XMFLOAT3 m_target = { 0.0f,0.0f,0.0f };
 };
