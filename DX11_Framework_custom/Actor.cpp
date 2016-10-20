@@ -47,7 +47,7 @@ void Actor::Move( const float deltaT)
 
 void Actor::MovePID(float deltaT)
 {
-	m_worldSpecs.position = m_physics.MoveTowardTarget( m_worldSpecs, deltaT);
+	m_worldSpecs.position = m_physics.MoveToTarget( m_worldSpecs, deltaT);
 }
 
 void Actor::DoGravity( const float deltaT)

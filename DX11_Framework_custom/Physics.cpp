@@ -23,6 +23,16 @@ bool Physics::CorrectCollision()
 5. Properly implement time (get actual time elapsed from system)*/
 // TODO
 
+// ALT VERSION
+XMFLOAT3 Physics::MoveToTarget( const ModelSpecs_W& worldSpecs, const float deltaT )
+{
+	const float gainCoefficient = 0.05f;
+	m_attributes.posError = m_attributes.target - worldSpecs.position;
+	
+	XMFLOAT3 increment = m_attributes.posError * gainCoefficient;
+	return worldSpecs.position + increment;
+}
+
 XMFLOAT3 Physics::MoveTowardTarget( const ModelSpecs_W& worldSpecs, const float deltaT )
 {
 	// will calculate and add this displacement to actual position

@@ -14,6 +14,8 @@ public:
 
 	bool CorrectCollision();
 
+	DirectX::XMFLOAT3 MoveToTarget( const ModelSpecs_W & worldSpecs, const float deltaT );
+
 	DirectX::XMFLOAT3 MoveTowardTarget( const ModelSpecs_W& worldSpecs, const float deltaT );
 
 	DirectX::XMFLOAT3 ApplyGravity( const ModelSpecs_W& worldSpecs, const float deltaT );
