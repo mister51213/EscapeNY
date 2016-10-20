@@ -3,6 +3,13 @@
 
 using namespace DirectX;
 
+void Physics::MakeBoundingBox(BoundingBox bounds, eModType type)
+{
+	if( type == SPHERE)
+	{
+	}
+}
+
 bool Physics::CheckCollision(BoundingBox bounds)
 {
 	return false;

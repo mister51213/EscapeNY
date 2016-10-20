@@ -2,8 +2,6 @@
 
 #include "Includes.h"
 
-using namespace std;
-
 // Permit me to be a little lazy :)
 // This is just an alias to shorten the amount of typing
 template<class T>
@@ -66,7 +64,7 @@ enum eForceType
 
 struct BoundingBox
 {
-	vector<XMFLOAT3> vertices;
+	std::vector<DirectX::XMFLOAT3> vertices;
 };
 
 //////////////////////

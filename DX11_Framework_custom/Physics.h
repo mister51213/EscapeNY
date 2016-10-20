@@ -10,9 +10,15 @@ public:
 	Physics() = default;
 	~Physics() = default;
 
+	/////////////// COLLISION RELATED ///////////////////
+
+	void MakeBoundingBox(BoundingBox bounds, eModType type = SPHERE);
+
 	bool CheckCollision(BoundingBox bounds );
 
 	bool CorrectCollision();
+
+	/////////////// MOTION RELATED ///////////////////
 
 	DirectX::XMFLOAT3 MoveToTarget( const ModelSpecs_W & worldSpecs, const float deltaT );
 
@@ -24,5 +30,8 @@ public:
 
 public:
 	PhysAttributes m_attributes;
+
+private:
+	BoundingBox m_bounds;
 };
 
