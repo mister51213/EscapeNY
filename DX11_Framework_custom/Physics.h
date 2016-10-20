@@ -10,7 +10,7 @@ public:
 	Physics() = default;
 	~Physics() = default;
 
-	bool CheckCollision();
+	bool CheckCollision(BoundingBox bounds );
 
 	bool CorrectCollision();
 

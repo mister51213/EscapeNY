@@ -3,7 +3,7 @@
 
 using namespace DirectX;
 
-bool Physics::CheckCollision()
+bool Physics::CheckCollision(BoundingBox bounds)
 {
 	return false;
 }

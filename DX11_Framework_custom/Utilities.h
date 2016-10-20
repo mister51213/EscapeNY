@@ -2,6 +2,8 @@
 
 #include "Includes.h"
 
+using namespace std;
+
 // Permit me to be a little lazy :)
 // This is just an alias to shorten the amount of typing
 template<class T>
@@ -34,7 +36,6 @@ void Sort( std::vector<DirectX::XMFLOAT3> &V );
 //////////////////////////
 /// GAME LOGIC RELATED ///
 //////////////////////////
-
 enum eState
 {
 	Stationary, Falling, Moving, Move_PID
@@ -61,6 +62,11 @@ enum eForceType
 	Pull,
 	Spin,
 	Swerve
+};
+
+struct BoundingBox
+{
+	vector<XMFLOAT3> vertices;
 };
 
 //////////////////////
