@@ -109,7 +109,7 @@ void Game_FPS::reset()
     m_player = Actor_Player(
     { { 0.f, 10.f, 0.f },
     { 0.f, 0.f, 0.f },
-    { 1.f, 1.f, 1.f } },
+    { .5f, .5f, .5f } },
         eTexture::Water3, ModelSpecs_L(), SPHERE);
     //2 - BEAR
     ModelSpecs_W wSpecs1 = 

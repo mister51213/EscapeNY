@@ -12,8 +12,8 @@ public:
 	Light_Spot()
 		:
 		Light_Base( eLightType::SPOT_LIGHT )
-	{
-	}
+	{}
+
 	~Light_Spot() = default;
 
 	const DirectX::XMFLOAT3 & Light_Spot::GetDirection() const override;

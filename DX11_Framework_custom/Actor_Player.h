@@ -21,11 +21,10 @@ public:
     void GetInput(const Input& pInput, int randI = 0.f, float randF = 0.f) override;
 
 private:
-	void Move( const XMFLOAT3 &offset )
-	{ m_worldSpecs.position += offset; }
+	void Move( const XMFLOAT3 &offset );
 
-	void Rotate( const XMFLOAT3 &rotation )
-	{ m_worldSpecs.orientation += rotation; }
+
+	void Rotate( const XMFLOAT3 &rotation );
 
 private:
     //std::shared_ptr<Input> m_pInput;

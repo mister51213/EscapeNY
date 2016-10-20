@@ -156,12 +156,15 @@
     <ClCompile Include="Game_Maze.cpp" />
     <ClCompile Include="Algorithm_Maze.cpp" />
     <ClCompile Include="Light_Base.cpp" />
+    <ClCompile Include="Light_Diffuse.cpp" />
+    <ClCompile Include="Light_Point.cpp" />
     <ClCompile Include="Light_Spot.cpp" />
     <ClCompile Include="MessageBox_Goal.cpp" />
     <ClCompile Include="MessageBox_Title.cpp" />
     <ClCompile Include="Model_TexturedNM.cpp" />
     <ClCompile Include="Overlay_Base.cpp" />
     <ClCompile Include="Overlay_Title.cpp" />
+    <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Shader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -257,6 +260,7 @@
     <ClInclude Include="Model_TexturedNM.h" />
     <ClInclude Include="Overlay_Base.h" />
     <ClInclude Include="Overlay_Title.h" />
+    <ClInclude Include="Physics.h" />
     <ClInclude Include="Shader.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

@@ -298,8 +298,9 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 
 void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float radiusGlobe, int vertices )
 {
-	// cos values for theta = 0,15,30,45,60,75,90
-	const float cosValues[ 7 ] =
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// sin values for theta = 90, 75, 60, 45, 30, 15, 0
+	constexpr float sinValues[] =
 	{
 		1.0f,
 		0.9659258f,
@@ -309,9 +310,19 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		0.258819f,
 		0.0f
 	};
+	constexpr float sqSinValues[] =
+	{
+		sinValues[ 0 ] * sinValues[ 0 ],
+		sinValues[ 1 ] * sinValues[ 1 ],
+		sinValues[ 2 ] * sinValues[ 2 ],
+		sinValues[ 3 ] * sinValues[ 3 ],
+		sinValues[ 4 ] * sinValues[ 4 ],
+		sinValues[ 5 ] * sinValues[ 5 ],
+		sinValues[ 6 ] * sinValues[ 6 ],
+	};
 
-	// sin values for theta = 0,15,30,45,60,75,90
-	const float sinValues[ 7 ] =
+	// cos values for theta = 90, 75, 60, 45, 30, 15, 0
+	constexpr float cosValues[ 7 ] =
 	{
 		0.0f,
 		0.258819f,
@@ -322,280 +333,130 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		1.0f
 	};
 
-	// TODO: optimize by adding array of const pre-multiplied squares of cos and sin values
+	constexpr float sqCosValues[] =
+	{
+		cosValues[ 0 ] * cosValues[ 0 ],
+		cosValues[ 1 ] * cosValues[ 1 ],
+		cosValues[ 2 ] * cosValues[ 2 ],
+		cosValues[ 3 ] * cosValues[ 3 ],
+		cosValues[ 4 ] * cosValues[ 4 ],
+		cosValues[ 5 ] * cosValues[ 5 ],
+		cosValues[ 6 ] * cosValues[ 6 ],
+	};
 
-	// TODO: OFFSET ALL OF THESE POINTS BY LOCAL SPECS VALUES
 	// Scale main globe radius by average of local specs
 	const float gRadius = radiusGlobe*Magnitude( Specs.size );
-
-	/////// INTERMEDIATE INDICES /////////
-	//vector<int> intermediateIndices;
-	vector<vector<int>> intermediateIndices;
-	intermediateIndices.resize( 6 * 2 + 1 );
-	for(auto& latitude: intermediateIndices )
-	{
-		latitude.resize( 24 );
-	}
-	intermediateIndices[ 0 ][ 0 ] = 0;
-
-	///////// ADD VERTEX AT FAR POLE OF SPHERE //////////
-	vector<DirectX::XMFLOAT3> masterSphere;
-	masterSphere.push_back( { 0.0f, 0.0f, gRadius } );
-
-	// OBSOLETE - one dimensional vector for quadrant 1
-	//vector<DirectX::XMFLOAT3> quadrant1( 37 );
-	/////////////////// Make one positive quadrant ///////////////////
-	//// loop through cos values along z axis (from far pole of globe to its center)
-	//for ( int z = 5; z >= 0; z-- ) // NOTE: end at 6, because we don't need the single point at the pole.
-	//{
-	//	// radius of each slice = sin of angle PHI at that slice
-	//	float sliceRadius = sinValues[ z ] * gRadius; // scale down radius by sin of the slice
-	//	float slicePosZ = cosValues[ z ] * gRadius;
-	//	// TODO: Each quadrant should only interate through 1ST 6 NUMBERS,
-	//	// because the starting vertex of next quadrant = ending vert of previous
-	//	for ( int i = 6; i >= 0; i-- )
-	//	{
-	//		int index = z * 6 + i;
-	//		quadrant1[ index ] = 
-	//		{ 
-	//			sliceRadius*cosValues[ i ], 
-	//			sliceRadius*sinValues[ i ], 
-	//			slicePosZ 
-	//		};			
-	//		// FIRST SLICE Q1
-	//		intermediateIndices.push_back(index);
-	//		// FIRST SLICE Q2
-	//		intermediateIndices.push_back(index+37);
-	//		// FIRST SLICE Q3
-	//		intermediateIndices.push_back(index+37*2);
-	//		// FIRST SLICE Q4
-	//		intermediateIndices.push_back(index+37*3);
-	//	}
-	//}
-
-	///////////////// Make one positive quadrant ///////////////////
-	vector<vector<DirectX::XMFLOAT3>> quadrant1;
-	quadrant1.resize( 6 );
-	for(auto& latitude: quadrant1 )
-	{
-		latitude.resize( 6 );
-	}
-
-	// loop through cos values along z axis (from far pole of globe to its center)
-	for ( int z = 0; z < 6; z++ ) // NOTE: We don't need the single point at the pole.
-	{
-		// radius of each slice = sin of angle PHI at that slice
-		float sliceRadius = sinValues[ z + 1] * gRadius; // scale down radius by sin of the slice
-		float slicePosZ = cosValues[ z + 1] * gRadius;
-
-		// TODO: Each quadrant should only interate through 1ST 6 NUMBERS,
-		// because the first vertex of next quadrant = last vert of previous
-		// TODO: When we reflect this first quadrant into the next 7 quadrants,
-		// SWITCH its X and Y values so there won't be a gap in the middle of the sphere.
-
-		for ( int i = 0 ; i < 6; i++ )
-		{
-			quadrant1[z][i] = { sliceRadius*cosValues[ i ], sliceRadius*sinValues[ i ], slicePosZ };			
-
-			// FILL ALL 4 QUADRANTS of the corresponding slice of the "index sphere"
-			intermediateIndices[ z ][ i + 0] = i;
-			intermediateIndices[ z ][ i + 6 ] = i + 6;
-			intermediateIndices[ z ][ i + 12 ] = i + 12;
-			intermediateIndices[ z ][ i + 18 ] = i + 18;
-		}
-	}
-
-	////////////////////////////////////////////////////////////
-	//////////////// REFLECT TO MAKE OTHER 7 QUADRANTS /////////
-	////////////////////////////////////////////////////////////
-	int quadSize = quadrant1.size();
-
-	////////////////// FAR TOP RIGHT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( quadrant1[ i ] );
-	}
-	////////////////// FAR TOP LEFT //////////////////////////////
-
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, quadrant1[ i ].z, } );
-	}
-	////////////////// FAR BOTTOM LEFT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
-	}
-	////////////////// FAR BOTTOM RIGHT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, quadrant1[ i ].z, } );
-	}
-
-	////////////////// NEAR TOP RIGHT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	}
-	////////////////// NEAR TOP LEFT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { -quadrant1[ i ].x, quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	}
-	////////////////// NEAR BOTTOM LEFT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { -quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	}
-	////////////////// NEAR BOTTOM RIGHT //////////////////////////////
-	for ( int i = 0; i < quadSize; i++ )
-	{
-		masterSphere.push_back( { quadrant1[ i ].x, -quadrant1[ i ].y, -quadrant1[ i ].z, } );
-	}
-
-
-	/////////////// END W VERTEX AT OPPOSITE POLE ///////////////////
-	//masterSphere[masterSize-1]={ 0.0f,0.0f,-gRadius };
-	masterSphere.push_back( { 0.0f, 0.0f, -gRadius } );
-
-	//////////////// MAKE INDICES /////////////////////////
-	// Reorder the vertices into index triplets corresponding to triangles
-	// for DirectX pipeline to draw
-
-	vector<DWORD> sphereIndices;
-
-	// TODO: group indices into continuous loops first
-	//////////// DRAW TOP /////////////////
-	for( int i = 0; i < 24; i++ )
-	{
-		// All 7 triangles start with index of pole
-		sphereIndices.push_back( 0 );
-		sphereIndices.push_back( intermediateIndices[i ] );
-		sphereIndices.push_back( intermediateIndices[i + 1] );
-	}
-	// knit together last and first vertices
-	sphereIndices.push_back( 0 );
-	sphereIndices.push_back( intermediateIndices[27] );
-    sphereIndices.push_back( intermediateIndices[0] );
-
-	bool flipFlag = false;
-	//////////// DRAW NEXT BELT /////////////////
-	for( int i = 0; i < 24; i++ )
-	{
-		if( !flipFlag )
-		{	
-			sphereIndices.push_back( intermediateIndices[ i ] );
-			sphereIndices.push_back( intermediateIndices[ i + 24 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
-			flipFlag = true;
-		}
-		else
-		{
-			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 24 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 25 ] );
-			flipFlag = false;
-		}
-	}
-
-	// TODO: make outer for loop, iterating thru number of slices
-	// TODO: multiply by numslices
-		//////////// DRAW NEXT BELT /////////////////
-	int numslices=3;
-	for( int i = 0; i < 24; i++ )
-	{
-		if( !flipFlag )
-		{	
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices-1] );
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices ] );
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices-1] );
-			flipFlag = true;
-		}
-		else
-		{
-			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices ] );
-			sphereIndices.push_back( intermediateIndices[ i + 25*numslices ] );
-			flipFlag = false;
-		}
-	}
-
-		//////////// DRAW NEXT BELT /////////////////
-	int numslices1=4;
-	for( int i = 0; i < 24; i++ )
-	{
-		if( !flipFlag )
-		{	
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1-1] );
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1-1] );
-			flipFlag = true;
-		}
-		else
-		{
-			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 25*numslices1 ] );
-			flipFlag = false;
-		}
-	}
-
-		//////////// DRAW NEXT BELT /////////////////
-	int numslices2=5;
-	for( int i = 0; i < 24; i++ )
-	{
-		if( !flipFlag )
-		{	
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1-1] );
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1-1] );
-			flipFlag = true;
-		}
-		else
-		{
-			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 25*numslices1 ] );
-			flipFlag = false;
-		}
-	}
-
-			//////////// DRAW NEXT BELT /////////////////
-	int numslices3=6;
-	for( int i = 0; i < 24; i++ )
-	{
-		if( !flipFlag )
-		{	
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1-1] );
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1-1] );
-			flipFlag = true;
-		}
-		else
-		{
-			sphereIndices.push_back( intermediateIndices[ i + 1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 24*numslices1 ] );
-			sphereIndices.push_back( intermediateIndices[ i + 25*numslices1 ] );
-			flipFlag = false;
-		}
-	}
-
-
-
-	// TODO: Test to see if sorting helps
-	// Sort algorithm is complete, but haven't implemented any triangle 
-	// creation.  First everything is sorted by Y (Top to Bottom) then by Z
-	// (Front to Back), then by X (Left to Right)
-	//Sort( masterSphere );
-
 	PrimitiveFactory::ClearAllBuffers();
 
-	// LOAD VERTICES INTO PRIMITIVE FACTORY LIST //
-	int masterSize = masterSphere.size();
-	PrimitiveFactory::vertices = masterSphere;
+	vector<XMFLOAT3> pVertices;
+	pVertices.push_back( XMFLOAT3( 0.f, 1.f, 0.f ) * gRadius );
+	for ( int j = 1; j < 7; ++j )
+	{
+		const auto y = sinValues[ j ] ;
+		const auto loopRadius = ( Normalize( XMFLOAT2( cosValues[j], y ) ) ).x;
 
-	//////////// TEST //////////////
-	PrimitiveFactory::indices = sphereIndices;
+		for ( int i = 0; i < 6; ++i )
+		{
+			const auto x = cosValues[i] * loopRadius;
+			const auto z = sinValues[i] * loopRadius;
+			pVertices.push_back( XMFLOAT3( x, y, z ) * gRadius);
+		}
+		for ( int i = 0; i < 6; ++i )
+		{
+			const auto x = sinValues[ i ] * loopRadius;
+			const auto z = -cosValues[ i ] * loopRadius;
+			pVertices.push_back( XMFLOAT3( x, y, z ) * gRadius );
+		}
+		for ( int i = 0; i < 6; ++i )
+		{
+			const auto x = -cosValues[ i ] * loopRadius;
+			const auto z = -sinValues[ i ] * loopRadius;
+			pVertices.push_back( XMFLOAT3( x, y, z ) * gRadius );
+		}
+		for ( int i = 0; i < 6; ++i )
+		{
+			const auto x = -sinValues[ i ] * loopRadius;
+			const auto z = cosValues[ i ] * loopRadius;
+			pVertices.push_back( XMFLOAT3( x, y, z ) * gRadius );
+		}
+	}
+	for ( int j = 1; j < 6; ++j )
+	{
+		const auto y = -cosValues[ j ];
+		const auto loopRadius = ( Normalize( XMFLOAT2( sinValues[ j ], y ) ) ).x;
+
+		for ( int i = 0; i < 6; ++i )
+		{
+			const auto x = cosValues[ i ] * loopRadius;
+			const auto z = sinValues[ i ] * loopRadius;
+			pVertices.push_back( XMFLOAT3( x, y, z ) * gRadius );
+		}
+		for ( int i = 0; i < 6; ++i )
+		{
+			const auto x = sinValues[ i ] * loopRadius;
+			const auto z = -cosValues[ i ] * loopRadius;
+			pVertices.push_back( XMFLOAT3( x, y, z ) * gRadius );
+		}
+		for ( int i = 0; i < 6; ++i )
+		{
+			const auto x = -cosValues[ i ] * loopRadius;
+			const auto z = -sinValues[ i ] * loopRadius;
+			pVertices.push_back( XMFLOAT3( x, y, z ) * gRadius );
+		}
+		for ( int i = 0; i < 6; ++i )
+		{
+			const auto x = -sinValues[ i ] * loopRadius;
+			const auto z = cosValues[ i ] * loopRadius;
+			pVertices.push_back( XMFLOAT3( x, y, z ) * gRadius );
+		}
+	}
+	pVertices.push_back( XMFLOAT3( 0.f, -1.f, 0.f ) * gRadius );
+
+	const int vertsInList = 24;
+	// Top set of triangles
+	for ( int i = 1; i < vertsInList; ++i )
+	{
+		PrimitiveFactory::vertices.push_back( pVertices[ 0 ] );
+		PrimitiveFactory::vertices.push_back( pVertices[ i ] );
+		PrimitiveFactory::vertices.push_back( pVertices[ i + 1 ] );
+	}
+	PrimitiveFactory::vertices.push_back( pVertices[ 0 ] );
+	PrimitiveFactory::vertices.push_back( pVertices[ vertsInList ] );
+	PrimitiveFactory::vertices.push_back( pVertices[ 1 ] );
+	
+        // Middle sets
+	for ( int j = 0; j < 10; ++j )
+	{
+		const auto prevVertSet = j * vertsInList;
+		const auto  curVertSet = prevVertSet + vertsInList;
+		for ( int i = 0; i < vertsInList; ++i )
+		{
+			const auto k = i + 1;
+			const auto idx0 = prevVertSet + k; // TL
+			const auto idx1 = prevVertSet + k + 1; // TR
+			const auto idx2 =  curVertSet + k; // BL
+			const auto idx3 =  curVertSet + k + 1; // BR
+
+			PrimitiveFactory::vertices.push_back( pVertices[ idx0 ] );
+			PrimitiveFactory::vertices.push_back( pVertices[ idx2 ] );
+			PrimitiveFactory::vertices.push_back( pVertices[ idx1 ] );
+
+			PrimitiveFactory::vertices.push_back( pVertices[ idx1 ] );
+			PrimitiveFactory::vertices.push_back( pVertices[ idx2 ] );
+			PrimitiveFactory::vertices.push_back( pVertices[ idx3 ] );
+		}
+	}
+	// Bottom set of triangles
+	const auto offset = pVertices.size() - ( vertsInList + 1 );
+	for ( int i = 0; i < vertsInList; ++i )
+	{
+		PrimitiveFactory::vertices.push_back( pVertices.back() );
+		PrimitiveFactory::vertices.push_back( pVertices[ offset + i ] );
+		PrimitiveFactory::vertices.push_back( pVertices[ offset + i + 1 ] );
+	}
+	PrimitiveFactory::vertices.push_back( pVertices.back() );
+	PrimitiveFactory::vertices.push_back( pVertices[ offset + ( vertsInList - 2 ) ] );
+	PrimitiveFactory::vertices.push_back( pVertices[ offset ] );
 
 	////////////// CREATE UVs ///////////////////////////////////////
 	//PrimitiveFactory::uvs.resize( masterSize);
@@ -612,7 +473,7 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	// This means that the sphere will be flattened and the back and front 
 	// will show the same image.
 	const auto uvOffset = XMFLOAT2( .5f, .5f );
-	for ( const auto &vertex : masterSphere )
+	for ( const auto &vertex : PrimitiveFactory::vertices)
 	{
 		const auto nVertex = Normalize( vertex );
 		const auto uv = ( XMFLOAT2( nVertex.x, -( nVertex.y ) ) * .5f ) + uvOffset;
@@ -622,29 +483,29 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	////////////// CREATE NORMALs ///////////////////////////////////////
 	//PrimitiveFactory::normals.resize( masterSize );
 
-	for ( int i = 0; i < masterSize; i++ )
+	for ( int i = 0; i < PrimitiveFactory::vertices.size(); i++ )
 	{
-		XMFLOAT3 radiusVector = masterSphere[ i ] - Specs.center;
+		XMFLOAT3 radiusVector = PrimitiveFactory::vertices[ i ] - Specs.center;
 		XMFLOAT3 normal = Normalize( radiusVector );
 		PrimitiveFactory::normals.push_back( normal );
 
-		//// CREATE BINORMALS & TANGENTS (Just filler) ////
+		//// CREATE BINORMALS & TANGENTS  ////
 		XMFLOAT3 edge10;
 		XMFLOAT3 edge20;
 		XMFLOAT2 tEdge10;
 		XMFLOAT2 tEdge20;
 
-		if ( i + 3 < masterSize )
+		if ( i + 3 < PrimitiveFactory::vertices.size() )
 		{
-			edge10 = masterSphere[ i + 1 ] - masterSphere[ i + 0 ];
-			edge20 = masterSphere[ i + 2 ] - masterSphere[ i + 0 ];
-			tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ]; 
+			edge10 = PrimitiveFactory::vertices[ i + 1 ] - PrimitiveFactory::vertices[ i + 0 ];
+			edge20 = PrimitiveFactory::vertices[ i + 2 ] - PrimitiveFactory::vertices[ i + 0 ];
+			tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ];
 			tEdge20 = uvs[ i + 2 ] - uvs[ i + 0 ];
 		}
 		else // do it in reverse
 		{
-			edge10 = masterSphere[ i - 0 ] - masterSphere[ i - 1 ];
-			edge20 = masterSphere[ i + 0 ] - masterSphere[ i - 2 ];
+			edge10 = PrimitiveFactory::vertices[ i - 0 ] - PrimitiveFactory::vertices[ i - 1 ];
+			edge20 = PrimitiveFactory::vertices[ i + 0 ] - PrimitiveFactory::vertices[ i - 2 ];
 			tEdge10 = uvs[ i + 0 ] - uvs[ i - 1 ];
 			tEdge20 = uvs[ i + 0 ] - uvs[ i - 2 ];
 		}
@@ -656,7 +517,8 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		PrimitiveFactory::tangents.push_back( binormal );
 	}
 
-	//Common( Specs );
+	Common( Specs );
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )

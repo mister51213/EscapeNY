@@ -34,4 +34,14 @@ void Actor_Player::GetInput(const Input& pInput, int randI, float randF)
 
         m_worldSpecs.orientation.y += pInput.GetRelativeX();
 		m_worldSpecs.orientation.x += pInput.GetRelativeY();
-    } 
+    }
+
+void Actor_Player::Move( const XMFLOAT3 & offset )
+{
+	m_worldSpecs.position += offset;
+}
+
+void Actor_Player::Rotate( const XMFLOAT3 & rotation )
+{
+	m_worldSpecs.orientation += rotation;
+}

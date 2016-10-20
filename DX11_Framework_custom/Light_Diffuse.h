@@ -16,12 +16,8 @@ public:
 
 	~Light_Diffuse() = default;
 
-	const DirectX::XMFLOAT3 &GetDirection()const override
-	{
-		return m_lightBuffer.lightDirection;
-	}
-	void SetDirection( float X, float Y, float Z )override
-	{
-		m_lightBuffer.lightDirection = { X, Y, Z };
-	}
+	const DirectX::XMFLOAT3 &GetDirection()const override;
+
+	void SetDirection( float X, float Y, float Z )override;
+
 };
