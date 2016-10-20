@@ -10,6 +10,7 @@
 #include "Utilities.h"
 #include "Model.h"
 #include "Input.h"
+#include "Physics.h"
 
 class Actor
 {
@@ -49,7 +50,7 @@ public:
     // controllable actors.
     virtual void GetInput(const Input& pInput, int randI = 0.f, float randF = 0.f) {}
 
-    void MovePID(XMFLOAT3 targetPos, float deltaT = 0.0f);
+    void MovePID(float deltaT = 0.0f);
     
 protected:
     void Move(const float time);
@@ -67,7 +68,8 @@ protected:
 	////////////////////////////////
     // PHYSICS / MOVEMENT RELATED //
     ////////////////////////////////
-	PhysAttributes physics;
+	//PhysAttributes physics;
+	Physics m_physics;
 
     //XMFLOAT3 m_velocity = {0.f, 0.0f, 0.f};
     //// "downward" acceleration on the Y axis

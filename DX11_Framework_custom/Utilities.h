@@ -124,6 +124,14 @@ struct PhysAttributes
     XMFLOAT3 target = { 0.0f,0.0f,0.0f };
 };
 
+enum eForceType
+{
+	Push,
+	Pull,
+	Spin,
+	Swerve
+};
+
 //////////////////////
 // GRAPHICS RELATED //
 //////////////////////
