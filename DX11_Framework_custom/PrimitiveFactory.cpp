@@ -371,16 +371,24 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 
 	const int vertsInList = 24;
 	// Top set of triangles
+	
 	for ( int i = 1; i < vertsInList; ++i )
 	{
 		PrimitiveFactory::vertices.push_back( pVertices[ 0 ] );
-		PrimitiveFactory::vertices.push_back( pVertices[ i + 1 ] );
 		PrimitiveFactory::vertices.push_back( pVertices[ i ] );
+		PrimitiveFactory::vertices.push_back( pVertices[ i + 1 ] );
 	}
+
+	// Missing piece (loop back around)
 	PrimitiveFactory::vertices.push_back( pVertices[ 0 ] );
 	PrimitiveFactory::vertices.push_back( pVertices[ vertsInList ] );
 	PrimitiveFactory::vertices.push_back( pVertices[ 1 ] );
-	
+
+	// ONE MORE MISSING PIECE in second band
+	PrimitiveFactory::vertices.push_back( pVertices[ vertsInList + 2 ] );
+	PrimitiveFactory::vertices.push_back( pVertices[ vertsInList ] );
+	PrimitiveFactory::vertices.push_back( pVertices[ vertsInList + 1] );
+
         // Middle sets
 	for ( int j = 0; j < 10; ++j )
 	{
@@ -408,8 +416,8 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	for ( int i = 0; i < vertsInList; ++i )
 	{
 		PrimitiveFactory::vertices.push_back( pVertices.back() );
-		PrimitiveFactory::vertices.push_back( pVertices[ offset + i ] );
 		PrimitiveFactory::vertices.push_back( pVertices[ offset + i + 1 ] );
+		PrimitiveFactory::vertices.push_back( pVertices[ offset + i ] );
 	}
 	PrimitiveFactory::vertices.push_back( pVertices.back() );
 	PrimitiveFactory::vertices.push_back( pVertices[ offset + ( vertsInList - 2 ) ] );
