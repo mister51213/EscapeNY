@@ -242,7 +242,7 @@ void Game_FPS::RenderFrame(const GameView &GameViewRef)
 {
     //LightingFX();
 	SceneBufferType scene{};
-	scene.ambientColor = { .35f, .35f, .35f, .35f };
+	scene.ambientColor = { .2f, .2f, .2f, .2f };
 	scene.lightCount = min( m_spotLights.size(), MAX_SHADER_LIGHTS );
 
     for (int i = 0; i < m_spotLights.size(); i++)

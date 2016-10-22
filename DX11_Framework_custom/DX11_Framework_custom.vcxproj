@@ -152,6 +152,7 @@
     <ClCompile Include="Algorithm_Spiral3D.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DXUtils.cpp" />
+    <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GameView.cpp" />
     <ClCompile Include="Game_FPS.cpp" />
     <ClCompile Include="Game_Maze.cpp" />
@@ -242,6 +243,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="DXUtils.h" />
+    <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GameView.h" />
     <ClInclude Include="Game_FPS.h" />
     <ClInclude Include="IGameState.h" />
