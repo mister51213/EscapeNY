@@ -67,7 +67,7 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
     //////////////////////
     m_pCamera->GetInput(InputRef);
     m_pCamera->GetMouseInput(InputRef);
-    m_player.GetInput(InputRef);
+   // m_player.GetInput(InputRef);
 
     for (auto& pActor : m_actorsSUB1)
     {
