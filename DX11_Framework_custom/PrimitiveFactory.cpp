@@ -374,45 +374,34 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 	
 	for ( int i = 1; i < vertsInList; ++i )
 	{
-		const auto vA = pVertices[ i + 1 ]; 
-		const auto vB = pVertices[ 0 ];
-		const auto vC = pVertices[ i ];
-
-		///// TESTING TRIANGLE FACING DIRECTION
-		const auto A = vB - vA;
-		const auto B = vC - vA;
-		const auto C = CrossProduct( A, B );
-		const auto dp = DotProduct( { 0.f, 0.f, 1.f }, C );
-
-		vertices.push_back( vA );
-		vertices.push_back( vB );
-		vertices.push_back( vC );
+		PrimitiveFactory::vertices.push_back( pVertices[ 0 ] );
+		PrimitiveFactory::vertices.push_back( pVertices[ i ] );
+		PrimitiveFactory::vertices.push_back( pVertices[ i + 1 ] );
 	}
-	// Missing piece (loop back around)
-	vertices.push_back( pVertices[ 1 ] );
-	vertices.push_back( pVertices[ 0 ] );
-	vertices.push_back( pVertices[ vertsInList ] );
 
+	// Missing piece (loop back around)
+	PrimitiveFactory::vertices.push_back( pVertices[ 0 ] );
+	PrimitiveFactory::vertices.push_back( pVertices[ vertsInList ] );
+	PrimitiveFactory::vertices.push_back( pVertices[ 1 ] );
 
 	//// ONE MORE MISSING PIECE in second band
 	//PrimitiveFactory::vertices.push_back( pVertices[ vertsInList + 1 ] );
 	//PrimitiveFactory::vertices.push_back( pVertices[ vertsInList + 2] );
 	//PrimitiveFactory::vertices.push_back( pVertices[ vertsInList + 3] );
 
-	// Middle sets
-	int count = 0;
+        // Middle sets
 	for ( int j = 0; j < 10; ++j )
 	{
 		const auto prevVertSet = j * vertsInList;
 		const auto  curVertSet = prevVertSet + vertsInList;
-		for ( int i = 1; i < vertsInList-1; ++i )
+		for ( int i = 0; i < vertsInList; ++i )
 		{
 			const auto k = i + 1;
-			const auto idx0 = prevVertSet + i; // TL
-			const auto idx1 = prevVertSet + k; // TR
-			const auto idx2 =  curVertSet + i; // BL
-			const auto idx3 =  curVertSet + k; // BR
-			
+			const auto idx0 = prevVertSet + k; // TL
+			const auto idx1 = prevVertSet + k + 1; // TR
+			const auto idx2 =  curVertSet + k; // BL
+			const auto idx3 =  curVertSet + k + 1; // BR
+
 			vertices.push_back( pVertices[ idx0 ] );
 			vertices.push_back( pVertices[ idx2 ] );
 			vertices.push_back( pVertices[ idx1 ] );
@@ -420,13 +409,8 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 			vertices.push_back( pVertices[ idx1 ] );
 			vertices.push_back( pVertices[ idx2 ] );
 			vertices.push_back( pVertices[ idx3 ] );
-			++count;
 		}
 	}
-	// Wrap last triangle in middle set to beginning of last ring
-	//*(vertices.end() - 1) = pVertices[ 10 * 24 ];
-
-
 	// Bottom set of triangles
 	const auto offset = pVertices.size() - ( vertsInList + 1 );
 	for ( int i = 0; i < vertsInList; ++i )
@@ -435,8 +419,8 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		PrimitiveFactory::vertices.push_back( pVertices[ offset + i + 1 ] );
 		PrimitiveFactory::vertices.push_back( pVertices[ offset + i ] );
 	}
-	PrimitiveFactory::vertices.push_back( pVertices[ offset + ( vertsInList - 2 ) ] );
 	PrimitiveFactory::vertices.push_back( pVertices.back() );
+	PrimitiveFactory::vertices.push_back( pVertices[ offset + ( vertsInList - 2 ) ] );
 	PrimitiveFactory::vertices.push_back( pVertices[ offset ] );
 
 	////////////// CREATE UVs ///////////////////////////////////////
