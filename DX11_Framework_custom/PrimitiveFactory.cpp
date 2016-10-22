@@ -447,48 +447,44 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 
 	int vertCount = PrimitiveFactory::vertices.size();
 
-	// TODO:
-	/*
-	1. try ONLY looping through normals to create proper amount (2 separate loops)
-	2. if that doesnt work, try RESIZING, then INDEXing into the tangent and binormal
-	   lists, as is done in createMeshNM, instead of PUSHING BACK
-	*/
-
-
-	//normals.resize( vertCount );
-	//tangents.resize( vertCount );
-	//binormals.resize( vertCount );
-
-	for ( int i = 0; i < vertCount; i += 3 )
+	////////////// CREATE NORMALs ///////////////////////////////////////
+	for( int i = 0; i < vertCount; i ++ )
 	{
-		////////////// CREATE NORMALs ///////////////////////////////////////
 		XMFLOAT3 radiusVector = PrimitiveFactory::vertices[ i ] - Specs.center;
 		XMFLOAT3 normal = Normalize( radiusVector );
 		PrimitiveFactory::normals.push_back( normal );
-		PrimitiveFactory::normals.push_back( normal );
-		PrimitiveFactory::normals.push_back( normal );
+	}
 
-		//// CREATE BINORMALS & TANGENTS  ////
-		XMFLOAT3 edge10;
-		XMFLOAT3 edge20;
-		XMFLOAT2 tEdge10;
-		XMFLOAT2 tEdge20;
+	//// CREATE BINORMALS & TANGENTS  ////
+	tangents.resize( vertCount );
+	binormals.resize( vertCount );
 
-		edge10 = PrimitiveFactory::vertices[ i + 1 ] - PrimitiveFactory::vertices[ i + 0 ];
-		edge20 = PrimitiveFactory::vertices[ i + 2 ] - PrimitiveFactory::vertices[ i + 0 ];
-		tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ];
-		tEdge20 = uvs[ i + 2 ] - uvs[ i + 0 ];
+	for ( int i = 0; i < vertCount; i += 3 )
+	{
+		XMFLOAT3 edge10 = PrimitiveFactory::vertices[ i + 1 ] - PrimitiveFactory::vertices[ i + 0 ];
+		XMFLOAT3 edge20 = PrimitiveFactory::vertices[ i + 2 ] - PrimitiveFactory::vertices[ i + 0 ];
+		XMFLOAT2 tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ];
+		XMFLOAT2 tEdge20 = uvs[ i + 2 ] - uvs[ i + 0 ];
 
-		XMFLOAT3 tangent = CalculateTangent( edge20, tEdge20 );
-		XMFLOAT3 binormal = CalculateBiNormal( tangent, normal );
+		// Calculate the denominator of the tangent/binormal equation.
+		float den = 1.0f / 
+			(( tEdge10.x * tEdge20.y ) - ( tEdge10.y * tEdge20.x ));
 
-		PrimitiveFactory::binormals.push_back( tangent);
-		PrimitiveFactory::binormals.push_back( tangent);
-		PrimitiveFactory::binormals.push_back( tangent);
+		// Calculate cross products and multiply by the coefficient to get tangent and binormal.
+		XMFLOAT3 tangent{}, binormal{};
+		tangent.x = ( tEdge20.y * edge10.x - tEdge10.y * edge20.x ) * den;
+		tangent.y = ( tEdge20.y * edge10.y - tEdge10.y * edge20.y ) * den;
+		tangent.z = ( tEdge20.y * edge10.z - tEdge10.y * edge20.z ) * den;
 
-		PrimitiveFactory::tangents.push_back( binormal);
-		PrimitiveFactory::tangents.push_back( binormal);
-		PrimitiveFactory::tangents.push_back( binormal);
+		binormal.x = ( tEdge10.x * edge20.x - tEdge20.x * edge10.x ) * den;
+		binormal.y = ( tEdge10.x * edge20.y - tEdge20.x * edge10.y ) * den;
+		binormal.z = ( tEdge10.x * edge20.z - tEdge20.x * edge10.z ) * den;
+
+		tangent = Normalize( tangent );
+		binormal = Normalize( binormal );
+
+		tangents[ i + 2 ] = tangents[ i + 1 ] = tangents[ i ] = tangent;
+		binormals[ i + 2 ] = binormals[ i + 1 ] = binormals[ i ] = binormal;
 	}
 
 	Common( Specs );
