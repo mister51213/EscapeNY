@@ -445,15 +445,27 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		PrimitiveFactory::uvs.push_back( uv );
 	}
 
-	////////////// CREATE NORMALs ///////////////////////////////////////
-	//PrimitiveFactory::normals.resize( masterSize );
+	int vertCount = PrimitiveFactory::vertices.size();
 
-	bool flipFlag = false;
-	int windup = 1;
-	for ( int i = 0; i < PrimitiveFactory::vertices.size(); i++ )
+	// TODO:
+	/*
+	1. try ONLY looping through normals to create proper amount (2 separate loops)
+	2. if that doesnt work, try RESIZING, then INDEXing into the tangent and binormal
+	   lists, as is done in createMeshNM, instead of PUSHING BACK
+	*/
+
+
+	//normals.resize( vertCount );
+	//tangents.resize( vertCount );
+	//binormals.resize( vertCount );
+
+	for ( int i = 0; i < vertCount; i += 3 )
 	{
+		////////////// CREATE NORMALs ///////////////////////////////////////
 		XMFLOAT3 radiusVector = PrimitiveFactory::vertices[ i ] - Specs.center;
 		XMFLOAT3 normal = Normalize( radiusVector );
+		PrimitiveFactory::normals.push_back( normal );
+		PrimitiveFactory::normals.push_back( normal );
 		PrimitiveFactory::normals.push_back( normal );
 
 		//// CREATE BINORMALS & TANGENTS  ////
@@ -462,57 +474,21 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 		XMFLOAT2 tEdge10;
 		XMFLOAT2 tEdge20;
 
-		if( !flipFlag )
-		{
-			if( i + 3 < PrimitiveFactory::vertices.size() )
-			{
-				edge10 = PrimitiveFactory::vertices[ i + 1 ] - PrimitiveFactory::vertices[ i + 0 ];
-				edge20 = PrimitiveFactory::vertices[ i + 2 ] - PrimitiveFactory::vertices[ i + 0 ];
-				tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ];
-				tEdge20 = uvs[ i + 2 ] - uvs[ i + 0 ];
-			}
-			else // do it in reverse
-			{
-				edge10 = PrimitiveFactory::vertices[ i - 0 ] - PrimitiveFactory::vertices[ i - 1 ];
-				edge20 = PrimitiveFactory::vertices[ i + 0 ] - PrimitiveFactory::vertices[ i - 2 ];
-				tEdge10 = uvs[ i + 0 ] - uvs[ i - 1 ];
-				tEdge20 = uvs[ i + 0 ] - uvs[ i - 2 ];
-			}
-		}
-
-		else // calculate backwards every 3 vertices to align triangles
-		{
-			if( i + 3 < PrimitiveFactory::vertices.size() )
-			{
-				edge20 = PrimitiveFactory::vertices[ i + 1 ] - PrimitiveFactory::vertices[ i + 0 ];
-				edge10 = PrimitiveFactory::vertices[ i + 2 ] - PrimitiveFactory::vertices[ i + 0 ];
-				tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ];
-				tEdge20 = uvs[ i + 2 ] - uvs[ i + 0 ];
-			}
-			else // do it in reverse
-			{
-				edge20 = PrimitiveFactory::vertices[ i - 0 ] - PrimitiveFactory::vertices[ i - 1 ];
-				edge10 = PrimitiveFactory::vertices[ i + 0 ] - PrimitiveFactory::vertices[ i - 2 ];
-				tEdge10 = uvs[ i + 0 ] - uvs[ i - 1 ];
-				tEdge20 = uvs[ i + 0 ] - uvs[ i - 2 ];
-			}
-			flipFlag = false;
-		}
-
-		windup++;
-		if( windup % 3 == 0 )
-		flipFlag = true;
+		edge10 = PrimitiveFactory::vertices[ i + 1 ] - PrimitiveFactory::vertices[ i + 0 ];
+		edge20 = PrimitiveFactory::vertices[ i + 2 ] - PrimitiveFactory::vertices[ i + 0 ];
+		tEdge10 = uvs[ i + 1 ] - uvs[ i + 0 ];
+		tEdge20 = uvs[ i + 2 ] - uvs[ i + 0 ];
 
 		XMFLOAT3 tangent = CalculateTangent( edge20, tEdge20 );
 		XMFLOAT3 binormal = CalculateBiNormal( tangent, normal );
 
 		PrimitiveFactory::binormals.push_back( tangent);
-//		PrimitiveFactory::binormals.push_back( tangent*-1.0f );
-//		PrimitiveFactory::binormals.push_back( tangent );
+		PrimitiveFactory::binormals.push_back( tangent);
+		PrimitiveFactory::binormals.push_back( tangent);
 
 		PrimitiveFactory::tangents.push_back( binormal);
-//		PrimitiveFactory::tangents.push_back( binormal*-1.0f );
-//		PrimitiveFactory::tangents.push_back( binormal );
+		PrimitiveFactory::tangents.push_back( binormal);
+		PrimitiveFactory::tangents.push_back( binormal);
 	}
 
 	Common( Specs );
@@ -677,6 +653,10 @@ void PrimitiveFactory::CreateMeshNM( const wstring & Filename )
 	///////////////////////////////////////
 	indexCount = vertexCount;
 	indices.resize( indexCount );
+
+	///////////////////////////////////////
+	///  CREATE TANGENTS AND BINoRMALS  ///
+	///////////////////////////////////////
 
 	tangents.resize( vertexCount );
 	binormals.resize( vertexCount );
