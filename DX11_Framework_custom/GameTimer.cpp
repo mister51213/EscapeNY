@@ -2,82 +2,24 @@
 
 GameTimer::GameTimer()
 {
-	startedAt = 0;
-	pausedAt = 0;
-	paused = false;
-	started = false;
+	Start();
 }
 
 GameTimer::~GameTimer()
 {}
 
-
-bool GameTimer::IsStarted()
-{
-	return started;
-}
-
-bool GameTimer::IsStopped()
-{
-	return !started;
-}
-
-bool GameTimer::IsPaused()
-{
-	return paused;
-}
-
-bool GameTimer::IsActive()
-{
-	return !paused & started;
-}
-
-void GameTimer::Pause()
-{
-	if( paused || !started )
-		return;
-
-	paused = true;
-	pausedAt = clock();
-}
-
-void GameTimer::Resume()
-{
-	if( !paused )
-		return;
-
-	paused = false;
-	startedAt += clock() - pausedAt;
-}
-
-void GameTimer::Stop()
-{
-	started = false;
-}
-
 void GameTimer::Start()
 {
-	if( started )
-		return;
-
-	started = true;
-	paused = false;
-	startedAt = clock();
+	// set current time
+	lastTime = time( 0 );
 }
 
-void GameTimer::Reset()
+bool GameTimer::EnoughTimePassed()
 {
-	paused = false;
-	startedAt = clock();
-}
-
-clock_t GameTimer::GetTicks()
-{
-	if( !started )
-		return 0;
-
-	if( paused )
-		return pausedAt - startedAt;
-
-	return clock() - startedAt;
+	// see if more than .250 seconds passed since last time
+	if( difftime( time( 0 ), lastTime ) > 250.0f )
+	{
+		Start(); // reset timer
+		return true;
+	}
 }

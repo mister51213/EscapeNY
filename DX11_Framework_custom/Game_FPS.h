@@ -5,6 +5,7 @@
 #include "Actor_Light.h"
 #include "Light_Spot.h"
 #include "Overlay.h"
+#include "GameTimer.h"
 
 class Game_FPS:public ISubGame
 {
@@ -54,6 +55,9 @@ private:
     vector<Actor_Light> m_spotLights; // manipulates lights
     vector<LightBufferType> m_lightSet; // passed to GameView
     int m_numLights = 5;
+
+	// TIMING
+	GameTimer timer;
 
     // TODO: ENCAPSULATE this into a bigger SCENE object down the road
     
