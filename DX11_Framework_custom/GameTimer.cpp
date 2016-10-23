@@ -1,14 +1,5 @@
 #include "GameTimer.h"
 
-
-
-GameTimer::GameTimer()
-{}
-
-
-GameTimer::~GameTimer()
-{}
-
 GameTimer::GameTimer()
 {
 	startedAt = 0;
@@ -16,6 +7,10 @@ GameTimer::GameTimer()
 	paused = false;
 	started = false;
 }
+
+GameTimer::~GameTimer()
+{}
+
 
 bool GameTimer::IsStarted()
 {
