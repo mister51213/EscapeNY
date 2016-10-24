@@ -5,21 +5,40 @@ GameTimer::GameTimer()
 	Start();
 }
 
-GameTimer::~GameTimer()
-{}
-
 void GameTimer::Start()
 {
 	// set current time
-	lastTime = time( 0 );
+	start = clock.now();
+}
+
+void GameTimer::Stop()
+{
+	stop = clock.now();
+}
+
+long long GameTimer::Reset()
+{
+	Stop();
+	const long long elapsed = GetMilli();
+	Start();
+
+	return elapsed;
+}
+
+long long GameTimer::GetMilli()
+{
+	return clockStopped ?
+		duration_cast< milliseconds >( stop - start ).count() :
+		duration_cast< milliseconds >( clock.now() - start ).count();	
 }
 
 bool GameTimer::EnoughTimePassed()
 {
 	// see if more than .250 seconds passed since last time
-	if( difftime( time( 0 ), lastTime ) > 250.0f )
+	if ( GetMilli() > 250 )
 	{
-		Start(); // reset timer
+		Reset();
 		return true;
 	}
+	return false;
 }

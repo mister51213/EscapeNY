@@ -8,13 +8,19 @@ class GameTimer
 {
 public:
 	GameTimer();
-	~GameTimer();
+	~GameTimer() = default;
 
 	void Start();
+	void Stop();
+	long long Reset();
+	// Function returns a 64bit long long int in milliseconds
+	long long GetMilli();
 
-bool EnoughTimePassed();
+	bool EnoughTimePassed();
 
 private:
-	time_t lastTime;
+	high_resolution_clock clock;
+	time_point<high_resolution_clock> start, stop;
+	bool clockStopped = false;
 };
 

@@ -96,7 +96,6 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
 
 	bool enoughTimePassed = timer.EnoughTimePassed();
 
-
 	m_player.UpdateState( Move_PID, 0.007f );
 	// TODO: incorporate this w actual game timer
 
