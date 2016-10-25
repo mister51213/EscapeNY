@@ -58,8 +58,15 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 	// Use UpdateFrame to update actors, camera and anything else that needs updating.
 void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
 {
+	// FOR TESTING PURPOSES, use constant time interval
 	timer.Stop();
+
+	#ifdef NDEBUG
 	float tSinceLastFrame = timer.SecondsPassed();
+	#else
+	float tSinceLastFrame = 0.016f; // avg time btwn frames (60 FPS)
+	#endif
+	
 	timer.Start();
 
     int randInt = rand() % 3;
@@ -94,7 +101,7 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
     
 
 	//////////////////////////////
-	// TEST OUT TIMER //
+		// TEST OUT TIMER //
 	//////////////////////////////
 
 	m_player.UpdateState( Move_PID, tSinceLastFrame/*0.007f*/ );
