@@ -73,6 +73,9 @@
     <Filter Include="Source Files\Shader Files\Obsolete">
       <UniqueIdentifier>{f840eaf9-0449-44da-a452-b601c9abbaae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Lighting">
+      <UniqueIdentifier>{bebe6841-1dba-4563-ae36-bc1ec7da6253}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -213,28 +216,10 @@
     <ClCompile Include="Shader_NMap.cpp">
       <Filter>Source Files\Shader Files</Filter>
     </ClCompile>
-    <ClCompile Include="Light_Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Light_Spot.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Actor_Player.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
     <ClCompile Include="Physics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Light_Diffuse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Light_Point.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MathUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DXUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameTimer.cpp">
@@ -242,6 +227,24 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Light_Base.cpp">
+      <Filter>Source Files\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Light_Diffuse.cpp">
+      <Filter>Source Files\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Light_Point.cpp">
+      <Filter>Source Files\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Light_Spot.cpp">
+      <Filter>Source Files\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="DXUtils.cpp">
+      <Filter>Source Files\Utility Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="MathUtils.cpp">
+      <Filter>Source Files\Utility Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -416,12 +419,6 @@
     <ClInclude Include="Actor_Light.h">
       <Filter>Header Files\Actors</Filter>
     </ClInclude>
-    <ClInclude Include="Shader_NMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Light_Base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Model_TexturedNM.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
@@ -439,6 +436,12 @@
     </ClInclude>
     <ClInclude Include="DXUtils.h">
       <Filter>Header Files\Utility Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Light_Base.h">
+      <Filter>Header Files\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader_NMap.h">
+      <Filter>Header Files\Shader Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
