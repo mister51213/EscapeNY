@@ -33,10 +33,10 @@ bool Physics::CorrectCollision()
 // ALT VERSION
 XMFLOAT3 Physics::MoveToTarget( const ModelSpecs_W& worldSpecs, const float deltaT )
 {
-	const float gainCoefficient = 0.05f;
+	const float gainCoefficient = 1.f;
 	m_attributes.posError = m_attributes.target - worldSpecs.position;
 	
-	XMFLOAT3 increment = m_attributes.posError * gainCoefficient;
+	XMFLOAT3 increment = m_attributes.posError * gainCoefficient * deltaT;
 	return worldSpecs.position + increment;
 }
 

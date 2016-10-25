@@ -58,6 +58,10 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 	// Use UpdateFrame to update actors, camera and anything else that needs updating.
 void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
 {
+	timer.Stop();
+	float tSinceLastFrame = timer.SecondsPassed();
+	timer.Start();
+
     int randInt = rand() % 3;
 	// NOTE: If you need a float between 0.f and 10.f, shouldn't the line say:
     float randFloat = static_cast<float>(rand() % 100)* 0.1f; // get random float from 0~10.0
@@ -93,10 +97,7 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
 	// TEST OUT TIMER //
 	//////////////////////////////
 
-
-	bool enoughTimePassed = timer.EnoughTimePassed();
-
-	m_player.UpdateState( Move_PID, 0.007f );
+	m_player.UpdateState( Move_PID, tSinceLastFrame/*0.007f*/ );
 	// TODO: incorporate this w actual game timer
 
 

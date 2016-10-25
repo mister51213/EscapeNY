@@ -1,10 +1,17 @@
 #pragma once
 
+/*
+* This is for files that will not be accessing the custom classes
+* in our framework, and therefore safe to include anywhere.
+*/
+
 #define WIN32_LEAN_AND_MEAN
 
 //////////////
 // INCLUDES //
 //////////////
+
+
 
 // C++ standard headers
 #include <algorithm>
@@ -16,6 +23,7 @@
 #include <stdio.h>
 #include <string>
 #include <time.h>
+#include <chrono>
 #include <vector>
 
 // Win API headers
