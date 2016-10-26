@@ -11,14 +11,8 @@
 class Scene
 {
 public:
-	Scene();
-	// TODO: Remove after reading to avoid clutter.
-	// For efficiency, if not needed, either remove the destructor or 
-	// set "= default;" and remove the implementation in the .cpp file.  
-	// This allows the compiler to generate one which for some reason is said to
-	// be more efficient, probably makes the destruction of objects inline where
-	// defining one, even an empty one makes a function call...just a theory.
-	~Scene();
+	Scene() = default;
+	~Scene() = default;
 
 	// Entry point into the scene object.  Each Scene child should implement this 
 	// function.  It's purpose is to handle calling the update functions or all 
