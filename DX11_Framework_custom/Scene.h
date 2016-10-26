@@ -28,8 +28,8 @@ public:
 	// list of actors that have those names.  Probably won't want to go this route
 	// since we don't want a vector of Actor base objects.  Player and NPCs will
 	// be of different types.
-	std::vector<Actor> m_actors_dynamic; // player, NPCs
-	std::vector<Actor> m_actors_static; // trees, walls, scenery, etc
+	std::vector<std::unique_ptr<Actor>> m_actors_dynamic; // player, NPCs
+	std::vector<std::unique_ptr<Actor>> m_actors_static; // trees, walls, scenery, etc
 
 	// TODO: look into how to animate dynamic actors like this
 	// For polymorphic behavior with vectors, you'll need to have a vector
