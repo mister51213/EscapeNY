@@ -64,6 +64,7 @@ protected:
     ModelSpecs_W m_worldSpecs;
     ModelSpecs_L m_localSpecs;
 
+	// TODO: move into general physics
     eState m_state;
 
 	////////////////////////////////
