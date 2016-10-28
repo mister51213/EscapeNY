@@ -2181,7 +2181,7 @@ position?<y:LabelModel>
               <y:Geometry height="40.0" width="102.49322980615898" x="2398.2450246416297" y="116.99138586926776"/>
               <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="10" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.2509765625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="72.9208984375" x="14.786165684329717" y="11.87451171875">Calculate score<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="10" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.2509765625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="72.9208984375" x="14.786165684329262" y="11.87451171875">Calculate score<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -2197,7 +2197,7 @@ position?<y:LabelModel>
               <y:Geometry height="40.0" width="102.49322980615898" x="2398.2450246416297" y="186.99138586926776"/>
               <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="10" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.2509765625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="75.1474609375" x="13.672884434329717" y="11.874511718750028">Increment Level<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="10" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.2509765625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="75.1474609375" x="13.672884434329262" y="11.87451171875">Increment Level<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -2340,7 +2340,7 @@ position?<y:LabelModel>
     <node id="n57">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.decision">
-          <y:Geometry height="47.67999999999995" width="109.0" x="1350.5117193059357" y="-662.9393781272412"/>
+          <y:Geometry height="47.67999999999995" width="109.0" x="1326.1209938395034" y="-662.9393781272412"/>
           <y:Fill color="#E8EEF7" color2="#FF0000" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="10" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.2509765625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="61.8173828125" x="23.59130859375" y="15.714511718750032">Level 1 - 10?<y:LabelModel>
@@ -2355,7 +2355,6 @@ position?<y:LabelModel>
     </node>
     <node id="n58" yfiles.foldertype="group">
       <data key="d4"/>
-      <data key="d5"/>
       <data key="d6">
         <y:ProxyAutoBoundsNode>
           <y:Realizers active="0">
@@ -2455,7 +2454,7 @@ pushed?<y:LabelModel>
               <y:Geometry height="47.67999999999995" width="80.0" x="2272.757184434568" y="651.9918618314346"/>
               <y:Fill color="#E8EEF7" color2="#FF0000" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="34.0234375" x="22.98828125" y="7.138828124999975">In the
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="34.0234375" x="22.98828125" y="7.138828124999918">In the
 drink<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
@@ -2489,7 +2488,7 @@ from list<y:LabelModel>
               <y:Geometry height="56.479999999999905" width="96.79999999999995" x="2382.757184434568" y="648.1518618314349"/>
               <y:Fill color="#E8EEF7" color2="#FF0000" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="64.703125" x="16.04843750000009" y="11.538828124999952">Ran into
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="64.703125" x="16.04843750000009" y="11.538828125000009">Ran into
 another car<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
@@ -3485,7 +3484,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e1" source="n56::n1" target="n56::n14">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -3495,7 +3493,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e2" source="n56::n2" target="n56::n15">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="-3.2533850969205105" ty="8.472357034942092"/>
@@ -3621,7 +3618,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e15" source="n56::n9" target="n56::n17">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="-15.212669537415962"/>
@@ -3689,7 +3685,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e22" source="n56::n14" target="n56::n2">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -3717,7 +3712,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e25" source="n56::n15" target="n56::n9">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="3.2533850969205105" ty="0.8956901528675303"/>
@@ -3727,7 +3721,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e26" source="n56::n15" target="n56::n19">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="-5.149322100719928" ty="-3.839999999999975"/>
@@ -3755,7 +3748,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e29" source="n56::n16" target="n56::n2">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -3788,7 +3780,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e32" source="n56::n17" target="n56::n4">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -3798,7 +3789,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e33" source="n56::n17" target="n56::n18">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -3808,7 +3798,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="e58" source="n56::n16" target="n54::n0">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="32.0803083602882" sy="-0.3426245118665747" tx="0.0" ty="0.0">
@@ -3822,7 +3811,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e34" source="n56::n19" target="n56::n16">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -3832,7 +3820,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e35" source="n56::n18" target="n56::n15">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -3864,7 +3851,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e38" source="n56::n20" target="n56::n8">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -3976,7 +3962,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e39" source="n56::n10" target="n56::n9">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="26.03008379133098" ty="4.993705537684605">
@@ -4009,7 +3994,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e42" source="n56::n6" target="n56::n7">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -4019,7 +4003,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e43" source="n56::n21" target="n56::n6">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -4029,7 +4012,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e44" source="n56::n5" target="n56::n21">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="14.870672865527268"/>
@@ -4039,7 +4021,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="n56::e45" source="n56::n6" target="n56::n9">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="-1.8209397678151618" ty="10.520767009321844">
@@ -4055,7 +4036,6 @@ another car<y:LabelModel>
       </data>
     </edge>
     <edge id="e59" source="n56::n21" target="n58::n1">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
