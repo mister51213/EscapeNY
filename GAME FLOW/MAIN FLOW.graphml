@@ -2340,7 +2340,7 @@ position?<y:LabelModel>
     <node id="n57">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.decision">
-          <y:Geometry height="47.67999999999995" width="109.0" x="1326.1209938395034" y="-662.9393781272412"/>
+          <y:Geometry height="47.67999999999995" width="109.0" x="1350.5117193059357" y="-663.1070179238028"/>
           <y:Fill color="#E8EEF7" color2="#FF0000" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="10" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.2509765625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="61.8173828125" x="23.59130859375" y="15.714511718750032">Level 1 - 10?<y:LabelModel>
@@ -3352,10 +3352,9 @@ another car<y:LabelModel>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="27.059096995057416" ty="-5.357997574479327">
-            <y:Point x="1708.101642303947" y="-68.56741523621366"/>
-            <y:Point x="1708.101642303947" y="-200.61732181875328"/>
-            <y:Point x="1708.101642303947" y="-320.8969085716869"/>
-            <y:Point x="1620.0228897998304" y="-356.88607626154095"/>
+            <y:Point x="1659.6282847453951" y="-68.56741523621366"/>
+            <y:Point x="1659.6282847453951" y="-320.8969085716869"/>
+            <y:Point x="1574.2771855818614" y="-378.2631441883042"/>
           </y:Path>
           <y:LineStyle color="#FF0000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
