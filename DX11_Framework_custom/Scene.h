@@ -8,6 +8,17 @@
 #include "Texture.h"
 #include "GameTimer.h"
 
+/*
+TODO: Keep graphics out of Scene and in GameView
+TODO: Implement these
+	Map,
+	List of Cars,
+	Monsters,
+	Player spawn point,
+	Light Set (day or night?),
+	Camera
+*/
+
 class Scene
 {
 public:
@@ -36,9 +47,6 @@ public:
 	// of pointers, preferrably a vector of unique_ptrs of Camera_Base type
 	// or whatever we name the parent camera class
 	std::vector<Camera> m_cameras; // dynamic / fixed, different camera angles
-	std::vector<Texture> m_texturePool;
-	std::vector<Model> m_modelPool;
-
 	SceneBufferType m_lightSet; // TODO: Make all lights controlled from one place
 	// TODO: Right now there are the following light related types:
 	/*

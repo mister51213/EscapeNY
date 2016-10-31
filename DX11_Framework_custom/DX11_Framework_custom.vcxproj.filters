@@ -246,6 +246,9 @@
     <ClCompile Include="MathUtils.cpp">
       <Filter>Source Files\Utility Classes</Filter>
     </ClCompile>
+    <ClCompile Include="GameEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -442,6 +445,9 @@
     </ClInclude>
     <ClInclude Include="Shader_NMap.h">
       <Filter>Header Files\Shader Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEvent.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

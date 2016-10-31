@@ -19,6 +19,23 @@
 
 using namespace std;
 
+/*
+TODO: Implement; sub groups of textures and models for different chapters
+TODO: Tie these in with CHAPTER struct.
+VisualTheme* m_activeTheme;
+VisualTheme* m_theme1;
+VisualTheme* m_theme1;
+VisualTheme* m_theme1;
+VisualTheme* m_theme1;
+
+
+// Load each visual theme as needed
+LoadCurrentTheme(eTheme indexOfCurrentTheme);
+
+// one model pool which is reskinned per level
+ModelPool m_modelPool;;
+// TexturePool is now broken up into many different themes
+*/
 class GameView
 {
 public:
