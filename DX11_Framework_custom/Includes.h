@@ -15,6 +15,8 @@
 
 // C++ standard headers
 #include <algorithm>
+#include <array>
+#include <chrono>
 #include <fstream>
 #include <math.h>
 #include <memory>
@@ -23,7 +25,6 @@
 #include <stdio.h>
 #include <string>
 #include <time.h>
-#include <chrono>
 #include <vector>
 
 // Win API headers
