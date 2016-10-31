@@ -12,7 +12,6 @@
 //////////////
 
 
-
 // C++ standard headers
 #include <algorithm>
 #include <array>
@@ -38,3 +37,7 @@
 // Microsoft helper headers
 #include <DirectXMath.h>
 #include <wrl.h>
+
+// Custom classes
+//#include "GameTimer.h"
+//#include "Scene.h"

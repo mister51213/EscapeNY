@@ -59,15 +59,15 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
 {
 	// FOR TESTING PURPOSES, use constant time interval
-	timer.Stop();
+	m_timer.Stop();
 
 	#ifdef NDEBUG
-	float tSinceLastFrame = timer.SecondsPassed();
+	float tSinceLastFrame = m_timer.SecondsPassed();
 	#else
 	float tSinceLastFrame = 0.016f; // avg time btwn frames (60 FPS)
 	#endif
 	
-	timer.Start();
+	m_timer.Start();
 
     int randInt = rand() % 3;
 	// NOTE: If you need a float between 0.f and 10.f, shouldn't the line say:

@@ -6,6 +6,7 @@
 #include "Light_Spot.h"
 #include "Overlay.h"
 #include "GameTimer.h"
+//#include "Scene.h"
 
 class Game_FPS:public ISubGame
 {
@@ -56,9 +57,18 @@ private:
     vector<LightBufferType> m_lightSet; // passed to GameView
     int m_numLights = 5;
 
-	// TIMING
-	GameTimer timer;
+	//////////////////////////////////////////////////////
+	///////////////////// NEW CLASSES ////////////////////
+	//////////////////////////////////////////////////////
+	
+	GameTimer m_timer;
+	//Scene m_scene; (CHILDREN of these functions)
+	// TODO: implement this so Actors are being passed to the physics engine
+	// TODO: (currently, it is the OTHER way around)
+	// TODO: remove physics member object from Actor.h line 74
+	//Physics m_physics;
 
-    // TODO: ENCAPSULATE this into a bigger SCENE object down the road
+    // TODO: Consolidate Timer, Physics, Scene, and GameView all into one GAME class
+	// (now they are spread out between game_fps and game)
     
 };
