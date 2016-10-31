@@ -13,8 +13,7 @@ public:
 		class Game *const pGame,
 		Camera *const pCamera) = 0;
 
-	// Use UpdateFrame to update actors, camera and anything else that 
-	// needs updating.
+	// Use this to update actors, camera and anything else that needs updating.
 	virtual void UpdateScene( const Input &InputRef, Camera *const pCamera) = 0;
 
 	// Use RenderFrame to render the list of actors or other game objects
