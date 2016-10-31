@@ -10,12 +10,11 @@ class GameEvent
 		ACTIVEPLAY,
 		GAMEOVER
 	};
+
 public:
-	GameEvent()
-	{
-		
-	}
+	GameEvent();
 	~GameEvent();
+
 	GameState ChangeState( GameState newState );
 	void NewLevel();
 	void StartGame();

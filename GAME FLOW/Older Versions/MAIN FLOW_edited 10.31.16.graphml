@@ -3486,14 +3486,14 @@ in the Game class, but is only used for initialization of the Texture and Model 
         <y:ProxyAutoBoundsNode>
           <y:Realizers active="0">
             <y:GroupNode>
-              <y:Geometry height="2215.779778501074" width="2073.38243673774" x="3839.9834986721435" y="-1314.353424397391"/>
+              <y:Geometry height="2210.4123065720414" width="2073.38243673774" x="3839.9834986721435" y="-1308.9859524683586"/>
               <y:Fill color="#F5F5F5" transparent="false"/>
               <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="100" fontStyle="plain" hasLineColor="false" height="126.509765625" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="2073.38243673774" x="0.0" y="0.0">UML DIAGRAM</y:NodeLabel>
               <y:Shape type="roundrectangle"/>
               <y:State closed="false" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
               <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="5" bottomF="4.564501541896334" left="0" leftF="0.0" right="75" rightF="75.21319214138839" top="0" topF="0.0"/>
+              <y:BorderInsets bottom="5" bottomF="4.564501541896561" left="0" leftF="0.0" right="75" rightF="75.21319214138839" top="11" topF="10.59235564357391"/>
             </y:GroupNode>
             <y:GroupNode>
               <y:Geometry height="50.0" width="50.0" x="0.0" y="60.0"/>
@@ -3919,7 +3919,7 @@ Factory<y:LabelModel>
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="40.00000000000006" width="211.28573378839565" x="3915.5776638742545" y="-1172.843658772391"/>
+              <y:Geometry height="40.00000000000006" width="211.28573378839565" x="3915.577663874254" y="-1156.8838311997847"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="66.216796875" x="72.53446845669782" y="3.0">TIMER<y:LabelModel>
@@ -4175,7 +4175,7 @@ void ThreatLevelDown(); // change music
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="153.27871339709378" width="211.28573378839565" x="4420.21643708077" y="242.45204530526343"/>
+              <y:Geometry height="153.27871339709378" width="211.28573378839565" x="4191.912038872425" y="242.45204530526343"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="30" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="40.7529296875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="135.66015625" x="37.81278876919782" y="3.0">CAMERA<y:LabelModel>
@@ -4546,6 +4546,7 @@ the way?<y:LabelModel>
       </graph>
     </node>
     <node id="n14">
+      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.start1">
           <y:Geometry height="40.0" width="80.0" x="9591.655859288301" y="-1475.8732843635967"/>
@@ -7144,7 +7145,7 @@ the way?<y:LabelModel>
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-207.31538305160575" sy="-97.81671107983418" tx="92.01160340424121" ty="-3.736105343325562"/>
+          <y:Path sx="-207.31538305160575" sy="-97.81671107983418" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="5.0"/>
           <y:Arrows source="diamond" target="none"/>
           <y:BendStyle smoothed="false"/>

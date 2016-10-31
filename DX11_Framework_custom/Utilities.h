@@ -179,10 +179,10 @@ struct CHAPTER
 
 // Returns center position in real world coordinates
 // IE. center of tile
-inline XMFLOAT2 ConvertTileCoordinates( int X, int Y )
-{
-	return{ ( X * g_tileWidth ) + g_offset, ( Y * g_tileWidth ) + g_offset };
-}
+//inline XMFLOAT2 ConvertTileCoordinates( int X, int Y )
+//{
+//	return{ ( X * g_tileWidth ) + g_offset, ( Y * g_tileWidth ) + g_offset };
+//}
 
 
 struct LEVEL_BLUEPRINT
@@ -204,18 +204,18 @@ struct LEVEL_BLUEPRINT
 	int carInitMap[ 10 ][ 10 ];
 	
 
-	static constexpr int carInitMap_example[ 10 ][10]
-	{ 
-		-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1,
-		-1, -1, -1, -1, -1, PORCHE, -1, -1, LAMBO, -1,
-		-1, -1, LAMBO, -1, -1, -1, -1, -1, LAMBO, -1,
-		-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1,
-		-1, -1, -1, -1, -1, CORVETTE, -1, -1, -1, -1,
-		-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1,
-		-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, -1, -1,
-		-1, -1, CORVETTE, -1, -1, PORCHE, -1, -1, LAMBO, -1,
-		-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1,
-		-1, -1, LAMBO, -1, -1, CORVETTE, -1, -1, -1, -1
-	};
+	//static constexpr int carInitMap_example[ 10 ][10]
+	//{ 
+	//	-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1,
+	//	-1, -1, -1, -1, -1, PORCHE, -1, -1, LAMBO, -1,
+	//	-1, -1, LAMBO, -1, -1, -1, -1, -1, LAMBO, -1,
+	//	-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1,
+	//	-1, -1, -1, -1, -1, CORVETTE, -1, -1, -1, -1,
+	//	-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1,
+	//	-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, -1, -1,
+	//	-1, -1, CORVETTE, -1, -1, PORCHE, -1, -1, LAMBO, -1,
+	//	-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1,
+	//	-1, -1, LAMBO, -1, -1, CORVETTE, -1, -1, -1, -1
+	//};
 };
 
