@@ -95,9 +95,13 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
     // TODO: and producing strange results. Tell it if within 0.001 of accuracy, to stop homing in on target.
     
 	// MAKE THIS CALL refPhysics.DO_PHYSICS every frame
-	//refPhysics.UpdateAll(m_player);
+	m_player.SetPosition(
+		refPhysics.MoveToTarget_ALT(
+			m_player.GetWorldSpecs(), 
+			m_player.m_attributes, 
+			tSinceLastFrame));
 
-	m_player.UpdateState( Move_PID, tSinceLastFrame/*0.007f*/ );
+	//m_player.UpdateState( Move_PID, tSinceLastFrame/*0.007f*/ );
 	// TODO: incorporate this w actual game timer
 
 

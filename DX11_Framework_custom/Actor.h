@@ -30,6 +30,9 @@ public:
     eTexture GetTexIndex() const { return m_texIndex; }
     const ModelSpecs_W &GetWorldSpecs() const { return m_worldSpecs; }
     const ModelSpecs_L &GetLocalSpecs() const { return m_localSpecs; }
+	
+	void SetWorldSpecs(ModelSpecs_W& newSpecs)	{ m_worldSpecs = newSpecs;}
+	void SetPosition(XMFLOAT3& newPos)	{ m_worldSpecs.position = newPos;}
 
     // TODO: move these into a child class, they are redundant for most
     // If they are redundant, wouldn't you want them in parent, so you 
@@ -70,8 +73,11 @@ protected:
 	////////////////////////////////
     // PHYSICS / MOVEMENT RELATED //
     ////////////////////////////////
-	//PhysAttributes physics;
 	Physics m_physics;
+
+public:
+	// NEW IMPLEMENTATION
+	PhysAttributes m_attributes;
 
     //XMFLOAT3 m_velocity = {0.f, 0.0f, 0.f};
     //// "downward" acceleration on the Y axis

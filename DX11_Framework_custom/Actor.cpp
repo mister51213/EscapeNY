@@ -41,16 +41,17 @@ void Actor::Move( const float deltaT)
     // 1. Properly implement time (get actual time elapsed from system)
     // 2. Need to initialize velocity elsewhere?
 
-    XMFLOAT3 deltaPos = m_physics.m_attributes.velocity * deltaT;
+    //XMFLOAT3 deltaPos = m_physics.m_attributes.velocity * deltaT;
+	XMFLOAT3 deltaPos = m_attributes.velocity * deltaT;
     m_worldSpecs.position += deltaPos;
 }
 
 void Actor::MovePID(float deltaT)
 {
-	m_worldSpecs.position = m_physics.MoveToTarget( m_worldSpecs, deltaT);
+	m_worldSpecs.position = m_physics.MoveToTarget_ALT( m_worldSpecs, m_attributes, deltaT);
 }
 
 void Actor::DoGravity( const float deltaT)
 {
-	m_worldSpecs.position = m_physics.ApplyGravity(m_worldSpecs,deltaT);
+	m_worldSpecs.position = m_physics.ApplyGravity(m_worldSpecs,m_attributes,deltaT);
 }
