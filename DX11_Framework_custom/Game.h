@@ -6,6 +6,7 @@
 // Sub-game includes
 #include "Game_Maze.h"
 #include "Game_FPS.h"
+#include "Scene.h"
 
 class Game
 {
@@ -38,6 +39,8 @@ private:
     GameView m_GameView;
 
     // This will switch to whatever game is active at the time.
-    std::unique_ptr<ISubGame> m_pActiveGame;
+    std::unique_ptr<ISubGame> m_pActiveScene;
+	GameTimer m_timer; // TODO: move into GAME, make it use them when it calls m_pActiveScene.UpdateScene();
+	Physics m_physics;
 };
 

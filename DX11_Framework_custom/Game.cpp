@@ -5,8 +5,10 @@ using namespace DirectX;
 
 Game::Game( std::shared_ptr<Input> pInput )
 	:
-	m_pActiveGame(new Game_FPS) // change active game here
-	//m_pActiveGame( new Game_Maze )
+	// change active game here
+	m_pActiveScene( new Game_FPS )
+	//m_pActiveScene( new Scene )
+	//m_pActiveScene( new Game_Maze )
 {
 	m_pInput = pInput;
 	srand( static_cast<unsigned int>( time( nullptr ) ) );
@@ -37,7 +39,7 @@ bool Game::Initialize(
 	// Pass all member pointers to GameObjects class so it can draw with them
 	m_GameView = GameView( m_pGraphics, m_pDirect3D, m_pCamera );
 	m_GameView.Initialize();
-    m_pActiveGame->Initialize(m_pGraphics, this, m_pCamera.get());
+    m_pActiveScene->Initialize(m_pGraphics, this, m_pCamera.get());
 
 	return true;
 }
@@ -56,11 +58,17 @@ bool Game::render()
 {
 	// Generate the view matrix based on the camera's position.
 	m_pCamera->Render();
-    m_pActiveGame->RenderFrame(m_GameView);
+    m_pActiveScene->RenderFrame(m_GameView);
 	return true;
 }
 
 void Game::updateGameObjects()
 {
-    m_pActiveGame->UpdateScene(*m_pInput, m_pCamera.get());
+	// FOR TESTING PURPOSES, use constant time interval
+	m_timer.Stop();
+	
+    m_pActiveScene->UpdateScene(*m_pInput, m_pCamera.get(), m_physics, m_timer);
+	// phyics - move actual IMPLEMENTATIONS into main physics object
+
+	m_timer.Start();
 }

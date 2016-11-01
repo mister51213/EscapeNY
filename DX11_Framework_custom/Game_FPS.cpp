@@ -56,20 +56,15 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 }
 
 	// Use UpdateFrame to update actors, camera and anything else that needs updating.
-void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
+void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
 {
-	// FOR TESTING PURPOSES, use constant time interval
-	m_timer.Stop();
-
 	#ifdef NDEBUG
-	float tSinceLastFrame = m_timer.SecondsPassed();
+	float tSinceLastFrame = refTimer.SecondsPassed();
 	#else
 	float tSinceLastFrame = 0.016f; // avg time btwn frames (60 FPS)
 	#endif
-	
-	m_timer.Start();
 
-    int randInt = rand() % 3;
+	int randInt = rand() % 3;
 	// NOTE: If you need a float between 0.f and 10.f, shouldn't the line say:
     float randFloat = static_cast<float>(rand() % 100)* 0.1f; // get random float from 0~10.0
 
@@ -99,10 +94,8 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera)
     // TODO: Error keeps infinitely decreasing, then wavering around 0, so it ends up getting wound up
     // TODO: and producing strange results. Tell it if within 0.001 of accuracy, to stop homing in on target.
     
-
-	//////////////////////////////
-		// TEST OUT TIMER //
-	//////////////////////////////
+	// MAKE THIS CALL refPhysics.DO_PHYSICS every frame
+	//refPhysics.UpdateAll(m_player);
 
 	m_player.UpdateState( Move_PID, tSinceLastFrame/*0.007f*/ );
 	// TODO: incorporate this w actual game timer

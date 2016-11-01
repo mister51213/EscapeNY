@@ -23,7 +23,7 @@ void Game_Maze::Initialize(
 	reset();
 }
 
-void Game_Maze::UpdateScene( const Input &InputRef, Camera *const pCamera )
+void Game_Maze::UpdateScene( const Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
 {
 	m_player.GetInput( InputRef );
 
