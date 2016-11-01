@@ -127,7 +127,7 @@ void Game_FPS::reset()
     { { 0.f, 10.f, 0.f },
     { 0.f, 0.f, 0.f },
     { .5f, .5f, .5f } },
-        eTexture::Water3, ModelSpecs_L(), SPHERE);
+        eTexture::AsphaltOld, ModelSpecs_L(), SPHERE);
     //2 - BEAR
     ModelSpecs_W wSpecs1 = 
     { { 0.f, -1.f, 0.f },
@@ -154,31 +154,32 @@ void Game_FPS::reset()
     aTest3 = Actor_NPC( wSpecs3, Lava2, ModelSpecs_L(), SOME_EDIFACE);
 
     // TEST SUBSETS OF ACTORS
-    //Algorithm_Grid3D alg;
-    //const int numRows = 5, numColumns = 5, numZ = 5;
-    //m_actorsSUB1 = alg.MakePatternNPC(numRows * numColumns * numZ, { 0.0f,100.0f,0.0f });
-    //auto numActors1 = m_actorsSUB1.size();
+    Algorithm_Grid3D alg;
+    const int numRows = 5, numColumns = 5, numZ = 5;
+    m_actorsSUB1 = alg.MakePatternNPC(numRows * numColumns * numZ, { 0.0f,100.0f,0.0f });
+    auto numActors1 = m_actorsSUB1.size();
 
-    //Algorithm_Spiral3D alg2(this);    
-    //m_actorsSUB2 = alg2.MakePatternNPC(100);
+    Algorithm_Spiral3D alg2(this);    
+    m_actorsSUB2 = alg2.MakePatternNPC(100);
 	auto numActors2 = m_actorsSUB2.size();
 
     // CRUCIAL!! //
-    m_pActorsMASTER.reserve(2 /*+ numActors1 + numActors2*/);
+    m_pActorsMASTER.reserve(/*2*/ + numActors1 + numActors2);
 
     // Load up draw list
     m_pActorsMASTER.push_back(&m_player);
     //m_pActorsMASTER.push_back(&aTest1);
     //m_pActorsMASTER.push_back(&aTest2);
     m_pActorsMASTER.push_back(&aTest3);
-    //for (int i = 0; i < numActors1; i++)
-    //{
-    //    m_pActorsMASTER.push_back(&(m_actorsSUB1[i]));
-    //}
-    //for (int i = 0; i < numActors2; i++)
-    //{
-    //    m_pActorsMASTER.push_back(&(m_actorsSUB2[i]));
-    //}
+
+	for (int i = 0; i < numActors1; i++)
+    {
+        m_pActorsMASTER.push_back(&(m_actorsSUB1[i]));
+    }
+    for (int i = 0; i < numActors2; i++)
+    {
+        m_pActorsMASTER.push_back(&(m_actorsSUB2[i]));
+    }
 }
 
 void Game_FPS::LightingFX()

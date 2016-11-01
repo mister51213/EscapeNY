@@ -24,6 +24,12 @@ public:
 
 	bool CorrectCollision();
 
+	XMFLOAT3 ApplyGravity_ALT( const float Mass, const float DeltaTime );
+
+	XMFLOAT3 ApplyWind( const float Mass );
+
+	XMFLOAT3 DoPhysics( const float Mass, const float DeltaTime, const XMFLOAT3 & Velocity );
+
 	/////////////// MOTION RELATED ///////////////////
 
 	DirectX::XMFLOAT3 MoveToTarget( const ModelSpecs_W & worldSpecs, PhysAttributes& attributes, const float deltaT );

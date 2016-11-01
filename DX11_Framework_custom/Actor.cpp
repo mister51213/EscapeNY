@@ -55,7 +55,7 @@ void Actor::MovePID(float deltaT)
 // ALT VERSION 2
 void Actor::MoveToTarget_ALT2(const float deltaT )
 {
-	const float gainCoefficient = 1.f;
+	const float gainCoefficient = 1.5f;
 	m_attributes.posError = m_attributes.target - m_worldSpecs.position;
 	XMFLOAT3 increment = m_attributes.posError * gainCoefficient * deltaT;
 
