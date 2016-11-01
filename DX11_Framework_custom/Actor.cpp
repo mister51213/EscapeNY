@@ -46,9 +46,20 @@ void Actor::Move( const float deltaT)
     m_worldSpecs.position += deltaPos;
 }
 
+// TODO: THESE are currently not used; must stop using the member m_physics variable in Actor.
 void Actor::MovePID(float deltaT)
 {
 	m_worldSpecs.position = m_physics.MoveToTarget_ALT( m_worldSpecs, m_attributes, deltaT);
+}
+
+// ALT VERSION 2
+void Actor::MoveToTarget_ALT2(const float deltaT )
+{
+	const float gainCoefficient = 1.f;
+	m_attributes.posError = m_attributes.target - m_worldSpecs.position;
+	XMFLOAT3 increment = m_attributes.posError * gainCoefficient * deltaT;
+
+	m_worldSpecs.position += increment;
 }
 
 void Actor::DoGravity( const float deltaT)

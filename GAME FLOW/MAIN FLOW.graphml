@@ -3486,7 +3486,7 @@ in the Game class, but is only used for initialization of the Texture and Model 
         <y:ProxyAutoBoundsNode>
           <y:Realizers active="0">
             <y:GroupNode>
-              <y:Geometry height="2215.779778501074" width="2073.38243673774" x="3839.9834986721435" y="-1314.353424397391"/>
+              <y:Geometry height="2259.689412508917" width="2073.38243673774" x="3839.9834986721435" y="-1358.2630584052342"/>
               <y:Fill color="#F5F5F5" transparent="false"/>
               <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="100" fontStyle="plain" hasLineColor="false" height="126.509765625" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="2073.38243673774" x="0.0" y="0.0">UML DIAGRAM</y:NodeLabel>
@@ -3919,7 +3919,7 @@ Factory<y:LabelModel>
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="40.00000000000006" width="211.28573378839565" x="3915.5776638742545" y="-1172.843658772391"/>
+              <y:Geometry height="40.00000000000006" width="211.28573378839565" x="3915.5776638742545" y="-1216.7532927802342"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="66.216796875" x="72.53446845669782" y="3.0">TIMER<y:LabelModel>
@@ -4054,7 +4054,7 @@ void Run()</y:MethodLabel>
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="133.89683210621746" width="271.8798989905058" x="3854.9834986721435" y="-1102.843658772391"/>
+              <y:Geometry height="133.89683210621746" width="271.8798989905058" x="3854.9834986721435" y="-1133.7490334165136"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="108.4921875" x="81.6938557452529" y="3.0">GameState<y:LabelModel>
@@ -4144,7 +4144,7 @@ GameOver }
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="218.70403501396544" width="271.8798989905049" x="3854.9834986721435" y="-968.9468266661736"/>
+              <y:Geometry height="218.70403501396544" width="271.8798989905049" x="3854.9834986721435" y="-999.852201310296"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="119.60546875" x="76.13721512025245" y="3.0">Game Event<y:LabelModel>
@@ -4197,7 +4197,7 @@ void Activate3rdPersonView();</y:MethodLabel>
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="61.63633575369363" width="211.28573378839565" x="4422.639048283957" y="-668.3226365276347"/>
+              <y:Geometry height="61.63633575369363" width="211.28573378839565" x="4467.347039273761" y="-681.0963482390073"/>
               <y:Fill color="#CCFFFF" transparent="false"/>
               <y:BorderStyle color="#0000FF" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="53.00390625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#0000FF" verticalTextPosition="bottom" visible="true" width="86.24609375" x="62.51982001919782" y="3.0">LEVEL
@@ -7648,7 +7648,7 @@ the way?<y:LabelModel>
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-172.69854169862992" sy="148.6351893666853" tx="0.0" ty="0.0"/>
+          <y:Path sx="-128.19756841185517" sy="137.4183771336352" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="5.0"/>
           <y:Arrows source="diamond" target="none"/>
           <y:BendStyle smoothed="false"/>
