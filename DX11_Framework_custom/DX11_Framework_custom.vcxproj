@@ -143,10 +143,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Actor_Dynamic.cpp" />
     <ClCompile Include="Actor_Light.cpp" />
     <ClCompile Include="Actor_NPC.cpp" />
     <ClCompile Include="Actor_Player.cpp" />
     <ClCompile Include="Actor_Player_Alt.cpp" />
+    <ClCompile Include="Actor_Static.cpp" />
     <ClCompile Include="Algorithm_Grid3D.cpp" />
     <ClCompile Include="Algorithm_Random.cpp" />
     <ClCompile Include="Algorithm_Spiral3D.cpp" />
@@ -235,10 +237,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="Actor_Dynamic.h" />
     <ClInclude Include="Actor_Light.h" />
     <ClInclude Include="Actor_NPC.h" />
     <ClInclude Include="Actor_Player.h" />
     <ClInclude Include="Actor_Player_Alt.h" />
+    <ClInclude Include="Actor_Static.h" />
     <ClInclude Include="Algorithm_Grid3D.h" />
     <ClInclude Include="Algorithm_Random.h" />
     <ClInclude Include="Algorithm_Spiral3D.h" />

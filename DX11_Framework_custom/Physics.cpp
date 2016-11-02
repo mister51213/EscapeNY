@@ -47,7 +47,7 @@ bool Physics::CorrectCollision()
 
 
 //////////////////////////////
-//	NEW PHYS FUNCTIONS //
+//	  NEW PHYS FUNCTIONS    //
 //////////////////////////////
 
 DirectX::XMFLOAT3 Physics::ApplyGravity_ALT( const float Mass, const float DeltaTime )
