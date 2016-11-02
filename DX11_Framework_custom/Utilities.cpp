@@ -103,6 +103,7 @@ void Quicksort( XMFLOAT3 *arr, const int left, const int right, PartFn Fn )
 
 void Sort( std::vector<XMFLOAT3> &V )
 {
+	
 	// Erase duplicate vertices from vertex list
 	/*for ( int j = V.size() - 1; j >= 0; --j )
 	{
@@ -114,7 +115,8 @@ void Sort( std::vector<XMFLOAT3> &V )
 			}
 		}
 	}*/
-
+	
+	
 	// Sort by Y
 	Quicksort( V.data(), 0, V.size() - 1, PartitionY );
 
@@ -166,6 +168,11 @@ DirectX::XMMATRIX GetWorldMatrix( const ModelSpecs_W & modSpecs )
 	return XMMatrixTranspose( rot*scal*trans );
 }
 
+DirectX::XMFLOAT2 ConvertTileCoordinates( int X, int Y )
+{
+	return{ ( X * g_tileWidth ) + g_offset, ( Y * g_tileWidth ) + g_offset };
+}
+
 void Transpose( std::vector<XMMATRIX>& matrices )
 {
 	for( auto &matrix : matrices )
@@ -187,3 +194,37 @@ ModelSpecs_L::ModelSpecs_L( const XMFLOAT3 & Center, const XMFLOAT3 & Orientatio
 // CreateCBufferDescription(UINT size)
 // TODO: Make generic function CreateVertexBuffer(??)
 /////////////////////////////////////////////////////
+
+inline AlignedAxisBoundingBox::AlignedAxisBoundingBox( const DirectX::XMFLOAT3 & Center, const DirectX::XMFLOAT3 & Extent )
+	:
+	center( Center ),
+	extent( Extent )
+{}
+
+// Assumes that translation has already been applied
+
+inline bool AlignedAxisBoundingBox::Overlaps( const AlignedAxisBoundingBox & AABB ) const
+{
+	// Max extents
+	const auto RightTopBackA = ( center + extent );
+	const auto RightTopBackB = ( AABB.center + AABB.extent );
+
+	// Min extent
+	const auto LeftBottomFrontA = ( center - extent );
+	const auto LeftBottomFrontB = ( AABB.center - AABB.extent );
+
+	// Determine if any of the sides overlaps
+	const auto xOverlap = ( RightTopBackA.x > RightTopBackB.x &&
+							LeftBottomFrontA.x < LeftBottomFrontB.x );
+	const auto yOverlap = ( RightTopBackA.y > RightTopBackB.y &&
+							LeftBottomFrontA.y < LeftBottomFrontB.y );
+	const auto zOverlap = ( RightTopBackA.z > RightTopBackB.z &&
+							LeftBottomFrontA.z < LeftBottomFrontB.z );
+
+	// AND the overlap results together 
+	const auto doesOverlap = ( xOverlap && yOverlap && zOverlap );
+
+	// Return the final result
+	return doesOverlap;
+
+}

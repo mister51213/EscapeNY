@@ -70,6 +70,24 @@ enum eForceType
 	Swerve
 };
 
+// It might be more efficient to store CENTER and EXTENT in Bounding box.
+// This way you only have to update the CENTER each frame and calculate
+// the sides of the box from the extents.  Currently, if you store all
+// eight vertices of the bounding box, you'd have to update all eight each
+// frame.  Even if you store just the min/max points of the box, that's 
+// still two vertices instead of one to update.
+struct AlignedAxisBoundingBox
+{
+	AlignedAxisBoundingBox() = default;
+	AlignedAxisBoundingBox( const DirectX::XMFLOAT3 &Center, const DirectX::XMFLOAT3 &Extent );
+
+	// Assumes that translation has already been applied
+	bool Overlaps( const AlignedAxisBoundingBox &AABB )const;
+
+
+	DirectX::XMFLOAT3 center, extent;
+};
+
 struct BoundingBox
 {
 	std::vector<DirectX::XMFLOAT3> vertices;
@@ -179,10 +197,7 @@ struct CHAPTER
 
 // Returns center position in real world coordinates
 // IE. center of tile
-//inline XMFLOAT2 ConvertTileCoordinates( int X, int Y )
-//{
-//	return{ ( X * g_tileWidth ) + g_offset, ( Y * g_tileWidth ) + g_offset };
-//}
+DirectX::XMFLOAT2 ConvertTileCoordinates( int X, int Y );
 
 
 struct LEVEL_BLUEPRINT
@@ -204,18 +219,18 @@ struct LEVEL_BLUEPRINT
 	int carInitMap[ 10 ][ 10 ];
 	
 
-	//static constexpr int carInitMap_example[ 10 ][10]
-	//{ 
-	//	-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1,
-	//	-1, -1, -1, -1, -1, PORCHE, -1, -1, LAMBO, -1,
-	//	-1, -1, LAMBO, -1, -1, -1, -1, -1, LAMBO, -1,
-	//	-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1,
-	//	-1, -1, -1, -1, -1, CORVETTE, -1, -1, -1, -1,
-	//	-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1,
-	//	-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, -1, -1,
-	//	-1, -1, CORVETTE, -1, -1, PORCHE, -1, -1, LAMBO, -1,
-	//	-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1,
-	//	-1, -1, LAMBO, -1, -1, CORVETTE, -1, -1, -1, -1
-	//};
+	static constexpr int carInitMap_example[ 10 ][10]
+	{ 
+		{ -1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1 },
+		{ -1, -1, -1, -1, -1, PORCHE, -1, -1, LAMBO, -1 },
+		{-1, -1, LAMBO, -1, -1, -1, -1, -1, LAMBO, -1 },
+		{-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1 },
+		{-1, -1, -1, -1, -1, CORVETTE, -1, -1, -1, -1 },
+		{-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1 },
+		{-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, -1, -1 },
+		{-1, -1, CORVETTE, -1, -1, PORCHE, -1, -1, LAMBO, -1 },
+		{-1, -1, LAMBO, -1, -1, PORCHE, -1, -1, LAMBO, -1 },
+		{-1, -1, LAMBO, -1, -1, CORVETTE, -1, -1, -1, -1 }
+	};
 };
 

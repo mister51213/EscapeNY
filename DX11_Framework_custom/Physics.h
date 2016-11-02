@@ -19,8 +19,15 @@ public:
 	/////////////// COLLISION RELATED ///////////////////
 
 	void MakeBoundingBox(BoundingBox bounds, eModType type = SPHERE);
+	// AlignedAxisBoundingBox doesn't care what shape the mesh is, it's a BOX.
+	// If you care what the model type is, you need to make different Bounding
+	// objects, like BoundingTriangle, BoundingFrustum, BoundingSphere or BoundingMesh.
+	AlignedAxisBoundingBox MakeBoundingBox( const std::vector<DirectX::XMFLOAT3> &VertexList);
 
 	bool CheckCollision(BoundingBox bounds );
+	bool CheckCollision( 
+		const XMFLOAT3 &PositionA, const AlignedAxisBoundingBox &BoundsA, 
+		const XMFLOAT3 &PositionB, const AlignedAxisBoundingBox &BoundsB );
 
 	bool CorrectCollision();
 
