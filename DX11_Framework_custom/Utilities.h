@@ -42,10 +42,10 @@ void Sort( std::vector<DirectX::XMFLOAT3> &V );
 //////////////////////////
 /// GAME LOGIC RELATED ///
 //////////////////////////
-enum eState
-{
-	Stationary, Falling, Moving, Move_PID
-};
+//enum eState
+//{
+//	Stationary, Falling, Moving, Move_PID
+//};
 
 ////////////////////////
 /// PHYSICS RELATED  ///
@@ -60,11 +60,6 @@ struct PhysAttributes
 	DirectX::XMFLOAT3 velocity = { 0.f, 0.0f, 0.f };
 	DirectX::XMFLOAT3 acceleration = { 0.f, 0.0f, 0.f };
 	float Mass = 1.0f;
-
-
-	// TODO:
-	DirectX::XMFLOAT3 posError = { 0.0f, 0.0f, 0.0f };
-	DirectX::XMFLOAT3 target = { 0.0f, 0.0f, 0.0f };
 };
 
 enum eForceType

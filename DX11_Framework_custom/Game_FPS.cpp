@@ -94,14 +94,8 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
     // TODO: Error keeps infinitely decreasing, then wavering around 0, so it ends up getting wound up
     // TODO: and producing strange results. Tell it if within 0.001 of accuracy, to stop homing in on target.
     
-	// MAKE THIS CALL refPhysics.DO_PHYSICS every frame
-	//m_player.SetPosition(
-	//	refPhysics.MoveToTarget_ALT(
-	//		m_player.GetWorldSpecs(), 
-	//		m_player.m_attributes, 
-	//		tSinceLastFrame));
 
-	m_player.MoveToTarget_ALT2( tSinceLastFrame );
+	m_player.MoveToTarget( tSinceLastFrame );
 
 	// FIRST CHECK FOR INPUT
 	// > that modifies the actor's phys attributes as necessary
@@ -121,7 +115,6 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
 		m_physics.DoPhysics( actor.m_attributes, tSinceLastFrame);
 	}
 	// pass attributes by reference so that DoPhysics cna modify it
-	// CALL 
 	for each ( auto actor in m_actorsSUB1 )
 	{
 		actor.SetState( Actor_Dynamic::Move_PID );
@@ -292,8 +285,7 @@ void Game_FPS::RenderFrame(const GameView &GameViewRef)
     }
 
     // TODO: make it take a whole VECTOR of LightBufferTypes
-    // TODO: refactor the shader to have that array of 300 lights and
-    // initialize them as needed
+    // TODO: refactor the shader to have that array of 300 lights and initialize them as needed
 
     GameViewRef.UpdateView(m_pActorsMASTER, scene);
    	m_Overlay.Render( *m_pGraphics );
