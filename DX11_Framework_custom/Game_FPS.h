@@ -65,7 +65,7 @@ private:
 	// TODO: implement this so Actors are being passed to the physics engine
 	// TODO: (currently, it is the OTHER way around)
 	// TODO: remove physics member object from Actor.h line 74
-	//Physics m_physics;
+	Physics m_physics;
 
     // TODO: Consolidate Timer, Physics, Scene, and GameView all into one GAME class
 	// (now they are spread out between game_fps and game)

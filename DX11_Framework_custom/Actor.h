@@ -47,19 +47,19 @@ public:
     // GAME LOGIC AND PHYSICS FUNCTIONS //
     //////////////////////////////////////
     // TODO: CHANGE THIS TO TAKE REAL TIME!!!!!!!!!!
-    void UpdateState(eState state, float deltaT = 0.0f);
+	// void UpdateState(eState state, float deltaT = 0.0f);
 
 	
     virtual void GetInput(const Input& pInput, int randI = 0.f, float randF = 0.f) {}
 
-    void MovePID(float deltaT = 0.0f);
+    //void MovePID(float deltaT = 0.0f);
 
-	void MoveToTarget_ALT2( const float deltaT );
+	//void MoveToTarget_ALT2( const float deltaT );
 
 
 protected:
-    void Move(const float time);
-	void DoGravity(const float deltaT);
+    //void Move(const float time);
+	//void DoGravity(const float deltaT);
 
 protected:
     eModType m_modType;

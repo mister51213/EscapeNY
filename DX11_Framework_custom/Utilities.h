@@ -58,6 +58,11 @@ struct PhysAttributes
 	// would need to calculate this for more realistic physics.
 	float terminalV = 50.0f;
 	DirectX::XMFLOAT3 velocity = { 0.f, 0.0f, 0.f };
+	DirectX::XMFLOAT3 acceleration = { 0.f, 0.0f, 0.f };
+	float Mass = 1.0f;
+
+
+	// TODO:
 	DirectX::XMFLOAT3 posError = { 0.0f, 0.0f, 0.0f };
 	DirectX::XMFLOAT3 target = { 0.0f, 0.0f, 0.0f };
 };
@@ -119,7 +124,7 @@ struct ModelSpecs_L
 	ModelSpecs_L(
 		const DirectX::XMFLOAT3 &Center = { 0.f, 0.f, 0.f },
 		const DirectX::XMFLOAT3 &Orientation = { 0.f, 0.f, 0.f },
-		const DirectX::XMFLOAT3 &Size = { .5f, .5f, .5f } );
+		const DirectX::XMFLOAT3 &Size = { 1.f, 1.f, 1.f } );
 
 	DirectX::XMFLOAT3 center;
 	DirectX::XMFLOAT3 orientation;

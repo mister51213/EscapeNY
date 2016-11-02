@@ -32,9 +32,9 @@ public:
 
 	DirectX::XMFLOAT3 ApplyGravity_ALT( const float Mass, const float DeltaTime );
 
-	DirectX::XMFLOAT3 ApplyWind( const float Mass );
+	DirectX::XMFLOAT3 ApplyWind( const float Mass, const float DeltaTime );
 
-	DirectX::XMFLOAT3 DoPhysics( const float Mass, const float DeltaTime, const DirectX::XMFLOAT3 & Velocity );
+	void DoPhysics( PhysAttributes& attributes, const float DeltaTime );
 
 	/////////////// MOTION RELATED ///////////////////
 

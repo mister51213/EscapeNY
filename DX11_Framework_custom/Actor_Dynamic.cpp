@@ -12,6 +12,31 @@ Actor_Dynamic::Actor_Dynamic(ModelSpecs_W worldSpecs, eTexture tex, ModelSpecs_L
 Actor_Dynamic::~Actor_Dynamic()
 {}
 
+void Actor_Dynamic::Update(eState state, float deltaT)
+{
+	    m_state = state;
+        switch (m_state)
+        {
+        case Stationary:
+            return;
+        case Falling:
+            {
+                //DoGravity(deltaT);
+            }
+        case Moving:
+            {
+                Move(deltaT);
+            }
+        case Move_PID:
+            {
+                MovePID(deltaT); // TODO: change this to non-default parameter
+            }
+        default:
+            return;
+        }
+}
+
+
 void Actor_Dynamic::Move( const float deltaT)
 {
     // TODO:

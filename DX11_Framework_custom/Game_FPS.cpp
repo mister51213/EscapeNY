@@ -78,7 +78,7 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
     for (auto& pActor : m_actorsSUB1)
     {
         pActor.GetInput(InputRef, randInt, randFloat);
-        pActor.UpdateState(Falling, 0.007f);
+        //pActor.Update(Falling, 0.007f);
     }
 
     randInt = rand() % 3;
@@ -103,15 +103,45 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
 
 	m_player.MoveToTarget_ALT2( tSinceLastFrame );
 
+	// FIRST CHECK FOR INPUT
+	// > that modifies the actor's phys attributes as necessary
 	//m_player.UpdateState( Move_PID, tSinceLastFrame/*0.007f*/ );
-	// TODO: incorporate this w actual game timer
+
+	/*
+	1. INPUT SETS THE TARGET
+	1.5 CALCULATE ALL FORCES
+	2. CALCULATE FINAL ACCELERATION FOR THAT FRAME
+	3. CALCULATE FINAL VELOCITY FOR THAT FRAME 
+		(as a result of the acceleration)
+	4. CALCULATE FINAL DISPLACEMENT > add it to the object's position
+	*/
+	
+	for each ( auto actor in m_actorsSUB1 )
+	{
+		m_physics.DoPhysics( actor.m_attributes, tSinceLastFrame);
+	}
+	// pass attributes by reference so that DoPhysics cna modify it
+	// CALL 
+	for each ( auto actor in m_actorsSUB1 )
+	{
+		actor.Update(Move_PID, tSinceLastFrame);
+	}
+
+
+
+
+
+
+
+
+
 
 
     for (int i = 0; i < m_actorsSUB1.size(); i++)
     {
         // random number 0~.1
        float randFloatS = static_cast<float>(rand() % 1000)* 0.00001f;
-       m_actorsSUB1[i].UpdateState(Falling, randFloatS);
+       m_actorsSUB1[i].Update(Falling, randFloatS);
     }
 }
 

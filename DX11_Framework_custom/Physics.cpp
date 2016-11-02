@@ -99,14 +99,14 @@ DirectX::XMFLOAT3 Physics::ApplyGravity_ALT( const float Mass, const float Delta
 	const DirectX::XMFLOAT3 accelerationDirection( 0.f, -gravityConstant, 0.f );
 	const DirectX::XMFLOAT3 acceleration( accelerationDirection * timeSquared );
 	
-	return acceleration * Mass;
+	return acceleration * Mass; // RESULTANT INCREASE IN ACCELERATION 
 
 	// Same rule would apply for attracting forces like two masses in space 
 	// or particles being attraced to each other, just in the direction
 	// of each other.
 }
 
-DirectX::XMFLOAT3 Physics::ApplyWind( const float Mass )
+DirectX::XMFLOAT3 Physics::ApplyWind( const float Mass, const float DeltaTime )
 {
 	// Wind direction and strength (it's vector) could change each frame or each
 	// level.  Depending on the wind speed, it may have no affect on player velocity
@@ -117,19 +117,22 @@ DirectX::XMFLOAT3 Physics::ApplyWind( const float Mass )
 
 	const float airMass = 0.00936837f;
 	const DirectX::XMFLOAT3 windDirection( -1.f, 0.f, 0.f );
-	return windDirection * airMass;
+	return windDirection * airMass *DeltaTime; // RESULTANT INCREASE IN ACCELERATION 
 }
 
-DirectX::XMFLOAT3 Physics::DoPhysics( const float Mass, const float DeltaTime, const DirectX::XMFLOAT3 &Velocity )
+void Physics::DoPhysics( PhysAttributes& attributes, const float DeltaTime)
 {
-	DirectX::XMFLOAT3 acceleration = ApplyGravity_ALT( Mass, DeltaTime );
-	acceleration += ApplyWind( Mass );
-	// Apply any physical forces desired, then add acceleration to velocity 
-	// and return result
+	DirectX::XMFLOAT3 acceleration = ApplyGravity_ALT( attributes.Mass, DeltaTime );
+	acceleration += ApplyWind( attributes.Mass, DeltaTime );
+	//acceleration += ApplyForce1( Mass )*DeltaTime;
+	//acceleration += ApplyForce2( Mass )*DeltaTime;
 
-	return Velocity + acceleration;
+	// Apply any physical forces desired, then add acceleration to velocity and return result
+
+	attributes.acceleration += acceleration;
+	// return acceleration; // TODO: add this to velocity in actor move function
+	// return Velocity + acceleration;
 }
-
 
 
 XMFLOAT3 Physics::MoveToTarget( const ModelSpecs_W& worldSpecs, PhysAttributes& attributes, const float deltaT )
