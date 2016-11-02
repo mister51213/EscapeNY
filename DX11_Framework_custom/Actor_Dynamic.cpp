@@ -21,20 +21,20 @@ void Actor_Dynamic::Update(float deltaT)
 {
         switch (m_state)
         {
-        case Stationary:
+        case STILL:
             return;
-        case Falling:
+        case FALLING:
             {
 
             }
-        case Move_PID:
+        case HOMING:
             {
-                MoveToTarget(deltaT); // TODO: change this to non-default parameter
+                ChaseTarget(deltaT); // TODO: change this to non-default parameter
 				break;
             }
-		case Moving:
+		case CONST_MOVE:
             {
-                Move(deltaT);
+                ConstantMove(deltaT);
 				break;
             }
         default:
@@ -42,13 +42,13 @@ void Actor_Dynamic::Update(float deltaT)
         }
 }
 
-void Actor_Dynamic::Move( const float deltaT)
+void Actor_Dynamic::ConstantMove( const float deltaT)
 {
 	XMFLOAT3 deltaPos = m_attributes.velocity * deltaT;
     m_worldSpecs.position += deltaPos;
 }
 
-void Actor_Dynamic::MoveToTarget(const float deltaT )
+void Actor_Dynamic::ChaseTarget(const float deltaT )
 {
 	const float gainCoefficient = 1.5f;
 	XMFLOAT3 m_posError = m_target - m_worldSpecs.position;

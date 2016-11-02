@@ -8,7 +8,7 @@ public:
 	enum eActorState
 	{	
 		// TODO: REMOVE THESE, add specific state collections for each Actor child
-		Stationary, Falling, Moving, Move_PID,
+		STILL, FALLING, CONST_MOVE, HOMING,
 		PLAYER_IDLE, PLAYER_WALKING, PLAYER_PUSHING, PLAYER_QUICKTIME, PLAYER_DROWNING, PLAYER_PINNED
 	};
 
@@ -17,9 +17,8 @@ public:
 	~Actor_Dynamic();
 	void SetState( eActorState state );
 	virtual void Update( float deltaT );
-	void Move( const float deltaT );
-	void MovePID( float deltaT );
-	void MoveToTarget( const float deltaT );
+	void ConstantMove( const float deltaT );
+	void ChaseTarget( const float deltaT );
 
 	XMFLOAT3 MoveTowardTarget( const float deltaT );
 

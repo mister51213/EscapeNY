@@ -12,25 +12,25 @@ void Actor_Player::GetInput(const Input& pInput, int randI, float randF)
     {
         if (pInput.IsKeyDown(VK_RIGHT))
         {
-            m_state = Move_PID;
+            m_state = HOMING;
             m_target = { 60.f, 0.f, 0.0f };
             //Move({ .6f, 0.f, 0.f });
         }
         if (pInput.IsKeyDown(VK_LEFT))
         {
-            m_state = Move_PID;
+            m_state = HOMING;
             m_target = { -60.f, 0.f, 0.0f };
             //Move({ -.6f, 0.f, 0.f });
         }
         if (pInput.IsKeyDown(VK_UP))
         {
-            m_state = Move_PID;
+            m_state = HOMING;
             m_target = { 0.f, 0.f, 60.0f };            
            //Move({ 0.f, 0.f, .6f });
         }
         if (pInput.IsKeyDown(VK_DOWN))
         {
-            m_state = Move_PID;
+            m_state = HOMING;
             m_target = { 0.f, 0.f, -60.0f };
             //Move({ 0.f, 0.f, -.6f });
         }
@@ -43,18 +43,18 @@ void Actor_Player::GetInput(const Input& pInput, int randI, float randF)
 {
         switch (m_state)
         {
-        case Stationary:
+        case STILL:
             return;
-        case Falling:
+        case FALLING:
             {
 
             }
-        case Move_PID:
+        case HOMING:
             {
-                MoveToTarget(deltaT); // TODO: change this to non-default parameter
+                ChaseTarget(deltaT); // TODO: change this to non-default parameter
 				break;
             }
-		case Moving:
+		case CONST_MOVE:
             {
 				Move( { 1.0f,1.0f,1.0f } );
 				break;

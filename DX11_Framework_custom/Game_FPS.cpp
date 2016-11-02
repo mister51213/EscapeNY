@@ -95,7 +95,7 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
     // TODO: and producing strange results. Tell it if within 0.001 of accuracy, to stop homing in on target.
     
 
-	m_player.MoveToTarget( tSinceLastFrame );
+	m_player.ChaseTarget( tSinceLastFrame );
 
 	// FIRST CHECK FOR INPUT
 	// > that modifies the actor's phys attributes as necessary
@@ -117,16 +117,15 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
 	// pass attributes by reference so that DoPhysics cna modify it
 	for each ( auto actor in m_actorsSUB1 )
 	{
-		actor.SetState( Actor_Dynamic::Move_PID );
+		actor.SetState( Actor_Dynamic::CONST_MOVE );
 		actor.Update(tSinceLastFrame);
 	}
-
 
     for (int i = 0; i < m_actorsSUB1.size(); i++)
     {
         // random number 0~.1
        float randFloatS = static_cast<float>(rand() % 1000)* 0.00001f;
-		m_actorsSUB1[i].SetState( Actor_Dynamic::Move_PID );
+		m_actorsSUB1[i].SetState( Actor_Dynamic::CONST_MOVE );
        m_actorsSUB1[i].Update(randFloatS);
     }
 }
