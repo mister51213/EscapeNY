@@ -9,9 +9,9 @@ GameEvent::GameEvent()
 GameEvent::~GameEvent()
 {}
 
-GameEvent::GameState GameEvent::ChangeState( GameState newState )
+GameEvent::eGameState GameEvent::ChangeState( eGameState newState )
 {
-	return GameState();
+	return eGameState();
 }
 
 void GameEvent::NewLevel()

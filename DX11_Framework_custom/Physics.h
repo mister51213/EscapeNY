@@ -12,8 +12,9 @@ public:
 	~Physics() = default;
 
 	///////////////////// GENERAL ///////////////////////
-	ModelSpecs_W UpdateAll(PhysAttributes& attributes);
-	
+	//ModelSpecs_W UpdateAll(PhysAttributes& attributes);
+	void ApplyImpulse(PhysAttributes& attributes, const float Mass, const float DeltaTime );
+
 	/////////////// COLLISION RELATED ///////////////////
 
 	// AlignedAxisBoundingBox doesn't care what shape the mesh is, it's a BOX.
@@ -30,14 +31,9 @@ public:
 	/////////////// FORCE RELATED ///////////////////
 	DirectX::XMFLOAT3 ApplyGravity( const float Mass, const float DeltaTime );
 	DirectX::XMFLOAT3 ApplyGravity_OLD( const ModelSpecs_W& worldSpecs, PhysAttributes& attributes, const float deltaT );
-
 	DirectX::XMFLOAT3 ApplyWind( const float Mass, const float DeltaTime );
 
 	void DoPhysics( PhysAttributes& attributes, const float DeltaTime );
-
-
-public:
-	//PhysAttributes m_attributes;
 
 private:
 	BoundingMesh m_bounds;

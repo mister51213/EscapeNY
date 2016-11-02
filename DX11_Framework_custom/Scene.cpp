@@ -35,6 +35,28 @@ void Scene::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const
 	reset();
 }
 
+void Scene::reset()
+{
+	m_pActorsMASTER.clear();
+
+	// MAP
+	m_map = Actor_NPC( 
+	{ { 0.f, 0.f, 0.f },
+	{ 0.f, 0.f, 0.f },
+	{ 300.f, 150.f, 300.f } }, Lava2, ModelSpecs_L(), SOME_EDIFICE );
+
+    // PLAYER
+    m_player = Actor_Player(
+    { { 0.f, 10.f, 0.f },
+    { 0.f, 0.f, 0.f },
+    { .5f, .5f, .5f } }, eTexture::AsphaltOld, ModelSpecs_L(), SPHERE);
+
+	// LOAD DRAW LIST
+	m_pActorsMASTER.reserve( 2 );
+	m_pActorsMASTER.push_back(&m_player);
+    m_pActorsMASTER.push_back(&m_map);
+}
+
 void Scene::UpdateScene( const Input & InputRef, Camera * const pCamera, const Physics & refPhysics, const GameTimer & refTimer )
 {
 	// TIMER 
@@ -49,30 +71,15 @@ void Scene::UpdateScene( const Input & InputRef, Camera * const pCamera, const P
     m_pCamera->GetMouseInput(InputRef);
     m_player.GetInput(InputRef);
 
-	// PLAYER MOVEMENT
-	m_player.ChaseTarget( tSinceLastFrame );
-}
+	// PHYSICS
+	for each ( auto actor in m_pActorsMASTER )
+	{
+		m_physics.DoPhysics( actor->GetAttributes(), tSinceLastFrame);
+	}
 
-void Scene::reset()
-{
-	m_pActorsMASTER.clear();
-
-	// MAP
-	m_map = Actor_NPC( 
-	{ { 0.f, 0.f, 0.f },
-	{ 0.f, 0.f, 0.f },
-	{ 70.f, 30.f, 70.f } }, Lava2, ModelSpecs_L(), SOME_EDIFICE );
-
-    // PLAYER
-    m_player = Actor_Player(
-    { { 0.f, 10.f, 0.f },
-    { 0.f, 0.f, 0.f },
-    { .5f, .5f, .5f } }, eTexture::AsphaltOld, ModelSpecs_L(), SPHERE);
-
-	// LOAD DRAW LIST
-	m_pActorsMASTER.reserve( 2 );
-	m_pActorsMASTER.push_back(&m_player);
-    m_pActorsMASTER.push_back(&m_map);
+	// ACTOR MOVEMENT
+	m_player.SetState( Actor_Dynamic::HOMING );
+	m_player.Update(tSinceLastFrame);
 }
 
 void Scene::RenderFrame( const GameView & GameViewRef )
@@ -91,8 +98,8 @@ void Scene::RenderFrame( const GameView & GameViewRef )
    	m_Overlay.Render( *m_pGraphics );
 }
 
-// TODO: IMPLEMENT THIS
 const SceneBufferType & Scene::GetSceneData() const
 {
+	// TODO: IMPLEMENT THIS
 	return SceneBufferType();
 }

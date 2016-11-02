@@ -13,6 +13,9 @@ ModelSpecs_W Physics::UpdateAll( PhysAttributes & attributes )
 	return ModelSpecs_W();
 }
 
+void Physics::ApplyImpulse( PhysAttributes & attributes, const float Mass, const float DeltaTime )
+{}
+
 AlignedAxisBoundingBox Physics::MakeBoundingBox( const std::vector<DirectX::XMFLOAT3> &VertexList)
 {
 	// Initialize the minimum and maximum values for all the vertices

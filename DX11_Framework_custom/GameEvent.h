@@ -2,7 +2,7 @@
 
 class GameEvent
 {
-	enum class GameState
+	enum class eGameState
 	{
 		PAUSED,
 		MENU,
@@ -15,7 +15,7 @@ public:
 	GameEvent();
 	~GameEvent();
 
-	GameState ChangeState( GameState newState );
+	eGameState ChangeState( eGameState newState );
 	void NewLevel();
 	void StartGame();
 	void EndGame();
@@ -26,6 +26,6 @@ public:
 	void ThreatLevelDown(); // change music
 
 private:
-	GameState m_currentState = GameState::ACTIVEPLAY;
+	eGameState m_currentState = eGameState::ACTIVEPLAY;
 };
 

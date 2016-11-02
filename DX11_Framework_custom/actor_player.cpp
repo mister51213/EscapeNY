@@ -13,25 +13,25 @@ void Actor_Player::GetInput(const Input& pInput, int randI, float randF)
         if (pInput.IsKeyDown(VK_RIGHT))
         {
             m_state = HOMING;
-            m_target = { 60.f, 0.f, 0.0f };
+            m_target = { 200.f, 0.f, 0.0f };
             //Move({ .6f, 0.f, 0.f });
         }
         if (pInput.IsKeyDown(VK_LEFT))
         {
             m_state = HOMING;
-            m_target = { -60.f, 0.f, 0.0f };
+            m_target = { -200.f, 0.f, 0.0f };
             //Move({ -.6f, 0.f, 0.f });
         }
         if (pInput.IsKeyDown(VK_UP))
         {
             m_state = HOMING;
-            m_target = { 0.f, 0.f, 60.0f };            
+            m_target = { 0.f, 0.f, 200.f };            
            //Move({ 0.f, 0.f, .6f });
         }
         if (pInput.IsKeyDown(VK_DOWN))
         {
             m_state = HOMING;
-            m_target = { 0.f, 0.f, -60.0f };
+            m_target = { 0.f, 0.f, -200.f };
             //Move({ 0.f, 0.f, -.6f });
         }
 
@@ -64,7 +64,7 @@ void Actor_Player::GetInput(const Input& pInput, int randI, float randF)
         }
 }
 
-
+// TODO: DEFUNCT
 void Actor_Player::Move( const XMFLOAT3 & offset )
 {
 	m_worldSpecs.position += offset;

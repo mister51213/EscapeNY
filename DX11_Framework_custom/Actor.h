@@ -30,7 +30,8 @@ public:
     eTexture GetTexIndex() const { return m_texIndex; }
     const ModelSpecs_W &GetWorldSpecs() const { return m_worldSpecs; }
     const ModelSpecs_L &GetLocalSpecs() const { return m_localSpecs; }
-	
+	PhysAttributes &GetAttributes() { return m_attributes; }
+
 	void SetWorldSpecs(ModelSpecs_W& newSpecs)	{ m_worldSpecs = newSpecs;}
 	void SetPosition(XMFLOAT3& newPos)	{ m_worldSpecs.position = newPos;}
 
@@ -45,11 +46,6 @@ protected:
 
     ModelSpecs_W m_worldSpecs;
     ModelSpecs_L m_localSpecs;
-
-	////////////////////////////////
-    // PHYSICS / MOVEMENT RELATED //
-    ////////////////////////////////
-	Physics m_physics;
 
 public:
 	PhysAttributes m_attributes;
