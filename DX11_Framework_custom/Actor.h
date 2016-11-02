@@ -34,9 +34,6 @@ public:
 	void SetWorldSpecs(ModelSpecs_W& newSpecs)	{ m_worldSpecs = newSpecs;}
 	void SetPosition(XMFLOAT3& newPos)	{ m_worldSpecs.position = newPos;}
 
-    // TODO: move these into a child class, they are redundant for most
-    // If they are redundant, wouldn't you want them in parent, so you 
-    // don't have to keep remaking the same function?
     const XMFLOAT3 &GetPosition()const { return m_worldSpecs.position; }
     const XMFLOAT3 &GetRotation()const { return m_worldSpecs.orientation; }
 
@@ -52,6 +49,7 @@ public:
     // TODO: CHANGE THIS TO TAKE REAL TIME!!!!!!!!!!
     void UpdateState(eState state, float deltaT = 0.0f);
 
+	
     virtual void GetInput(const Input& pInput, int randI = 0.f, float randF = 0.f) {}
 
     void MovePID(float deltaT = 0.0f);

@@ -1,6 +1,11 @@
 #include "Physics.h"
 #include "MathUtils.h"
 
+#ifdef min || max
+#undef min
+#undef max
+#endif
+
 using namespace DirectX;
 
 ModelSpecs_W Physics::UpdateAll( PhysAttributes & attributes )
@@ -9,7 +14,7 @@ ModelSpecs_W Physics::UpdateAll( PhysAttributes & attributes )
 }
 
 // ALT VERSION
-DirectX::XMFLOAT3 Physics::MoveToTarget_ALT( const ModelSpecs_W & worldSpecs, PhysAttributes & attributes, const float deltaT ) const
+XMFLOAT3 Physics::MoveToTarget_ALT( const ModelSpecs_W & worldSpecs, PhysAttributes & attributes, const float deltaT ) const
 {
 	const float gainCoefficient = 1.f;
 	attributes.posError = attributes.target - worldSpecs.position;
@@ -25,9 +30,55 @@ void Physics::MakeBoundingBox(BoundingBox bounds, eModType type)
 	}
 }
 
+AlignedAxisBoundingBox Physics::MakeBoundingBox( const std::vector<DirectX::XMFLOAT3> &VertexList)
+{
+	// Initialize the minimum and maximum values for all the vertices
+	// to numbers that will definitely be overridden
+	XMFLOAT3 minVertex{ FLT_MAX, FLT_MAX, FLT_MAX };
+	XMFLOAT3 maxVertex{ FLT_MIN, FLT_MIN, FLT_MIN };
+
+	// Loop through the list of vertices and collect the lowest and highest
+	// values for each component
+	for ( auto& vertex : VertexList )
+	{
+		minVertex.x = std::min( minVertex.x, vertex.x );
+		minVertex.y = std::min( minVertex.y, vertex.y );
+		minVertex.z = std::min( minVertex.z, vertex.z );
+
+		maxVertex.x = std::max( maxVertex.x, vertex.x );
+		maxVertex.y = std::max( maxVertex.y, vertex.y );
+		maxVertex.z = std::max( maxVertex.z, vertex.z );
+	}
+
+	const auto extent = ( maxVertex - minVertex ) * .5f;
+	const auto center = minVertex + extent;
+	AlignedAxisBoundingBox bounds( center, extent );
+
+	// Return the BoundingBox object.
+	return bounds;
+}
+
 bool Physics::CheckCollision(BoundingBox bounds)
 {
 	return false;
+}
+
+bool Physics::CheckCollision( 
+	const XMFLOAT3 &PositionA, const AlignedAxisBoundingBox &BoundsA,
+	const XMFLOAT3 &PositionB, const AlignedAxisBoundingBox &BoundsB )
+{
+	// More information may be needed to determine how to handle the collision
+	// after verifying that there is a collision, but for now this just 
+	// determines if there was a collision.
+	
+	// If you don't like this implementation, then make sure that the center 
+	// member of the two AlignedAxisBoundingBox objects have been translated
+	// before entering this function.
+	const auto aabbA = AlignedAxisBoundingBox( BoundsA.center + PositionA, BoundsA.extent );
+	const auto aabbB = AlignedAxisBoundingBox( BoundsB.center + PositionB, BoundsB.extent );
+
+	bool overlaps = aabbA.Overlaps( aabbB );
+	return overlaps;
 }
 
 bool Physics::CorrectCollision()
