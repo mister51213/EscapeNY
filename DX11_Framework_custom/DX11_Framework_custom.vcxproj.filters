@@ -225,9 +225,6 @@
     <ClCompile Include="GameTimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Light_Base.cpp">
       <Filter>Source Files\Lighting</Filter>
     </ClCompile>
@@ -254,6 +251,9 @@
     </ClCompile>
     <ClCompile Include="Actor_Dynamic.cpp">
       <Filter>Source Files\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\SubGames</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -437,9 +437,6 @@
     <ClInclude Include="GameTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MathUtils.h">
       <Filter>Header Files\Utility Classes</Filter>
     </ClInclude>
@@ -460,6 +457,9 @@
     </ClInclude>
     <ClInclude Include="Actor_Static.h">
       <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\SubGames</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

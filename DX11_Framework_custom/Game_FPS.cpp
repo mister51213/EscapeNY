@@ -78,34 +78,19 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
     for (auto& pActor : m_actorsSUB1)
     {
         pActor.GetInput(InputRef, randInt, randFloat);
-        //pActor.Update(Falling, 0.007f);
     }
 
     randInt = rand() % 3;
     randFloat = (rand()%50)/10.0f; // get random float from 0~10.0
-    for (auto& pActor : m_actorsSUB2)
-    {
-        pActor.GetInput(InputRef, randInt, randFloat);
-    }
+	for( auto& pActor : m_actorsSUB2 )
+	{
+		pActor.GetInput( InputRef, randInt, randFloat );
+	}
 
-    /////////////////////////////
-    // PHYSICS //////////////////
-    /////////////////////////////
-    // TODO: Error keeps infinitely decreasing, then wavering around 0, so it ends up getting wound up
-    // TODO: and producing strange results. Tell it if within 0.001 of accuracy, to stop homing in on target.
-    
-	// MAKE THIS CALL refPhysics.DO_PHYSICS every frame
-	//m_player.SetPosition(
-	//	refPhysics.MoveToTarget_ALT(
-	//		m_player.GetWorldSpecs(), 
-	//		m_player.m_attributes, 
-	//		tSinceLastFrame));
-
-	m_player.MoveToTarget_ALT2( tSinceLastFrame );
+	m_player.ChaseTarget( tSinceLastFrame );
 
 	// FIRST CHECK FOR INPUT
 	// > that modifies the actor's phys attributes as necessary
-	//m_player.UpdateState( Move_PID, tSinceLastFrame/*0.007f*/ );
 
 	/*
 	1. INPUT SETS THE TARGET
@@ -121,27 +106,18 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
 		m_physics.DoPhysics( actor.m_attributes, tSinceLastFrame);
 	}
 	// pass attributes by reference so that DoPhysics cna modify it
-	// CALL 
 	for each ( auto actor in m_actorsSUB1 )
 	{
-		actor.Update(Move_PID, tSinceLastFrame);
+		actor.SetState( Actor_Dynamic::CONST_MOVE );
+		actor.Update(tSinceLastFrame);
 	}
-
-
-
-
-
-
-
-
-
-
 
     for (int i = 0; i < m_actorsSUB1.size(); i++)
     {
         // random number 0~.1
        float randFloatS = static_cast<float>(rand() % 1000)* 0.00001f;
-       m_actorsSUB1[i].Update(Falling, randFloatS);
+		m_actorsSUB1[i].SetState( Actor_Dynamic::CONST_MOVE );
+       m_actorsSUB1[i].Update(randFloatS);
     }
 }
 
@@ -175,13 +151,14 @@ void Game_FPS::reset()
     { { -10.f, 0.f, -30.f },
       { 0.f,0.f,0.f },
       { 80.f, 1.f, 80.f } };*/
+
     //4 - World Space
 	ModelSpecs_W wSpecs3{
 		{ 0.f, 0.f, 0.f },
 		{ 0.f, 0.f, 0.f },
 		{ 70.f, 30.f, 70.f }
 	};
-    aTest3 = Actor_NPC( wSpecs3, Lava2, ModelSpecs_L(), SOME_EDIFACE);
+    aTest3 = Actor_NPC( wSpecs3, Lava2, ModelSpecs_L(), SOME_EDIFICE);
 
     // TEST SUBSETS OF ACTORS
     Algorithm_Grid3D alg;
@@ -299,8 +276,7 @@ void Game_FPS::RenderFrame(const GameView &GameViewRef)
     }
 
     // TODO: make it take a whole VECTOR of LightBufferTypes
-    // TODO: refactor the shader to have that array of 300 lights and
-    // initialize them as needed
+    // TODO: refactor the shader to have that array of 300 lights and initialize them as needed
 
     GameViewRef.UpdateView(m_pActorsMASTER, scene);
    	m_Overlay.Render( *m_pGraphics );

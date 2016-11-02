@@ -14,9 +14,6 @@ public:
 	///////////////////// GENERAL ///////////////////////
 	ModelSpecs_W UpdateAll(PhysAttributes& attributes);
 	
-	/////// NEW MOTION /////////
-	DirectX::XMFLOAT3 MoveToTarget_ALT( const ModelSpecs_W & worldSpecs, PhysAttributes& attributes, const float deltaT ) const;
-
 	/////////////// COLLISION RELATED ///////////////////
 
 	// AlignedAxisBoundingBox doesn't care what shape the mesh is, it's a BOX.
@@ -30,21 +27,14 @@ public:
 
 	bool CorrectCollision();
 
-	DirectX::XMFLOAT3 ApplyGravity_ALT( const float Mass, const float DeltaTime );
+	/////////////// FORCE RELATED ///////////////////
+	DirectX::XMFLOAT3 ApplyGravity( const float Mass, const float DeltaTime );
+	DirectX::XMFLOAT3 ApplyGravity_OLD( const ModelSpecs_W& worldSpecs, PhysAttributes& attributes, const float deltaT );
 
 	DirectX::XMFLOAT3 ApplyWind( const float Mass, const float DeltaTime );
 
 	void DoPhysics( PhysAttributes& attributes, const float DeltaTime );
 
-	/////////////// MOTION RELATED ///////////////////
-
-	DirectX::XMFLOAT3 MoveToTarget( const ModelSpecs_W & worldSpecs, PhysAttributes& attributes, const float deltaT );
-
-	DirectX::XMFLOAT3 MoveTowardTarget( const ModelSpecs_W& worldSpecs, PhysAttributes& attributes, const float deltaT );
-
-	DirectX::XMFLOAT3 ApplyGravity( const ModelSpecs_W& worldSpecs, PhysAttributes& attributes, const float deltaT );
-
-	DirectX::XMFLOAT3 ApplyForce( eForceType forceType );
 
 public:
 	//PhysAttributes m_attributes;

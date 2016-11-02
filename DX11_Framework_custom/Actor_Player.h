@@ -18,6 +18,8 @@ public:
 
     void GetInput(const Input& pInput, int randI = 0.f, float randF = 0.f) override;
 
+	void Update( float deltaT ) override;
+
 private:
 	void Move( const DirectX::XMFLOAT3 &offset );
 
