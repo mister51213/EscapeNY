@@ -21,17 +21,28 @@ void TestBoard::Initialize( UINT Width, UINT Height, Graphics *const pGraphics )
 	m_width = Width;
 	m_height = Height;
 
-	m_worldSpecs.position = { ( m_width * .5f ) * 5.f, 1.f, ( m_height * .5f ) * 5.f};
+	const XMFLOAT2 position = ConvertTileCoordinates( m_width >> 1u, m_height >> 1u );
+	m_worldSpecs.position = { -position.x, 1.f, position.y};
 	m_worldSpecs.scale = 
 	{ 
 		static_cast<float>( m_width ), 1.f, 
 		static_cast<float>( m_height ) 
 	};
 
-	m_startCell =	{ rand() % m_width, m_height - 1 };
-	m_endCell =		{ rand() % m_width, 0 };
+	const float xStart = static_cast< float >( rand() % m_width );
+	const float yStart = static_cast< float >( m_height - 1 );
+	const float xEnd = static_cast< float >( rand() % m_width );
+	const float yEnd = 0.f + position.y;
+
+	const UINT xStartCell = static_cast<UINT>( xStart + position.x );
+	const UINT xEndCell = static_cast<UINT>( xEnd + position.x );
+	const UINT yStartCell = static_cast<UINT>( yStart + position.y );
+	const UINT yEndCell = static_cast<UINT>( yEnd );
+
+	m_startCell = { xStartCell, yStartCell };
+	m_endCell   =	{ xEndCell, yEndCell };
 	
-	m_cellSize = { 5.f, 1.f, 5.f };	
+	m_cellSize = { g_tileWidth, 1.f, g_tileWidth };
 }
 
 DirectX::XMUINT2 TestBoard::GetStartCellCoord() const

@@ -87,6 +87,7 @@ void Game_Maze::reset()
 	// clearing it when already empty doesn't hurt anything
 	m_pActorDrawList.clear();
 
+	
 	// Initialize the board object
 	m_board.Initialize( 9, 9, m_pGraphics );
 
@@ -99,7 +100,9 @@ void Game_Maze::reset()
 		{ .5f, .5f, .5f }
 	};
 
-	m_player = Actor_Player_Alt( wSpecs, SharkSkin, ModelSpecs_L() );
+	ModelSpecs_L lSpecs;
+	lSpecs.size *= (g_tileWidth * .95f);
+	m_player = Actor_Player_Alt( wSpecs, SharkSkin, lSpecs );
 
 	// Create the maze and get the list of actors representing walls
 	///////////////////////////////////////////////////
