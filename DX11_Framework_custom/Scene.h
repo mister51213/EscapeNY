@@ -56,12 +56,17 @@ private:
 	Graphics *m_pGraphics;
 	D3DGraphics *m_pDirect3D;
     Overlay m_Overlay;
-	Camera* m_pCamera; // dynamic / fixed, different camera angles
+
+	//////////////////////////////////////
+	// PHYSICS ///////////////////////////
+	//////////////////////////////////////
 	Physics m_physics;  
 
 	//////////////////////////////////////
 	// ACTORS ////////////////////////////
 	//////////////////////////////////////
+	Camera* m_pCamera; // dynamic / fixed, different camera angles
+
 	Actor_NPC m_map;
 	Actor_Player m_player;
 

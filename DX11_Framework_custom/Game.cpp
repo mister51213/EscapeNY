@@ -6,8 +6,8 @@ using namespace DirectX;
 Game::Game( std::shared_ptr<Input> pInput )
 	:
 	// change active game here
-	m_pActiveScene( new Game_FPS )
-	//m_pActiveScene( new Scene )
+	//m_pActiveScene( new Game_FPS )
+	m_pActiveScene( new Scene )
 	//m_pActiveScene( new Game_Maze )
 {
 	m_pInput = pInput;

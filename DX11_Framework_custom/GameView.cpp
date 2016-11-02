@@ -134,8 +134,8 @@ void GameView::initModelPool()
     m_ModelPool[CUSTOM_MESH4]->Initialize(prim, *m_pGfx);
 
 	prim.CreateMeshNM( L"Meshes/cube_inverted.BinaryMesh" );
-	m_ModelPool[ SOME_EDIFACE ].reset( new Model_TexturedNM );
-	m_ModelPool[ SOME_EDIFACE ]->Initialize( prim, *m_pGfx );
+	m_ModelPool[ SOME_EDIFICE ].reset( new Model_TexturedNM );
+	m_ModelPool[ SOME_EDIFICE ]->Initialize( prim, *m_pGfx );
 
     prim.CreateMeshNM( L"Meshes/car.BinaryMesh" );
 	m_ModelPool[ CAR ].reset( new Model_TexturedNM );

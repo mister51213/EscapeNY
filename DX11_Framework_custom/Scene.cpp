@@ -58,28 +58,41 @@ void Scene::reset()
 	m_pActorsMASTER.clear();
 
 	// MAP
-		ModelSpecs_W wSpecs3{
-		{ 0.f, 0.f, 0.f },
-		{ 0.f, 0.f, 0.f },
-		{ 70.f, 30.f, 70.f }
-	};
-    m_map = Actor_NPC( wSpecs3, Lava2, ModelSpecs_L(), SOME_EDIFACE);
+	m_map = Actor_NPC( 
+	{ { 0.f, 0.f, 0.f },
+	{ 0.f, 0.f, 0.f },
+	{ 70.f, 30.f, 70.f } }, Lava2, ModelSpecs_L(), SOME_EDIFICE );
 
     // PLAYER
     m_player = Actor_Player(
     { { 0.f, 10.f, 0.f },
     { 0.f, 0.f, 0.f },
-    { .5f, .5f, .5f } },
-        eTexture::AsphaltOld, ModelSpecs_L(), SPHERE);
+    { .5f, .5f, .5f } }, eTexture::AsphaltOld, ModelSpecs_L(), SPHERE);
 
-
+	// LOAD DRAW LIST
+	m_pActorsMASTER.reserve( 2 );
+	m_pActorsMASTER.push_back(&m_player);
+    m_pActorsMASTER.push_back(&m_map);
 }
 
 void Scene::RenderFrame( const GameView & GameViewRef )
-{}
+{
+	// LIGHTS
+	SceneBufferType scene{};
+	scene.ambientColor = { .2f, .2f, .2f, .2f };
+	scene.lightCount = min( m_spotLights.size(), MAX_SHADER_LIGHTS );
+    for (int i = 0; i < m_spotLights.size(); i++)
+    {
+        scene.lights[i] = m_spotLights[i].GetLight()->GetLightBufferType();
+    }
 
+	// DRAW SCENE AND LIGHTS
+    GameViewRef.UpdateView(m_pActorsMASTER, scene);
+   	m_Overlay.Render( *m_pGraphics );
+}
+
+// TODO: IMPLEMENT THIS
 const SceneBufferType & Scene::GetSceneData() const
 {
-	// TODO: insert return statement here
 	return SceneBufferType();
 }

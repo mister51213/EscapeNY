@@ -158,7 +158,7 @@ void Game_FPS::reset()
 		{ 0.f, 0.f, 0.f },
 		{ 70.f, 30.f, 70.f }
 	};
-    aTest3 = Actor_NPC( wSpecs3, Lava2, ModelSpecs_L(), SOME_EDIFACE);
+    aTest3 = Actor_NPC( wSpecs3, Lava2, ModelSpecs_L(), SOME_EDIFICE);
 
     // TEST SUBSETS OF ACTORS
     Algorithm_Grid3D alg;
