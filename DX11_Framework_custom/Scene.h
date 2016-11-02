@@ -8,10 +8,11 @@
 #include "Texture.h"
 #include "GameTimer.h"
 #include "ISubGame.h"
+#include "Overlay.h"
 
+// TODO: Keep graphics out of Scene and in GameView
+// TODO: Implement these
 /*
-TODO: Keep graphics out of Scene and in GameView
-TODO: Implement these
 	Map,
 	List of Cars,
 	Monsters,
@@ -27,10 +28,9 @@ public:
 	~Scene() = default;
 
 	////////////////////////////////////
-	// ISUBGAME FUNCTIONS //
+	// ISUBGAME FUNCTIONS //////////////
 	////////////////////////////////////
-
-		virtual void Initialize(
+	virtual void Initialize(
 		Graphics *pGraphics, 
 		class Game *const pGame,
 		Camera *const pCamera);
@@ -40,23 +40,41 @@ public:
 							  const Physics& refPhysics, const GameTimer& refTimer );
 
 	// Use RenderFrame to render the list of actors or other game objects
-	virtual void RenderFrame( const GameView &GameViewRef );
+	virtual void RenderFrame( const GameView &GameViewRef ); 
 
-	////////////////////////////////////
-	// ISUBGAME FUNCTIONS //
-	////////////////////////////////////	 
-
+private:
+	void reset();
+	
+	//TODO: IMPLEMENT THIS
 	// Retrieves the data for the shader to use in rendering.
 	const SceneBufferType &GetSceneData()const;
 
-public:
+private:
+	//////////////////////////////////////
+	// OVERHEAD //////////////////////////
+	//////////////////////////////////////
+	Graphics *m_pGraphics;
+	D3DGraphics *m_pDirect3D;
+    Overlay m_Overlay;
+	Camera* m_pCamera; // dynamic / fixed, different camera angles
+	Physics m_physics;  
+
+	//////////////////////////////////////
+	// ACTORS ////////////////////////////
+	//////////////////////////////////////
+	Actor_NPC m_map;
+	Actor_Player m_player;
 
 	std::vector<std::unique_ptr<Actor>> m_actors_dynamic; // player, NPCs
 	std::vector<std::unique_ptr<Actor>> m_actors_static; // trees, walls, scenery, etc
+	vector<Actor*> m_pActorsMASTER;
 
-
-	std::vector<Camera> m_cameras; // dynamic / fixed, different camera angles
-	SceneBufferType m_lightSet; // TODO: Make all lights controlled from one place
-
+	//////////////////////////////////////
+	// LIGHTING //////////////////////////
+	//////////////////////////////////////	
+	// TODO: Make all lights controlled from one place
+    vector<Actor_Light> m_spotLights; // manipulates lights
+    vector<LightBufferType> m_lightSet; // passed to GameView
+    int m_numLights = 5;
 };
 

@@ -78,7 +78,6 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
     for (auto& pActor : m_actorsSUB1)
     {
         pActor.GetInput(InputRef, randInt, randFloat);
-        //pActor.Update(Falling, 0.007f);
     }
 
     randInt = rand() % 3;
@@ -88,18 +87,10 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
 		pActor.GetInput( InputRef, randInt, randFloat );
 	}
 
-    /////////////////////////////
-    // PHYSICS //////////////////
-    /////////////////////////////
-    // TODO: Error keeps infinitely decreasing, then wavering around 0, so it ends up getting wound up
-    // TODO: and producing strange results. Tell it if within 0.001 of accuracy, to stop homing in on target.
-    
-
 	m_player.ChaseTarget( tSinceLastFrame );
 
 	// FIRST CHECK FOR INPUT
 	// > that modifies the actor's phys attributes as necessary
-	//m_player.UpdateState( Move_PID, tSinceLastFrame/*0.007f*/ );
 
 	/*
 	1. INPUT SETS THE TARGET
@@ -160,6 +151,7 @@ void Game_FPS::reset()
     { { -10.f, 0.f, -30.f },
       { 0.f,0.f,0.f },
       { 80.f, 1.f, 80.f } };*/
+
     //4 - World Space
 	ModelSpecs_W wSpecs3{
 		{ 0.f, 0.f, 0.f },
