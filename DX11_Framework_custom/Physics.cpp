@@ -23,13 +23,6 @@ XMFLOAT3 Physics::MoveToTarget_ALT( const ModelSpecs_W & worldSpecs, PhysAttribu
 	return worldSpecs.position + increment;
 }
 
-void Physics::MakeBoundingBox(BoundingBox bounds, eModType type)
-{
-	if( type == SPHERE)
-	{
-	}
-}
-
 AlignedAxisBoundingBox Physics::MakeBoundingBox( const std::vector<DirectX::XMFLOAT3> &VertexList)
 {
 	// Initialize the minimum and maximum values for all the vertices
@@ -56,11 +49,6 @@ AlignedAxisBoundingBox Physics::MakeBoundingBox( const std::vector<DirectX::XMFL
 
 	// Return the BoundingBox object.
 	return bounds;
-}
-
-bool Physics::CheckCollision(BoundingBox bounds)
-{
-	return false;
 }
 
 bool Physics::CheckCollision( 

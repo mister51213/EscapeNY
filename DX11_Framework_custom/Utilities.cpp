@@ -31,6 +31,7 @@ int PartitionY( XMFLOAT3* Array, const int Left, const int Right )
 	std::swap( Array[ i - 1 ], Array[ Left ] );
 	return i - 1;
 }
+
 int PartitionZ( XMFLOAT3* Array, const int Left, const int Right )
 {
 	const auto mid = Left + ( Right - Left ) / 2;
@@ -59,6 +60,7 @@ int PartitionZ( XMFLOAT3* Array, const int Left, const int Right )
 	std::swap( Array[ i - 1 ], Array[ Left ] );
 	return i - 1;
 }
+
 int PartitionX( XMFLOAT3* Array, const int Left, const int Right )
 {
 	const auto mid = Left + ( Right - Left ) / 2;
@@ -88,7 +90,7 @@ int PartitionX( XMFLOAT3* Array, const int Left, const int Right )
 	return i - 1;
 }
 
-void Quicksort( XMFLOAT3 *arr, const int left, const int right, PartFn Fn )
+void Quicksort( XMFLOAT3 *arr, const int left, const int right, PartFn Fn ) // function pointer (polymorphic)
 {
 	if ( left >= right )
 	{
@@ -195,7 +197,7 @@ ModelSpecs_L::ModelSpecs_L( const XMFLOAT3 & Center, const XMFLOAT3 & Orientatio
 // TODO: Make generic function CreateVertexBuffer(??)
 /////////////////////////////////////////////////////
 
-inline AlignedAxisBoundingBox::AlignedAxisBoundingBox( const DirectX::XMFLOAT3 & Center, const DirectX::XMFLOAT3 & Extent )
+AlignedAxisBoundingBox::AlignedAxisBoundingBox( const DirectX::XMFLOAT3 & Center, const DirectX::XMFLOAT3 & Extent )
 	:
 	center( Center ),
 	extent( Extent )
@@ -203,26 +205,26 @@ inline AlignedAxisBoundingBox::AlignedAxisBoundingBox( const DirectX::XMFLOAT3 &
 
 // Assumes that translation has already been applied
 
-inline bool AlignedAxisBoundingBox::Overlaps( const AlignedAxisBoundingBox & AABB ) const
+bool AlignedAxisBoundingBox::Overlaps( const AlignedAxisBoundingBox & AABB ) const
 {
 	// Max extents
-	const auto RightTopBackA = ( center + extent );
-	const auto RightTopBackB = ( AABB.center + AABB.extent );
+	const XMFLOAT3 RightTopBackA = ( center + extent );
+	const XMFLOAT3 RightTopBackB = ( AABB.center + AABB.extent );
 
 	// Min extent
-	const auto LeftBottomFrontA = ( center - extent );
-	const auto LeftBottomFrontB = ( AABB.center - AABB.extent );
+	const XMFLOAT3 LeftBottomFrontA = ( center - extent );
+	const XMFLOAT3 LeftBottomFrontB = ( AABB.center - AABB.extent );
 
 	// Determine if any of the sides overlaps
-	const auto xOverlap = ( RightTopBackA.x > RightTopBackB.x &&
+	const bool xOverlap = ( RightTopBackA.x > RightTopBackB.x &&
 							LeftBottomFrontA.x < LeftBottomFrontB.x );
-	const auto yOverlap = ( RightTopBackA.y > RightTopBackB.y &&
+	const bool yOverlap = ( RightTopBackA.y > RightTopBackB.y &&
 							LeftBottomFrontA.y < LeftBottomFrontB.y );
-	const auto zOverlap = ( RightTopBackA.z > RightTopBackB.z &&
+	const bool zOverlap = ( RightTopBackA.z > RightTopBackB.z &&
 							LeftBottomFrontA.z < LeftBottomFrontB.z );
 
 	// AND the overlap results together 
-	const auto doesOverlap = ( xOverlap && yOverlap && zOverlap );
+	const bool doesOverlap = ( xOverlap && yOverlap && zOverlap );
 
 	// Return the final result
 	return doesOverlap;

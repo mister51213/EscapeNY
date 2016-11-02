@@ -76,7 +76,7 @@ enum eForceType
 // eight vertices of the bounding box, you'd have to update all eight each
 // frame.  Even if you store just the min/max points of the box, that's 
 // still two vertices instead of one to update.
-struct AlignedAxisBoundingBox
+struct AlignedAxisBoundingBox // JUST A BOX
 {
 	AlignedAxisBoundingBox() = default;
 	AlignedAxisBoundingBox( const DirectX::XMFLOAT3 &Center, const DirectX::XMFLOAT3 &Extent );
@@ -88,7 +88,7 @@ struct AlignedAxisBoundingBox
 	DirectX::XMFLOAT3 center, extent;
 };
 
-struct BoundingBox
+struct BoundingMesh // for detailed hit detection
 {
 	std::vector<DirectX::XMFLOAT3> vertices;
 };
