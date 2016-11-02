@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Actor.h"
+#include "Actor_Dynamic.h"
 #include "Input.h"
 #include "Utilities.h"
 
 class Actor_Player_Alt:
-	public Actor
+	public Actor_Dynamic
 {
 public:
 	Actor_Player_Alt();

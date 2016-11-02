@@ -5,6 +5,9 @@
 Actor_Dynamic::Actor_Dynamic()
 {}
 
+Actor_Dynamic::Actor_Dynamic(ModelSpecs_W worldSpecs, eTexture tex, ModelSpecs_L localSpecs, eModType modType): 
+	Actor( worldSpecs, tex, localSpecs, modType )
+{}
 
 Actor_Dynamic::~Actor_Dynamic()
 {}

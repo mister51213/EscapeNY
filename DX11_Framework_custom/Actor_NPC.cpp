@@ -2,7 +2,7 @@
 #include "MathUtils.h"
 
 Actor_NPC::Actor_NPC( const ModelSpecs_W & worldSpecs, eTexture tex, const ModelSpecs_L & localSpecs, eModType mod ) :
-	Actor( worldSpecs, tex, localSpecs, mod ) // base constructor
+	Actor_Dynamic( worldSpecs, tex, localSpecs, mod ) // base constructor
 {}
 
 void Actor_NPC::GetInput( const Input & pInput, int randI, float randF )

@@ -1,9 +1,10 @@
 #pragma once
-#include "Actor.h"
+
+#include "Actor_Dynamic.h"
 #include "Light_Spot.h"
 
 class Actor_Light :
-    public Actor
+    public Actor_Dynamic
 {
 public:
     Actor_Light()  = default;

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Actor.h"
+#include "Actor_Dynamic.h"
 
 
-class Actor_Player : public Actor
+class Actor_Player : public Actor_Dynamic
 {
 public:
 	Actor_Player() = default;
@@ -20,7 +20,6 @@ public:
 
 private:
 	void Move( const DirectX::XMFLOAT3 &offset );
-
 
 	void Rotate( const DirectX::XMFLOAT3 &rotation );
 };

@@ -13,7 +13,7 @@ Actor_Player_Alt::Actor_Player_Alt(
 	const ModelSpecs_L &localSpecs,
 	eModType modType )
 	:
-	Actor( worldSpecs, tex, localSpecs, modType ),
+	Actor_Dynamic( worldSpecs, tex, localSpecs, modType ),
 	m_speed(0.2f)
 {
 }

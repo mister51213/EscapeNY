@@ -5,7 +5,7 @@ using namespace DirectX;
 
 Actor_Player::Actor_Player( const ModelSpecs_W & worldSpecs, eTexture tex, const ModelSpecs_L & localSpecs, eModType modType )
 	:
-	Actor( worldSpecs, tex, localSpecs, modType ) // base constructor
+	Actor_Dynamic( worldSpecs, tex, localSpecs, modType ) // base constructor
 {}
 
 void Actor_Player::GetInput(const Input& pInput, int randI, float randF)

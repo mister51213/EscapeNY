@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Actor.h"
+#include "Actor_Dynamic.h"
 
-class Actor_NPC : public Actor
+class Actor_NPC : public Actor_Dynamic
 {
 public:
 	Actor_NPC() = default;
