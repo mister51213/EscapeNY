@@ -83,10 +83,10 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
 
     randInt = rand() % 3;
     randFloat = (rand()%50)/10.0f; // get random float from 0~10.0
-    for (auto& pActor : m_actorsSUB2)
-    {
-        pActor.GetInput(InputRef, randInt, randFloat);
-    }
+	for( auto& pActor : m_actorsSUB2 )
+	{
+		pActor.GetInput( InputRef, randInt, randFloat );
+	}
 
     /////////////////////////////
     // PHYSICS //////////////////
@@ -124,24 +124,17 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
 	// CALL 
 	for each ( auto actor in m_actorsSUB1 )
 	{
-		actor.Update(Move_PID, tSinceLastFrame);
+		actor.SetState( Actor_Dynamic::Move_PID );
+		actor.Update(tSinceLastFrame);
 	}
-
-
-
-
-
-
-
-
-
 
 
     for (int i = 0; i < m_actorsSUB1.size(); i++)
     {
         // random number 0~.1
        float randFloatS = static_cast<float>(rand() % 1000)* 0.00001f;
-       m_actorsSUB1[i].Update(Falling, randFloatS);
+		m_actorsSUB1[i].SetState( Actor_Dynamic::Move_PID );
+       m_actorsSUB1[i].Update(randFloatS);
     }
 }
 
