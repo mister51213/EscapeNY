@@ -153,22 +153,23 @@ enum CarType
 enum eTexture
 {
 	AsphaltFresh = 0,
-	AsphaltTGA = 1,
+	waterSHALLOW = 1,
 	AsphaltOld = 2,
 	Water1 = 3,
-	Water2 = 4,
-	Water3 = 5,
-	Underwater1 = 6,
-	Underwater2 = 7,
-	Underwater3 = 8,
-	Underwater4 = 9,
-	Underwater5 = 10,
-	Underwater6 = 11,
-	Underwater7 = 12,
-	SharkSkin = 13,
-	Aluminum = 14,
-	Lava = 15,
-	Lava2 = 16
+	Underwater1 = 4,
+	SharkSkin = 5,
+	Aluminum = 6,
+	Lava = 7,
+	Lava2 = 8,
+	Bush = 9
+	//Water2 = 4,
+	//Water3 = 5,
+	//Underwater2 = 7,
+	//Underwater3 = 8,
+	//Underwater4 = 9,
+	//Underwater5 = 10,
+	//Underwater6 = 11,
+	//Underwater7 = 12,
 };
 
 ////////////////////////////////////////////////////////////////

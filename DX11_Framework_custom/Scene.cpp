@@ -43,13 +43,13 @@ void Scene::reset()
 	m_map = Actor_NPC( 
 	{ { 0.f, 0.f, 0.f },
 	{ 0.f, 0.f, 0.f },
-	{ 300.f, 150.f, 300.f } }, Lava2, ModelSpecs_L(), SOME_EDIFICE );
+	{ 300.f, 150.f, 300.f } }, Bush, ModelSpecs_L(), SOME_EDIFICE );
 
     // PLAYER
     m_player = Actor_Player(
     { { 0.f, 10.f, 0.f },
     { 0.f, 0.f, 0.f },
-    { .5f, .5f, .5f } }, eTexture::AsphaltOld, ModelSpecs_L(), SPHERE);
+    { .5f, .5f, .5f } }, eTexture::Lava, ModelSpecs_L(), SPHERE);
 
 	// LOAD DRAW LIST
 	m_pActorsMASTER.reserve( 2 );
