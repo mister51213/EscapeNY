@@ -149,8 +149,8 @@ void GameView::initModelPool()
 
 void GameView::initTexturePool()
 {
-//	const int numTextures = 18;
-	const int numTextures = 10;
+//	const int numTextures = 19;
+	const int numTextures = 11;
 
 	m_TexturePool.resize( numTextures );
 	m_TexturePool[ AsphaltFresh ].Initialize( *m_pGfx, L"Textures\\asphaltFresh.jpg" );
@@ -163,7 +163,9 @@ void GameView::initTexturePool()
     m_TexturePool[ Lava ].Initialize( *m_pGfx, L"Textures\\lava5.jpg" );
     m_TexturePool[ Lava2 ].Initialize( *m_pGfx, L"Textures\\lava9.jpg" );
 	m_TexturePool[ Bush ].Initialize( *m_pGfx, L"Textures\\bush.jpg" );
-    //m_TexturePool[ Water2 ].Initialize( *m_pGfx, L"Textures\\water2.jpg" );
+	m_TexturePool[ Energy ].Initialize( *m_pGfx, L"Textures\\energy.jpg" );
+
+	//m_TexturePool[ Water2 ].Initialize( *m_pGfx, L"Textures\\water2.jpg" );
     //m_TexturePool[ Water3 ].Initialize( *m_pGfx, L"Textures\\water3.jpg" );
     //m_TexturePool[ Underwater2 ].Initialize( *m_pGfx, L"Textures\\underwater2.jpg" );
     //m_TexturePool[ Underwater3 ].Initialize( *m_pGfx, L"Textures\\underwater3.jpg" );
@@ -175,8 +177,8 @@ void GameView::initTexturePool()
 
 void GameView::initNormalMapPool()
 {
-//  const int numTextures = 18;
-    const int numTextures = 10;
+//  const int numTextures = 19;
+    const int numTextures = 11;
 
 	m_NormalPool.resize( numTextures );
 	m_NormalPool[ AsphaltFresh ].Initialize( *m_pGfx, L"Textures\\asphaltFreshN.jpg" );
@@ -189,6 +191,7 @@ void GameView::initNormalMapPool()
     m_NormalPool[ Lava ].Initialize( *m_pGfx, L"Textures\\lava5N.jpg" );
     m_NormalPool[ Lava2 ].Initialize( *m_pGfx, L"Textures\\lava9N.jpg" );
 	m_NormalPool[ Bush ].Initialize( *m_pGfx, L"Textures\\bushN.jpg" );
+	m_NormalPool[ Energy ].Initialize( *m_pGfx, L"Textures\\energyN.jpg" );
 
     /*m_NormalPool[ Water2 ].Initialize( *m_pGfx, L"Textures\\water2N.jpg" );
     m_NormalPool[ Water3 ].Initialize( *m_pGfx, L"Textures\\water3N.jpg" );*/

@@ -50,11 +50,30 @@ void Actor_Dynamic::ConstantMove( const float deltaT)
 
 void Actor_Dynamic::ChaseTarget(const float deltaT )
 {
-	const float gainCoefficient = 1.5f;
-	XMFLOAT3 m_posError = m_target - m_worldSpecs.position;
-	XMFLOAT3 increment = m_posError * gainCoefficient * deltaT;
+	//XMFLOAT3 increment = posError * gainCoefficient * deltaT;
+	//m_worldSpecs.position += increment;
 
-	m_worldSpecs.position += increment;
+	XMFLOAT3 posError = m_target - m_worldSpecs.position;	
+	const float gainCoefficient = 2.f;
+	const float integrator = 1.5f;
+
+	XMFLOAT3 displacement;
+
+	if(Magnitude(posError) > 60.f)
+	{
+		// increment velocity by fraction of distance to target
+		XMFLOAT3 acceleration = posError * gainCoefficient;
+		XMFLOAT3 velocityChange = acceleration * deltaT;
+		m_attributes.velocity += velocityChange;
+	}
+	else
+	{
+		// creep toward target until you reach it
+		m_attributes.velocity = posError * integrator *deltaT;
+	}
+
+	displacement = m_attributes.velocity * deltaT;
+	m_worldSpecs.position += displacement;	
 }
 
 XMFLOAT3 Actor_Dynamic::MoveTowardTarget( const float deltaT )

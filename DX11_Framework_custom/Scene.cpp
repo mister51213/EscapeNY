@@ -28,8 +28,9 @@ void Scene::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const
 		auto* pLight = dynamic_cast<Light_Spot*>( light.GetLight() );
 
 		// Settings for newly created light.
-		pLight->SetColor( r, g, b );
-		pLight->SetConeAngle( 60.f );
+		//pLight->SetColor( r, g, b );
+		pLight->SetColor( .5f, .5f, .5f );
+		pLight->SetConeAngle( 45.f );
 		pLight->SetIntensity( 5.f );
     }
 
@@ -46,13 +47,13 @@ void Scene::reset()
 	m_map = Actor_NPC( 
 	{ { 0.f, 0.f, 0.f },
 	{ 0.f, 0.f, 0.f },
-	{ 300.f, 150.f, 300.f } }, Bush, ModelSpecs_L(), SOME_EDIFICE );
+	{ 300.f, 150.f, 300.f } }, Energy, ModelSpecs_L(), SOME_EDIFICE );
 
     // PLAYER
     m_player = Actor_Player(
     { { 0.f, 10.f, 0.f },
     { 0.f, 0.f, 0.f },
-    { .5f, .5f, .5f } }, eTexture::Lava, ModelSpecs_L(), SPHERE);
+    { .5f, .5f, .5f } }, eTexture::Bush, ModelSpecs_L(), SPHERE);
 
 	// LOAD DRAW LIST
 	m_pActorsMASTER.reserve( 2 );
@@ -95,7 +96,7 @@ void Scene::RenderFrame( const GameView & GameViewRef )
 {
 	// LIGHTS
 	SceneBufferType scene{};
-	scene.ambientColor = { .1f, .1f, .1f, .1f };
+	scene.ambientColor = { .15f, .15f, .15f, .1f };
 	scene.lightCount = min( m_spotLights.size(), MAX_SHADER_LIGHTS );
     for (int i = 0; i < m_spotLights.size(); i++)
     {

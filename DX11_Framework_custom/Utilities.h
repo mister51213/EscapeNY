@@ -60,6 +60,7 @@ struct PhysAttributes
 	DirectX::XMFLOAT3 velocity = { 0.f, 0.0f, 0.f };
 	DirectX::XMFLOAT3 acceleration = { 0.f, 0.0f, 0.f };
 	float Mass = 1.0f;
+	float Size = 5.0f;
 };
 
 enum eForceType
@@ -161,7 +162,8 @@ enum eTexture
 	Aluminum = 6,
 	Lava = 7,
 	Lava2 = 8,
-	Bush = 9
+	Bush = 9,
+	Energy = 10
 	//Water2 = 4,
 	//Water3 = 5,
 	//Underwater2 = 7,

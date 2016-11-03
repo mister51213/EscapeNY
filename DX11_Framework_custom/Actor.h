@@ -47,6 +47,6 @@ protected:
     ModelSpecs_W m_worldSpecs;
     ModelSpecs_L m_localSpecs;
 
-public:
+public: //TODO: MAKE PROTECTED
 	PhysAttributes m_attributes;
 };
