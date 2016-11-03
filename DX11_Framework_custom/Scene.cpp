@@ -16,8 +16,10 @@ void Scene::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const
 		float x = static_cast<float>( rand() % 300 - 150 );
    		float y = static_cast<float>( rand() % 300 - 150 );
         float z = static_cast<float>( rand() % 300 - 150 );
-		light.Initialize( { x, y, z}, { 0.f, 0.f, 0.f } );
-
+//		light.Initialize( { x, y, z}, { 0.f, 0.f, 0.f } );
+		// LOOKAT PLAYER
+		light.Initialize( { x, y, z}, m_player.GetPosition() );
+		
 		// Randomly create colors for new spot lights
 		float r = static_cast<float>(rand() % 100) * .01f;
 		float g = static_cast<float>(rand() % 100) * .01f;
@@ -25,14 +27,38 @@ void Scene::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const
 
 		auto* pLight = dynamic_cast<Light_Spot*>( light.GetLight() );
 
-		// Set the color for the newly created light.
-		pLight->SetColor( r, g, b );
+		// Settings for newly created light.
+		//pLight->SetColor( r, g, b );
+		pLight->SetColor( .5f, .5f, .5f );
 		pLight->SetConeAngle( 45.f );
+		pLight->SetIntensity( 5.f );
     }
 
     m_lightSet.resize(m_numLights);
 
 	reset();
+}
+
+void Scene::reset()
+{
+	m_pActorsMASTER.clear();
+
+	// MAP
+	m_map = Actor_NPC( 
+	{ { 0.f, 0.f, 0.f },
+	{ 0.f, 0.f, 0.f },
+	{ 300.f, 150.f, 300.f } }, Energy, ModelSpecs_L(), SOME_EDIFICE );
+
+    // PLAYER
+    m_player = Actor_Player(
+    { { 0.f, 10.f, 0.f },
+    { 0.f, 0.f, 0.f },
+    { .5f, .5f, .5f } }, eTexture::Bush, ModelSpecs_L(), SPHERE);
+
+	// LOAD DRAW LIST
+	m_pActorsMASTER.reserve( 2 );
+	m_pActorsMASTER.push_back(&m_player);
+    m_pActorsMASTER.push_back(&m_map);
 }
 
 void Scene::UpdateScene( const Input & InputRef, Camera * const pCamera, const Physics & refPhysics, const GameTimer & refTimer )
@@ -49,37 +75,28 @@ void Scene::UpdateScene( const Input & InputRef, Camera * const pCamera, const P
     m_pCamera->GetMouseInput(InputRef);
     m_player.GetInput(InputRef);
 
-	// PLAYER MOVEMENT
-	m_player.ChaseTarget( tSinceLastFrame );
-}
+	// PHYSICS
+	for each ( auto actor in m_pActorsMASTER )
+	{
+		m_physics.DoPhysics( actor->GetAttributes(), tSinceLastFrame);
+	}
 
-void Scene::reset()
-{
-	m_pActorsMASTER.clear();
+	// ACTOR MOVEMENT
+	m_player.SetState( Actor_Dynamic::HOMING );
+	m_player.Update(tSinceLastFrame);
 
-	// MAP
-	m_map = Actor_NPC( 
-	{ { 0.f, 0.f, 0.f },
-	{ 0.f, 0.f, 0.f },
-	{ 70.f, 30.f, 70.f } }, Lava2, ModelSpecs_L(), SOME_EDIFICE );
-
-    // PLAYER
-    m_player = Actor_Player(
-    { { 0.f, 10.f, 0.f },
-    { 0.f, 0.f, 0.f },
-    { .5f, .5f, .5f } }, eTexture::AsphaltOld, ModelSpecs_L(), SPHERE);
-
-	// LOAD DRAW LIST
-	m_pActorsMASTER.reserve( 2 );
-	m_pActorsMASTER.push_back(&m_player);
-    m_pActorsMASTER.push_back(&m_map);
+	// LIGHTS FOLLOW ACTOR
+	for ( Actor_Light& light : m_spotLights )
+	{
+		light.SetLookat( m_player.GetPosition() );
+	}
 }
 
 void Scene::RenderFrame( const GameView & GameViewRef )
 {
 	// LIGHTS
 	SceneBufferType scene{};
-	scene.ambientColor = { .2f, .2f, .2f, .2f };
+	scene.ambientColor = { .15f, .15f, .15f, .1f };
 	scene.lightCount = min( m_spotLights.size(), MAX_SHADER_LIGHTS );
     for (int i = 0; i < m_spotLights.size(); i++)
     {
@@ -91,8 +108,8 @@ void Scene::RenderFrame( const GameView & GameViewRef )
    	m_Overlay.Render( *m_pGraphics );
 }
 
-// TODO: IMPLEMENT THIS
 const SceneBufferType & Scene::GetSceneData() const
 {
+	// TODO: IMPLEMENT THIS
 	return SceneBufferType();
 }

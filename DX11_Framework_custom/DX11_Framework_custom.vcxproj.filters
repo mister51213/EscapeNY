@@ -168,9 +168,6 @@
     <ClCompile Include="Utilities.cpp">
       <Filter>Source Files\Utility Classes</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Game_FPS.cpp">
       <Filter>Source Files\SubGames</Filter>
     </ClCompile>
@@ -255,7 +252,7 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files\SubGames</Filter>
     </ClCompile>
-    <ClCompile Include="Actor_Car.cpp">
+    <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
   </ItemGroup>
@@ -276,9 +273,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ImageLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D3DGraphics.h">
@@ -464,7 +458,7 @@
     <ClInclude Include="Scene.h">
       <Filter>Header Files\SubGames</Filter>
     </ClInclude>
-    <ClInclude Include="Actor_Car.h">
+    <ClInclude Include="Camera.h">
       <Filter>Header Files\Actors</Filter>
     </ClInclude>
   </ItemGroup>
