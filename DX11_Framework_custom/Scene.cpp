@@ -16,8 +16,10 @@ void Scene::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const
 		float x = static_cast<float>( rand() % 300 - 150 );
    		float y = static_cast<float>( rand() % 300 - 150 );
         float z = static_cast<float>( rand() % 300 - 150 );
-		light.Initialize( { x, y, z}, { 0.f, 0.f, 0.f } );
-
+//		light.Initialize( { x, y, z}, { 0.f, 0.f, 0.f } );
+		// LOOKAT PLAYER
+		light.Initialize( { x, y, z}, m_player.GetPosition() );
+		
 		// Randomly create colors for new spot lights
 		float r = static_cast<float>(rand() % 100) * .01f;
 		float g = static_cast<float>(rand() % 100) * .01f;
@@ -25,9 +27,10 @@ void Scene::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const
 
 		auto* pLight = dynamic_cast<Light_Spot*>( light.GetLight() );
 
-		// Set the color for the newly created light.
+		// Settings for newly created light.
 		pLight->SetColor( r, g, b );
-		pLight->SetConeAngle( 45.f );
+		pLight->SetConeAngle( 60.f );
+		pLight->SetIntensity( 5.f );
     }
 
     m_lightSet.resize(m_numLights);
@@ -80,13 +83,19 @@ void Scene::UpdateScene( const Input & InputRef, Camera * const pCamera, const P
 	// ACTOR MOVEMENT
 	m_player.SetState( Actor_Dynamic::HOMING );
 	m_player.Update(tSinceLastFrame);
+
+	// LIGHTS FOLLOW ACTOR
+	for ( Actor_Light& light : m_spotLights )
+	{
+		light.SetLookat( m_player.GetPosition() );
+	}
 }
 
 void Scene::RenderFrame( const GameView & GameViewRef )
 {
 	// LIGHTS
 	SceneBufferType scene{};
-	scene.ambientColor = { .2f, .2f, .2f, .2f };
+	scene.ambientColor = { .1f, .1f, .1f, .1f };
 	scene.lightCount = min( m_spotLights.size(), MAX_SHADER_LIGHTS );
     for (int i = 0; i < m_spotLights.size(); i++)
     {
