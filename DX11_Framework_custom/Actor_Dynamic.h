@@ -12,10 +12,13 @@ public:
 		PLAYER_IDLE, PLAYER_WALKING, PLAYER_PUSHING, PLAYER_QUICKTIME, PLAYER_DROWNING, PLAYER_PINNED
 	};
 
-	Actor_Dynamic();
+	Actor_Dynamic() = default;
 	Actor_Dynamic( ModelSpecs_W worldSpecs, eTexture tex, ModelSpecs_L localSpecs, eModType modType );
-	~Actor_Dynamic();
+	~Actor_Dynamic() = default;
+
 	void SetState( eActorState state );
+	eActorState GetState()const;
+
 	virtual void Update( float deltaT );
 	void ConstantMove( const float deltaT );
 	void ChaseTarget( const float deltaT );

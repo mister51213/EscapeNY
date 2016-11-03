@@ -10,3 +10,6 @@ Actor::Actor( const ModelSpecs_W & worldSpecs, eTexture tex, const ModelSpecs_L 
 	m_texIndex( tex ),
 	m_modType( modType )
 {}
+
+Actor::~Actor()
+{}

@@ -255,6 +255,9 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files\SubGames</Filter>
     </ClCompile>
+    <ClCompile Include="Actor_Car.cpp">
+      <Filter>Source Files\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -460,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files\SubGames</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_Car.h">
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

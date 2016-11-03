@@ -26,7 +26,8 @@ public:
 	DirectX::XMFLOAT3 GetStartPosition()const;
 	DirectX::XMFLOAT3 GetEndPosition()const;
 	DirectX::XMFLOAT3 GetCellSize()const;
-	DirectX::XMFLOAT3 GetBoundingBox( const DirectX::XMFLOAT3 &Position )const;
+	AlignedAxisBoundingBox GetBoardBoundingBox( )const;
+	AlignedAxisBoundingBox GetCellBoundingBox( const DirectX::XMFLOAT3 &Position )const;
 	const std::vector<Actor>& GetTiles()const;
 	void SetCells( std::vector<Actor> &&pCells );
 

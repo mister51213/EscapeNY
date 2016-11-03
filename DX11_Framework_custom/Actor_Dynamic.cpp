@@ -2,19 +2,18 @@
 
 
 
-Actor_Dynamic::Actor_Dynamic()
-{}
-
 Actor_Dynamic::Actor_Dynamic(ModelSpecs_W worldSpecs, eTexture tex, ModelSpecs_L localSpecs, eModType modType): 
 	Actor( worldSpecs, tex, localSpecs, modType )
-{}
-
-Actor_Dynamic::~Actor_Dynamic()
 {}
 
 void Actor_Dynamic::SetState(eActorState state)
 {
 	    m_state = state;
+}
+
+Actor_Dynamic::eActorState Actor_Dynamic::GetState() const
+{
+	return m_state;
 }
 
 void Actor_Dynamic::Update(float deltaT)

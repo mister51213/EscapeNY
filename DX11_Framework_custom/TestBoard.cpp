@@ -29,15 +29,10 @@ void TestBoard::Initialize( UINT Width, UINT Height, Graphics *const pGraphics )
 		static_cast<float>( m_height ) 
 	};
 
-	const float xStart = static_cast< float >( rand() % m_width );
-	const float yStart = static_cast< float >( m_height - 1 );
-	const float xEnd = static_cast< float >( rand() % m_width );
-	const float yEnd = 0.f + position.y;
-
-	const UINT xStartCell = static_cast<UINT>( xStart + position.x );
-	const UINT xEndCell = static_cast<UINT>( xEnd + position.x );
-	const UINT yStartCell = static_cast<UINT>( yStart + position.y );
-	const UINT yEndCell = static_cast<UINT>( yEnd );
+	const UINT xStartCell = rand() % m_width;
+	const UINT xEndCell = rand() % m_width;
+	const UINT yStartCell = m_height - 1;
+	const UINT yEndCell = 0;
 
 	m_startCell = { xStartCell, yStartCell };
 	m_endCell   =	{ xEndCell, yEndCell };
@@ -116,18 +111,27 @@ void TestBoard::SetCells( std::vector<Actor>&& pCells )
 	m_cellSize = m_pCells[ 0 ].GetLocalSpecs().size;
 }
 
-DirectX::XMFLOAT3 TestBoard::GetBoundingBox( const DirectX::XMFLOAT3 & Position ) const
+AlignedAxisBoundingBox TestBoard::GetBoardBoundingBox()const
 {
-	auto cellExtent = m_cellSize * .5f;
-	XMFLOAT3 bb;
+	const XMFLOAT3 boardExtent = ( m_cellSize * m_width ) * .5f;
+	
+	AlignedAxisBoundingBox bb( { 0.f, 0.f, 0.f }, boardExtent );
+	
+	return bb;
+}
 
-	bb.x = Position.x + cellExtent.x;
-	bb.z = Position.z + cellExtent.z;
-	bb.y = 1.f;
+AlignedAxisBoundingBox TestBoard::GetCellBoundingBox( const DirectX::XMFLOAT3 & Position ) const
+{
+	const XMFLOAT3 cellExtent = m_cellSize * .5f;
+	
+	const int cellX = static_cast< int >( std::round( Position.x ) ) % m_width;
+	const int cellY = static_cast< int >( std::round( Position.y ) ) / m_width;
 
-	// Not uniform, so much search for cell at Position
-
-	return DirectX::XMFLOAT3();
+	const XMFLOAT2 tileCenterCoordinates = ConvertTileCoordinates( cellX, cellY );
+	const XMFLOAT3 tileCenter = 
+	{ tileCenterCoordinates.x, 1.f, tileCenterCoordinates.y };
+	
+	return AlignedAxisBoundingBox( tileCenter, cellExtent );
 }
 
 const std::vector<Actor>& TestBoard::GetTiles()const
