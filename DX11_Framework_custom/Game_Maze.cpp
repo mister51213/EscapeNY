@@ -3,6 +3,13 @@
 #include "Algorithm_Random.h"
 #include "MathUtils.h"
 
+using namespace DirectX;
+
+Game_Maze::Game_Maze( Input * pInput )
+	:
+	m_pInput( pInput )
+{}
+
 void Game_Maze::Initialize(
 	Graphics *pGraphics,
 	class Game *const pGame,
@@ -25,13 +32,24 @@ void Game_Maze::Initialize(
 
 void Game_Maze::UpdateScene( const Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
 {
-	m_player.GetInput( InputRef );
+	UpdatePlayerState();
+	UpdateCarState();
+	UpdateMonsterState();
+	
+#ifdef NDEBUG
+	const float detlatime = refTimer.SecondsPassed();
+#else
+	const float deltatime = .016f;
+#endif
+
+	m_player.Update( deltatime );
 
 	// MAKE CAMERA FOLLOW THE PLAYER
 	// Get player position, offset camera, set camera position
-	auto camOffset = m_player.GetWorldSpecs().position;
-	camOffset.y += 70.f;
-	pCamera->SetPosition( camOffset );
+	const XMFLOAT3 &playerPosition = m_player.GetWorldSpecs().position;
+	const XMFLOAT3 camOffset = { 0.f, 70.f, 0.f };
+
+	pCamera->SetPosition( playerPosition + camOffset );
 
 	pCamera->GetInput( InputRef );
 
@@ -83,26 +101,10 @@ void Game_Maze::RenderFrame( const GameView &GameViewRef )
 
 void Game_Maze::reset()
 {
-	// Must clear draw list before using it during reset, 
-	// clearing it when already empty doesn't hurt anything
-	m_pActorDrawList.clear();
-
-	
+	//////////////////////////////////////////////////
 	// Initialize the board object
+	//////////////////////////////////////////////////
 	m_board.Initialize( 9, 9, m_pGraphics );
-
-
-	// Initialize the test player actor
-	ModelSpecs_W wSpecs
-	{
-		{ 0.f, 0.f, 0.f },
-		{ 0.f, 0.f, 0.f },
-		{ .5f, .5f, .5f }
-	};
-
-	ModelSpecs_L lSpecs;
-	lSpecs.size *= (g_tileWidth * .95f);
-	m_player = Actor_Player_Alt( wSpecs, SharkSkin, lSpecs );
 
 	// Create the maze and get the list of actors representing walls
 	///////////////////////////////////////////////////
@@ -116,6 +118,26 @@ void Game_Maze::reset()
 	auto actorList = gen.MakePattern( 20 );
 	///////////////////////////////////////////////////
 
+	//////////////////////////////////////////////////
+	// Initialize the player
+	//////////////////////////////////////////////////
+	// Initialize the test player actor
+	ModelSpecs_W wSpecs
+	{
+		m_board.GetStartPosition(),
+		{ 0.f, 0.f, 0.f },
+		{ .5f, .5f, .5f }
+	};
+
+	m_player = Actor_Player_Alt( wSpecs, SharkSkin, m_pInput );
+
+	//////////////////////////////////////////////////
+	// Initialize the draw list
+	//////////////////////////////////////////////////
+	// Must clear draw list before using it during reset, 
+	// clearing it when already empty doesn't hurt anything
+	m_pActorDrawList.clear();
+
 	// Reserve space in draw list so pointers remain valid
 	// Add additional space for actors not apart of a list
 	m_pActorDrawList.reserve( actorList.size() + 2 );
@@ -128,28 +150,27 @@ void Game_Maze::reset()
 		m_pActorDrawList.push_back( &actor );
 	}
 
-	// Board makes it's own model, so not passed to GameView::OnReset
 	m_pActorDrawList.push_back( &m_board );
 
 	// Move list of actors to board object
 	m_board.SetCells( std::move( actorList ) );
 
-	// Move player to start position
-	auto startPos = m_board.GetStartPosition();
-	m_player.SetPosition( startPos );
-
+	//////////////////////////////////////////////////
+	// Initialize the lights
+	//////////////////////////////////////////////////
 	m_pLights.resize( 4 );
 
 	int count = 0;
+	Actor_Light *pActorLight = m_pLights.data();
 	for( float j = -10.f; j <= 10.f; j += 20.f )
 	{
 		for( float i = -10.f; i <= 10.f; i += 20.f )
 		{
-			auto pos = XMFLOAT3{ i * 5.f, 20.f, j * 5.f };
-			auto &light = m_pLights[ count ];
+			const XMFLOAT3 pos = XMFLOAT3{ i * 5.f, 20.f, j * 5.f };
+			Actor_Light &light = *pActorLight;
 			light.Initialize( pos, { 0.f, 0.f, 0.f } );
 
-			auto *pLight = dynamic_cast<Light_Spot*>( light.GetLight() );
+			Light_Spot *const pLight = dynamic_cast<Light_Spot*>( light.GetLight() );
 			
 
 			// ConeAngle can be between 1.f and 180.f...min/max'd in shader
@@ -173,6 +194,7 @@ void Game_Maze::reset()
 			}
 
 			++count;
+			++pActorLight;
 		}
 	}
 
@@ -184,4 +206,59 @@ const TestBoard & Game_Maze::GetBoard()
 {
 	return m_board;
 }
+
+void Game_Maze::UpdatePlayerState()
+{
+	Actor_Dynamic::eActorState state = m_player.GetState();
+	if ( m_pInput->AnyPressed() )
+	{
+		switch ( state )
+		{
+			case Actor_Dynamic::PLAYER_IDLE:
+				m_player.SetState( Actor_Dynamic::PLAYER_WALKING );
+				break;
+			case Actor_Dynamic::PLAYER_WALKING:
+				break;
+			case Actor_Dynamic::PLAYER_PUSHING:
+				break;
+			case Actor_Dynamic::PLAYER_QUICKTIME:
+				// Mash keys, choose which keys to press
+				break;
+			case Actor_Dynamic::PLAYER_DROWNING:
+				// Death animations
+				break;
+			case Actor_Dynamic::PLAYER_PINNED:
+				// Death animations
+				break;
+			default:
+				break;
+		}
+	}
+	else
+	{
+		switch ( state )
+		{
+			case Actor_Dynamic::PLAYER_IDLE:
+				break;
+			case Actor_Dynamic::PLAYER_WALKING:
+			case Actor_Dynamic::PLAYER_PUSHING:
+				m_player.SetState( Actor_Dynamic::PLAYER_IDLE );
+				break;
+			case Actor_Dynamic::PLAYER_QUICKTIME:
+				break;
+			case Actor_Dynamic::PLAYER_DROWNING:
+				break;
+			case Actor_Dynamic::PLAYER_PINNED:
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+void Game_Maze::UpdateCarState()
+{}
+
+void Game_Maze::UpdateMonsterState()
+{}
 

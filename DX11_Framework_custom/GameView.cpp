@@ -23,8 +23,6 @@ void GameView::Initialize()
 	initializeShader();
 }
 
-// TODO: this should not directly take LightBufferType; it needs one level up (LightSpot type), 
-// TODO: so it can pass world position info to shader for directional lighting
 void GameView::UpdateView(const vector<Actor*>& actors, const SceneBufferType& SceneLights ) const
 { 
 	

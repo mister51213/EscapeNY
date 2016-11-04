@@ -14,7 +14,7 @@ class Game_Maze:
 public:
 	Game_Maze() = default;
 	~Game_Maze()= default;
-
+	Game_Maze( Input *pInput );
 	// Use Initialize to initialize anything that needs initializing.
 	void Initialize( 
 		Graphics *pGraphics,
@@ -30,6 +30,11 @@ public:
 
 	const TestBoard &GetBoard();
 
+private:
+	void UpdatePlayerState();
+	void UpdateCarState();
+	void UpdateMonsterState();
+
 private: // Private methods
 	void reset();
 
@@ -39,6 +44,7 @@ private: // Private members
 	Game *m_pGame;
 	Graphics *m_pGraphics;
 	Camera *m_pCamera;
+	Input *m_pInput;
 
 	Overlay m_Overlay;
 	TestBoard m_board;

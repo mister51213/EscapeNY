@@ -40,7 +40,7 @@ public:
 		const DirectX::XMFLOAT3 &Rotation,
 		const DirectX::XMUINT2 &ScreenSize,
 		const DirectX::XMFLOAT2 &ScreenClipDepth );
-
+	
 	void GetInput( const Input& pInput );
 
 	void GetMouseInput( const Input& pInput );

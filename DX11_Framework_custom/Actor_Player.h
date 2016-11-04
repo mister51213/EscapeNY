@@ -16,7 +16,7 @@ public:
 		const ModelSpecs_L & localSpecs, 
 		eModType modType = CUBE_TEXTURED );
 
-    void GetInput(const Input& pInput, int randI = 0.f, float randF = 0.f) override;
+    void GetInput( const Input& pInput, int randI = 0.f, float randF = 0.f ) override;
 
 	void Update( float deltaT ) override;
 

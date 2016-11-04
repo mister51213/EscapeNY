@@ -19,6 +19,7 @@
 #include <fstream>
 #include <math.h>
 #include <memory>
+#include <queue>
 #include <random>
 #include <stack>
 #include <stdio.h>

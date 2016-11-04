@@ -8,19 +8,23 @@ class Actor_Player_Alt:
 	public Actor_Dynamic
 {
 public:
-	Actor_Player_Alt();
+	Actor_Player_Alt() = default;
 	Actor_Player_Alt(
 		const ModelSpecs_W &worldSpecs,
 		eTexture tex,
-		const ModelSpecs_L &localSpecs,
+		Input *pInput,
 		eModType modType = CUBE_TEXTURED );
-	~Actor_Player_Alt();
+	~Actor_Player_Alt() = default;
 
-	void SetPosition( const DirectX::XMFLOAT3 &Position );
-	void GetInput( const Input& pInput, int randI = 0.f, float randF = 0.f ) override;
-	
+	void Update( float deltaT )override final;
 	
 private:
-	float m_speed;
+	void Walk( float DeltaTime );
+	void Push( float DeltaTime );
+	void QuickTime();
+private:
+	AlignedAxisBoundingBox m_boundingbox;
+	Input *m_pInput;
+	float m_speed = .2f;
 };
 

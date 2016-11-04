@@ -33,27 +33,24 @@ void Input::Initialize( HWND WinHandle )
 	RegisterRawInputDevices( &rawDevice, 1, sizeof( RAWINPUTDEVICE ) );
 
 	ZeroMemory( m_keys, 256 );
+	FlushRelativeData();
 
-	
 	GetWindowRect( WinHandle, &m_clamp );
-	m_x = ( m_clamp.right - m_clamp.left ) / 2;
-	m_y = ( m_clamp.bottom - m_clamp.top ) / 2;
-	m_relX = 0;
-	m_relY = 0;
-	SetCursorPos( m_x, m_y );
+	m_position.x = ( m_clamp.right - m_clamp.left ) / 2;
+	m_position.y = ( m_clamp.bottom - m_clamp.top ) / 2;
+	SetCursorPos( m_position.x, m_position.y );
 }
 
 void Input::FlushRelativeData()
 {
-	m_relX = 0;
-	m_relY = 0;
+	m_relPosition = POINT{};
 }
 
 void Input::OnMouseInput( const RAWMOUSE & RawMouseInput )
 {
 	// Store any relative mouse movements from last frame
-	m_relX = RawMouseInput.lLastX;
-	m_relY = RawMouseInput.lLastY;
+	m_relPosition.x = RawMouseInput.lLastX;
+	m_relPosition.y = RawMouseInput.lLastY;
 
 	m_leftDown = RawMouseInput.usButtonFlags & RI_MOUSE_LEFT_BUTTON_DOWN;
 	m_rightDown = ( ( RawMouseInput.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_DOWN ) >> 2 );
@@ -61,41 +58,40 @@ void Input::OnMouseInput( const RAWMOUSE & RawMouseInput )
 	// Clip the cursor to window boundaries
 	ClipCursor( &m_clamp );
 
-	// Get the mouse position
-	POINT currentMousePos{};
-	GetCursorPos( &currentMousePos );
-
-	// Update Input's mouse position
-	m_x = currentMousePos.x;
-	m_y = currentMousePos.y;
+	// Update Input's mouse position	
+	GetCursorPos( &m_position );		
 
 	// Register the new position with Windows
-	SetCursorPos( currentMousePos.x, currentMousePos.y );
+	SetCursorPos( m_position.x, m_position.y );
 }
 
 int Input::GetX() const
 {
-	return m_x;
+	return m_position.x;
 }
 
 int Input::GetY() const
 {
-	return m_y;
+	return m_position.y;
 }
 
 int Input::GetRelativeX() const
 {
-	return m_relX;
+	return m_relPosition.x;
 }
 
 int Input::GetRelativeY() const
 {
-	return m_relY;
+	return m_relPosition.y;
 }
 
 void Input::KeyDown(unsigned int input)
 {
 	// If a key is pressed then save that state in the key array.
+	// Skip adding to queue if auto-repeat...button held too long
+	
+	m_eventQueue.push( Event( eInputEvent::Pressed, input ) );
+	m_keysPressed.push_back( input );
 	m_keys[input] = true;
 	return;
 }
@@ -105,12 +101,45 @@ void Input::KeyUp(unsigned int input)
 {
 	// If a key is released then clear that state in the key array.
 	m_keys[input] = false;
+
+	// Remove key from the list of keys that are pressed.
+	std::vector<unsigned int>::iterator it = 
+		std::find( m_keysPressed.begin(), m_keysPressed.end(), input );
+	if ( it != m_keysPressed.end() )
+	{
+		m_keysPressed.erase( it );
+	}
 	return;
 }
 
-// CODE_CHANGE: Made function const
 bool Input::IsKeyDown(unsigned int key)const
 {
 	// Return what state the key is in (pressed/not pressed).
 	return m_keys[key];
+}
+
+
+class DoLast
+{
+public:
+	DoLast( std::queue< Input::Event > &Events ) : m_events( Events ) {}
+	~DoLast() { m_events.pop(); }
+private:
+	std::queue< Input::Event > &m_events;
+};
+
+Input::Event Input::Read()
+{
+	if ( m_eventQueue.empty() )
+	{
+		m_eventQueue.emplace( eInputEvent::Invalid, -1 );
+	}
+
+	DoLast doLast( m_eventQueue );
+	return m_eventQueue.front();
+}
+
+bool Input::AnyPressed() const
+{	
+	return ( !m_keysPressed.empty() ) | m_leftDown | m_rightDown;
 }

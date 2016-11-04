@@ -13,6 +13,30 @@
 class Input
 {
 public:
+	enum class eInputEvent
+	{
+		Invalid, Pressed, Released
+	};
+
+	class Event
+	{
+	public:
+		Event( eInputEvent eEvent, const unsigned char Key )
+			:
+			m_eEvent( eEvent ),
+			m_key( Key )
+		{			
+		}
+		eInputEvent GetEvent()const
+		{
+			return m_eEvent;
+		}
+
+	private:
+		eInputEvent m_eEvent;
+		unsigned char m_key;
+	};
+
 	Input() = default;
 	~Input();
 
@@ -43,11 +67,18 @@ public:
 
 	bool IsKeyDown( unsigned int )const;
 
+	// Will be used for text input later on.
+	Event Read();
+	//If vector is empty and no mouse buttons pressed, then return false
+	bool AnyPressed()const;
 private:
 	bool m_keys[ 256 ];
+	bool m_leftDown = false, m_rightDown = false;
 
-	bool m_leftDown, m_rightDown;
-	int m_x, m_y;
-	int m_relX, m_relY;
+	POINT m_position, m_relPosition;
 	RECT m_clamp;
+
+	// Used for the AnyPressed function.  
+	std::vector<unsigned int> m_keysPressed;
+	std::queue<Event> m_eventQueue;
 };

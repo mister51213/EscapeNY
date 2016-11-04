@@ -177,7 +177,13 @@ LRESULT CALLBACK System::MessageHandler(
 		case WM_KEYDOWN:
 		{
 			// If a key is pressed send it to the input object so it can record that state.
-			m_Input->KeyDown( static_cast<unsigned int>( wparam ) );
+			// If a key is held avoid sending multiple messages
+			const auto autoRepeatMask = ( 1u << 30u );
+			const auto autoRepeatBitSet = ( lparam & autoRepeatMask ) >> 30;
+			if (!autoRepeatBitSet )
+			{
+				m_Input->KeyDown( static_cast<unsigned int>( wparam ) );
+			}
 			return 0;
 		}
 

@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Actor_Car.cpp" />
     <ClCompile Include="Actor_Dynamic.cpp" />
     <ClCompile Include="Actor_Light.cpp" />
     <ClCompile Include="Actor_NPC.cpp" />
@@ -237,6 +238,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="Actor_Car.h" />
     <ClInclude Include="Actor_Dynamic.h" />
     <ClInclude Include="Actor_Light.h" />
     <ClInclude Include="Actor_NPC.h" />

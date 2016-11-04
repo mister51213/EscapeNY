@@ -1,82 +1,104 @@
 #include "Actor_Player_Alt.h"
 #include "MathUtils.h"
 
-Actor_Player_Alt::Actor_Player_Alt()
-	:
-	m_speed(0.2f)
-{
-}
-
 Actor_Player_Alt::Actor_Player_Alt( 
 	const ModelSpecs_W &worldSpecs,
 	eTexture tex,
-	const ModelSpecs_L &localSpecs,
+	Input *pInput,
 	eModType modType )
 	:
-	Actor_Dynamic( worldSpecs, tex, localSpecs, modType ),
+	Actor_Dynamic( worldSpecs, tex, ModelSpecs_L(), modType ),
+	m_pInput(pInput),
 	m_speed(0.2f)
 {
+	m_state = Actor_Dynamic::PLAYER_IDLE;
 }
 
-
-Actor_Player_Alt::~Actor_Player_Alt()
+void Actor_Player_Alt::Update( float DeltaTime )
 {
+	switch ( m_state )
+	{
+		case Actor_Dynamic::PLAYER_IDLE:
+			// Set idle animation/pose
+			break;
+		case Actor_Dynamic::PLAYER_WALKING:
+			// Set walk animation
+			Walk( DeltaTime );
+			break;
+		case Actor_Dynamic::PLAYER_PUSHING:
+			// Set pushing animation
+			Push( DeltaTime );
+			break;
+		case Actor_Dynamic::PLAYER_QUICKTIME:
+			// Set panic animation
+			QuickTime();
+			break;
+		case Actor_Dynamic::PLAYER_DROWNING:
+			// Set flailing animation
+			break;
+		case Actor_Dynamic::PLAYER_PINNED:
+			// Set dead animation/pose
+			break;
+	}
 }
 
-void Actor_Player_Alt::SetPosition( const DirectX::XMFLOAT3 & Position )
-{
-	m_worldSpecs.position = Position;
-}
-
-void Actor_Player_Alt::GetInput( const Input& pInput, int randI, float randF )
+void Actor_Player_Alt::Walk( float DeltaTime )
 {
 	// Initialize the values to be used for direction
-	float x = 0.f, z = 0.f;
-
-	// Only eight directions user can point when using keybaord for 
-	// input; 
-	// north, northeast, east, southeast, 
-	// south, southwest, west and northwest
-	// Set X and Z to a constant 1 or -1 to use for direction
-	// calculations
-	if( pInput.IsKeyDown( VK_UP ) )
-	{
-		z = 1.f;
-	}
-	else if( pInput.IsKeyDown( VK_DOWN ) )
-	{
-		z = -1.f;
-	}
-
-	if( pInput.IsKeyDown( VK_LEFT ) )
-	{
-		x = -1.f;
-	}
-	else if( pInput.IsKeyDown( VK_RIGHT ) )
-	{
-		x = 1.f;
-	}
+	bool keyIsPressed = false;	
+	float minuend = 0.f, yRot = 0.f;
 		
+	const float z = [ & ]
+	{		
+		if ( m_pInput->IsKeyDown( VK_UP ) )
+		{
+			keyIsPressed = true;
+			yRot = 90.f;
+			return 1.f;
+		}
+		else if ( m_pInput->IsKeyDown( VK_DOWN ) )
+		{
+			keyIsPressed = true;
+			yRot = -90.f;
+			return -1.f;
+		}
+		return 0.f;
+	}( );
+	const float x = [ & ]
+	{
+		if ( m_pInput->IsKeyDown( VK_LEFT ) )
+		{
+			keyIsPressed = true;
+			minuend = 180.f;
+			return -1.f;
+		}
+		else if ( m_pInput->IsKeyDown( VK_RIGHT ) )
+		{
+			keyIsPressed = true;
+			minuend = 90.f;
+			return 1.f;
+		}
+		return 0.f;
+	}( );
+
+	if ( !keyIsPressed ) return;
+
 	// rx and rz are used as result of multiplying recipricol magnitude
 	// by the x and z values as mentioned below
-	if( x == 0.f && z == 0.f )
-	{
-		return;
-	}
-	float recipLength = 1.f / sqrtf( pow( x, 2 ) + pow( z, 2 ) );
-	float rx = x * recipLength;
-	float rz = z * recipLength;
-		
-	// Figure out how to convert vector direction to angle in degrees
-	bool posResult = ( ( rx > 0.f && rz > 0.f ) );
-	bool negResult = ( ( rx < 0.f && rz < 0.f ) );
-	float yRotation = g_degree * 
-		( posResult && negResult ? asin( rx ) : -( fabsf( asin( rx ) ) ) );
-		
-	
-	m_worldSpecs.orientation.y = yRotation;
-	
+	const float recipLength = 1.f / sqrtf( pow( x, 2 ) + pow( z, 2 ) );
+	const float rx = x * recipLength;
+	const float rz = z * recipLength;
+
+	const float sign = std::signbit( yRot ) ? -1.f : 1.f;
+	m_worldSpecs.orientation.y = ( minuend - ( abs( yRot ) * .5f ) ) * sign;
+
 	// Use the vector direction and speed to move player to new position
 	m_worldSpecs.position.x += ( rx * m_speed );
 	m_worldSpecs.position.z += ( rz * m_speed );
 }
+
+void Actor_Player_Alt::Push( float DeltaTime )
+{}
+
+void Actor_Player_Alt::QuickTime()
+{}

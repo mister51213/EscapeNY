@@ -12,10 +12,13 @@ public:
 		PLAYER_IDLE, PLAYER_WALKING, PLAYER_PUSHING, PLAYER_QUICKTIME, PLAYER_DROWNING, PLAYER_PINNED
 	};
 
-	Actor_Dynamic();
+	Actor_Dynamic() = default;
 	Actor_Dynamic( ModelSpecs_W worldSpecs, eTexture tex, ModelSpecs_L localSpecs, eModType modType );
-	~Actor_Dynamic();
+	~Actor_Dynamic() = default;
+
 	void SetState( eActorState state );
+	eActorState GetState()const;
+
 	virtual void Update( float deltaT );
 	void ConstantMove( const float deltaT );
 	void ChaseTargetALT( const float deltaT );
@@ -26,5 +29,8 @@ public:
 protected: 
 	eActorState m_state;
     XMFLOAT3 m_target = { 0.0f,0.0f,0.0f };
+
+	// I think this is needed to determine when to start slowing down.
+	XMFLOAT3 m_initalPosition = { 0.0f, 0.0f, 0.0f };
 };
 

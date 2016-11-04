@@ -17,6 +17,7 @@ XMFLOAT2 operator*( const XMFLOAT2 &V, const float S );
 // without having to declare: using namespace
 XMFLOAT3 operator+( const XMFLOAT3 &V1, const XMFLOAT3& V2 );
 XMFLOAT3 operator-( const XMFLOAT3 &V1, const XMFLOAT3& V2 );
+XMFLOAT3 operator-( const XMFLOAT3 &V );
 XMFLOAT3 operator*( const XMFLOAT3 &V, const float S );
 XMFLOAT3 operator/( const XMFLOAT3 &V, const float S );
 XMFLOAT3 &operator+= ( XMFLOAT3& V1, const XMFLOAT3& V2 );
@@ -25,6 +26,7 @@ XMFLOAT3 &operator*= ( XMFLOAT3 &V, const float S );
 XMFLOAT3 &operator/= ( XMFLOAT3 &V, const float S );
 
 bool operator==( const XMFLOAT3 &A, const XMFLOAT3 &B );
+bool operator!=( const XMFLOAT3 &A, const XMFLOAT3 &B );
 
 // PI is equal to 180 degrees
 constexpr float g_PI = 3.141592654f;
@@ -117,3 +119,8 @@ XMVECTOR ConvertToRadians( const XMVECTOR& angleInDegrees );
 
 XMFLOAT3 ConvertToRadians( const XMFLOAT3& angleInDegrees );
 
+template<class MathType>
+MathType Square( const MathType &Val )
+{
+	return Val * Val;
+}
