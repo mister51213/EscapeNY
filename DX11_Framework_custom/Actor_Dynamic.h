@@ -18,6 +18,7 @@ public:
 	void SetState( eActorState state );
 	virtual void Update( float deltaT );
 	void ConstantMove( const float deltaT );
+	void ChaseTargetALT( const float deltaT );
 	void ChaseTarget( const float deltaT );
 
 	XMFLOAT3 MoveTowardTarget( const float deltaT );
