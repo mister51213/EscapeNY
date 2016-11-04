@@ -75,6 +75,11 @@ bool operator==( const XMFLOAT3 & A, const XMFLOAT3 & B )
 	return A.x == B.x && A.y == B.y && A.z == B.z;
 }
 
+bool operator!=( const XMFLOAT3 & A, const XMFLOAT3 & B )
+{
+	return !( A == B );
+}
+
 XMFLOAT3 CrossProduct( const XMFLOAT3 & V1, const XMFLOAT3 & V2 )
 {
 	return

@@ -28,5 +28,8 @@ public:
 protected: 
 	eActorState m_state;
     XMFLOAT3 m_target = { 0.0f,0.0f,0.0f };
+
+	// I think this is needed to determine when to start slowing down.
+	XMFLOAT3 m_initalPosition = { 0.0f, 0.0f, 0.0f };
 };
 

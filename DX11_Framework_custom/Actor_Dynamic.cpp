@@ -49,65 +49,112 @@ void Actor_Dynamic::ConstantMove( const float deltaT)
 
 void Actor_Dynamic::ChaseTarget(const float deltaT )
 {
-	//XMFLOAT3 increment = posError * gainCoefficient * deltaT;
-	//m_worldSpecs.position += increment;
+	// Temporary lambda functions comparing difference in 
+	// implementation of acceleration.
 
-	XMFLOAT3 posError = m_target - m_worldSpecs.position;	
-	const float gainCoefficient = 10.f;
-	const float integrator = 0.5f;
-
-	XMFLOAT3 displacement = { 0.f, 0.f, 0.f };
-	XMFLOAT3 acceleration = { 0.f, 0.f, 0.f };
-
-	XMFLOAT3 recipPosError = posError * 0.9;
-	if (posError.x !=0.0f && posError.y !=0.0f && posError.z !=0.0f )
+	auto JoshChaseTarget = [ & ]()
 	{
-		recipPosError = 
+		if ( m_target != XMFLOAT3{ 0.f, 0.f, 0.f } )
 		{
-			1.0f / posError.x,
-			1.0f / posError.y,
-			1.0f / posError.z
-		};
-	}
+			const float constSpeed = 50.f;
 
-			// increment velocity by fraction of distance to target
-		acceleration = (posError - recipPosError) * gainCoefficient;
+			const XMFLOAT3 range = m_target - m_initalPosition;
+			const float totalDistance = Magnitude( range );
+
+			const XMFLOAT3 toTargetVector = m_target - m_worldSpecs.position;
+			const float distanceToTarget = Magnitude( toTargetVector );
+			const float inverseDistance = 1.f / distanceToTarget;
+
+			if ( distanceToTarget <= 0.01f )
+			{
+				m_initalPosition = m_target;
+				return;
+			}
+
+			const float accelCoeff = distanceToTarget / totalDistance;
+			const float decelCoeff = ( 1.f - accelCoeff );
+
+			const XMFLOAT3 direction = toTargetVector * inverseDistance;
+			const XMFLOAT3 frameVelocity = direction * ( accelCoeff * constSpeed );
+			const XMFLOAT3 frameDecelVel = -direction * ( decelCoeff * constSpeed );
+
+			const float timeSquared = Square( deltaT );
+			const XMFLOAT3 acceleration = frameVelocity * timeSquared;
+			const XMFLOAT3 deceleration = frameDecelVel * timeSquared;
+			const XMFLOAT3 finalAcceleration = acceleration + deceleration;
+
+			m_attributes.velocity += finalAcceleration;
+			m_worldSpecs.position += m_attributes.velocity;
+			int a = 0;
+		}
+	};
+
+	auto GregChaseTarget = [ & ]()
+	{
+		//XMFLOAT3 increment = posError * gainCoefficient * deltaT;
+		//m_worldSpecs.position += increment;
+
+		XMFLOAT3 posError = m_target - m_worldSpecs.position;
+		const float gainCoefficient = 10.f;
+		const float integrator = 0.5f;
+
+		XMFLOAT3 displacement = { 0.f, 0.f, 0.f };
+		XMFLOAT3 acceleration = { 0.f, 0.f, 0.f };
+
+		XMFLOAT3 recipPosError = posError * 0.9;
+		if ( posError.x != 0.0f && posError.y != 0.0f && posError.z != 0.0f )
+		{
+			recipPosError =
+			{
+				1.0f / posError.x,
+				1.0f / posError.y,
+				1.0f / posError.z
+			};
+		}
+
+		// increment velocity by fraction of distance to target
+		acceleration = ( posError - recipPosError ) * gainCoefficient;
 		XMFLOAT3 velocityChange = acceleration * deltaT;
 		m_attributes.velocity += velocityChange;
 
 		//if ( Magnitude( posError ) < 50.f ) // hit the breaks
 		//	m_attributes.velocity *= integrator;
-		
-	//if(Magnitude(posError) > 100.f)
-	//{
-	//	// increment velocity by fraction of distance to target
-	//	acceleration = (posError - recipPosError);
-	//	XMFLOAT3 velocityChange = acceleration * deltaT * gainCoefficient;
-	//	m_attributes.velocity += velocityChange;
-	//}
-	//else
-	//{
-	//	// creep toward target until you reach it
-	//	//m_attributes.velocity = posError * integrator *deltaT;
-	//	acceleration = (posError - recipPosError);
-	//	XMFLOAT3 velocityChange = acceleration * deltaT * integrator;
-	//	m_attributes.velocity += velocityChange;
-	//}
 
-	displacement = m_attributes.velocity * deltaT;
-	m_worldSpecs.position += displacement;	
+		//if(Magnitude(posError) > 100.f)
+		//{
+		//	// increment velocity by fraction of distance to target
+		//	acceleration = (posError - recipPosError);
+		//	XMFLOAT3 velocityChange = acceleration * deltaT * gainCoefficient;
+		//	m_attributes.velocity += velocityChange;
+		//}
+		//else
+		//{
+		//	// creep toward target until you reach it
+		//	//m_attributes.velocity = posError * integrator *deltaT;
+		//	acceleration = (posError - recipPosError);
+		//	XMFLOAT3 velocityChange = acceleration * deltaT * integrator;
+		//	m_attributes.velocity += velocityChange;
+		//}
+
+		displacement = m_attributes.velocity * deltaT;
+		m_worldSpecs.position += displacement;
+	};
+		
+	JoshChaseTarget();
+	//GregChaseTarget();
 }
 
 XMFLOAT3 Actor_Dynamic::MoveTowardTarget( const float deltaT )
 {
 	// will calculate and add this displacement to actual position
-	XMFLOAT3 deltaPos = { 0.0f, 0.0f, 0.0f };
-
+	
 	// Store current position
 	XMFLOAT3 currPos = m_worldSpecs.position;
 
 	// How far do we still have to travel?
 	XMFLOAT3 posError = m_target - currPos;
+
+	// Magnitude will always be positive, so no need for call to abs()
 	float distToTarget = abs( Magnitude( posError ) );
 
 	// displacement by next frame if we continue traveling at current speed
@@ -128,7 +175,7 @@ XMFLOAT3 Actor_Dynamic::MoveTowardTarget( const float deltaT )
 
 	float dampener = 0.05f;
 	// Apply required accel and velocity and calculate displacement
-	deltaPos = ( ( m_attributes.velocity*deltaT ) + ( requiredAccel*( deltaT*deltaT ) ) * 0.5f ) * dampener;
+	const XMFLOAT3 deltaPos = ( ( m_attributes.velocity*deltaT ) + ( requiredAccel*( deltaT*deltaT ) ) * 0.5f ) * dampener;
 	m_attributes.velocity += ( requiredAccel*deltaT );
 	//}
 	//else // kick in the integrator for fine tuning
