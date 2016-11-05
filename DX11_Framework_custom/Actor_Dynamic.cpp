@@ -56,34 +56,78 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 	{
 		if ( m_target != XMFLOAT3{ 0.f, 0.f, 0.f } )
 		{
-			const float constSpeed = 50.f;
+			// You can consider this the amount of force that is being applied
+			// to the object.  
+			const float constSpeed = 500.f;
 
+			// My understanding of the problem can be solved using linear
+			// interpolation of the amount of acceleration in opposing
+			// directions, but you need to know your starting position and
+			// ending position for it to work.
+
+			// Linear interpolation is where you calculate the position
+			// along a line based on some percentage.  
+			/*
+				If you have a starting point of (0, 0, 0) and want to end at
+				(100, 0, 0) you can see that when you are 25% done with your 
+				journey, you will be at (25, 0, 0) and you still have 75% to go.
+				So the vector that is left is (75, 0, 0).
+
+				The formula for linear interpolation (LERP) is:
+				completed = start + ((end - start) * percentage)
+				remaining = start + ((end - start) * (1.0-percentage))
+				total = completed + remaining
+				Percentage is usually between 0.0 and 1.0
+			*/
+
+			// range is the (end - start) in vector form and total distance
+			// is the scalar form
 			const XMFLOAT3 range = m_target - m_initalPosition;
 			const float totalDistance = Magnitude( range );
 
+			// toTargetVector and distanceToTarget are just intermediary
+			// steps to find the percentage part
 			const XMFLOAT3 toTargetVector = m_target - m_worldSpecs.position;
 			const float distanceToTarget = Magnitude( toTargetVector );
 			const float inverseDistance = 1.f / distanceToTarget;
-
-			if ( distanceToTarget <= 0.01f )
-			{
-				m_initalPosition = m_target;
-				return;
-			}
-
+			
+			// accelCoeff is the percentage portion of the LERP formula
 			const float accelCoeff = distanceToTarget / totalDistance;
+			// decelCoeff is the remaining percentage portion of the LERP formula
 			const float decelCoeff = ( 1.f - accelCoeff );
 
+			if ( decelCoeff >= 1.f )
+			{
+				int a = 0;
+			}
+
+			// Calculates the direction of the force to be applied.
 			const XMFLOAT3 direction = toTargetVector * inverseDistance;
+
+			// accelCoeff * constSpeed, is the magnitude of displacement to be
+			// applied in the direction the object is going.
 			const XMFLOAT3 frameVelocity = direction * ( accelCoeff * constSpeed );
+
+			// decelCoeff * constSpeed, is the magnitude of displacement to be
+			// applied in the opposing direction the object is going.
 			const XMFLOAT3 frameDecelVel = -direction * ( decelCoeff * constSpeed );
 
 			const float timeSquared = Square( deltaT );
+
+			// acceleration is m/s2, so that should explain these steps
 			const XMFLOAT3 acceleration = frameVelocity * timeSquared;
 			const XMFLOAT3 deceleration = frameDecelVel * timeSquared;
+
+			// This finishes off the LERP formula, where accleration + deceleration
+			// equals 100% of the total range.
 			const XMFLOAT3 finalAcceleration = acceleration + deceleration;
 
+			// We increase velocity by the amount of desired acceleration for
+			// this frame.
 			m_attributes.velocity += finalAcceleration;
+
+			// We add velocity to position as the total amount of displacement
+			// for this frame.
 			m_worldSpecs.position += m_attributes.velocity;
 			int a = 0;
 		}

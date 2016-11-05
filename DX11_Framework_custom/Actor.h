@@ -43,7 +43,7 @@ public:
     const XMFLOAT3 &GetPosition()const { return m_worldSpecs.position; }
     const XMFLOAT3 &GetRotation()const { return m_worldSpecs.orientation; }
 
-    virtual void GetInput( const Input& pInput, int randI = 0.f, float randF = 0.f ) {}
+    virtual void GetInput( Input& pInput, int randI = 0.f, float randF = 0.f ) {}
 
 protected:
     eModType m_modType;

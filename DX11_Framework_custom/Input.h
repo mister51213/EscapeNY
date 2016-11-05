@@ -31,7 +31,10 @@ public:
 		{
 			return m_eEvent;
 		}
-
+		unsigned char GetKey()const
+		{
+			return m_key;
+		}
 	private:
 		eInputEvent m_eEvent;
 		unsigned char m_key;
@@ -67,10 +70,18 @@ public:
 
 	bool IsKeyDown( unsigned int )const;
 
-	// Will be used for text input later on.
+	// Will be used for text input later on.  If list is empty
+	// both of these functions construct an Event object with
+	// an invalid state; eInputEvent::Invalid and keycode is -1;
+
+	// Read returns next event and removes it from the queue
 	Event Read();
+	// Peek returns next event and doesn't remove from queue
+	Event Peek()const;
 	//If vector is empty and no mouse buttons pressed, then return false
 	bool AnyPressed()const;
+
+
 private:
 	bool m_keys[ 256 ];
 	bool m_leftDown = false, m_rightDown = false;

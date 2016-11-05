@@ -8,46 +8,55 @@ Actor_Player::Actor_Player( const ModelSpecs_W & worldSpecs, eTexture tex, const
 	Actor_Dynamic( worldSpecs, tex, localSpecs, modType ) // base constructor
 {}
 
-void Actor_Player::GetInput( const Input& pInput, int randI, float randF )
+void Actor_Player::GetInput( Input& pInput, int randI, float randF )
 {
-	if ( pInput.IsKeyDown( VK_RIGHT ) )
+	Input::Event evnt = pInput.Peek();
+	
+	if ( pInput.IsKeyDown( VK_UP ) && !upPressLastFrame )
 	{
-		if ( m_initalPosition == m_target )
-		{
-			m_state = HOMING;
-			m_target = { 200.f, 0.f, 0.0f };
-			m_initalPosition = GetPosition();
-		}
-		//Move({ .6f, 0.f, 0.f });
+		upPressLastFrame = true;
 	}
-	else if ( pInput.IsKeyDown( VK_LEFT ) )
+	if ( pInput.IsKeyDown( VK_DOWN ) && !downPressLastFrame )
 	{
-		if ( m_initalPosition == m_target )
-		{
-			m_state = HOMING;
-			m_target = { -200.f, 0.f, 0.0f };
-			m_initalPosition = GetPosition();
-		}		//Move({ -.6f, 0.f, 0.f });
+		downPressLastFrame = true;
 	}
-	if ( pInput.IsKeyDown( VK_UP ) )
+	if ( pInput.IsKeyDown( VK_LEFT ) && !leftPressLastFrame )
 	{
-		if ( m_initalPosition == m_target )
-		{
-			m_state = HOMING;
-			m_target = { 0.f, 0.f, 200.f };
-			m_initalPosition = GetPosition();
-		}
-		//Move({ 0.f, 0.f, .6f });
+		leftPressLastFrame = true;
 	}
-	else if ( pInput.IsKeyDown( VK_DOWN ) )
+	if ( pInput.IsKeyDown( VK_RIGHT ) && !rightPressLastFrame )
 	{
-		if ( m_initalPosition == m_target )
-		{
-			m_state = HOMING;
-			m_target = { 0.f, 0.f, -200.f };
-			m_initalPosition = GetPosition();
-		}
-		//Move({ 0.f, 0.f, -.6f });
+		rightPressLastFrame = true;
+	}
+
+	if ( !pInput.IsKeyDown( VK_UP ) && upPressLastFrame )
+	{
+		upPressLastFrame = false;
+		m_state = HOMING;
+		m_target = { 0.f, 0.f, 200.f };
+		m_initalPosition = GetPosition();
+	}
+	else if ( !pInput.IsKeyDown( VK_DOWN ) && downPressLastFrame )
+	{
+		downPressLastFrame = false;
+		m_state = HOMING;
+		m_target = { 0.f, 0.f, -200.f };
+		m_initalPosition = GetPosition();
+	}
+
+	if ( !pInput.IsKeyDown( VK_RIGHT ) && rightPressLastFrame )
+	{
+		rightPressLastFrame = false;
+		m_state = HOMING;
+		m_target = { 200.f, 0.f, 0.0f };
+		m_initalPosition = GetPosition();
+	}
+	else if ( !pInput.IsKeyDown( VK_LEFT ) && leftPressLastFrame )
+	{
+		leftPressLastFrame = false;
+		m_state = HOMING;
+		m_target = { -200.f, 0.f, 0.0f };
+		m_initalPosition = GetPosition();
 	}
 
 	m_worldSpecs.orientation.y += pInput.GetRelativeX();

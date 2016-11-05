@@ -16,7 +16,7 @@ public:
         Camera *const pCamera) override;
 
 	// Use UpdateFrame to update actors, camera and anything else that needs updating.
-    virtual void UpdateScene(const Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer) override;
+    virtual void UpdateScene( Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer) override;
 
 	// Use RenderFrame to render the list of actors or other game objects
 	virtual void RenderFrame( const GameView &GameViewRef ) override;

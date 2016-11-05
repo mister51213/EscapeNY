@@ -44,6 +44,10 @@ void Input::Initialize( HWND WinHandle )
 void Input::FlushRelativeData()
 {
 	m_relPosition = POINT{};
+	while ( !m_eventQueue.empty() )
+	{
+		m_eventQueue.pop();
+	}
 }
 
 void Input::OnMouseInput( const RAWMOUSE & RawMouseInput )
@@ -136,6 +140,16 @@ Input::Event Input::Read()
 	}
 
 	DoLast doLast( m_eventQueue );
+	return m_eventQueue.front();
+}
+
+Input::Event Input::Peek()const
+{
+	if ( m_eventQueue.empty() )
+	{
+		Input::Event( eInputEvent::Invalid, -1 );
+	}
+
 	return m_eventQueue.front();
 }
 

@@ -16,7 +16,7 @@ public:
 		Camera *const pCamera) = 0;
 
 	// Use this to update actors, camera and anything else that needs updating.
-	virtual void UpdateScene( const Input &InputRef, 
+	virtual void UpdateScene( Input &InputRef, 
 							  Camera *const pCamera, 
 							  const Physics& refPhysics, 
 							  const GameTimer& refTimer ) = 0; // TODO: add const to end of physics functions

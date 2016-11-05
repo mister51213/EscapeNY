@@ -36,7 +36,7 @@ public:
 		Camera *const pCamera);
 
 	// Use this to update actors, camera and anything else that needs updating.
-	virtual void UpdateScene( const Input &InputRef, Camera *const pCamera, 
+	virtual void UpdateScene( Input &InputRef, Camera *const pCamera, 
 							  const Physics& refPhysics, const GameTimer& refTimer );
 
 	// Use RenderFrame to render the list of actors or other game objects

@@ -5,7 +5,7 @@ Actor_NPC::Actor_NPC( const ModelSpecs_W & worldSpecs, eTexture tex, const Model
 	Actor_Dynamic( worldSpecs, tex, localSpecs, mod ) // base constructor
 {}
 
-void Actor_NPC::GetInput( const Input & pInput, int randI, float randF )
+void Actor_NPC::GetInput( Input & pInput, int randI, float randF )
 {
 	//srand( static_cast<unsigned int>( time( nullptr ) ) );
 	//int dieRoll = rand() % 3;

@@ -56,7 +56,7 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 }
 
 	// Use UpdateFrame to update actors, camera and anything else that needs updating.
-void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
+void Game_FPS::UpdateScene( Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
 {
 	#ifdef NDEBUG
 	float tSinceLastFrame = refTimer.SecondsPassed();

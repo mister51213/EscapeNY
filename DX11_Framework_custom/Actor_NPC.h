@@ -16,7 +16,7 @@ public:
 public:
 	// Leaving these functions here for you to test with, 
 	// please remember to put in CPP files when done.
-	void GetInput( const Input& pInput, int randI = 0.f, float randF = 0.f ) override;
+	void GetInput( Input& pInput, int randI = 0.f, float randF = 0.f ) override;
 
 private:
 	void Move( const DirectX::XMFLOAT3 &offset );

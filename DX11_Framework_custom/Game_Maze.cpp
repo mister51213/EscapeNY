@@ -30,7 +30,7 @@ void Game_Maze::Initialize(
 	reset();
 }
 
-void Game_Maze::UpdateScene( const Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
+void Game_Maze::UpdateScene( Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
 {
 	UpdatePlayerState();
 	UpdateCarState();

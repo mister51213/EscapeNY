@@ -61,7 +61,7 @@ void Scene::reset()
     m_pActorsMASTER.push_back(&m_map);
 }
 
-void Scene::UpdateScene( const Input & InputRef, Camera * const pCamera, const Physics & refPhysics, const GameTimer & refTimer )
+void Scene::UpdateScene( Input & InputRef, Camera * const pCamera, const Physics & refPhysics, const GameTimer & refTimer )
 {
 	// TIMER 
 	#ifdef NDEBUG

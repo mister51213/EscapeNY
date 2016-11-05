@@ -16,7 +16,7 @@ public:
 		const ModelSpecs_L & localSpecs, 
 		eModType modType = CUBE_TEXTURED );
 
-    void GetInput( const Input& pInput, int randI = 0.f, float randF = 0.f ) override;
+    void GetInput( Input& pInput, int randI = 0.f, float randF = 0.f ) override;
 
 	void Update( float deltaT ) override;
 
@@ -24,4 +24,8 @@ private:
 	void Move( const DirectX::XMFLOAT3 &offset );
 
 	void Rotate( const DirectX::XMFLOAT3 &rotation );
+	bool leftPressLastFrame = false;
+	bool rightPressLastFrame = false;
+	bool upPressLastFrame = false;
+	bool downPressLastFrame = false;
 };
