@@ -12,41 +12,41 @@ void Actor_Player::GetInput( const Input& pInput, int randI, float randF )
 {
 	if ( pInput.IsKeyDown( VK_RIGHT ) )
 	{
-		if ( m_initalPosition == m_target )
-		{
+		//if ( m_initalPosition == m_target )
+		//{
 			m_state = HOMING;
-			m_target = { 200.f, 0.f, 0.0f };
+			m_target = { 100.f, 0.f, 0.0f };
 			m_initalPosition = GetPosition();
-		}
+		//}
 		//Move({ .6f, 0.f, 0.f });
 	}
 	else if ( pInput.IsKeyDown( VK_LEFT ) )
 	{
-		if ( m_initalPosition == m_target )
-		{
+		//if ( m_initalPosition == m_target )
+		//{
 			m_state = HOMING;
-			m_target = { -200.f, 0.f, 0.0f };
+			m_target = { -100.f, 0.f, 0.0f };
 			m_initalPosition = GetPosition();
-		}		//Move({ -.6f, 0.f, 0.f });
+		//}		//Move({ -.6f, 0.f, 0.f });
 	}
 	if ( pInput.IsKeyDown( VK_UP ) )
 	{
-		if ( m_initalPosition == m_target )
-		{
+		//if ( m_initalPosition == m_target )
+		//{
 			m_state = HOMING;
-			m_target = { 0.f, 0.f, 200.f };
+			m_target = { 0.f, 0.f, 100.f };
 			m_initalPosition = GetPosition();
-		}
+		//}
 		//Move({ 0.f, 0.f, .6f });
 	}
 	else if ( pInput.IsKeyDown( VK_DOWN ) )
 	{
-		if ( m_initalPosition == m_target )
-		{
+		//if ( m_initalPosition == m_target )
+		//{
 			m_state = HOMING;
-			m_target = { 0.f, 0.f, -200.f };
+			m_target = { 0.f, 0.f, -100.f };
 			m_initalPosition = GetPosition();
-		}
+		//}
 		//Move({ 0.f, 0.f, -.6f });
 	}
 

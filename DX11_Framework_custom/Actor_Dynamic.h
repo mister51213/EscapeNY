@@ -27,6 +27,8 @@ public:
 	XMFLOAT3 MoveTowardTarget( const float deltaT );
 
 protected: 
+	float integrator;
+
 	eActorState m_state;
     XMFLOAT3 m_target = { 0.0f,0.0f,0.0f };
 

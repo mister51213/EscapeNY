@@ -56,8 +56,6 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 	{
 		if ( m_target != XMFLOAT3{ 0.f, 0.f, 0.f } )
 		{
-			const float constSpeed = 50.f;
-
 			const XMFLOAT3 range = m_target - m_initalPosition;
 			const float totalDistance = Magnitude( range );
 
@@ -65,27 +63,58 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 			const float distanceToTarget = Magnitude( toTargetVector );
 			const float inverseDistance = 1.f / distanceToTarget;
 
-			if ( distanceToTarget <= 0.01f )
-			{
-				m_initalPosition = m_target;
-				return;
-			}
+			//if ( distanceToTarget <= 0.01f )
+			//{
+			//	m_initalPosition = m_target;
+			//	return;
+			//}
 
 			const float accelCoeff = distanceToTarget / totalDistance;
-			const float decelCoeff = ( 1.f - accelCoeff );
+			const float decelCoeff = -( 1.f - accelCoeff );
 
-			const XMFLOAT3 direction = toTargetVector * inverseDistance;
-			const XMFLOAT3 frameVelocity = direction * ( accelCoeff * constSpeed );
-			const XMFLOAT3 frameDecelVel = -direction * ( decelCoeff * constSpeed );
+			XMFLOAT3 velToAdd = m_attributes.velocity * accelCoeff * .3f;
+			XMFLOAT3 velToSub = m_attributes.velocity * decelCoeff * .3f;
+			XMFLOAT3 nudge = range * 0.01f;
 
-			const float timeSquared = Square( deltaT );
-			const XMFLOAT3 acceleration = frameVelocity * timeSquared;
-			const XMFLOAT3 deceleration = frameDecelVel * timeSquared;
-			const XMFLOAT3 finalAcceleration = acceleration + deceleration;
+			float halfRange = totalDistance * 0.5f;
+			float closeRange = totalDistance * 0.3f;
+			XMFLOAT3 displacement;
 
-			m_attributes.velocity += finalAcceleration;
-			m_worldSpecs.position += m_attributes.velocity;
-			int a = 0;
+			if ( abs(distanceToTarget) > abs(halfRange) ) // accelerate
+			{
+			}
+			//else if ( abs(distanceToTarget) < abs(closeRange) ) // tractor beam
+			//{
+			//	m_attributes.velocity = { 0.f, 0.f, .0f };
+			//	displacement = range * deltaT * 1.5f;
+			//}
+			else
+			{
+			}
+
+			// ACCELERATE
+			m_attributes.velocity += velToAdd + nudge;
+			m_attributes.velocity += velToSub; // hit the breaks
+
+			displacement = m_attributes.velocity * deltaT;
+			m_worldSpecs.position += displacement;
+
+			//const XMFLOAT3 direction = toTargetVector * inverseDistance;
+
+			//// velocityToAdd is the instantaneous velocity that we must add to reach the target
+			//const XMFLOAT3 velocityToAdd = direction * ( accelCoeff * constSpeed );
+			//const XMFLOAT3 velocityToSubtract = -direction * ( decelCoeff * constSpeed );
+
+			//const float timeSquared = Square( deltaT );
+			//const XMFLOAT3 acceleration = velocityToAdd * timeSquared;
+			//const XMFLOAT3 deceleration = velocityToSubtract * timeSquared;
+
+			//const XMFLOAT3 finalAcceleration = acceleration + deceleration;
+
+			//m_attributes.velocity += finalAcceleration;
+			//m_worldSpecs.position += m_attributes.velocity;
+
+			//int a = 0;
 		}
 	};
 
@@ -95,23 +124,29 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 		//m_worldSpecs.position += increment;
 
 		XMFLOAT3 posError = m_target - m_worldSpecs.position;
-		const float gainCoefficient = 10.f;
 		const float integrator = 0.5f;
 
 		XMFLOAT3 displacement = { 0.f, 0.f, 0.f };
 		XMFLOAT3 acceleration = { 0.f, 0.f, 0.f };
 
-		XMFLOAT3 recipPosError = posError * 0.9;
-		if ( posError.x != 0.0f && posError.y != 0.0f && posError.z != 0.0f )
-		{
-			recipPosError =
-			{
-				1.0f / posError.x,
-				1.0f / posError.y,
-				1.0f / posError.z
-			};
-		}
+		XMFLOAT3 recipPosError =
+		{ 
+			posError.x == 0.0f ? 0.0f : 1.0f / posError.x,
+			posError.x == 0.0f ? 0.0f : 1.0f / posError.y,
+			posError.x == 0.0f ? 0.0f : 1.0f / posError.z 
+		};
 
+		//if ( posError.x != 0.0f && posError.y != 0.0f && posError.z != 0.0f )
+		//{
+		//	recipPosError =
+		//	{
+		//		1.0f / posError.x,
+		//		1.0f / posError.y,
+		//		1.0f / posError.z
+		//	};
+		//}
+
+		const float gainCoefficient = 2000.f;
 		// increment velocity by fraction of distance to target
 		acceleration = ( posError - recipPosError ) * gainCoefficient;
 		XMFLOAT3 velocityChange = acceleration * deltaT;
@@ -132,6 +167,7 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 		//	// creep toward target until you reach it
 		//	//m_attributes.velocity = posError * integrator *deltaT;
 		//	acceleration = (posError - recipPosError);
+
 		//	XMFLOAT3 velocityChange = acceleration * deltaT * integrator;
 		//	m_attributes.velocity += velocityChange;
 		//}
