@@ -4,7 +4,9 @@
 
 Actor_Dynamic::Actor_Dynamic(ModelSpecs_W worldSpecs, eTexture tex, ModelSpecs_L localSpecs, eModType modType): 
 	Actor( worldSpecs, tex, localSpecs, modType )
-{}
+{
+	ResetPIDParams();
+}
 
 void Actor_Dynamic::SetState(eActorState state)
 {
@@ -14,6 +16,14 @@ void Actor_Dynamic::SetState(eActorState state)
 Actor_Dynamic::eActorState Actor_Dynamic::GetState() const
 {
 	return m_state;
+}
+
+void Actor_Dynamic::ResetPIDParams( XMFLOAT3 target )
+{		
+	m_target = target;
+	m_initalPosition = GetPosition();
+	m_initialHeading = m_target - m_initalPosition;
+	m_halfway = abs(Magnitude(m_initialHeading)) * 0.5;
 }
 
 void Actor_Dynamic::Update(float deltaT)
@@ -49,14 +59,82 @@ void Actor_Dynamic::ConstantMove( const float deltaT)
 
 void Actor_Dynamic::ChaseTarget(const float deltaT )
 {
-
-	auto optionThree = 
-		[ & ]()
+	auto crudeOption = [ & ]()
 	{
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			// You can consider this the amount of force that is being applied
-			// to the object.  
-		const float constSpeed = 500.f;
+	//XMFLOAT3 posError = m_target - m_worldSpecs.position;
+	//XMFLOAT3 increment = 1.f * deltaT;
+	//m_worldSpecs.position += increment;
+	};
+
+	auto bestOption = [ & ]()
+	{
+			/*
+		STEP ONE
+			*must CLAMP the proportional gain below:
+		acceleration = error * gainCoefficient; (a positive const value)
+		acceleration += velocity * derivatieGainCoefficient; (a negative const value)
+
+		STEP TWO
+			*add friction to damp the oscillation
+		*/
+
+		XMFLOAT3 currDistV = m_target - m_worldSpecs.position;
+		float error = Magnitude( currDistV );
+		XMFLOAT3 dirToTarget = Normalize(currDistV);
+		
+		// INTEGRATE ACCELERATION
+		float accelCoeff = 1.7f; // TODO: make this proportional
+
+		if ( error < m_halfway )
+		{
+			accelCoeff *= -1.0;
+		}
+		if ( error < 5.0f ) //CLOSE RANGE
+		{
+			accelCoeff = 0.f;
+			m_attributes.velocity = { 0.f, 0.f, 0.f };
+		}
+
+		// THE VELOCITY IS THE OUTCOME OF INTEGRATING THE ACCELERATION OVER TIME
+		m_attributes.acceleration = dirToTarget * accelCoeff;
+		m_attributes.velocity += m_attributes.acceleration;
+		XMFLOAT3 displacement = m_attributes.velocity * deltaT;
+		m_worldSpecs.position += displacement;
+
+	};
+
+	auto betterOption = [ & ]()
+	{
+		float fakeTime = 0.1;
+
+		XMFLOAT3 currDistV = m_target - m_worldSpecs.position;
+		float error = Magnitude( currDistV );
+		XMFLOAT3 dirToTarget = Normalize(currDistV);
+		
+		// INTEGRATE ACCELERATION
+		float accelCoeff = 0.5f; // TODO: make this proportional
+
+		if ( error < m_halfway )
+		{
+			accelCoeff *= -1.0;
+		}
+		if ( error < 5.0f ) //CLOSE RANGE
+		{
+			accelCoeff = 0.f;
+			m_attributes.velocity = { 0.f, 0.f, 0.f };
+		}
+
+		// THE VELOCITY IS THE OUTCOME OF INTEGRATING THE ACCELERATION OVER TIME
+		m_attributes.acceleration = dirToTarget * accelCoeff;
+		m_attributes.velocity += m_attributes.acceleration;
+		XMFLOAT3 displacement = m_attributes.velocity * fakeTime;
+		m_worldSpecs.position += displacement;
+	};
+
+	auto optionThree = [ & ]()
+	{
+			// You can consider this the amount of force that is being applied to the object.  
+		const float constSpeed = 5.f;
 
 		// My understanding of the problem can be solved using linear
 		// interpolation of the amount of acceleration in opposing
@@ -127,9 +205,7 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 		// We add velocity to position as the total amount of displacement
 		// for this frame.
 		m_worldSpecs.position += m_attributes.velocity;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	};
-
 	auto JoshChaseTarget = [ & ]()
 	{
 		if ( m_target != XMFLOAT3{ 0.f, 0.f, 0.f } )
@@ -195,12 +271,8 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 			//int a = 0;
 		}
 	};
-
 	auto GregChaseTarget = [ & ]()
 	{
-		//XMFLOAT3 increment = posError * gainCoefficient * deltaT;
-		//m_worldSpecs.position += increment;
-
 		XMFLOAT3 posError = m_target - m_worldSpecs.position;
 		const float integrator = 0.5f;
 
@@ -224,7 +296,7 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 		//	};
 		//}
 
-		const float gainCoefficient = 2000.f;
+		const float gainCoefficient = 20.f;
 		// increment velocity by fraction of distance to target
 		acceleration = ( posError - recipPosError ) * gainCoefficient;
 		XMFLOAT3 velocityChange = acceleration * deltaT;
@@ -256,7 +328,10 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 		
 	//JoshChaseTarget();
 	//GregChaseTarget();
-	optionThree();
+	//optionThree();
+	//betterOption();
+	//crudeOption();
+	bestOption();
 }
 
 XMFLOAT3 Actor_Dynamic::MoveTowardTarget( const float deltaT )

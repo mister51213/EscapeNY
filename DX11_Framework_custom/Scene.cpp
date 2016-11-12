@@ -51,7 +51,7 @@ void Scene::reset()
 
     // PLAYER
     m_player = Actor_Player(
-    { { 0.f, 100.f, 0.f },
+    { { 0.f, 0.f, -150.f },
     { 0.f, 0.f, 0.f },
     { .5f, .5f, .5f } }, eTexture::Bush, ModelSpecs_L(), SPHERE);
 

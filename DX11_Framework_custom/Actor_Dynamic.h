@@ -19,6 +19,8 @@ public:
 	void SetState( eActorState state );
 	eActorState GetState()const;
 
+	void ResetPIDParams(XMFLOAT3 target = { 0.f, 0.f, 0.f });
+
 	virtual void Update( float deltaT );
 	void ConstantMove( const float deltaT );
 	void ChaseTargetALT( const float deltaT );
@@ -34,5 +36,7 @@ protected:
 
 	// I think this is needed to determine when to start slowing down.
 	XMFLOAT3 m_initalPosition = { 0.0f, 0.0f, 0.0f };
+	XMFLOAT3 m_initialHeading = {0.0f, 0.0f, 0.0f};
+	float m_halfway = 0.0f;
 };
 

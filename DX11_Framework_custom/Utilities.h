@@ -57,8 +57,8 @@ struct PhysAttributes
 {
 	// would need to calculate this for more realistic physics.
 	float terminalV = 50.0f;
-	DirectX::XMFLOAT3 velocity = { 0.f, 0.0f, 0.f };
-	DirectX::XMFLOAT3 acceleration = { 0.f, 0.0f, 0.f };
+	DirectX::XMFLOAT3 velocity = { 0.f, 0.f, 0.f };
+	DirectX::XMFLOAT3 acceleration = { 0.f, 0.f, 0.f };
 	float Mass = 1.0f;
 	float Size = 5.0f;
 };
