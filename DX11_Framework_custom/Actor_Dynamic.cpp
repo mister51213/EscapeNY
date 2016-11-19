@@ -68,22 +68,41 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 
 	auto bestOption = [ & ]()
 	{
-			/*
-		STEP ONE
-			*must CLAMP the proportional gain below:
-		acceleration = error * gainCoefficient; (a positive const value)
-		acceleration += velocity * derivatieGainCoefficient; (a negative const value)
-
-		STEP TWO
-			*add friction to damp the oscillation
-		*/
-
 		XMFLOAT3 currDistV = m_target - m_worldSpecs.position;
 		float error = Magnitude( currDistV );
 		XMFLOAT3 dirToTarget = Normalize(currDistV);
 		
-		// INTEGRATE ACCELERATION
-		float accelCoeff = 1.7f; // TODO: make this proportional
+		//////////// PROPORTIONAL ACCELERATION METHOD //////////////
+		float pCoeff = 0.3f; // proportional gain coefficient
+		float dCoeff = -.05f; // derivative gain coefficient
+		m_integrator += error; // TODO: add conditional statement to apply this
+		m_attributes.acceleration = dirToTarget * error * pCoeff;
+		m_attributes.acceleration += m_attributes.velocity * dCoeff;
+		//////////// PROPORTIONAL ACCELERATION METHOD //////////////
+
+		////////// UNIVERSAL FINAL CALCULATION ///////
+		m_attributes.velocity += m_attributes.acceleration;
+		XMFLOAT3 displacement = m_attributes.velocity * deltaT;
+		m_worldSpecs.position += displacement;
+	};
+
+	auto betterOption = [ & ]()
+	{
+					/*
+		STEP ONE
+			*must CLAMP the proportional gain below:
+		acceleration = error * gainCoefficient; (a positive const value)
+		acceleration += velocity * derivativeGainCoefficient; (a negative const value)
+
+		STEP TWO
+			*add friction to damp the oscillation
+		*/
+		XMFLOAT3 currDistV = m_target - m_worldSpecs.position;
+		float error = Magnitude( currDistV );
+		XMFLOAT3 dirToTarget = Normalize(currDistV);
+		
+		/////////// FIXED ACCELERATION METHOD //////////////////
+		float accelCoeff = 3.5f;
 
 		if ( error < m_halfway )
 		{
@@ -94,40 +113,12 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 			accelCoeff = 0.f;
 			m_attributes.velocity = { 0.f, 0.f, 0.f };
 		}
+		/////////// FIXED ACCELERATION METHOD //////////////////
 
 		// THE VELOCITY IS THE OUTCOME OF INTEGRATING THE ACCELERATION OVER TIME
 		m_attributes.acceleration = dirToTarget * accelCoeff;
 		m_attributes.velocity += m_attributes.acceleration;
 		XMFLOAT3 displacement = m_attributes.velocity * deltaT;
-		m_worldSpecs.position += displacement;
-
-	};
-
-	auto betterOption = [ & ]()
-	{
-		float fakeTime = 0.1;
-
-		XMFLOAT3 currDistV = m_target - m_worldSpecs.position;
-		float error = Magnitude( currDistV );
-		XMFLOAT3 dirToTarget = Normalize(currDistV);
-		
-		// INTEGRATE ACCELERATION
-		float accelCoeff = 0.5f; // TODO: make this proportional
-
-		if ( error < m_halfway )
-		{
-			accelCoeff *= -1.0;
-		}
-		if ( error < 5.0f ) //CLOSE RANGE
-		{
-			accelCoeff = 0.f;
-			m_attributes.velocity = { 0.f, 0.f, 0.f };
-		}
-
-		// THE VELOCITY IS THE OUTCOME OF INTEGRATING THE ACCELERATION OVER TIME
-		m_attributes.acceleration = dirToTarget * accelCoeff;
-		m_attributes.velocity += m_attributes.acceleration;
-		XMFLOAT3 displacement = m_attributes.velocity * fakeTime;
 		m_worldSpecs.position += displacement;
 	};
 

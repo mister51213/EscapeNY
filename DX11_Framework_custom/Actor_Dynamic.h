@@ -38,5 +38,7 @@ protected:
 	XMFLOAT3 m_initalPosition = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT3 m_initialHeading = {0.0f, 0.0f, 0.0f};
 	float m_halfway = 0.0f;
+	float m_integrator = 0.0f;
 };
+
 
