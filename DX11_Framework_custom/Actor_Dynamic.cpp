@@ -73,11 +73,28 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 		XMFLOAT3 dirToTarget = Normalize(currDistV);
 		
 		//////////// PROPORTIONAL ACCELERATION METHOD //////////////
-		float pCoeff = 0.3f; // proportional gain coefficient
-		float dCoeff = -.05f; // derivative gain coefficient
+		float pCoeff = 0.2f; // proportional gain coefficient
+		float dCoeff = -.07f; // derivative gain coefficient
 		m_integrator += error; // TODO: add conditional statement to apply this
+		/*
+		NOTE: Integrator is only needed if real world friction applies.
+		In other words, if the thrust input doesn't produce the velocity
+		that you expect, because some of it is lost to friction, then you
+		have to creep the rest of the way to the goal using the integrator.
+
+		So to add another level of realism, this function shouldnt be able to
+		automatically increment acceleration and velocity, but rather input a force, 
+		and the result of that force will be affected by other forces in the world, 
+		such as friction and drag. Then it will check its own resultant velocity, 
+		and continue to calculate	how much input it needs to give based on that. 
+		
+		This is how PID works in the real world.
+		*/
 		m_attributes.acceleration = dirToTarget * error * pCoeff;
 		m_attributes.acceleration += m_attributes.velocity * dCoeff;
+		// TODO: Add friction to damp the speed as it approaches target;
+		// TODO: that way, we won't only rely on P and D coefficients
+
 		//////////// PROPORTIONAL ACCELERATION METHOD //////////////
 
 		////////// UNIVERSAL FINAL CALCULATION ///////
