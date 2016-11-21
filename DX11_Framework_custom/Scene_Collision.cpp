@@ -51,20 +51,22 @@ void Scene_Collision::reset()
 	{ 600.f, 400.f, 600.f } }, Energy, ModelSpecs_L(), SOME_EDIFICE );
 
     // BALL 1
-	m_ball1.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
+	float radius1 = 50.0f;
     m_ball1 = Actor_Player(
 	{ { 0.f, 100.f, -400.f },
 	{ 0.f, 0.f, 0.f },
-	{ m_ball1.m_attributes.radius, m_ball1.m_attributes.radius, m_ball1.m_attributes.radius } },
+	{ radius1, radius1, radius1 } },
 		eTexture::Aluminum, ModelSpecs_L(), SPHERE );
+	m_ball1.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
 
 	// BALL 2
-	m_ball2.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
+	float radius2 = 50.0f;
 	m_ball2 = Actor_Player(
     { { 0.f, 100.f, 400.f },
     { 0.f, 0.f, 0.f },
-	{ m_ball2.m_attributes.radius, m_ball2.m_attributes.radius, m_ball2.m_attributes.radius } },		
+	{ radius2, radius2, radius2 } },		
 		eTexture::waterSHALLOW, ModelSpecs_L(), SPHERE);
+	m_ball2.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
 
 	// LOAD DRAW LIST
 	m_pActorsMASTER.reserve( 3 );

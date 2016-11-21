@@ -31,7 +31,10 @@ void Actor_Dynamic::Update(float deltaT)
         switch (m_state)
         {
         case STILL:
-            return;
+		{
+			m_attributes.velocity = { 0.f, 0.f, 0.f };
+			return;
+		}
         case FALLING:
             {
 
@@ -344,7 +347,7 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 
 void Actor_Dynamic::Stop()
 {
-	m_target = m_worldSpecs.position;
+	m_state = STILL;
 }
 
 XMFLOAT3 Actor_Dynamic::MoveTowardTarget( const float deltaT )
