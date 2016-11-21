@@ -72,7 +72,7 @@ private:
     vector<LightBufferType> m_lightSet; // passed to GameView
 
 	int m_numBalls = 2;
-	int m_numLights = 10;
+	int m_numLights = 8;
 	int m_lightsPerBall = m_numLights / m_numBalls;
 };
 

@@ -48,7 +48,7 @@ void Scene_Collision::reset()
 	m_map = Actor_NPC( 
 	{ { 0.f, 0.f, 0.f },
 	{ 0.f, 0.f, 0.f },
-	{ 600.f, 150.f, 600.f } }, Energy, ModelSpecs_L(), SOME_EDIFICE );
+	{ 600.f, 400.f, 600.f } }, Energy, ModelSpecs_L(), SOME_EDIFICE );
 
     // BALL 1
     m_ball1 = Actor_Player(
@@ -85,15 +85,15 @@ void Scene_Collision::UpdateScene( const Input & InputRef, Camera * const pCamer
     m_ball2.GetInput(InputRef);
 
 	// PHYSICS
-	for each ( auto actor in m_pActorsMASTER )
-	{
-		m_physics.DoPhysics( actor->GetAttributes(), tSinceLastFrame);
-	}
+	//for each ( auto actor in m_pActorsMASTER )
+	//{
+	//	m_physics.DoPhysics( actor->GetAttributes(), tSinceLastFrame);
+	//}
 
 	// ACTOR MOVEMENT
-	m_ball1.SetState( Actor_Dynamic::HOMING );
+	//m_ball1.SetState( Actor_Dynamic::HOMING );
 	m_ball1.Update(tSinceLastFrame);
-	m_ball2.SetState( Actor_Dynamic::HOMING );
+	//m_ball2.SetState( Actor_Dynamic::HOMING );
 	m_ball2.Update(tSinceLastFrame);
 
 

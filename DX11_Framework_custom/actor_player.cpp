@@ -10,9 +10,9 @@ Actor_Player::Actor_Player( const ModelSpecs_W & worldSpecs, eTexture tex, const
 
 void Actor_Player::GetInput( const Input& pInput, int randI, float randF )
 {
-		float x = static_cast<float>( rand() % 700 - 150 );
-   		float y = static_cast<float>( rand() % 700 - 150 );
-        float z = static_cast<float>( rand() % 700 - 150 );
+		float x = static_cast<float>( rand() % 800 - 400 );
+   		float y = static_cast<float>( rand() % 800 - 400 );
+        float z = static_cast<float>( rand() % 800 - 400 );
 
 	if ( pInput.IsKeyDown( VK_RIGHT ) )
 	{
