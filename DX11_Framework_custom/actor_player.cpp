@@ -10,26 +10,53 @@ Actor_Player::Actor_Player( const ModelSpecs_W & worldSpecs, eTexture tex, const
 
 void Actor_Player::GetInput( const Input& pInput, int randI, float randF )
 {
+		float x = static_cast<float>( rand() % 700 - 150 );
+   		float y = static_cast<float>( rand() % 700 - 150 );
+        float z = static_cast<float>( rand() % 700 - 150 );
+
 	if ( pInput.IsKeyDown( VK_RIGHT ) )
 	{
 			m_state = HOMING;
-			ResetPIDParams( { 200.f, 0.f, 0.0f } );
+			ResetPIDParams( { x, y, 0.0f } );
 	}
 	else if ( pInput.IsKeyDown( VK_LEFT ) )
 	{
 			m_state = HOMING;
-			ResetPIDParams( { -200.f, 0.f, 0.0f } );
+			ResetPIDParams( { -x, y, 0.0f } );
 	}
 	if ( pInput.IsKeyDown( VK_UP ) )
 	{
 			m_state = HOMING;
-			ResetPIDParams( { 0.f, 0.f, 200.f } );
+			ResetPIDParams( { 0.f, y, z } );
 	}
 	else if ( pInput.IsKeyDown( VK_DOWN ) )
 	{
 			m_state = HOMING;
-			ResetPIDParams({ 0.f, 0.f, -200.f });
+			ResetPIDParams({ 0.f, y, -z });
 	}
+
+
+
+	//if ( pInput.IsKeyDown( VK_RIGHT ) )
+	//{
+	//		m_state = HOMING;
+	//		ResetPIDParams( { 200.f, 0.f, 0.0f } );
+	//}
+	//else if ( pInput.IsKeyDown( VK_LEFT ) )
+	//{
+	//		m_state = HOMING;
+	//		ResetPIDParams( { -200.f, 0.f, 0.0f } );
+	//}
+	//if ( pInput.IsKeyDown( VK_UP ) )
+	//{
+	//		m_state = HOMING;
+	//		ResetPIDParams( { 0.f, 0.f, 200.f } );
+	//}
+	//else if ( pInput.IsKeyDown( VK_DOWN ) )
+	//{
+	//		m_state = HOMING;
+	//		ResetPIDParams({ 0.f, 0.f, -200.f });
+	//}
 
 	m_worldSpecs.orientation.y += pInput.GetRelativeX();
 	m_worldSpecs.orientation.x += pInput.GetRelativeY();

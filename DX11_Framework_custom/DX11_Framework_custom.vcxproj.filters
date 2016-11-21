@@ -255,6 +255,15 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
+    <ClCompile Include="Actor_Car.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DXBoundingMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Collision.cpp">
+      <Filter>Source Files\SubGames</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -460,6 +469,15 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_Car.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXBoundingMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Collision.h">
+      <Filter>Header Files\SubGames</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

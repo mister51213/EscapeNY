@@ -7,6 +7,7 @@
 #include "Game_Maze.h"
 #include "Game_FPS.h"
 #include "Scene.h"
+#include "Scene_Collision.h"
 
 class Game
 {

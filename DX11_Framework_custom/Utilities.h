@@ -85,7 +85,6 @@ struct AlignedAxisBoundingBox // JUST A BOX
 	// Assumes that translation has already been applied
 	bool Overlaps( const AlignedAxisBoundingBox &AABB )const;
 
-
 	DirectX::XMFLOAT3 center, extent;
 };
 

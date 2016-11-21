@@ -7,8 +7,10 @@ Game::Game( std::shared_ptr<Input> pInput )
 	:
 	// change active game here
 	//m_pActiveScene( new Game_FPS )
-	m_pActiveScene( new Scene )
-//	m_pActiveScene( new Game_Maze )
+	//m_pActiveScene( new Game_Maze )
+	//m_pActiveScene( new Scene )
+	m_pActiveScene( new Scene_Collision )
+
 {
 	m_pInput = pInput;
 	srand( static_cast<unsigned int>( time( nullptr ) ) );
@@ -30,8 +32,8 @@ bool Game::Initialize(
 	RETURN_MESSAGE_IF_FALSE( result, L"Could not allocate memory for Camera." );
 	
     result = m_pCamera->Initialize(
-		{ 0.0f, 1300.0f, 0.0f },						// Position		
-		{ 90.f, 0.f, 0.f }, 						// Rotation
+		{ 0.0f, 450.0f, -1600.0f },					// Position		
+		{ 20.f, 0.f, 0.f }, 						// Rotation
 		{ ScreenWidth, ScreenHeight },				// Screen size
 		{ g_screenNear, g_screenDepth } ); 		    // Screen clip depths
 	RETURN_IF_FALSE( result );
