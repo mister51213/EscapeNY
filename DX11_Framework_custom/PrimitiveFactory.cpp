@@ -301,8 +301,16 @@ void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
 
 void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float radiusGlobe )
 {
+	//TODO: RIGHT NOW, Game and subGame dont know about radiusGlobe,
+	// so passing it in isnt helping AT ALL in unifying collision and drawing specs.
+	// THEREFORE, just set the radius to one for now, so the sphere will have
+	// a nice diameter of 2, and be scaled by whatever WORLD SPECS are passed
+	// in by the Scene object!
 	// Scale main globe radius by average of local specs
-	const float gRadius = radiusGlobe*Magnitude( Specs.size );
+	//const float gRadius = radiusGlobe*Magnitude( Specs.size );
+
+	const float gRadius = 1.0f;	
+	
 	PrimitiveFactory::ClearAllBuffers();
 
 	vector<XMFLOAT3> pVertices;

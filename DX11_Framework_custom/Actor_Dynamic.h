@@ -26,6 +26,8 @@ public:
 	void ChaseTargetALT( const float deltaT );
 	void ChaseTarget( const float deltaT );
 
+	void Stop();
+
 	XMFLOAT3 MoveTowardTarget( const float deltaT );
 
 protected: 

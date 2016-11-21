@@ -51,16 +51,20 @@ void Scene_Collision::reset()
 	{ 600.f, 400.f, 600.f } }, Energy, ModelSpecs_L(), SOME_EDIFICE );
 
     // BALL 1
+	m_ball1.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
     m_ball1 = Actor_Player(
-    { { 0.f, 100.f, -400.f },
-    { 0.f, 0.f, 0.f },
-    { .5f, .5f, .5f } }, eTexture::Bush, ModelSpecs_L(), SPHERE);
+	{ { 0.f, 100.f, -400.f },
+	{ 0.f, 0.f, 0.f },
+	{ m_ball1.m_attributes.radius, m_ball1.m_attributes.radius, m_ball1.m_attributes.radius } },
+		eTexture::Aluminum, ModelSpecs_L(), SPHERE );
 
-    // BALL 2
-    m_ball2 = Actor_Player(
+	// BALL 2
+	m_ball2.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
+	m_ball2 = Actor_Player(
     { { 0.f, 100.f, 400.f },
     { 0.f, 0.f, 0.f },
-    { .5f, .5f, .5f } }, eTexture::Bush, ModelSpecs_L(), SPHERE);
+	{ m_ball2.m_attributes.radius, m_ball2.m_attributes.radius, m_ball2.m_attributes.radius } },		
+		eTexture::waterSHALLOW, ModelSpecs_L(), SPHERE);
 
 	// LOAD DRAW LIST
 	m_pActorsMASTER.reserve( 3 );
@@ -97,8 +101,13 @@ void Scene_Collision::UpdateScene( const Input & InputRef, Camera * const pCamer
 	m_ball2.Update(tSinceLastFrame);
 
 
-	// LIGHTS distributed among balls
+	// CHECK COLLISIONS FOR BALLS
+	CheckCollisions();
+	// STOP ALL BALLS THAT COLLIDED (for now)
+	for ( auto & actor : m_pActorsOverlapping )
+		actor->Stop();
 
+	// LIGHTS distributed among balls
 	//for ( Actor_Light& light : m_spotLights )
 	for ( int i = 0; i < m_lightsPerBall; i++ )
 	{
@@ -108,6 +117,70 @@ void Scene_Collision::UpdateScene( const Input & InputRef, Camera * const pCamer
 	{
 		m_spotLights[ i ].SetLookat( m_ball2.GetPosition() );
 	}
+}
+
+void Scene_Collision::CheckCollisions()
+{
+	// TODO: ITERATE through all actors; compare one actor w every other actor in list;
+	// Then do the same for all the other actors
+	// TODO: add a second list to exclude the need for double comparisons
+	// (if one actor found to overlap w another actor, then dont have to check 
+	// vica versa when it comes time for that other actor to check for all OTHER actors)
+
+	if ( Overlaps( &m_ball1, &m_ball2 ))
+	{
+		m_pActorsOverlapping.push_back(&m_ball1);
+				m_pActorsOverlapping.push_back(&m_ball2);
+	}
+
+//FAILED ATTEMPT 2
+//for (auto iterator = m_pActorsMASTER.begin(); iterator != m_pActorsMASTER.end(); ++iterator )
+//{
+//    auto & value = *iterator;
+//	auto iteratorLimit = m_pActorsMASTER.end()++;
+//
+//	if ( iteratorLimit > )
+//	{
+//		bool overlaps = Overlaps( value, *( iterator++ ) );
+//
+//		if ( overlaps )
+//		{
+//			m_pActorsOverlapping.push_back( dynamic_cast< Actor_Dynamic* >( value ) );
+//		}
+//	}
+//}
+
+//FAILED ATTEMPT 1
+	//for ( auto & actor : m_pActorsMASTER ) // NOTE what value is auto? iterator?
+	//	// TODO: how to check if iterator is not at end
+	//{
+	//	if ( actor ) // check if actor is not null
+	//	{
+	//		if ( Overlaps( actor, actor++ ) ) // compare each actor with the next one in line
+	//		{
+	//			m_pActorsOverlapping.push_back( dynamic_cast<Actor_Dynamic*>(actor) );
+	//			// TODO: make second list to eliminate redundant checking
+	//		}
+	//	}
+	//}
+
+}
+
+bool Scene_Collision::Overlaps(Actor* pActor1, Actor* pActor2)
+{
+	float collisionDist = pActor1->GetAttributes().radius +
+		pActor2->GetAttributes().radius;
+
+	XMFLOAT3 distVector = pActor1->GetWorldSpecs().position +
+		pActor2->GetWorldSpecs().position;
+	float actorDistance = Magnitude( distVector );
+
+	if ( abs( actorDistance ) <= collisionDist )
+	{
+		return true;
+	}
+	else
+		return false;
 }
 
 void Scene_Collision::RenderFrame( const GameView & GameViewRef )

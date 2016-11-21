@@ -106,7 +106,7 @@ void GameView::initModelPool()
     m_ModelPool[PLANE].reset(new Model_TexturedNM );
     m_ModelPool[PLANE]->Initialize(prim, *m_pGfx);
     
-	prim.CreateSphereNM( defaultSpecs, 50.0f); // TODO: Change to CreateSphere
+	prim.CreateSphereNM( defaultSpecs, 1.0f); // TODO: MAKE SURE YOU HAVE UNIVERSAL UNITS TO BE SHARED GLOBALLY
     m_ModelPool[SPHERE].reset(new Model_TexturedNM );
     m_ModelPool[SPHERE]->Initialize(prim, *m_pGfx);
 

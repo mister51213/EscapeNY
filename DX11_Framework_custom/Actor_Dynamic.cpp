@@ -342,6 +342,11 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 	bestOption();
 }
 
+void Actor_Dynamic::Stop()
+{
+	m_target = m_worldSpecs.position;
+}
+
 XMFLOAT3 Actor_Dynamic::MoveTowardTarget( const float deltaT )
 {
 	// will calculate and add this displacement to actual position

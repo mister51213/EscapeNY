@@ -31,6 +31,10 @@ public:
 	// Use RenderFrame to render the list of actors or other game objects
 	virtual void RenderFrame( const GameView &GameViewRef ); 
 
+	void CheckCollisions();
+
+	bool Overlaps( Actor * pActor1, Actor * pActor2 );
+
 private:
 	void reset();
 	
@@ -57,12 +61,30 @@ private:
 	Camera* m_pCamera; // dynamic / fixed, different camera angles
 
 	Actor_NPC m_map;
+
+	// TODO: Issue with sharing sphere radius info between actor (for collision) 
+	// TODO: and gameview (for drawing)
+	// FOR TESTING PURPOSES
+	// Just calculate radius here same way as PrimitiveFactory.CreateSphereNM()
+	// in order to keep it consistent w physics and drawing
+
 	Actor_Player m_ball1;
+	float m_radiusB1; 
+
 	Actor_Player m_ball2;
+	float m_radiusB2;
 
 	std::vector<std::unique_ptr<Actor>> m_actors_dynamic; // player, NPCs
 	std::vector<std::unique_ptr<Actor>> m_actors_static; // trees, walls, scenery, etc
 	vector<Actor*> m_pActorsMASTER;
+	
+	//////////////////////////////////////
+	// COLLISION TESTING /////////////////
+	//////////////////////////////////////	
+	vector<Actor_Dynamic*> m_pActorsOverlapping;
+	// TODO: Check every actor every frame, whichever are found to overlap,
+	// add them to the above list of overlapping actors.
+	// TODO: remember to clear the list after they no longer overlap!
 
 	//////////////////////////////////////
 	// LIGHTING //////////////////////////
