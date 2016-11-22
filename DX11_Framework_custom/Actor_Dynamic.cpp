@@ -96,9 +96,10 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 
 void Actor_Dynamic::Rebound()
 {
+	float reboundMagnitude = Magnitude( m_attributes.velocity );
 	XMFLOAT3 currVeloc = Normalize( m_attributes.velocity );
 	XMFLOAT3 reverseDir = -currVeloc;
-	XMFLOAT3 newTarget = reverseDir * 300.f;
+	XMFLOAT3 newTarget = reverseDir * reboundMagnitude;
 	m_target = newTarget;
 	PauseCollisionChecking();
 }

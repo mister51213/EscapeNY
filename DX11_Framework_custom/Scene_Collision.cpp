@@ -116,7 +116,11 @@ void Scene_Collision::UpdateScene( const Input & InputRef, Camera * const pCamer
 	// NOW RESUME COLLISION CHECKING ONCE BALLS HAVE BROKEN AWAY FROM EACH OTHER
 	for ( auto & actor : m_pActorsMASTER )
 	{
-		dynamic_cast< Actor_Dynamic* >( actor )->ResumeCollisionChecking();
+		// TODO: first check if the balls have cleared minimum safe distance before turning back on
+		if ( !Overlaps(&m_ball1, &m_ball2) )
+		{
+			dynamic_cast< Actor_Dynamic* >( actor )->ResumeCollisionChecking();
+		}
 	}
 
 	// TODO: 2 ISSUES
