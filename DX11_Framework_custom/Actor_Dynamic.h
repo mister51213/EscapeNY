@@ -23,12 +23,8 @@ public:
 
 	virtual void Update( float deltaT );
 	void ConstantMove( const float deltaT );
-	void ChaseTargetALT( const float deltaT );
 	void ChaseTarget( const float deltaT );
-
 	void Stop();
-
-	XMFLOAT3 MoveTowardTarget( const float deltaT );
 
 protected: 
 	float integrator;
@@ -38,7 +34,7 @@ protected:
 
 	// I think this is needed to determine when to start slowing down.
 	XMFLOAT3 m_initalPosition = { 0.0f, 0.0f, 0.0f };
-	XMFLOAT3 m_initialHeading = {0.0f, 0.0f, 0.0f};
+	XMFLOAT3 m_initialHeading = { 0.0f, 0.0f, 0.0f };
 	float m_halfway = 0.0f;
 	float m_integrator = 0.0f;
 };

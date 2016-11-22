@@ -1,5 +1,5 @@
 #include "Algorithm_Maze.h"
-#include "Game_Maze.h"
+#include "Scene_Maze.h"
 #include "MathUtils.h"
 
 using namespace DirectX;
@@ -14,7 +14,7 @@ vector<Actor> Algorithm_Maze::MakePattern( int numActors )
 {
 	// Retrieve the board from the game object
 	// TODO: Try casting to child class of ISubGame
-	auto *pMazeGame = dynamic_cast<Game_Maze *>( m_pGame );
+	auto *pMazeGame = dynamic_cast<Scene_Maze *>( m_pGame );
 
 	// Crash with error if cast didn't work, otherwise continue creating
 	// maze

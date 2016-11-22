@@ -159,8 +159,8 @@
     <ClCompile Include="GameEvent.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GameView.cpp" />
-    <ClCompile Include="Game_FPS.cpp" />
-    <ClCompile Include="Game_Maze.cpp" />
+    <ClCompile Include="Scene_FPS.cpp" />
+    <ClCompile Include="Scene_Maze.cpp" />
     <ClCompile Include="Algorithm_Maze.cpp" />
     <ClCompile Include="Light_Base.cpp" />
     <ClCompile Include="Light_Diffuse.cpp" />
@@ -257,7 +257,7 @@
     <ClInclude Include="GameEvent.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GameView.h" />
-    <ClInclude Include="Game_FPS.h" />
+    <ClInclude Include="Scene_FPS.h" />
     <ClInclude Include="IGameState.h" />
     <ClInclude Include="ILight.h" />
     <ClInclude Include="ILightDirection.h" />
@@ -266,7 +266,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="IOverlay.h" />
     <ClInclude Include="ISubGame.h" />
-    <ClInclude Include="Game_Maze.h" />
+    <ClInclude Include="Scene_Maze.h" />
     <ClInclude Include="Algorithm_Maze.h" />
     <ClInclude Include="Light_Base.h" />
     <ClInclude Include="Light_Diffuse.h" />

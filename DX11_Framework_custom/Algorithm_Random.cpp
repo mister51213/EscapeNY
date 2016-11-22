@@ -1,5 +1,5 @@
 #include "Algorithm_Random.h"
-#include "Game_Maze.h"
+#include "Scene_Maze.h"
 #include "MathUtils.h"
 
 Algorithm_Random::Algorithm_Random( ISubGame*const pGame )
@@ -22,7 +22,7 @@ vector<Actor> Algorithm_Random::MakePattern( int numActors )
 	std::vector<eTileType> tileTypes;
 	float cellSize = 0.f;
 	{
-		Game_Maze *pGame = dynamic_cast<Game_Maze *>( m_pGame );
+		Scene_Maze *pGame = dynamic_cast<Scene_Maze *>( m_pGame );
 		assert( pGame );
 
 		const auto &board = pGame->GetBoard();

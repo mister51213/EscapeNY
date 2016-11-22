@@ -1,8 +1,8 @@
-#include "Game_FPS.h"
+#include "Scene_FPS.h"
 #include "Light_Diffuse.h"
 #include "Light_Point.h"
 
-void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const pCamera) 
+void Scene_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const pCamera) 
 {
     //srand( static_cast<unsigned int>( time( nullptr ) ) );
 
@@ -56,7 +56,7 @@ void Game_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const 
 }
 
 	// Use UpdateFrame to update actors, camera and anything else that needs updating.
-void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
+void Scene_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
 {
 	#ifdef NDEBUG
 	float tSinceLastFrame = refTimer.SecondsPassed();
@@ -121,7 +121,7 @@ void Game_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const P
     }
 }
 
-void Game_FPS::reset()
+void Scene_FPS::reset()
 {
     m_actorsSUB1.clear();
     m_actorsSUB2.clear();
@@ -189,7 +189,7 @@ void Game_FPS::reset()
     }
 }
 
-void Game_FPS::LightingFX()
+void Scene_FPS::LightingFX()
 {
     //VisualFX_Disco();
     
@@ -263,7 +263,7 @@ void Game_FPS::LightingFX()
     > Then let it get updated every time
 */
     
-void Game_FPS::RenderFrame(const GameView &GameViewRef)
+void Scene_FPS::RenderFrame(const GameView &GameViewRef)
 {
     //LightingFX();
 	SceneBufferType scene{};

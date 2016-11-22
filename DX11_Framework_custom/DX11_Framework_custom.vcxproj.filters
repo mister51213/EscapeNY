@@ -168,9 +168,6 @@
     <ClCompile Include="Utilities.cpp">
       <Filter>Source Files\Utility Classes</Filter>
     </ClCompile>
-    <ClCompile Include="Game_FPS.cpp">
-      <Filter>Source Files\SubGames</Filter>
-    </ClCompile>
     <ClCompile Include="Actor.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
@@ -182,9 +179,6 @@
     </ClCompile>
     <ClCompile Include="Algorithm_Spiral3D.cpp">
       <Filter>Source Files\Algorithms</Filter>
-    </ClCompile>
-    <ClCompile Include="Game_Maze.cpp">
-      <Filter>Source Files\SubGames</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\Shader Files\Obsolete</Filter>
@@ -262,6 +256,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scene_Collision.cpp">
+      <Filter>Source Files\SubGames</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_FPS.cpp">
+      <Filter>Source Files\SubGames</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Maze.cpp">
       <Filter>Source Files\SubGames</Filter>
     </ClCompile>
   </ItemGroup>
@@ -377,12 +377,6 @@
     <ClInclude Include="Algorithm_Random.h">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="Game_FPS.h">
-      <Filter>Header Files\SubGames</Filter>
-    </ClInclude>
-    <ClInclude Include="Game_Maze.h">
-      <Filter>Header Files\SubGames</Filter>
-    </ClInclude>
     <ClInclude Include="ILight.h">
       <Filter>Header Files\Lighting</Filter>
     </ClInclude>
@@ -477,6 +471,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scene_Collision.h">
+      <Filter>Header Files\SubGames</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Maze.h">
+      <Filter>Header Files\SubGames</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_FPS.h">
       <Filter>Header Files\SubGames</Filter>
     </ClInclude>
   </ItemGroup>

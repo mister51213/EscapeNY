@@ -4,8 +4,8 @@
 #include "Input.h"
 
 // Sub-game includes
-#include "Game_Maze.h"
-#include "Game_FPS.h"
+#include "Scene_Maze.h"
+#include "Scene_FPS.h"
 #include "Scene.h"
 #include "Scene_Collision.h"
 
