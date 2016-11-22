@@ -26,6 +26,9 @@ public:
 	void ChaseTarget( const float deltaT );
 	void Rebound();
 	void Stop();
+	void PauseCollisionChecking();
+	void ResumeCollisionChecking();
+	bool CollisionTurnedOff();
 
 protected: 
 	float integrator;
@@ -38,6 +41,8 @@ protected:
 	XMFLOAT3 m_initialHeading = { 0.0f, 0.0f, 0.0f };
 	float m_halfway = 0.0f;
 	float m_integrator = 0.0f;
+
+	bool m_stopCheckFlag = false;
 };
 
 

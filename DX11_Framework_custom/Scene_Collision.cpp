@@ -102,18 +102,34 @@ void Scene_Collision::UpdateScene( const Input & InputRef, Camera * const pCamer
 	//m_ball2.SetState( Actor_Dynamic::HOMING );
 	m_ball2.Update(tSinceLastFrame);
 
-
 	// CHECK COLLISIONS FOR BALLS
 	CheckCollisions();
+
 	// HANDLE ALL BALLS THAT COLLIDED (for now)
 	for ( auto & actor : m_pActorsOverlapping )
 	{
 		//actor->Stop();
 		actor->Rebound();
 	}
-	m_pActorsOverlapping.clear();
+	m_pActorsOverlapping.clear(); // remove them from list
 
-	// TODO: remove from this list
+	// NOW RESUME COLLISION CHECKING ONCE BALLS HAVE BROKEN AWAY FROM EACH OTHER
+	for ( auto & actor : m_pActorsMASTER )
+	{
+		dynamic_cast< Actor_Dynamic* >( actor )->ResumeCollisionChecking();
+	}
+
+	// TODO: 2 ISSUES
+	/*
+	1. For some reason it is resetting the target to 0,0,0 even AFTER the rebound function gets called;
+	make sure that happens only once on keypress, and then the target can be overridden by the rebound function
+	2. even though it temporarily turns off collision checking, it doesnt do it long enough for the balls
+	to escape each others' check radii; it only turns if off for once cycle, which is not long enough to allow
+	them to escape one another. 
+	
+	You should make it turn back on checking conditionally on whethere their
+	DISTANCES have cleared the minimum safe distance instead.
+	*/
 
 	// LIGHTS distributed among balls
 	//for ( Actor_Light& light : m_spotLights )
@@ -137,8 +153,11 @@ void Scene_Collision::CheckCollisions()
 
 	if ( Overlaps( &m_ball1, &m_ball2 ))
 	{
+	if(!m_ball1.CollisionTurnedOff())
 		m_pActorsOverlapping.push_back(&m_ball1);
-				m_pActorsOverlapping.push_back(&m_ball2);
+
+	if(!m_ball2.CollisionTurnedOff())
+		m_pActorsOverlapping.push_back(&m_ball2);
 	}
 
 //FAILED ATTEMPT 2

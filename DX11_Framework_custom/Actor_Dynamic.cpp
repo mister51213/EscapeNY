@@ -100,9 +100,25 @@ void Actor_Dynamic::Rebound()
 	XMFLOAT3 reverseDir = -currVeloc;
 	XMFLOAT3 newTarget = reverseDir * 300.f;
 	m_target = newTarget;
+	PauseCollisionChecking();
 }
 
 void Actor_Dynamic::Stop()
 {
 	m_state = STILL;
+}
+
+void Actor_Dynamic::ResumeCollisionChecking()
+{
+	m_stopCheckFlag = false;
+}
+
+bool Actor_Dynamic::CollisionTurnedOff()
+{
+	return m_stopCheckFlag;
+}
+
+void Actor_Dynamic::PauseCollisionChecking()
+{
+	m_stopCheckFlag = true;
 }
