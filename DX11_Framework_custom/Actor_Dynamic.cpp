@@ -94,6 +94,14 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 		m_worldSpecs.position += displacement;
 }
 
+//TODO:
+/*
+Now, since it only negates their velocties on rebound, 
+the rebound physics are not quite accurate. 
+We need to properly reflect these vectors across the plane 
+that is perpendicular to the balls respective flight paths instead.
+*/
+
 void Actor_Dynamic::Rebound()
 {
 	float reboundMagnitude = Magnitude( m_attributes.velocity );
