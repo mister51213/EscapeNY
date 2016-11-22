@@ -109,8 +109,8 @@ void Scene_Collision::UpdateScene( const Input & InputRef, Camera * const pCamer
 	{
 		//m_pActorsOverlapping[ 0 ]->ReboundDP(m_pActorsOverlapping[1]);
 		//m_pActorsOverlapping[ 1 ]->ReboundDP(m_pActorsOverlapping[0]);
-		m_pActorsOverlapping[ 0 ]->Rebound_Alt(m_pActorsOverlapping[1]);
-		m_pActorsOverlapping[ 1 ]->Rebound_Alt(m_pActorsOverlapping[0]);
+		m_pActorsOverlapping[ 0 ]->Rebound(m_pActorsOverlapping[1]);
+		m_pActorsOverlapping[ 1 ]->Rebound(m_pActorsOverlapping[0]);
 	}
 
 	// HANDLE ALL BALLS THAT COLLIDED (for now)

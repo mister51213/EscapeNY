@@ -24,8 +24,8 @@ public:
 	virtual void Update( float deltaT );
 	void ConstantMove( const float deltaT );
 	void ChaseTarget( const float deltaT );
-	void Rebound();
-	void Rebound_Alt( Actor_Dynamic * partnerBall );
+	void Rebound_WRONG();
+	void Rebound( Actor_Dynamic * partnerBall );
 	void ReboundDP(Actor_Dynamic* partnerBall);
 	void Stop();
 	void PauseCollisionChecking();

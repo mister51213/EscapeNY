@@ -102,7 +102,7 @@ We need to properly reflect these vectors across the plane
 that is perpendicular to the balls respective flight paths instead.
 */
 
-void Actor_Dynamic::Rebound()
+void Actor_Dynamic::Rebound_WRONG()
 {
 	float reboundMagnitude = Magnitude( m_attributes.velocity );
 	XMFLOAT3 currVeloc = Normalize( m_attributes.velocity );
@@ -112,11 +112,14 @@ void Actor_Dynamic::Rebound()
 	PauseCollisionChecking();
 }
 
-void Actor_Dynamic::Rebound_Alt(Actor_Dynamic* partnerBall)
+void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
 {
-	XMFLOAT3 thisTrajectory = m_worldSpecs.position - m_initalPosition;
+	// TODO: try replacing current position with target and seeing if it works better
+	// NOTE: initialPosition is added, then subtracted, so they cancel out, but
+	// left them here commented out just to show how the vectors are arrived at visually.
+	XMFLOAT3 thisTrajectory = m_worldSpecs.position/* - m_initalPosition*/;
 	XMFLOAT3 otherTrajectory = partnerBall->GetPosition() - partnerBall->GetInitialPosition();
-	m_target = thisTrajectory + otherTrajectory + m_initalPosition;
+	m_target = thisTrajectory + otherTrajectory/* + m_initalPosition*/;
 
 	PauseCollisionChecking();
 	// TODO: fix issue of balls getting stuck together.
