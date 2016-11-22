@@ -112,9 +112,18 @@ void Actor_Dynamic::Rebound()
 	PauseCollisionChecking();
 }
 
+void Actor_Dynamic::Rebound_Alt(Actor_Dynamic* partnerBall)
+{
+	XMFLOAT3 thisTrajectory = m_worldSpecs.position - m_initalPosition;
+	XMFLOAT3 otherTrajectory = partnerBall->GetPosition() - partnerBall->GetInitialPosition();
+	m_target = thisTrajectory + otherTrajectory + m_initalPosition;
+
+	PauseCollisionChecking();
+	// TODO: fix issue of balls getting stuck together.
+}
+
 void Actor_Dynamic::ReboundDP(Actor_Dynamic* partnerBall)
 {
-
 	float reboundMagnitude = Magnitude( m_attributes.velocity );
 	XMFLOAT3 veloc1 = Normalize( m_attributes.velocity );
 	XMFLOAT3 veloc2 = Normalize( partnerBall->GetAttributes().velocity );
@@ -129,8 +138,20 @@ void Actor_Dynamic::ReboundDP(Actor_Dynamic* partnerBall)
 	*/
 
 	// simply swap velocities here
-	XMFLOAT3 reverseDir = veloc2/* * DP*/;
+	XMFLOAT3 reverseDir = veloc2/* * DP */;
 	XMFLOAT3 newTarget = reverseDir * reboundMagnitude;
+
+	//TODO:
+	/*
+	negate only the perpendicular component of the vector of approach;
+	get that component efficiently using dot product
+
+	U [dot] V = 
+	U.x*V.x + U.y*V.y = 
+	magnitude(U)*magnitude(V)*cos(angle between 'em)
+	
+	*/
+		
 	m_target = newTarget;
 
 	PauseCollisionChecking();
@@ -149,6 +170,11 @@ void Actor_Dynamic::ResumeCollisionChecking()
 bool Actor_Dynamic::CollisionTurnedOff()
 {
 	return m_stopCheckFlag;
+}
+
+XMFLOAT3 Actor_Dynamic::GetInitialPosition() const
+{
+	return m_initalPosition;
 }
 
 void Actor_Dynamic::PauseCollisionChecking()

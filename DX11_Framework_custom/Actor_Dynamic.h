@@ -25,11 +25,13 @@ public:
 	void ConstantMove( const float deltaT );
 	void ChaseTarget( const float deltaT );
 	void Rebound();
+	void Rebound_Alt( Actor_Dynamic * partnerBall );
 	void ReboundDP(Actor_Dynamic* partnerBall);
 	void Stop();
 	void PauseCollisionChecking();
 	void ResumeCollisionChecking();
 	bool CollisionTurnedOff();
+	XMFLOAT3 GetInitialPosition() const;
 
 protected: 
 	float integrator;
@@ -37,7 +39,6 @@ protected:
 	eActorState m_state;
     XMFLOAT3 m_target = { 0.0f,0.0f,0.0f };
 
-	// I think this is needed to determine when to start slowing down.
 	XMFLOAT3 m_initalPosition = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT3 m_initialHeading = { 0.0f, 0.0f, 0.0f };
 	float m_halfway = 0.0f;
