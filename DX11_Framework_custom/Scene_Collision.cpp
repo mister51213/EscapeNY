@@ -53,7 +53,7 @@ void Scene_Collision::reset()
     // BALL 1
 	float radius1 = 50.0f;
     m_ball1 = Actor_Player(
-	{ { -400.f, 100.f, -0.f },
+	{ { -400.f, 300.f, -0.f },
 	{ 0.f, 0.f, 0.f },
 	{ radius1, radius1, radius1 } },
 		eTexture::Aluminum, ModelSpecs_L(), SPHERE );
@@ -62,7 +62,7 @@ void Scene_Collision::reset()
 	// BALL 2
 	float radius2 = 50.0f;
 	m_ball2 = Actor_Player(
-    { { 400.f, 100.f, 0.f },
+    { { 400.f, 300.f, 0.f },
     { 0.f, 0.f, 0.f },
 	{ radius2, radius2, radius2 } },		
 		eTexture::waterSHALLOW, ModelSpecs_L(), SPHERE);
@@ -105,12 +105,19 @@ void Scene_Collision::UpdateScene( const Input & InputRef, Camera * const pCamer
 	// CHECK COLLISIONS FOR BALLS
 	CheckCollisions();
 
-	// HANDLE ALL BALLS THAT COLLIDED (for now)
-	for ( auto & actor : m_pActorsOverlapping )
+	if ( !m_pActorsOverlapping.empty() )
 	{
-		//actor->Stop();
-		actor->Rebound();
+		m_pActorsOverlapping[ 0 ]->ReboundDP(m_pActorsOverlapping[1]);
+		m_pActorsOverlapping[ 1 ]->ReboundDP(m_pActorsOverlapping[0]);
 	}
+
+	// HANDLE ALL BALLS THAT COLLIDED (for now)
+	//for ( auto & actor : m_pActorsOverlapping )
+	//{
+		//actor->Stop();
+		//actor->Rebound();
+	//}
+
 	m_pActorsOverlapping.clear(); // remove them from list
 
 	// NOW RESUME COLLISION CHECKING ONCE BALLS HAVE BROKEN AWAY FROM EACH OTHER
@@ -160,7 +167,7 @@ void Scene_Collision::CheckCollisions()
 	if(!m_ball1.CollisionTurnedOff())
 		m_pActorsOverlapping.push_back(&m_ball1);
 
-	if(!m_ball2.CollisionTurnedOff())
+	if(!m_ball2.CollisionTurnedOff()	 )
 		m_pActorsOverlapping.push_back(&m_ball2);
 	}
 

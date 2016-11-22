@@ -25,6 +25,7 @@ public:
 	void ConstantMove( const float deltaT );
 	void ChaseTarget( const float deltaT );
 	void Rebound();
+	void ReboundDP(Actor_Dynamic* partnerBall);
 	void Stop();
 	void PauseCollisionChecking();
 	void ResumeCollisionChecking();

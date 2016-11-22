@@ -112,6 +112,30 @@ void Actor_Dynamic::Rebound()
 	PauseCollisionChecking();
 }
 
+void Actor_Dynamic::ReboundDP(Actor_Dynamic* partnerBall)
+{
+
+	float reboundMagnitude = Magnitude( m_attributes.velocity );
+	XMFLOAT3 veloc1 = Normalize( m_attributes.velocity );
+	XMFLOAT3 veloc2 = Normalize( partnerBall->GetAttributes().velocity );
+
+	//float DP = DotProduct( veloc2, veloc1 );
+	//TODO: 
+	/*
+	1. take dot product between two balls' velocities (normalized)
+	2. maintain the Y component of each of their velocities
+	3. flip the X component of each of their velocities
+	4. scale the resultant vector by the dot product	
+	*/
+
+	// simply swap velocities here
+	XMFLOAT3 reverseDir = veloc2/* * DP*/;
+	XMFLOAT3 newTarget = reverseDir * reboundMagnitude;
+	m_target = newTarget;
+
+	PauseCollisionChecking();
+}
+
 void Actor_Dynamic::Stop()
 {
 	m_state = STILL;
