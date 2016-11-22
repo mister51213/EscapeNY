@@ -24,6 +24,7 @@ public:
 	virtual void Update( float deltaT );
 	void ConstantMove( const float deltaT );
 	void ChaseTarget( const float deltaT );
+	void Rebound();
 	void Stop();
 
 protected: 

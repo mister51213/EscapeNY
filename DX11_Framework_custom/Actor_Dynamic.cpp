@@ -94,6 +94,14 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 		m_worldSpecs.position += displacement;
 }
 
+void Actor_Dynamic::Rebound()
+{
+	XMFLOAT3 currVeloc = Normalize( m_attributes.velocity );
+	XMFLOAT3 reverseDir = -currVeloc;
+	XMFLOAT3 newTarget = reverseDir * 300.f;
+	m_target = newTarget;
+}
+
 void Actor_Dynamic::Stop()
 {
 	m_state = STILL;

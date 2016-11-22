@@ -6,7 +6,7 @@ using namespace DirectX;
 
 Algorithm_Maze::Algorithm_Maze( ISubGame*const pGame )
 	:
-	Algorithm( pGame )
+	Algorithm( pGame ) 
 {
 }
 

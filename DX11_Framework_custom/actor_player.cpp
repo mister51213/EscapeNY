@@ -34,6 +34,11 @@ void Actor_Player::GetInput( const Input& pInput, int randI, float randF )
 			m_state = HOMING;
 			ResetPIDParams({ 0.f, y, -z });
 	}
+	if ( pInput.IsKeyDown( VK_SPACE ) )
+	{
+			m_state = HOMING;
+			ResetPIDParams({ 0.f, 0.f, 0.f });
+	}
 
 
 

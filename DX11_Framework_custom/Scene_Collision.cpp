@@ -16,7 +16,7 @@ void Scene_Collision::Initialize( Graphics * pGraphics, Game * const pGame, Came
 		float x = static_cast<float>( rand() % 300 - 150 );
    		float y = static_cast<float>( rand() % 300 - 150 );
         float z = static_cast<float>( rand() % 300 - 150 );
-//		light.Initialize( { x, y, z}, { 0.f, 0.f, 0.f } );
+		// light.Initialize( { x, y, z}, { 0.f, 0.f, 0.f } );
 
 		// LOOKAT ball1
 		light.Initialize( { x, y, z}, m_ball1.GetPosition() );
@@ -53,7 +53,7 @@ void Scene_Collision::reset()
     // BALL 1
 	float radius1 = 50.0f;
     m_ball1 = Actor_Player(
-	{ { 0.f, 100.f, -400.f },
+	{ { -400.f, 100.f, -0.f },
 	{ 0.f, 0.f, 0.f },
 	{ radius1, radius1, radius1 } },
 		eTexture::Aluminum, ModelSpecs_L(), SPHERE );
@@ -62,7 +62,7 @@ void Scene_Collision::reset()
 	// BALL 2
 	float radius2 = 50.0f;
 	m_ball2 = Actor_Player(
-    { { 0.f, 100.f, 400.f },
+    { { 400.f, 100.f, 0.f },
     { 0.f, 0.f, 0.f },
 	{ radius2, radius2, radius2 } },		
 		eTexture::waterSHALLOW, ModelSpecs_L(), SPHERE);
@@ -105,9 +105,15 @@ void Scene_Collision::UpdateScene( const Input & InputRef, Camera * const pCamer
 
 	// CHECK COLLISIONS FOR BALLS
 	CheckCollisions();
-	// STOP ALL BALLS THAT COLLIDED (for now)
+	// HANDLE ALL BALLS THAT COLLIDED (for now)
 	for ( auto & actor : m_pActorsOverlapping )
-		actor->Stop();
+	{
+		//actor->Stop();
+		actor->Rebound();
+	}
+	m_pActorsOverlapping.clear();
+
+	// TODO: remove from this list
 
 	// LIGHTS distributed among balls
 	//for ( Actor_Light& light : m_spotLights )
@@ -151,7 +157,6 @@ void Scene_Collision::CheckCollisions()
 //		}
 //	}
 //}
-
 //FAILED ATTEMPT 1
 	//for ( auto & actor : m_pActorsMASTER ) // NOTE what value is auto? iterator?
 	//	// TODO: how to check if iterator is not at end
@@ -173,7 +178,7 @@ bool Scene_Collision::Overlaps(Actor* pActor1, Actor* pActor2)
 	float collisionDist = pActor1->GetAttributes().radius +
 		pActor2->GetAttributes().radius;
 
-	XMFLOAT3 distVector = pActor1->GetWorldSpecs().position +
+	XMFLOAT3 distVector = pActor1->GetWorldSpecs().position -
 		pActor2->GetWorldSpecs().position;
 	float actorDistance = Magnitude( distVector );
 
