@@ -1,4 +1,8 @@
 #include "Algorithm_Grid3D.h"
+#include "MathUtils.h"
+
+using namespace std;
+using namespace DirectX;
 
 ///////////////////////////////////////
 // Old inherited function
@@ -42,6 +46,11 @@ Algorithm_Grid3D::Algorithm_Grid3D()
 }
 
 //TEST//
+
+vector<Actor> Algorithm_Grid3D::MakePattern( int )
+{
+	return vector<Actor>();
+}
 
 vector<Actor_NPC> Algorithm_Grid3D::MakePatternNPC( int numActors, XMFLOAT3 worldOffset )
 {

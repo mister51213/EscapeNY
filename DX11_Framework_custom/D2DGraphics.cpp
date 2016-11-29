@@ -1,13 +1,6 @@
 #include "D2DGraphics.h"
 #include "Graphics.h"
-
-D2DGraphics::D2DGraphics()
-{
-}
-
-
-D2DGraphics::~D2DGraphics()
-{}
+#include "Utilities.h"
 
 void D2DGraphics::BeginDraw()
 {	
@@ -25,7 +18,7 @@ bool D2DGraphics::Initialize( const Graphics &Gfx, const UINT ScreenWidth, const
 {	
 	// Get the D3D device and use it to create the D2D device
 	auto pDevice3D = Gfx.GetDirect3D()->GetDevice();
-	comptr<IDXGIDevice> pDxgiDevice;
+	ComPtr<IDXGIDevice> pDxgiDevice;
 	
 	// Casts the D3D device pointer to a DXGIDevice pointer
 	HRESULT hr = pDevice3D->QueryInterface( pDxgiDevice.GetAddressOf() );

@@ -1,11 +1,6 @@
 #include "Model_Textured.h"
 #include "PrimitiveFactory.h"
-
-Model_Textured::Model_Textured()
-{}
-
-Model_Textured::~Model_Textured()
-{}
+#include "Graphics.h"
 
 bool Model_Textured::Initialize( 
     const PrimitiveFactory &PrimMaker, const Graphics & Gfx)

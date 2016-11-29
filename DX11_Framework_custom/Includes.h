@@ -39,6 +39,3 @@
 #include <DirectXMath.h>
 #include <wrl.h>
 
-// Custom classes
-//#include "GameTimer.h"
-//#include "Scene.h"

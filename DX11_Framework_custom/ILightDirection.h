@@ -1,5 +1,10 @@
 #pragma once
 
+namespace DirectX
+{
+	struct XMFLOAT3;
+}
+
 class ILightDirection
 {
 public:

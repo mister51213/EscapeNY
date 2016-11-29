@@ -1,11 +1,8 @@
 #include "Overlay.h"
+#include "Graphics.h"
+#include "Input.h"
 #include "MessageBox_Goal.h"
-
-Overlay::Overlay()
-{}
-
-Overlay::~Overlay()
-{}
+#include "Utilities.h"
 
 bool Overlay::Initialize( const Graphics &Gfx )
 {
@@ -25,7 +22,7 @@ bool Overlay::Initialize( const Graphics &Gfx )
 	// from the first column of the file it is declared in, is the offset
 	// it will have on screen.
 	std::wstring mesg( 
-		L"Congratulations!!!\n\
+L"Congratulations!!!\n\
 You've reached the end of the maze.\n\
 Would you like to load another one? \n\
 Press Y to regenerate the maze, ESC to close program.\n" );

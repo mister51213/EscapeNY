@@ -2,14 +2,16 @@
 #include "Scene_Maze.h"
 #include "MathUtils.h"
 
+using namespace DirectX;
+
 Algorithm_Random::Algorithm_Random( ISubGame*const pGame )
 	:
 	Algorithm( pGame )
 {
 }
 
-vector<Actor> Algorithm_Random::MakePattern( int numActors )
-{	
+std::vector<Actor> Algorithm_Random::MakePattern( int numActors )
+{
 	// 0 is vertical, 1 is horizontal
 	const unsigned vert = 0;
 	const unsigned horiz = 1;

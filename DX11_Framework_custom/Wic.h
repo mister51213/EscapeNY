@@ -1,16 +1,16 @@
 #pragma once
+
 #pragma comment(lib, "windowscodecs.lib")
 
 #include "Includes.h"
-#include "Utilities.h"
+
+using Microsoft::WRL::ComPtr;
 class Wic
 {
 public:
-	Wic();
-	~Wic();
-
 	bool Initialize();
 	IWICImagingFactory *GetFactory()const;
+
 private:
-	comptr<IWICImagingFactory> m_pFactory;
+	ComPtr<IWICImagingFactory> m_pFactory;
 };

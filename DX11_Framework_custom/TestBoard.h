@@ -2,7 +2,8 @@
 
 #include "Includes.h"
 #include "Actor.h"
-#include "ResourceManager.h"
+
+class Graphics;
 
 enum eTileType
 {

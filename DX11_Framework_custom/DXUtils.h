@@ -2,13 +2,12 @@
 
 #include "Includes.h"
 
-using namespace DirectX;
 
 struct MatrixBufferType
 {
-	XMMATRIX world;
-	XMMATRIX view;
-	XMMATRIX projection;
+	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX view;
+	DirectX::XMMATRIX projection;
 
 	static D3D11_BUFFER_DESC CreateMatrixDescription();
 };
@@ -61,10 +60,10 @@ enum eLightType
 // Use this one type for ALL different lights
 struct LightBufferType
 {
-	XMFLOAT4 lightColor;
-	XMFLOAT3 lightPosition;
+	DirectX::XMFLOAT4 lightColor;
+	DirectX::XMFLOAT3 lightPosition;
 	float coneAngle;
-	XMFLOAT3 lightDirection;
+	DirectX::XMFLOAT3 lightDirection;
 	eLightType type;
 
 	static D3D11_BUFFER_DESC CreateLightDescription( unsigned int MaxLightCount );
@@ -76,9 +75,9 @@ struct LightBufferType
 #define MAX_SHADER_LIGHTS 10u
 struct SceneBufferType
 {
-	XMFLOAT4 ambientColor;
+	DirectX::XMFLOAT4 ambientColor;
 	int lightCount;
-	XMFLOAT3 padding;
+	DirectX::XMFLOAT3 padding;
 	LightBufferType lights[ MAX_SHADER_LIGHTS ];
 
 	static D3D11_BUFFER_DESC CreateLightDescription();

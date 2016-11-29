@@ -1,12 +1,47 @@
 #pragma once
 
 #include "Includes.h"
-
-// Permit me to be a little lazy :)
-// This is just an alias to shorten the amount of typing
-template<class T>
-using comptr = Microsoft::WRL::ComPtr<T>;
-
+// Files that include Utilties.h directly or indirectly 
+/*
+Actor.cpp
+Actor_Car.cpp				<- Indirectly (through Actor.h)
+Actor_Dynamic.cpp			<- Indirectly (through Actor.h)
+Actor_Light.cpp				<- Indirectly (through Actor.h)
+Actor_NPC.cpp				<- Indirectly (through Actor.h)
+Actor_Player.cpp			<- Indirectly (through Actor.h)
+Actor_Player_Alt.cpp		<- Indirectly (through Actor.h)
+Actor_Static.cpp			<- Indirectly (through Actor.h)
+Algorithm_Grid3D.cpp		<- Indirectly (through Actor.h)
+Algorithm_Maze.cpp			<- Indirectly (through Actor.h)
+Algorithm_Random.cpp		<- Indirectly (through Actor.h)
+Algorithm_Spiral3D.cpp		<- Indirectly (through Actor.h)
+Board.cpp					<- Indirectly (through Actor.h)
+Camera.cpp
+D2DGraphics.cpp
+D3DGraphics.cpp
+FontLoader.cpp
+Game.cpp					<- Indirectly (through GameView.h)
+GameView.cpp				<- Indirectly (through Actor.h)
+Graphics.cpp
+ImageLoader.cpp
+Main.cpp					<- Indirectly (through System.h)
+Model.cpp
+Model_Textured.cpp			<- Indirectly (through Model.h)
+Model_TexturedNM.cpp		<- Indirectly (through Model.h)
+Overlay.cpp
+Physics.cpp
+PrimitiveFactory.cpp
+Scene.cpp					<- Indirectly (through GameView.h)
+Scene_Collision.cpp			<- Indirectly (through Actor.h)
+Scene_FPS.cpp				<- Indirectly (through Actor.h)
+Scene_Maze.cpp				<- Indirectly (through Actor.h)
+Shader_NMap.cpp				<- Indirectly (through ShaderTEMPLATE.h)
+System.cpp					<- Indirectly (through Game.h)
+TestBoard.cpp				<- Indirectly (through Actor.h)
+Texture.cpp
+Utilities.cpp
+Wic.cpp
+*/
 #pragma warning(disable:4067)
 // Helper macros to decrease the amount of typing and space
 #define RETURN_IF_FALSE(Result)\

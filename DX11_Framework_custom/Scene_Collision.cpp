@@ -1,4 +1,14 @@
 #include "Scene_Collision.h"
+#include "Camera.h"
+#include "D3DGraphics.h"
+#include "DXUtils.h"
+#include "Game.h"
+#include "GameTimer.h"
+#include "Graphics.h"
+#include "Input.h"
+#include "MathUtils.h"
+
+using namespace DirectX;
 
 void Scene_Collision::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const pCamera )
 {
@@ -75,7 +85,7 @@ void Scene_Collision::reset()
     m_pActorsMASTER.push_back(&m_map);
 }
 
-void Scene_Collision::UpdateScene( const Input & InputRef, Camera * const pCamera, const Physics & refPhysics, const GameTimer & refTimer )
+void Scene_Collision::UpdateScene( Input & InputRef, Camera * const pCamera, const Physics & refPhysics, const GameTimer & refTimer )
 {
 	// TIMER 
 	#ifdef NDEBUG

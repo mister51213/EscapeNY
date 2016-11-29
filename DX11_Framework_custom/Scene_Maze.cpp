@@ -12,7 +12,7 @@ Scene_Maze::Scene_Maze( Input * pInput )
 
 void Scene_Maze::Initialize(
 	Graphics *pGraphics,
-	class Game *const pGame,
+	Game *const pGame,
 	Camera *const pCamera )
 {
 	// Copy Game and Graphics pointers to member viarable
@@ -30,7 +30,7 @@ void Scene_Maze::Initialize(
 	reset();
 }
 
-void Scene_Maze::UpdateScene( const Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
+void Scene_Maze::UpdateScene( Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
 {
 	UpdatePlayerState();
 	UpdateCarState();

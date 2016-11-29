@@ -1,7 +1,10 @@
 #pragma once
 
-#include "Includes.h"
-#include "DXUtils.h"
+namespace DirectX
+{
+	struct XMFLOAT4;
+}
+struct LightBufferType;
 
 class ILight
 {

@@ -1,4 +1,7 @@
 #include "Scene.h"
+#include "Camera.h"
+#include "GameView.h"
+#include "Graphics.h"
 
 void Scene::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const pCamera )
 {

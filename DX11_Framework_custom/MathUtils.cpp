@@ -1,4 +1,7 @@
 #include "MathUtils.h"
+#include "Includes.h"
+
+using namespace DirectX;
 
 XMFLOAT2 operator+( const XMFLOAT2 & V1, const XMFLOAT2 & V2 )
 {

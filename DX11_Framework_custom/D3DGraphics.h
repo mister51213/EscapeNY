@@ -14,9 +14,9 @@
 // INCLUDES //
 //////////////
 #include "Includes.h"
-#include "Utilities.h"
-using namespace DirectX;
+
 class Texture;
+using Microsoft::WRL::ComPtr;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: D3DGraphics
@@ -26,14 +26,10 @@ class D3DGraphics
 {
 	friend class Graphics;
 public:
-	D3DGraphics();
-	D3DGraphics(const D3DGraphics&);
-	~D3DGraphics();
-
 	bool Initialize( UINT ScreenWidth, UINT ScreenHeight, bool, HWND, bool);
 	void Shutdown();
 	
-	comptr<ID3D11Texture2D> CreateTexture2D( UINT Width, UINT Height, 
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> CreateTexture2D( UINT Width, UINT Height,
 		DXGI_FORMAT Format = DXGI_FORMAT_R8G8B8A8_UNORM,
 		BOOL IsWritable = FALSE,		// Used to set the CPU access flag
 		UINT MipLevels = 1,				// 0 for mip-maps, 1 for multi-sample texture
@@ -44,7 +40,7 @@ public:
 		D3D11_BIND_FLAG BindFlag = D3D11_BIND_SHADER_RESOURCE, 
 		UINT MiscFlag = 0,				// D3D11_RESOURCE_MISC_FLAG
 		LPVOID pImageData = nullptr );	// Initialize with pixels, nullptr for empty texture
-	comptr<ID3D11ShaderResourceView> CreateShaderResourceView( const Texture &Tex );
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> CreateShaderResourceView( const Texture &Tex );
 	
 	ID3D11Device* GetDevice()const;
 	ID3D11DeviceContext* GetDeviceContext()const;
@@ -67,12 +63,12 @@ private:
 	int m_videoCardMemory;	
 	std::wstring m_videoCardDescription;
 
-	comptr<IDXGISwapChain> m_pSwapChain;
-	comptr<ID3D11Device> m_pDevice;
-	comptr<ID3D11DeviceContext> m_pDeviceContext;
-	comptr<ID3D11RenderTargetView> m_pRenderTargetView;
-	comptr<ID3D11Texture2D> m_pDepthStencilBuffer;
-	comptr<ID3D11DepthStencilState> m_pDepthStencilState;
-	comptr<ID3D11DepthStencilView> m_pDepthStencilView;
-	comptr<ID3D11RasterizerState> m_pRasterState;
+	ComPtr<IDXGISwapChain> m_pSwapChain;
+	ComPtr<ID3D11Device> m_pDevice;
+	ComPtr<ID3D11DeviceContext> m_pDeviceContext;
+	ComPtr<ID3D11RenderTargetView> m_pRenderTargetView;
+	ComPtr<ID3D11Texture2D> m_pDepthStencilBuffer;
+	ComPtr<ID3D11DepthStencilState> m_pDepthStencilState;
+	ComPtr<ID3D11DepthStencilView> m_pDepthStencilView;
+	ComPtr<ID3D11RasterizerState> m_pRasterState;
 };

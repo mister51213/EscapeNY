@@ -10,9 +10,31 @@
 //////////////
 // INCLUDES //
 //////////////
-#include "Graphics.h"
-#include "PrimitiveFactory.h"
 #include "DXUtils.h"
+#include "Includes.h"
+#include "PrimitiveFactory.h"
+#include "Utilities.h"
+
+// Files that include Model.h directly or indirectly
+/*
+Board.cpp				<- Indirectly (through Model_Colored)
+Game.cpp				<- Indirectly (through GameView.h)
+GameView.cpp			<- Indirectly (through Model_Textured.h)
+Graphics.cpp
+Main.cpp				<- Indirectly (through System.h)
+Model.cpp
+Model_Textured.cpp
+Model_TexturedNM.cpp
+System.cpp				<- Indirectly (through Game.h)
+Scene_Maze.cpp			<- Indirectly (through GameView.h)
+Scene_FPS.cpp			<- Indirectly (through GameView.h)
+Scene_Collision.cpp		<- Indirectly (through GameView.h)
+Scene.cpp				<- Indirectly (through GameView.h)
+TestBoard.cpp			<- Indirectly (through Model_Textured)
+*/
+class Graphics;
+
+using Microsoft::WRL::ComPtr;
 
 ////////////////////////
 // Class name: Model
@@ -20,47 +42,24 @@
 class Model
 {
 public:
-    Model()
-    {}
-    Model(const Model& other)
-    {}
-    ~Model()
-    {}
-
     // This pure virtual initializer takes into account different types of models
     // (textured and primitive, for example)
     virtual bool Initialize(const PrimitiveFactory &PrimMaker, const Graphics &Gfx) = 0;
 
     // Returns the number of vertices, sometimes may be different than 
-// the index count
-    DWORD GetVertexCount()const
-    {
-        return m_vertexCount;
-
-    }
+	// the index count
+	DWORD GetVertexCount()const;
     // Returns the number of indices in the model. The color shader will 
-// need this information to draw this model.
-    DWORD GetIndexCount()const
-    {
-        return m_indexCount;
-    }
-    ID3D11Buffer *GetVertexBuffer()const
-    {
-        return m_vertexBuffer.Get();
-    }
-    ID3D11Buffer *GetIndexBuffer()const
-    {
-        return m_indexBuffer.Get();
-    }
+	// need this information to draw this model.
+	DWORD GetIndexCount()const;
+	ID3D11Buffer *GetVertexBuffer()const;
+	ID3D11Buffer *GetIndexBuffer()const;
     ///////////////////////////////////////////////////////////////////////
-// Stride is the size of one unit of info in an array
-// for example one row in a pixel array representing the screen (pitch)
-// or one Vertex containing 3D COORDINATE and UV COORDINATE info
-///////////////////////////////////////////////////////////////////////
-    UINT GetStride()const
-    {
-        return m_Stride;
-    }
+	// Stride is the size of one unit of info in an array
+	// for example one row in a pixel array representing the screen (pitch)
+	// or one Vertex containing 3D COORDINATE and UV COORDINATE info
+	///////////////////////////////////////////////////////////////////////
+	UINT GetStride()const;
 
 protected:
     template<class VertexType>
@@ -111,7 +110,7 @@ protected:
     }
 
 protected:
-    comptr<ID3D11Buffer> m_vertexBuffer, m_indexBuffer;
+    ComPtr<ID3D11Buffer> m_vertexBuffer, m_indexBuffer;
     int m_vertexCount, m_indexCount; // keep track of the size of each buffer
     UINT m_Stride;
 };

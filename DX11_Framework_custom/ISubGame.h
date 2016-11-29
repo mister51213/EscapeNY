@@ -1,10 +1,12 @@
 #pragma once
 
-#include "Camera.h"
-#include "GameView.h"
-#include "Input.h"
-#include "Physics.h"
-#include "GameTimer.h"
+class Camera;
+class Game;
+class GameTimer;
+class GameView;
+class Graphics;
+class Input;
+class Physics;
 
 class ISubGame
 {
@@ -12,7 +14,7 @@ public:
 	// Use Initialize to initialize anything that needs initializing.
 	virtual void Initialize(
 		Graphics *pGraphics, 
-		class Game *const pGame,
+		Game *const pGame,
 		Camera *const pCamera) = 0;
 
 	// Use this to update actors, camera and anything else that needs updating.

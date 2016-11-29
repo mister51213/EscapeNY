@@ -2,8 +2,8 @@
 
 #include "Includes.h"
 #include "Actor.h"
-#include "ISubGame.h"
 
+class ISubGame;
 
 class Algorithm
 {

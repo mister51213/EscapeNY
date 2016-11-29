@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Texture.h"
-#include "PrimitiveFactory.h"
+
+class PrimitiveFactory;
 
 class TexturedPlane
 {

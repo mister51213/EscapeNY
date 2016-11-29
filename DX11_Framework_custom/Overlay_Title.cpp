@@ -1,8 +1,8 @@
 #include "Overlay_Title.h"
+#include "Graphics.h"
+#include "Input.h"
 
-
-
-Overlay_Title::Overlay_Title( comptr<IDWriteTextFormat> Font )
+Overlay_Title::Overlay_Title( Microsoft::WRL::ComPtr<IDWriteTextFormat> Font )
 	:
 	Overlay_Base( Font )
 {
@@ -13,7 +13,7 @@ Overlay_Title::~Overlay_Title()
 {
 }
 
-bool Overlay_Title::Initialize( const Graphics &Gfx, const comptr<IDWriteTextFormat> &Font )
+bool Overlay_Title::Initialize( const Graphics &Gfx, const Microsoft::WRL::ComPtr<IDWriteTextFormat> &Font )
 {
 	/*FontLoader fntLoader;
 	bool result = fntLoader.Initialize();

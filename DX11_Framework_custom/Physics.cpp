@@ -1,7 +1,8 @@
 #include "Physics.h"
 #include "MathUtils.h"
+#include "Utilities.h"
 
-#ifdef min || max
+#if defined(min) || defined(max)
 #undef min
 #undef max
 #endif

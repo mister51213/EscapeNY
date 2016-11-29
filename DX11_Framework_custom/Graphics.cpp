@@ -3,18 +3,7 @@
 //////////////////////////////////////////////////////////////////////////
 #include "Graphics.h"
 #include "Model.h"
-
-Graphics::Graphics()
-{
-}
-
-Graphics::Graphics(const Graphics& other)
-{
-}
-
-Graphics::~Graphics()
-{
-}
+#include "Utilities.h"
 
 bool Graphics::Initialize( 
     int ScreenWidth, 

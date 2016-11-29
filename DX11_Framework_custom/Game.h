@@ -1,13 +1,23 @@
 #pragma once
 
+#include "Camera.h"
+#include "GameTimer.h"
 #include "GameView.h"
 #include "Input.h"
+#include "ISubGame.h"
+#include "Physics.h"
 
-// Sub-game includes
-#include "Scene_Maze.h"
-#include "Scene_FPS.h"
-#include "Scene.h"
-#include "Scene_Collision.h"
+// Files that include Game.h directly or indirectly
+/*
+Game.cpp
+System.cpp
+Scene_Maze.cpp
+Scene_Collision.cpp
+Main.cpp				<-Indirectly (through System.h)
+*/
+
+class Graphics;
+class D3DGraphics;
 
 class Game
 {

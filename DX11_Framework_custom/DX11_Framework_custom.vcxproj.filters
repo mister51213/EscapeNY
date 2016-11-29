@@ -264,6 +264,9 @@
     <ClCompile Include="Scene_Maze.cpp">
       <Filter>Source Files\SubGames</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -464,9 +467,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files\Actors</Filter>
     </ClInclude>
-    <ClInclude Include="Actor_Car.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DXBoundingMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -478,6 +478,9 @@
     </ClInclude>
     <ClInclude Include="Scene_FPS.h">
       <Filter>Header Files\SubGames</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_Car.h">
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

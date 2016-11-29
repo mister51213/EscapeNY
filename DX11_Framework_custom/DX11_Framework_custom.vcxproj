@@ -159,6 +159,7 @@
     <ClCompile Include="GameEvent.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GameView.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Scene_FPS.cpp" />
     <ClCompile Include="Scene_Maze.cpp" />
     <ClCompile Include="Algorithm_Maze.cpp" />

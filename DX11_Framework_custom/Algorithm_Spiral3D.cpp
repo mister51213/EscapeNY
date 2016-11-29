@@ -1,6 +1,9 @@
 #include "Algorithm_Spiral3D.h"
 #include "MathUtils.h"
 
+
+using namespace std;
+
 Algorithm_Spiral3D::Algorithm_Spiral3D( ISubGame * pGame )
 	:
 	Algorithm( pGame )

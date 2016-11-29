@@ -1,17 +1,7 @@
 #include "D3DGraphics.h"
 #include "Texture.h"
+#include "Utilities.h"
 
-D3DGraphics::D3DGraphics()
-{
-}
-
-D3DGraphics::D3DGraphics(const D3DGraphics& other)
-{
-}
-
-D3DGraphics::~D3DGraphics()
-{
-}
 
 bool D3DGraphics::Initialize( 
     UINT ScreenWidth, 
@@ -62,7 +52,7 @@ void D3DGraphics::Shutdown()
 	}
 }
 
-comptr<ID3D11Texture2D> D3DGraphics::CreateTexture2D( 
+ComPtr<ID3D11Texture2D> D3DGraphics::CreateTexture2D(
     UINT Width, 
     UINT Height, 
     DXGI_FORMAT Format,
@@ -76,7 +66,7 @@ comptr<ID3D11Texture2D> D3DGraphics::CreateTexture2D(
     UINT MiscFlag, 
     LPVOID pImageData )
 {
-	comptr<ID3D11Texture2D> pTexture;
+	ComPtr<ID3D11Texture2D> pTexture;
 
 	// TODO: Testing section
 	UINT qualityLevels = 0;
@@ -117,7 +107,7 @@ comptr<ID3D11Texture2D> D3DGraphics::CreateTexture2D(
 	return pTexture;
 }
 
-comptr<ID3D11ShaderResourceView> D3DGraphics::CreateShaderResourceView( const Texture & Tex )
+ComPtr<ID3D11ShaderResourceView> D3DGraphics::CreateShaderResourceView( const Texture & Tex )
 {
 	D3D11_TEXTURE2D_DESC texDesc{};
 	auto pTexture = Tex.GetTexture();
@@ -130,7 +120,7 @@ comptr<ID3D11ShaderResourceView> D3DGraphics::CreateShaderResourceView( const Te
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels = -1;
 
-	comptr<ID3D11ShaderResourceView> pSrv;
+	ComPtr<ID3D11ShaderResourceView> pSrv;
 	// Create the shader resource view for the texture.
 	HRESULT hResult = m_pDevice->CreateShaderResourceView( pTexture, &srvDesc,
 		pSrv.GetAddressOf() );
@@ -174,9 +164,9 @@ void D3DGraphics::GetVideoCardInfo( std::wstring &Description, int& Memory )
 
 bool D3DGraphics::initializeAdapterInfo( UINT ScreenWidth, UINT ScreenHeight, DXGI_RATIONAL &Ratio )
 {
-	comptr<IDXGIFactory> pFactory;
-	comptr<IDXGIAdapter> pAdapter;
-	comptr<IDXGIOutput> pAdapterOutput;
+	ComPtr<IDXGIFactory> pFactory;
+	ComPtr<IDXGIAdapter> pAdapter;
+	ComPtr<IDXGIOutput> pAdapterOutput;
 
 	// Create a DirectX graphics interface factory.
 	RETURN_IF_FAILED( CreateDXGIFactory( IID_PPV_ARGS( pFactory.GetAddressOf() ) ) );
@@ -298,7 +288,7 @@ bool D3DGraphics::initializeDeviceAndSwapchain( UINT ScreenWidth, UINT ScreenHei
 
 bool D3DGraphics::initializeBackBuffer()
 {
-	comptr<ID3D11Texture2D> pBackBuffer;
+	ComPtr<ID3D11Texture2D> pBackBuffer;
 
 	// Get the pointer to the back buffer.
 	RETURN_IF_FAILED( m_pSwapChain->GetBuffer( 0, IID_PPV_ARGS(pBackBuffer.GetAddressOf() ) ) );

@@ -1,12 +1,7 @@
 #include "FontLoader.h"
+#include "Utilities.h"
 
 
-FontLoader::FontLoader()
-{}
-
-
-FontLoader::~FontLoader()
-{}
 
 bool FontLoader::Initialize()
 {
@@ -17,10 +12,10 @@ bool FontLoader::Initialize()
 	return true;
 }
 
-comptr<IDWriteTextFormat> FontLoader::MakeFont( const std::wstring &FontName, float FontHeight, 
+ComPtr<IDWriteTextFormat> FontLoader::MakeFont( const std::wstring &FontName, float FontHeight, 
 	DWRITE_FONT_WEIGHT FontWeight,	DWRITE_FONT_STYLE FontStyle ) const
 {
-	comptr<IDWriteTextFormat> pTextFormat;
+	ComPtr<IDWriteTextFormat> pTextFormat;
 	HRESULT hr = m_pFactory->CreateTextFormat( FontName.c_str(), nullptr, FontWeight,
 		FontStyle, DWRITE_FONT_STRETCH_NORMAL, FontHeight, L"en-us",
 		pTextFormat.GetAddressOf() );

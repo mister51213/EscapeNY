@@ -1,6 +1,14 @@
 #include "Scene_FPS.h"
+#include "Actor_NPC.h"
+#include "Actor_Player.h"
+#include "Algorithm_Grid3D.h"
+#include "Algorithm_Spiral3D.h"
+#include "Camera.h"
+#include "GameView.h"
+#include "Graphics.h"
 #include "Light_Diffuse.h"
 #include "Light_Point.h"
+//#include "Light_Spot.h"
 
 void Scene_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const pCamera) 
 {
@@ -56,7 +64,7 @@ void Scene_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const
 }
 
 	// Use UpdateFrame to update actors, camera and anything else that needs updating.
-void Scene_FPS::UpdateScene(const Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
+void Scene_FPS::UpdateScene( Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
 {
 	#ifdef NDEBUG
 	float tSinceLastFrame = refTimer.SecondsPassed();

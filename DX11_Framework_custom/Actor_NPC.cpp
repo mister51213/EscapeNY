@@ -1,5 +1,8 @@
 #include "Actor_NPC.h"
 #include "MathUtils.h"
+#include "Input.h"
+
+using namespace DirectX;
 
 Actor_NPC::Actor_NPC( const ModelSpecs_W & worldSpecs, eTexture tex, const ModelSpecs_L & localSpecs, eModType mod ) :
 	Actor_Dynamic( worldSpecs, tex, localSpecs, mod ) // base constructor

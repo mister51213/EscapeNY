@@ -1,5 +1,11 @@
 #include "Game.h"
-#include <time.h>
+#include "GameView.h"
+#include "Graphics.h"
+// Sub-game includes
+#include "Scene_Maze.h"
+#include "Scene_FPS.h"
+#include "Scene.h"
+#include "Scene_Collision.h"
 
 using namespace DirectX;
 
@@ -39,7 +45,7 @@ bool Game::Initialize(
 	RETURN_IF_FALSE( result );
 
 	// Pass all member pointers to GameObjects class so it can draw with them
-	m_GameView = GameView( m_pGraphics, m_pDirect3D, m_pCamera );
+	m_GameView = GameView( m_pGraphics, m_pDirect3D, m_pCamera.get() );
 	m_GameView.Initialize();
     m_pActiveScene->Initialize(m_pGraphics, this, m_pCamera.get());
 

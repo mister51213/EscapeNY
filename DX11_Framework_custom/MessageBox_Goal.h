@@ -1,5 +1,12 @@
 #pragma once
+
+// Needed for wstring, also used for D2D1_RECT_F so no point forward declaring it
+#include "Includes.h"
+// Needed for MessageBoxBase
 #include "IOverlay.h"
+
+
+
 class MessageBox_Goal:
 	public MessageBoxBase
 {

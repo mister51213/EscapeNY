@@ -1,12 +1,20 @@
 #pragma once
 
+#include "Actor_Player_Alt.h"
+#include "Actor_Light.h"
+#include "DXUtils.h"
+#include "Includes.h"
 #include "ISubGame.h"
 #include "Overlay.h"
 #include "TestBoard.h"
-#include "Algorithm_Maze.h"
-#include "Actor_Player_Alt.h"
-#include "Actor_Light.h"
-#include "ResourceManager.h"
+
+class Camera;
+class Game;
+class GameTimer;
+class GameView;
+class Graphics;
+class Input;
+
 
 class Scene_Maze:
 	public ISubGame
@@ -18,7 +26,7 @@ public:
 	// Use Initialize to initialize anything that needs initializing.
 	void Initialize( 
 		Graphics *pGraphics,
-		class Game *const pGame,
+		Game *const pGame,
 		Camera *const pCamera ) override;
 
 	// Use UpdateFrame to update actors, camera and anything else that 
