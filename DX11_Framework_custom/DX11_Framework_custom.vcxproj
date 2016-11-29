@@ -160,6 +160,7 @@
     <ClCompile Include="GameEvent.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GameView.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Physics_NEW.cpp" />
     <ClCompile Include="Scene_FPS.cpp" />
     <ClCompile Include="Scene_Maze.cpp" />
