@@ -1,4 +1,6 @@
 #include "ImageLoader.h"
+#include "Utilities.h"
+#include "Wic.h"
 /************************************************************************************
 *  File name		: ImageLoader.cpp												*
 *  Creation Date	: 7/10/2016														*
@@ -9,16 +11,8 @@
 *  Requirements		:																*
 *************************************************************************************/
 
-using namespace Microsoft::WRL;
 
-ImageLoader::ImageLoader()
-{}
-
-ImageLoader::~ImageLoader()
-{
-}
-
-WicBitmapResult ImageLoader::CreateBitmap( const std::wstring & Filename, const Wic &crWic )
+WicBitmapResult ImageLoader::CreateBitmap( const std::wstring &Filename, const Wic &crWic )
 {
 	// Get the WIC factory from the Wic object
 	auto pFactory = crWic.GetFactory();
@@ -89,7 +83,7 @@ WicBitmapResult  ImageLoader::CreateBitmap( const UINT Width, const UINT Height,
 	auto pFactory = crWic.GetFactory();
 
 	// Create temp bitmap
-	Microsoft::WRL::ComPtr<IWICBitmap> pBitmap;
+	ComPtr<IWICBitmap> pBitmap;
 
 	// Create bitmap from memory using the temp bitmap
 	HRESULT hr = pFactory->CreateBitmap(
@@ -145,7 +139,7 @@ WicBitmapResult ImageLoader::loadTarga( const std::wstring &Filename, const Wic 
 	UINT imageSize = targaFileHeader.width * targaFileHeader.height * ( targaFileHeader.bpp / 8 );
 
 	// Acquire the bitmap lock
-	comptr<IWICBitmapLock> pLock;
+	ComPtr<IWICBitmapLock> pLock;
 	WICRect rect{0, 0, targaFileHeader.width, targaFileHeader.height};
 	bitmapResult.first = bitmapResult.second->Lock( &rect, WICBitmapLockWrite, pLock.GetAddressOf() );
 	if( FAILED( bitmapResult.first ) )

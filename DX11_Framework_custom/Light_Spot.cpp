@@ -1,5 +1,7 @@
 #include "Light_Spot.h"
 
+using namespace DirectX;
+
 const DirectX::XMFLOAT3 & Light_Spot::GetDirection() const
 {
 	return m_lightBuffer.lightDirection;

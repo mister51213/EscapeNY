@@ -1,22 +1,34 @@
 #pragma once
-#include "ISubGame.h";
-#include "Algorithm_Grid3D.h"
-#include "Algorithm_Spiral3D.h"
+
 #include "Actor_Light.h"
-#include "Light_Spot.h"
+#include "Actor_NPC.h"
+#include "Actor_Player.h"
+#include "ISubGame.h";
 #include "Overlay.h"
-#include "GameTimer.h"
+#include "Physics.h"
+
+class Camera;
+class D3DGraphics;
+class Game;
+class GameTimer;
+class GameView;
+class Graphics;
+class Input;
 
 class Scene_FPS:public ISubGame
 {
 public:
     virtual void Initialize(
         Graphics *pGraphics,
-        class Game *const pGame,
+        Game *const pGame,
         Camera *const pCamera) override;
 
 	// Use UpdateFrame to update actors, camera and anything else that needs updating.
-    virtual void UpdateScene(const Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer) override;
+    virtual void UpdateScene( 
+		Input &InputRef, 
+		Camera *const pCamera, 
+		const Physics& refPhysics, 
+		const GameTimer& refTimer) override;
 
 	// Use RenderFrame to render the list of actors or other game objects
 	virtual void RenderFrame( const GameView &GameViewRef ) override;
@@ -35,11 +47,11 @@ private:
     Overlay m_Overlay;
     Actor_Player m_player;
 
-    vector<Actor_NPC> m_actorsSUB1; //* vector is destroyed before the list   
-    vector<Actor_NPC> m_actorsSUB2;
-    vector<Actor_NPC> m_actorsSUB3;
-    vector<Actor_NPC> m_actorsSUB4;
-    vector<Actor*> m_pActorsMASTER;
+    std::vector<Actor_NPC> m_actorsSUB1; //* vector is destroyed before the list   
+    std::vector<Actor_NPC> m_actorsSUB2;
+    std::vector<Actor_NPC> m_actorsSUB3;
+    std::vector<Actor_NPC> m_actorsSUB4;
+    std::vector<Actor*> m_pActorsMASTER;
 
     Actor_NPC aTest1;
     Actor_NPC aTest2;
@@ -54,8 +66,8 @@ private:
 	Physics m_physics;   
 
     // LIGHTING
-    vector<Actor_Light> m_spotLights; // manipulates lights
-    vector<LightBufferType> m_lightSet; // passed to GameView
+    std::vector<Actor_Light> m_spotLights; // manipulates lights
+    std::vector<LightBufferType> m_lightSet; // passed to GameView
     int m_numLights = 5;
 	
 };

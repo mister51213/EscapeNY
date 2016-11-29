@@ -4,20 +4,14 @@
 ///////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "Camera.h"
 #include "Model_Textured.h"
-#include "Model.h"
-#include "Graphics.h"
-#include "Texture.h"
 #include "Actor.h"
-#include "Actor_Player.h"
-#include "Actor_NPC.h"
-#include <string>
-#include "ILight.h"
-#include "ShaderTEMPLATE.h"
 #include "Shader_NMap.h"
+#include "Texture.h"
 
-using namespace std;
+class Camera;
+class Graphics;
+class D3DGraphics;
 
 /*
 TODO: Implement; sub groups of textures and models for different chapters
@@ -40,10 +34,10 @@ class GameView
 {
 public:
 	GameView();
-	GameView( Graphics* pGfx, D3DGraphics* pD3D, std::shared_ptr<Camera> &pCam );
+	GameView( Graphics* pGfx, D3DGraphics* pD3D, Camera *pCam );
 	 
     void Initialize();
-	void UpdateView( const vector<Actor*>& actors, const SceneBufferType& SceneLights ) const;
+	void UpdateView( const std::vector<Actor*>& actors, const SceneBufferType& SceneLights ) const;
     void initModelPool();
 private:
 	void initTexturePool();
@@ -54,22 +48,13 @@ private:
 private:
     Graphics* m_pGfx;
     D3DGraphics* m_pD3D;
+	Camera *m_pCam;
 
-    std::shared_ptr<Camera> m_pCam;
-
-    /*ShaderT<
-		VertexBufferTypeAllInOne, 
-		MatrixBufferType, 
-		LightBufferType> m_activeShader;*/
-	/*ShaderT<
-		VertexBufferTypeAllInOneNMap, 
-		MatrixBufferType, 
-		SceneBufferType> m_NMapShader;*/
 	Shader_NMap m_shader_nMap;
 	
-    vector<Texture> m_TexturePool;
-    vector<Texture> m_NormalPool;
-    vector<std::shared_ptr<Model>> m_ModelPool;
+    std::vector<Texture> m_TexturePool;
+    std::vector<Texture> m_NormalPool;
+    std::vector<std::shared_ptr<Model>> m_ModelPool;
 
     std::shared_ptr<Model_Textured> m_pModTEST = 0;
 };

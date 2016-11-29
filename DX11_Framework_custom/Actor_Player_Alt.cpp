@@ -1,5 +1,6 @@
 #include "Actor_Player_Alt.h"
 #include "MathUtils.h"
+#include "Input.h"
 
 Actor_Player_Alt::Actor_Player_Alt( 
 	const ModelSpecs_W &worldSpecs,

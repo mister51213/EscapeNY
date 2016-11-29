@@ -10,28 +10,26 @@
 *************************************************************************************/
 
 #include "Includes.h"
-#include "Utilities.h"
-#include "ImageLoader.h"
-#include "FontLoader.h"
+
 
 #pragma comment(lib, "d2d1.lib")
 // TODO: Decide how this class will interact with the main Graphics class
 // Will probably refactor once I get the DirectWrite wrapper class written
 
+using Microsoft::WRL::ComPtr;
+
 class D2DGraphics
 {
 public:
    	friend class Graphics;
-	D2DGraphics();
-	~D2DGraphics();
 
 	void BeginDraw();
 	void EndDraw();
     bool Initialize(const Graphics &Gfx, const UINT Width, const UINT Height);
     
 private:
-	comptr<ID2D1Device> m_pDevice;
-	comptr<ID2D1DeviceContext> m_pContext;
-	comptr<ID2D1SolidColorBrush> m_pBrush;
-	comptr<ID2D1Bitmap1> m_pRenderSurface;
+	ComPtr<ID2D1Device> m_pDevice;
+	ComPtr<ID2D1DeviceContext> m_pContext;
+	ComPtr<ID2D1SolidColorBrush> m_pBrush;
+	ComPtr<ID2D1Bitmap1> m_pRenderSurface;
 };

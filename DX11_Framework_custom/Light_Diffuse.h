@@ -1,6 +1,5 @@
 #pragma once
 
-//#include "ILightDirection.h"
 #include "Light_Base.h"
 #include "ILightDirection.h"
 

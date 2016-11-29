@@ -1,5 +1,7 @@
 #include "DXUtils.h"
 
+using namespace DirectX;
+
 D3D11_BUFFER_DESC MatrixBufferType::CreateMatrixDescription()
 {
 	D3D11_BUFFER_DESC matrixBufferDesc{};

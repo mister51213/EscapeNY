@@ -26,10 +26,6 @@ class Model;
 class Graphics
 {
 public:
-	Graphics();
-	Graphics(const Graphics&);
-	~Graphics();
-
 	bool Initialize(int ScreenWidth, int ScreenHeight, HWND WinHandle, 
 		float Red, float Green, float Blue, float Alpha = 1.f );
 

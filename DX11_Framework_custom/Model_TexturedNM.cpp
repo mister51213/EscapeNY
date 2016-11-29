@@ -1,13 +1,6 @@
 #include "Model_TexturedNM.h"
-
-
-
-Model_TexturedNM::Model_TexturedNM()
-{}
-
-
-Model_TexturedNM::~Model_TexturedNM()
-{}
+#include "Graphics.h"
+#include "Utilities.h"
 
 bool Model_TexturedNM::Initialize( const PrimitiveFactory & PrimMaker, const Graphics & Gfx )
 {

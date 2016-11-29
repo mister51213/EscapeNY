@@ -1,6 +1,8 @@
 #include "Camera.h"
-#include "Utilities.h"
+#include "Input.h"
 #include "MathUtils.h"
+#include "Utilities.h"
+
 
 using namespace DirectX;
 

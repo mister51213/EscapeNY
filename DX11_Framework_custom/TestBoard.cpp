@@ -2,6 +2,7 @@
 #include "PrimitiveFactory.h"
 #include "Model_Textured.h"
 #include "MathUtils.h"
+#include "Graphics.h"
 
 using namespace DirectX;
 

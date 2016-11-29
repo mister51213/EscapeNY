@@ -1,10 +1,5 @@
 #include "Wic.h"
-
-Wic::Wic()
-{}
-
-Wic::~Wic()
-{}
+#include "Utilities.h"
 
 bool Wic::Initialize()
 {

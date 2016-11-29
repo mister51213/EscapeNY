@@ -1,13 +1,13 @@
 #pragma once
+
 #include "ILight.h"
+#include "DXUtils.h"
+
 class Light_Base :
 	public ILight
 {
 public:
-	Light_Base( eLightType Type )
-	{
-		m_lightBuffer.type = Type;
-	}
+	Light_Base( eLightType Type );
 		
 	virtual ~Light_Base() = default;
 

@@ -6,7 +6,8 @@ texture functionality for more detailed graphics.
 ***************************************************************************************/#pragma once
 
 #include "Includes.h"
-#include "Utilities.h"
+
+struct ModelSpecs_L;
 
 // Contains position, texture, and normal vectors 
 // corresponding to mesh file format

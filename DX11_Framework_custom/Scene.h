@@ -1,14 +1,16 @@
 #pragma once
 
-#include "Includes.h"
-#include "Camera.h"
 #include "Actor_Light.h";
-#include "Utilities.h"
+#include "Actor_NPC.h"
+#include "Actor_Player.h"
 #include "DXUtils.h"
-#include "Texture.h"
-#include "GameTimer.h"
+#include "Includes.h"
 #include "ISubGame.h"
+#include "Physics.h"
 #include "Overlay.h"
+
+class Camera;
+class D3DGraphics;
 
 // TODO: Keep graphics out of Scene and in GameView
 // TODO: Implement these
@@ -32,11 +34,11 @@ public:
 	////////////////////////////////////
 	virtual void Initialize(
 		Graphics *pGraphics, 
-		class Game *const pGame,
+		Game *const pGame,
 		Camera *const pCamera);
 
 	// Use this to update actors, camera and anything else that needs updating.
-	virtual void UpdateScene( const Input &InputRef, Camera *const pCamera, 
+	virtual void UpdateScene( Input &InputRef, Camera *const pCamera, 
 							  const Physics& refPhysics, const GameTimer& refTimer );
 
 	// Use RenderFrame to render the list of actors or other game objects
@@ -72,14 +74,14 @@ private:
 
 	std::vector<std::unique_ptr<Actor>> m_actors_dynamic; // player, NPCs
 	std::vector<std::unique_ptr<Actor>> m_actors_static; // trees, walls, scenery, etc
-	vector<Actor*> m_pActorsMASTER;
+	std::vector<Actor*> m_pActorsMASTER;
 
 	//////////////////////////////////////
 	// LIGHTING //////////////////////////
 	//////////////////////////////////////	
 	// TODO: Make all lights controlled from one place
-    vector<Actor_Light> m_spotLights; // manipulates lights
-    vector<LightBufferType> m_lightSet; // passed to GameView
+    std::vector<Actor_Light> m_spotLights; // manipulates lights
+    std::vector<LightBufferType> m_lightSet; // passed to GameView
     int m_numLights = 5;
 };
 

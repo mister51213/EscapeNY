@@ -1,21 +1,23 @@
 #pragma once
 
-#include "Utilities.h"
+#include "Actor.h"
 #include "Algorithm.h"
+#include "Includes.h"
 #include "TestBoard.h"
+#include "Utilities.h"
 
+class ISubGame;
 
 class Algorithm_Maze :public Algorithm
 {
 public:
 	Algorithm_Maze( ISubGame*const pGame );
-	vector<Actor> MakePattern( int numActors )override;
-	void SetData()override
-	{}
+	std::vector<Actor> MakePattern( int numActors )override;
+	void SetData()override{}
 
 private:
 	// Creates a list of neighbor cells
-	std::vector<XMINT2> MakeNeighborList(
+	std::vector<DirectX::XMINT2> MakeNeighborList(
 		const DirectX::XMUINT2 &CurCell,
 		UINT Width, UINT Height,
 		std::vector<eTileType> &TileTypes );

@@ -1,6 +1,9 @@
 #pragma once
 
+#include "Actor.h"
 #include "Algorithm.h"
+
+class ISubGame;
 
 class Algorithm_Random:
 	public Algorithm

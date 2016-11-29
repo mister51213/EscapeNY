@@ -1,19 +1,15 @@
 #include "Shader_NMap.h"
 #include "Includes.h"
+#include "DXUtils.h"
 
 
-Shader_NMap::Shader_NMap()
-{}
-
-
-Shader_NMap::~Shader_NMap()
-{}
+using Microsoft::WRL::ComPtr;
 
 bool Shader_NMap::Initialize( ID3D11Device * pDevice, int MaxLightCount )
 {
 	// Load/Create vertex shader and input layout
 	{
-		comptr<ID3DBlob> pBuffer;
+		ComPtr<ID3DBlob> pBuffer;
 		HRESULT hr = D3DReadFileToBlob(
 			L"Shaders/NMap_vs.cso",
 			pBuffer.GetAddressOf()
@@ -41,7 +37,7 @@ bool Shader_NMap::Initialize( ID3D11Device * pDevice, int MaxLightCount )
 
 	// Load/Create pixel shader 
 	{
-		comptr<ID3DBlob> pBuffer;
+		ComPtr<ID3DBlob> pBuffer;
 		HRESULT hr = D3DReadFileToBlob(
 			L"Shaders/NMap_ps.cso",
 			pBuffer.GetAddressOf()

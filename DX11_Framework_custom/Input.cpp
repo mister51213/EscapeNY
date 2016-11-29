@@ -101,6 +101,7 @@ void Input::KeyUp(unsigned int input)
 {
 	// If a key is released then clear that state in the key array.
 	m_keys[input] = false;
+	m_eventQueue.push( Event( eInputEvent::Released, input ) );
 
 	// Remove key from the list of keys that are pressed.
 	std::vector<unsigned int>::iterator it = 
@@ -129,13 +130,23 @@ private:
 };
 
 Input::Event Input::Read()
-{
+{	
 	if ( m_eventQueue.empty() )
 	{
 		m_eventQueue.emplace( eInputEvent::Invalid, -1 );
 	}
 
 	DoLast doLast( m_eventQueue );
+	return m_eventQueue.front();
+}
+
+Input::Event Input::Peek()const
+{
+	if ( m_eventQueue.empty() )
+	{
+		Input::Event( eInputEvent::Invalid, -1 );
+	}
+
 	return m_eventQueue.front();
 }
 

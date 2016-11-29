@@ -1,5 +1,8 @@
 #include "Actor_NPC.h"
 #include "MathUtils.h"
+#include "Input.h"
+
+using namespace DirectX;
 
 Actor_NPC::Actor_NPC( 
 	const ModelSpecs_W & worldSpecs, 
@@ -12,7 +15,7 @@ Actor_NPC::Actor_NPC(
 	m_isMovable = true;
 }
 
-void Actor_NPC::GetInput( const Input & pInput, int randI, float randF )
+void Actor_NPC::GetInput( Input & pInput, int randI, float randF )
 {
 	//srand( static_cast<unsigned int>( time( nullptr ) ) );
 	//int dieRoll = rand() % 3;

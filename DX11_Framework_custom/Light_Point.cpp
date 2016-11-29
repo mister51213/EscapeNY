@@ -1,4 +1,7 @@
 #include "Light_Point.h"
+#include "Includes.h"
+
+using namespace DirectX;
 
 const XMFLOAT3 & Light_Point::GetPosition() const
 {

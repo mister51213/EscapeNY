@@ -3,16 +3,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "Texture.h"
 #include "Graphics.h"
+#include "ImageLoader.h"
+#include "Utilities.h"
+#include "Wic.h"
 
-Texture::Texture()
-{
-}
-
-Texture::Texture( const Texture& other )
-{}
-
-Texture::~Texture()
-{}
 
 Texture & Texture::operator=( const Texture & Tex )
 {
@@ -189,7 +183,7 @@ bool Texture::createTextureFromWICImage( IWICBitmap * pBitmap, std::unique_ptr<B
 	WICRect srcRect{0, 0, static_cast<long>( width ), static_cast<long>( height )};
 
 	// Create a lock to get the data pointer to the pixel array
-	comptr<IWICBitmapLock> pLock;
+	ComPtr<IWICBitmapLock> pLock;
 	hr = pBitmap->Lock( &srcRect, WICBitmapLockRead, pLock.GetAddressOf() );
 	RETURN_IF_FAILED( hr );
 

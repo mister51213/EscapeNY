@@ -3,6 +3,8 @@
 #include "Light_Base.h"
 #include "ILightPoint.h"
 
+namespace DirectX{ struct XMFLOAT3; }
+
 class Light_Point :
 	public Light_Base,
 	public ILightPoint
@@ -16,9 +18,9 @@ public:
 
 	~Light_Point() = default;
 
-	const XMFLOAT3& GetPosition() const override;
+	const DirectX::XMFLOAT3& GetPosition() const override;
 
-	void SetPosition( const XMFLOAT3& position ) override;
+	void SetPosition( const DirectX::XMFLOAT3& position ) override;
 
 
 private:

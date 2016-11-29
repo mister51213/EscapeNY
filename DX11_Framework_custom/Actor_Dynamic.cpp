@@ -1,6 +1,13 @@
 #include "Actor_Dynamic.h"
+#include "MathUtils.h"
 
-Actor_Dynamic::Actor_Dynamic(ModelSpecs_W worldSpecs, eTexture tex, ModelSpecs_L localSpecs, eModType modType): 
+using namespace DirectX;
+
+Actor_Dynamic::Actor_Dynamic( const ModelSpecs_W &worldSpecs,
+							  eTexture tex,
+							  const ModelSpecs_L &localSpecs,
+							  eModType modType )
+	:
 	Actor( worldSpecs, tex, localSpecs, modType )
 {
 	ResetPIDParams();
@@ -16,8 +23,8 @@ Actor_Dynamic::eActorState Actor_Dynamic::GetState() const
 	return m_state;
 }
 
-void Actor_Dynamic::ResetPIDParams( XMFLOAT3 target )
-{		
+void Actor_Dynamic::ResetPIDParams( const XMFLOAT3 &target )
+{
 	m_target = target;
 	m_initalPosition = GetPosition();
 	m_initialHeading = m_target - m_initalPosition;
@@ -176,11 +183,6 @@ bool Actor_Dynamic::CollisionTurnedOff()
 XMFLOAT3 Actor_Dynamic::GetInitialPosition() const
 {
 	return m_initalPosition;
-}
-
-bool Actor_Dynamic::CheckMobility()
-{
-	return m_isMovable;
 }
 
 void Actor_Dynamic::PauseCollisionChecking()

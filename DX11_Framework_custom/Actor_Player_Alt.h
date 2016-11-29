@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Actor_Dynamic.h"
-#include "Input.h"
 #include "Utilities.h"
 
 class Actor_Player_Alt:

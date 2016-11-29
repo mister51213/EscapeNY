@@ -1,17 +1,17 @@
 #pragma once
 
 #include "Includes.h"
-#include "Utilities.h"
 #include "FontLoader.h"
 #include "IOverlay.h"
-#include "Input.h"
+
+class Input;
+class Graphics;
+
+using Microsoft::WRL::ComPtr;
 
 class Overlay :public IOverlay
 {
 public:
-	Overlay();
-	~Overlay();
-
 	bool Initialize( const Graphics &Gfx )override;
 	void Render(const Graphics &Gfx)override;
 	
@@ -20,7 +20,7 @@ public:
 	void PlayerReachGoal();
 	bool WantsReset();
 private:
-	comptr<IDWriteTextFormat> m_Font;
+	ComPtr<IDWriteTextFormat> m_Font;
 	std::unique_ptr< MessageBoxBase > msg;
 	
 	bool m_reachedGoal = false;

@@ -1,5 +1,6 @@
 #include "Actor_Player.h"
 #include "MathUtils.h"
+#include "Input.h"
 
 using namespace DirectX;
 
@@ -11,7 +12,7 @@ Actor_Player::Actor_Player( const ModelSpecs_W & worldSpecs, eTexture tex, const
 	m_isMovable = true;
 }
 
-void Actor_Player::GetInput( const Input& pInput, int randI, float randF )
+void Actor_Player::GetInput( Input& pInput, int randI, float randF )
 {
 		float x = static_cast<float>( rand() % 800 - 400 );
    		float y = static_cast<float>( rand() % 800 - 400 );

@@ -1,5 +1,7 @@
 #pragma once
+
 #include "Actor_Dynamic.h"
+
 class Actor_Car : public Actor_Dynamic
 {
 public:

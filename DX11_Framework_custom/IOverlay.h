@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Graphics.h"
+#include "Includes.h"
+
+class Graphics;
 
 
 class MessageBoxBase

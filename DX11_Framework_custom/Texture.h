@@ -6,24 +6,21 @@
 // INCLUDES //
 //////////////
 #include "Includes.h"
-#include "Utilities.h"
-#include "ImageLoader.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Forward declarations
 ////////////////////////////////////////////////////////////////////////////////
 class Graphics;
+class Wic;
 
+using Microsoft::WRL::ComPtr;
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: TextureClass
 ////////////////////////////////////////////////////////////////////////////////
 class Texture
 {
 public:
-	Texture();
-	Texture( const Texture& );
-	~Texture();
-
+	
 	Texture &operator=( const Texture &Tex );
 
 	// This procedure loads a texture from file
@@ -51,6 +48,6 @@ private:
 		std::unique_ptr<BYTE[]> &pImageData, const Wic &crWic );
 	bool createTextureFromWICImage( IWICBitmap *pBitmap, std::unique_ptr<BYTE[]> &pImageData );
 private:
-	comptr<ID3D11Texture2D> m_pTexture;
-	comptr<ID3D11ShaderResourceView> m_pTextureView;
+	ComPtr<ID3D11Texture2D> m_pTexture;
+	ComPtr<ID3D11ShaderResourceView> m_pTextureView;
 };

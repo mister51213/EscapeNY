@@ -1,6 +1,9 @@
 #pragma once
+
+#include "Actor_NPC.h"
 #include "Algorithm.h"
 
+class ISubGame;
 
 class Algorithm_Spiral3D: public Algorithm
 {

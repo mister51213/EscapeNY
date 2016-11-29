@@ -12,7 +12,7 @@ public:
 
     void Initialize(const DirectX::XMFLOAT3 &Position, const DirectX::XMFLOAT3 &LookAt);
 
-	void SetLookat( const XMFLOAT3 & LookAt );
+	void SetLookat( const DirectX::XMFLOAT3 & LookAt );
 
     const ILight* GetLight() const
     {

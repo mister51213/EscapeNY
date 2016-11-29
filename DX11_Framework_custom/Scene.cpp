@@ -1,4 +1,7 @@
 #include "Scene.h"
+#include "Camera.h"
+#include "GameView.h"
+#include "Graphics.h"
 
 void Scene::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const pCamera )
 {
@@ -61,7 +64,7 @@ void Scene::reset()
     m_pActorsMASTER.push_back(&m_map);
 }
 
-void Scene::UpdateScene( const Input & InputRef, Camera * const pCamera, const Physics & refPhysics, const GameTimer & refTimer )
+void Scene::UpdateScene( Input & InputRef, Camera * const pCamera, const Physics & refPhysics, const GameTimer & refTimer )
 {
 	// TIMER 
 	#ifdef NDEBUG

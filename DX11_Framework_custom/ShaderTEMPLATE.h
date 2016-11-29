@@ -1,6 +1,8 @@
 #pragma once
 
+// Needed for D3D11.h
 #include "Includes.h"
+// Needed for the RETURN_IF_FALSE/RETURN_IF_FAILED macros
 #include "Utilities.h"
 
 template<class VertexBuffer, class MatBuffer, class LightBuffer>
@@ -143,7 +145,7 @@ protected:
 		///////////////////////////////////////////////////////////
 		// Initialize the variables for this function
 		HRESULT result = S_OK;
-		comptr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer;
+		Microsoft::WRL::ComPtr<ID3D10Blob> pVertexShaderBuffer, pPixelShaderBuffer;
 
 		// Load the vertex shader code.
 		result = D3DReadFileToBlob(
@@ -201,10 +203,9 @@ protected:
 
 
 private:
-	comptr<ID3D11VertexShader> m_vertexShader;
-	comptr<ID3D11PixelShader> m_pixelShader;
-	comptr<ID3D11InputLayout> m_layout;
-	comptr<ID3D11Buffer> m_matrixBuffer, m_lightBuffer;
-	comptr<ID3D11SamplerState> m_sampleState;
-
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_vertexShader;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_pixelShader;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_layout;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> m_matrixBuffer, m_lightBuffer;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> m_sampleState;
 };

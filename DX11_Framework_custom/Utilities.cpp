@@ -1,6 +1,8 @@
 #include "Utilities.h"
 #include "MathUtils.h"
 
+using namespace DirectX;
+
 using PartFn = int( *)( XMFLOAT3*, const int, const int );
 
 int PartitionY( XMFLOAT3* Array, const int Left, const int Right )

@@ -9,10 +9,11 @@
 *  Requirements		:																*
 *************************************************************************************/
 #include "Includes.h"
-#include "Utilities.h"
-#include "Wic.h"
 
-using WicBitmapResult = std::pair<HRESULT, Microsoft::WRL::ComPtr<IWICBitmap>>;
+class Wic;
+
+using Microsoft::WRL::ComPtr;
+using WicBitmapResult = std::pair<HRESULT, ComPtr<IWICBitmap>>;
 
 class ImageLoader
 {
@@ -26,9 +27,6 @@ class ImageLoader
 	};
 
 public:
-	ImageLoader();
-	~ImageLoader();
-
 	static WicBitmapResult CreateBitmap( const std::wstring &Filename, const Wic &crWic );
 	static WicBitmapResult CreateBitmap( const UINT Width, const UINT Height, const Wic &rcWic );
 private:

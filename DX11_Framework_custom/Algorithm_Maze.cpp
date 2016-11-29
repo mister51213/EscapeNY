@@ -10,7 +10,7 @@ Algorithm_Maze::Algorithm_Maze( ISubGame*const pGame )
 {
 }
 
-vector<Actor> Algorithm_Maze::MakePattern( int numActors )
+std::vector<Actor> Algorithm_Maze::MakePattern( int numActors )
 {
 	// Retrieve the board from the game object
 	// TODO: Try casting to child class of ISubGame
@@ -163,7 +163,7 @@ std::vector<Actor> Algorithm_Maze::CreateActorList( const UINT Width, const UINT
 	XMFLOAT3 offset = XMFLOAT3( static_cast<float>( Width ), 2.f, static_cast<float>( Height ) ) * .5f;
 
 	// Create actor list where walls are
-	vector<Actor> actorList;
+	std::vector<Actor> actorList;
 	ModelSpecs_L lSpecs;
 	for( int z = 0; z < Height; ++z )
 	{

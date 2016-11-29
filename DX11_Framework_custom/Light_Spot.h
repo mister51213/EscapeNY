@@ -19,7 +19,7 @@ public:
 	const DirectX::XMFLOAT3 & Light_Spot::GetDirection() const override;
 	void Light_Spot::SetDirection( float X, float Y, float Z ) override;
 	const DirectX::XMFLOAT3 & Light_Spot::GetPosition() const override;
-	void Light_Spot::SetPosition( const XMFLOAT3& position ) override;
+	void Light_Spot::SetPosition( const DirectX::XMFLOAT3& position ) override;
 	const DirectX::XMFLOAT4 & Light_Spot::GetColor() const override;
 	void SetConeAngle( float OuterAngle ) override;
 	float GetConeAngle()const override;

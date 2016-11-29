@@ -1,5 +1,10 @@
 #include "Light_Base.h"
 
+Light_Base::Light_Base( eLightType Type )
+{
+	m_lightBuffer.type = Type;
+}
+
 const DirectX::XMFLOAT4 & Light_Base::GetColor() const
 {
 	return m_lightBuffer.lightColor;
