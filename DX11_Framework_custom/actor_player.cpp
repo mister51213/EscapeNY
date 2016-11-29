@@ -10,55 +10,35 @@ Actor_Player::Actor_Player( const ModelSpecs_W & worldSpecs, eTexture tex, const
 
 void Actor_Player::GetInput( Input& pInput, int randI, float randF )
 {
-	Input::Event evnt = pInput.Peek();
+	Input::Event evnt = pInput.Read();
+	if ( evnt.IsRelease() )
+	{
+		if ( evnt.GetKey() == VK_UP )
+		{
+			m_state = HOMING;
+			m_target = { 0.f, 0.f, 200.f };
+			m_initalPosition = GetPosition();
+		}
+		else if ( evnt.GetKey() == VK_DOWN )
+		{
+			m_state = HOMING;
+			m_target = { 0.f, 0.f, -200.f };
+			m_initalPosition = GetPosition();
+		}
+		else if ( evnt.GetKey() == VK_LEFT )
+		{
+			m_state = HOMING;
+			m_target = { -200.f, 0.f, 0.0f };
+			m_initalPosition = GetPosition();
+		}
+		else if ( evnt.GetKey() == VK_RIGHT )
+		{
+			m_state = HOMING;
+			m_target = { 200.f, 0.f, 0.0f };
+			m_initalPosition = GetPosition();
+		}
+	}
 	
-	if ( pInput.IsKeyDown( VK_UP ) && !upPressLastFrame )
-	{
-		upPressLastFrame = true;
-	}
-	if ( pInput.IsKeyDown( VK_DOWN ) && !downPressLastFrame )
-	{
-		downPressLastFrame = true;
-	}
-	if ( pInput.IsKeyDown( VK_LEFT ) && !leftPressLastFrame )
-	{
-		leftPressLastFrame = true;
-	}
-	if ( pInput.IsKeyDown( VK_RIGHT ) && !rightPressLastFrame )
-	{
-		rightPressLastFrame = true;
-	}
-
-	if ( !pInput.IsKeyDown( VK_UP ) && upPressLastFrame )
-	{
-		upPressLastFrame = false;
-		m_state = HOMING;
-		m_target = { 0.f, 0.f, 200.f };
-		m_initalPosition = GetPosition();
-	}
-	else if ( !pInput.IsKeyDown( VK_DOWN ) && downPressLastFrame )
-	{
-		downPressLastFrame = false;
-		m_state = HOMING;
-		m_target = { 0.f, 0.f, -200.f };
-		m_initalPosition = GetPosition();
-	}
-
-	if ( !pInput.IsKeyDown( VK_RIGHT ) && rightPressLastFrame )
-	{
-		rightPressLastFrame = false;
-		m_state = HOMING;
-		m_target = { 200.f, 0.f, 0.0f };
-		m_initalPosition = GetPosition();
-	}
-	else if ( !pInput.IsKeyDown( VK_LEFT ) && leftPressLastFrame )
-	{
-		leftPressLastFrame = false;
-		m_state = HOMING;
-		m_target = { -200.f, 0.f, 0.0f };
-		m_initalPosition = GetPosition();
-	}
-
 	m_worldSpecs.orientation.y += pInput.GetRelativeX();
 	m_worldSpecs.orientation.x += pInput.GetRelativeY();
 }

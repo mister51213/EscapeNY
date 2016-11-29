@@ -31,6 +31,18 @@ public:
 		{
 			return m_eEvent;
 		}
+		bool IsRelease()const
+		{
+			return m_eEvent == eInputEvent::Released;
+		}
+		bool IsPressed()const
+		{
+			return m_eEvent == eInputEvent::Pressed;
+		}
+		bool IsValid()const
+		{
+			return m_eEvent != eInputEvent::Invalid;
+		}
 		unsigned char GetKey()const
 		{
 			return m_key;
