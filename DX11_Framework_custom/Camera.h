@@ -72,5 +72,5 @@ private:
 	DirectX::XMFLOAT3 m_LookDir = { 0.0f, 0.0f, 1.0f };
 	DirectX::XMMATRIX m_ViewMatrix, m_ProjectionMatrix, m_OrthoMatrix;;
 
-	const float m_camSpeed = 20.f;
+	const float m_camSpeed = 100.f;
 };

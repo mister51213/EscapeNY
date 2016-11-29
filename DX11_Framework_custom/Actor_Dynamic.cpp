@@ -4,7 +4,9 @@
 
 Actor_Dynamic::Actor_Dynamic(ModelSpecs_W worldSpecs, eTexture tex, ModelSpecs_L localSpecs, eModType modType): 
 	Actor( worldSpecs, tex, localSpecs, modType )
-{}
+{
+	ResetPIDParams();
+}
 
 void Actor_Dynamic::SetState(eActorState state)
 {
@@ -16,12 +18,23 @@ Actor_Dynamic::eActorState Actor_Dynamic::GetState() const
 	return m_state;
 }
 
+void Actor_Dynamic::ResetPIDParams( XMFLOAT3 target )
+{		
+	m_target = target;
+	m_initalPosition = GetPosition();
+	m_initialHeading = m_target - m_initalPosition;
+	m_halfway = abs(Magnitude(m_initialHeading)) * 0.5;
+}
+
 void Actor_Dynamic::Update(float deltaT)
 {
         switch (m_state)
         {
         case STILL:
-            return;
+		{
+			m_attributes.velocity = { 0.f, 0.f, 0.f };
+			return;
+		}
         case FALLING:
             {
 
@@ -49,191 +62,125 @@ void Actor_Dynamic::ConstantMove( const float deltaT)
 
 void Actor_Dynamic::ChaseTarget(const float deltaT )
 {
-	// Temporary lambda functions comparing difference in 
-	// implementation of acceleration.
-
-	auto JoshChaseTarget = [ & ]()
-	{
-		if ( m_target != XMFLOAT3{ 0.f, 0.f, 0.f } )
-		{
-			// You can consider this the amount of force that is being applied
-			// to the object.  
-			const float constSpeed = 500.f;
-
-			// My understanding of the problem can be solved using linear
-			// interpolation of the amount of acceleration in opposing
-			// directions, but you need to know your starting position and
-			// ending position for it to work.
-
-			// Linear interpolation is where you calculate the position
-			// along a line based on some percentage.  
-			/*
-				If you have a starting point of (0, 0, 0) and want to end at
-				(100, 0, 0) you can see that when you are 25% done with your 
-				journey, you will be at (25, 0, 0) and you still have 75% to go.
-				So the vector that is left is (75, 0, 0).
-
-				The formula for linear interpolation (LERP) is:
-				completed = start + ((end - start) * percentage)
-				remaining = start + ((end - start) * (1.0-percentage))
-				total = completed + remaining
-				Percentage is usually between 0.0 and 1.0
-			*/
-
-			// range is the (end - start) in vector form and total distance
-			// is the scalar form
-			const XMFLOAT3 range = m_target - m_initalPosition;
-			const float totalDistance = Magnitude( range );
-
-			// toTargetVector and distanceToTarget are just intermediary
-			// steps to find the percentage part
-			const XMFLOAT3 toTargetVector = m_target - m_worldSpecs.position;
-			const float distanceToTarget = Magnitude( toTargetVector );
-			const float inverseDistance = 1.f / distanceToTarget;
-			
-			// accelCoeff is the percentage portion of the LERP formula
-			const float accelCoeff = distanceToTarget / totalDistance;
-			// decelCoeff is the remaining percentage portion of the LERP formula
-			const float decelCoeff = ( 1.f - accelCoeff );
-
-			if ( decelCoeff >= 1.f )
-			{
-				int a = 0;
-			}
-
-			// Calculates the direction of the force to be applied.
-			const XMFLOAT3 direction = toTargetVector * inverseDistance;
-
-			// accelCoeff * constSpeed, is the magnitude of displacement to be
-			// applied in the direction the object is going.
-			const XMFLOAT3 frameVelocity = direction * ( accelCoeff * constSpeed );
-
-			// decelCoeff * constSpeed, is the magnitude of displacement to be
-			// applied in the opposing direction the object is going.
-			const XMFLOAT3 frameDecelVel = -direction * ( decelCoeff * constSpeed );
-
-			const float timeSquared = Square( deltaT );
-
-			// acceleration is m/s2, so that should explain these steps
-			const XMFLOAT3 acceleration = frameVelocity * timeSquared;
-			const XMFLOAT3 deceleration = frameDecelVel * timeSquared;
-
-			// This finishes off the LERP formula, where accleration + deceleration
-			// equals 100% of the total range.
-			const XMFLOAT3 finalAcceleration = acceleration + deceleration;
-
-			// We increase velocity by the amount of desired acceleration for
-			// this frame.
-			m_attributes.velocity += finalAcceleration;
-
-			// We add velocity to position as the total amount of displacement
-			// for this frame.
-			m_worldSpecs.position += m_attributes.velocity;
-			int a = 0;
-		}
-	};
-
-	auto GregChaseTarget = [ & ]()
-	{
-		//XMFLOAT3 increment = posError * gainCoefficient * deltaT;
-		//m_worldSpecs.position += increment;
-
-		XMFLOAT3 posError = m_target - m_worldSpecs.position;
-		const float gainCoefficient = 10.f;
-		const float integrator = 0.5f;
-
-		XMFLOAT3 displacement = { 0.f, 0.f, 0.f };
-		XMFLOAT3 acceleration = { 0.f, 0.f, 0.f };
-
-		XMFLOAT3 recipPosError = posError * 0.9;
-		if ( posError.x != 0.0f && posError.y != 0.0f && posError.z != 0.0f )
-		{
-			recipPosError =
-			{
-				1.0f / posError.x,
-				1.0f / posError.y,
-				1.0f / posError.z
-			};
-		}
-
-		// increment velocity by fraction of distance to target
-		acceleration = ( posError - recipPosError ) * gainCoefficient;
-		XMFLOAT3 velocityChange = acceleration * deltaT;
-		m_attributes.velocity += velocityChange;
-
-		//if ( Magnitude( posError ) < 50.f ) // hit the breaks
-		//	m_attributes.velocity *= integrator;
-
-		//if(Magnitude(posError) > 100.f)
-		//{
-		//	// increment velocity by fraction of distance to target
-		//	acceleration = (posError - recipPosError);
-		//	XMFLOAT3 velocityChange = acceleration * deltaT * gainCoefficient;
-		//	m_attributes.velocity += velocityChange;
-		//}
-		//else
-		//{
-		//	// creep toward target until you reach it
-		//	//m_attributes.velocity = posError * integrator *deltaT;
-		//	acceleration = (posError - recipPosError);
-		//	XMFLOAT3 velocityChange = acceleration * deltaT * integrator;
-		//	m_attributes.velocity += velocityChange;
-		//}
-
-		displacement = m_attributes.velocity * deltaT;
-		m_worldSpecs.position += displacement;
-	};
+		XMFLOAT3 currDistV = m_target - m_worldSpecs.position;
+		float error = Magnitude( currDistV );
+		XMFLOAT3 dirToTarget = Normalize(currDistV);
 		
-	JoshChaseTarget();
-	//GregChaseTarget();
+		float pCoeff = 0.2f; // proportional gain coefficient
+		float dCoeff = -.07f; // derivative gain coefficient
+		m_integrator += error; // TODO: add conditional statement to apply this
+		/*
+		NOTE: Integrator is only needed if real world friction applies.
+		In other words, if the thrust input doesn't produce the velocity
+		that you expect, because some of it is lost to friction, then you
+		have to creep the rest of the way to the goal using the integrator.
+
+		So to add another level of realism, this function shouldnt be able to
+		automatically increment acceleration and velocity, but rather input a force, 
+		and the result of that force will be affected by other forces in the world, 
+		such as friction and drag. Then it will check its own resultant velocity, 
+		and continue to calculate	how much input it needs to give based on that. 
+		
+		This is how PID works in the real world.
+		*/
+		m_attributes.acceleration = dirToTarget * error * pCoeff;
+		m_attributes.acceleration += m_attributes.velocity * dCoeff;
+		// TODO: Add friction to damp the speed as it approaches target;
+		// TODO: that way, we won't only rely on P and D coefficients
+
+		////////// UNIVERSAL FINAL CALCULATION ///////
+		m_attributes.velocity += m_attributes.acceleration;
+		XMFLOAT3 displacement = m_attributes.velocity * deltaT;
+		m_worldSpecs.position += displacement;
 }
 
-XMFLOAT3 Actor_Dynamic::MoveTowardTarget( const float deltaT )
+//TODO:
+/*
+Now, since it only negates their velocties on rebound, 
+the rebound physics are not quite accurate. 
+We need to properly reflect these vectors across the plane 
+that is perpendicular to the balls respective flight paths instead.
+*/
+
+void Actor_Dynamic::Rebound_WRONG()
 {
-	// will calculate and add this displacement to actual position
+	float reboundMagnitude = Magnitude( m_attributes.velocity );
+	XMFLOAT3 currVeloc = Normalize( m_attributes.velocity );
+	XMFLOAT3 reverseDir = -currVeloc;
+	XMFLOAT3 newTarget = reverseDir * reboundMagnitude;
+	m_target = newTarget;
+	PauseCollisionChecking();
+}
+
+void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
+{
+	// TODO: try replacing current position with target and seeing if it works better
+	// NOTE: initialPosition is added, then subtracted, so they cancel out, but
+	// left them here commented out just to show how the vectors are arrived at visually.
+	XMFLOAT3 thisTrajectory = m_worldSpecs.position/* - m_initalPosition*/;
+	XMFLOAT3 otherTrajectory = partnerBall->GetPosition() - partnerBall->GetInitialPosition();
+	m_target = thisTrajectory + otherTrajectory/* + m_initalPosition*/;
+
+	PauseCollisionChecking();
+	// TODO: fix issue of balls getting stuck together.
+}
+
+void Actor_Dynamic::ReboundDP(Actor_Dynamic* partnerBall)
+{
+	float reboundMagnitude = Magnitude( m_attributes.velocity );
+	XMFLOAT3 veloc1 = Normalize( m_attributes.velocity );
+	XMFLOAT3 veloc2 = Normalize( partnerBall->GetAttributes().velocity );
+
+	//float DP = DotProduct( veloc2, veloc1 );
+	//TODO: 
+	/*
+	1. take dot product between two balls' velocities (normalized)
+	2. maintain the Y component of each of their velocities
+	3. flip the X component of each of their velocities
+	4. scale the resultant vector by the dot product	
+	*/
+
+	// simply swap velocities here
+	XMFLOAT3 reverseDir = veloc2/* * DP */;
+	XMFLOAT3 newTarget = reverseDir * reboundMagnitude;
+
+	//TODO:
+	/*
+	negate only the perpendicular component of the vector of approach;
+	get that component efficiently using dot product
+
+	U [dot] V = 
+	U.x*V.x + U.y*V.y = 
+	magnitude(U)*magnitude(V)*cos(angle between 'em)
 	
-	// Store current position
-	XMFLOAT3 currPos = m_worldSpecs.position;
+	*/
+		
+	m_target = newTarget;
 
-	// How far do we still have to travel?
-	XMFLOAT3 posError = m_target - currPos;
+	PauseCollisionChecking();
+}
 
-	// Magnitude will always be positive, so no need for call to abs()
-	float distToTarget = abs( Magnitude( posError ) );
+void Actor_Dynamic::Stop()
+{
+	m_state = STILL;
+}
 
-	// displacement by next frame if we continue traveling at current speed
-	//XMFLOAT3 potentialDisp = m_velocity*deltaT;
-	//XMFLOAT3 potentialPos = currPos + potentialDisp;
+void Actor_Dynamic::ResumeCollisionChecking()
+{
+	m_stopCheckFlag = false;
+}
 
-	//float potentialDist = abs(Magnitude(potentialPos - currPos));
-	// Would we overshoot it traveling at this speed?
-	/*if (abs(potentialDist) > abs(distToTarget))
-	m_worldSpecs.position = targetPos;*/ // then just move us to the target
+bool Actor_Dynamic::CollisionTurnedOff()
+{
+	return m_stopCheckFlag;
+}
 
-	// while further away than 20, full throttle toward target
-	//if (distToTarget > 50.0f)
-	//{
-	float recipTime = 1.0f / deltaT;
-	XMFLOAT3 requiredVeloc = posError * recipTime; // need to multiply this here?
-	XMFLOAT3 requiredAccel = ( requiredVeloc - m_attributes.velocity ) * recipTime;
+XMFLOAT3 Actor_Dynamic::GetInitialPosition() const
+{
+	return m_initalPosition;
+}
 
-	float dampener = 0.05f;
-	// Apply required accel and velocity and calculate displacement
-	const XMFLOAT3 deltaPos = ( ( m_attributes.velocity*deltaT ) + ( requiredAccel*( deltaT*deltaT ) ) * 0.5f ) * dampener;
-	m_attributes.velocity += ( requiredAccel*deltaT );
-	//}
-	//else // kick in the integrator for fine tuning
-	//{
-	//}
-	// Add displacement to ACTUAL position
-	if ( distToTarget > 0.001 )
-	{
-		currPos += deltaPos;
-	}
-	else
-	{
-		currPos = m_target;
-	}
-
-	return currPos;
+void Actor_Dynamic::PauseCollisionChecking()
+{
+	m_stopCheckFlag = true;
 }

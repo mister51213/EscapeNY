@@ -96,8 +96,8 @@ DirectX::XMFLOAT3 Physics::ApplyWind( const float Mass, const float DeltaTime )
 
 void Physics::DoPhysics( PhysAttributes& attributes, const float DeltaTime)
 {
-	DirectX::XMFLOAT3 acceleration = ApplyGravity( attributes.Mass, DeltaTime );
-	acceleration += ApplyWind( attributes.Mass, DeltaTime );
+	DirectX::XMFLOAT3 acceleration = ApplyGravity( attributes.mass, DeltaTime );
+	acceleration += ApplyWind( attributes.mass, DeltaTime );
 	//acceleration += ApplyForce1( Mass )*DeltaTime;
 	//acceleration += ApplyForce2( Mass )*DeltaTime;
 

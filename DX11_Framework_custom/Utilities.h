@@ -57,10 +57,11 @@ struct PhysAttributes
 {
 	// would need to calculate this for more realistic physics.
 	float terminalV = 50.0f;
-	DirectX::XMFLOAT3 velocity = { 0.f, 0.0f, 0.f };
-	DirectX::XMFLOAT3 acceleration = { 0.f, 0.0f, 0.f };
-	float Mass = 1.0f;
-	float Size = 5.0f;
+	DirectX::XMFLOAT3 velocity = { 0.f, 0.f, 0.f };
+	DirectX::XMFLOAT3 acceleration = { 0.f, 0.f, 0.f };
+	float mass = 1.0f;
+	float size = 5.0f;
+	float radius = 1.0f;
 };
 
 enum eForceType
@@ -84,7 +85,6 @@ struct AlignedAxisBoundingBox // JUST A BOX
 
 	// Assumes that translation has already been applied
 	bool Overlaps( const AlignedAxisBoundingBox &AABB )const;
-
 
 	DirectX::XMFLOAT3 center, extent;
 };

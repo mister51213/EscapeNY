@@ -1,16 +1,16 @@
-#include "Game_Maze.h"
+#include "Scene_Maze.h"
 #include "Game.h"
 #include "Algorithm_Random.h"
 #include "MathUtils.h"
 
 using namespace DirectX;
 
-Game_Maze::Game_Maze( Input * pInput )
+Scene_Maze::Scene_Maze( Input * pInput )
 	:
 	m_pInput( pInput )
 {}
 
-void Game_Maze::Initialize(
+void Scene_Maze::Initialize(
 	Graphics *pGraphics,
 	class Game *const pGame,
 	Camera *const pCamera )
@@ -30,7 +30,7 @@ void Game_Maze::Initialize(
 	reset();
 }
 
-void Game_Maze::UpdateScene( Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
+void Scene_Maze::UpdateScene( const Input &InputRef, Camera *const pCamera, const Physics& refPhysics, const GameTimer& refTimer)
 {
 	UpdatePlayerState();
 	UpdateCarState();
@@ -86,7 +86,7 @@ void Game_Maze::UpdateScene( Input &InputRef, Camera *const pCamera, const Physi
 	}
 }
 
-void Game_Maze::RenderFrame( const GameView &GameViewRef )
+void Scene_Maze::RenderFrame( const GameView &GameViewRef )
 {
 	for( int i = 0; i < m_pLights.size(); ++i )
 	{
@@ -99,7 +99,7 @@ void Game_Maze::RenderFrame( const GameView &GameViewRef )
 	//m_Overlay.Render( *m_pGraphics );
 }
 
-void Game_Maze::reset()
+void Scene_Maze::reset()
 {
 	//////////////////////////////////////////////////
 	// Initialize the board object
@@ -202,12 +202,12 @@ void Game_Maze::reset()
 	m_endReached = false;
 }
 
-const TestBoard & Game_Maze::GetBoard()
+const TestBoard & Scene_Maze::GetBoard()
 {
 	return m_board;
 }
 
-void Game_Maze::UpdatePlayerState()
+void Scene_Maze::UpdatePlayerState()
 {
 	Actor_Dynamic::eActorState state = m_player.GetState();
 	if ( m_pInput->AnyPressed() )
@@ -256,9 +256,9 @@ void Game_Maze::UpdatePlayerState()
 	}
 }
 
-void Game_Maze::UpdateCarState()
+void Scene_Maze::UpdateCarState()
 {}
 
-void Game_Maze::UpdateMonsterState()
+void Scene_Maze::UpdateMonsterState()
 {}
 

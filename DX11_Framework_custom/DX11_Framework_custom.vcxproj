@@ -154,12 +154,13 @@
     <ClCompile Include="Algorithm_Random.cpp" />
     <ClCompile Include="Algorithm_Spiral3D.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DXBoundingMesh.cpp" />
     <ClCompile Include="DXUtils.cpp" />
     <ClCompile Include="GameEvent.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GameView.cpp" />
-    <ClCompile Include="Game_FPS.cpp" />
-    <ClCompile Include="Game_Maze.cpp" />
+    <ClCompile Include="Scene_FPS.cpp" />
+    <ClCompile Include="Scene_Maze.cpp" />
     <ClCompile Include="Algorithm_Maze.cpp" />
     <ClCompile Include="Light_Base.cpp" />
     <ClCompile Include="Light_Diffuse.cpp" />
@@ -173,6 +174,7 @@
     <ClCompile Include="Overlay_Title.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Scene_Collision.cpp" />
     <ClCompile Include="Shader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -250,11 +252,12 @@
     <ClInclude Include="Algorithm_Spiral3D.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Algorithm.h" />
+    <ClInclude Include="DXBoundingMesh.h" />
     <ClInclude Include="DXUtils.h" />
     <ClInclude Include="GameEvent.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GameView.h" />
-    <ClInclude Include="Game_FPS.h" />
+    <ClInclude Include="Scene_FPS.h" />
     <ClInclude Include="IGameState.h" />
     <ClInclude Include="ILight.h" />
     <ClInclude Include="ILightDirection.h" />
@@ -263,7 +266,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="IOverlay.h" />
     <ClInclude Include="ISubGame.h" />
-    <ClInclude Include="Game_Maze.h" />
+    <ClInclude Include="Scene_Maze.h" />
     <ClInclude Include="Algorithm_Maze.h" />
     <ClInclude Include="Light_Base.h" />
     <ClInclude Include="Light_Diffuse.h" />
@@ -277,6 +280,7 @@
     <ClInclude Include="Overlay_Title.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Scene_Collision.h" />
     <ClInclude Include="Shader.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

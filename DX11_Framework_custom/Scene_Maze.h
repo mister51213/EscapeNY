@@ -8,13 +8,13 @@
 #include "Actor_Light.h"
 #include "ResourceManager.h"
 
-class Game_Maze:
+class Scene_Maze:
 	public ISubGame
 {
 public:
-	Game_Maze() = default;
-	~Game_Maze()= default;
-	Game_Maze( Input *pInput );
+	Scene_Maze() = default;
+	~Scene_Maze()= default;
+	Scene_Maze( Input *pInput );
 	// Use Initialize to initialize anything that needs initializing.
 	void Initialize( 
 		Graphics *pGraphics,

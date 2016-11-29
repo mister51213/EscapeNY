@@ -7,7 +7,7 @@
 #include "Overlay.h"
 #include "GameTimer.h"
 
-class Game_FPS:public ISubGame
+class Scene_FPS:public ISubGame
 {
 public:
     virtual void Initialize(
