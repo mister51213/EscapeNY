@@ -1,9 +1,16 @@
 #include "Actor_NPC.h"
 #include "MathUtils.h"
 
-Actor_NPC::Actor_NPC( const ModelSpecs_W & worldSpecs, eTexture tex, const ModelSpecs_L & localSpecs, eModType mod ) :
+Actor_NPC::Actor_NPC( 
+	const ModelSpecs_W & worldSpecs, 
+	eTexture tex, 
+	const ModelSpecs_L & localSpecs, 
+	eModType mod ) :
 	Actor_Dynamic( worldSpecs, tex, localSpecs, mod ) // base constructor
-{}
+{
+	// Set in constructor, and can only be accessed but not changed thereafter
+	m_isMovable = true;
+}
 
 void Actor_NPC::GetInput( const Input & pInput, int randI, float randF )
 {

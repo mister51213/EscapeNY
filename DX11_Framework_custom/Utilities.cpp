@@ -230,3 +230,9 @@ bool AlignedAxisBoundingBox::Overlaps( const AlignedAxisBoundingBox & AABB ) con
 	return doesOverlap;
 
 }
+
+PhysAttributes::PhysAttributes(const XMFLOAT3& cMass)
+{
+		momentum = velocity * mass;
+		centerOfMass = cMass; // TODO: actor to pass this in in constructor
+}

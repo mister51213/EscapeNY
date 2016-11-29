@@ -3486,14 +3486,14 @@ in the Game class, but is only used for initialization of the Texture and Model 
         <y:ProxyAutoBoundsNode>
           <y:Realizers active="0">
             <y:GroupNode>
-              <y:Geometry height="2259.689412508917" width="2073.38243673774" x="3839.9834986721435" y="-1358.2630584052342"/>
+              <y:Geometry height="2281.0558797920417" width="2084.346822060664" x="3829.0191133492194" y="-1358.2630584052342"/>
               <y:Fill color="#F5F5F5" transparent="false"/>
               <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="100" fontStyle="plain" hasLineColor="false" height="126.509765625" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="2073.38243673774" x="0.0" y="0.0">UML DIAGRAM</y:NodeLabel>
+              <y:NodeLabel alignment="center" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Dialog" fontSize="100" fontStyle="plain" hasLineColor="false" height="126.509765625" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="2084.346822060664" x="0.0" y="0.0">UML DIAGRAM</y:NodeLabel>
               <y:Shape type="roundrectangle"/>
               <y:State closed="false" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
               <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="5" bottomF="4.564501541896334" left="0" leftF="0.0" right="75" rightF="75.21319214138839" top="0" topF="0.0"/>
+              <y:BorderInsets bottom="26" bottomF="25.930968825020955" left="0" leftF="0.0" right="75" rightF="75.21319214138839" top="0" topF="0.0"/>
             </y:GroupNode>
             <y:GroupNode>
               <y:Geometry height="50.0" width="50.0" x="0.0" y="60.0"/>
@@ -3524,9 +3524,10 @@ in the Game class, but is only used for initialization of the Texture and Model 
                 </y:ModelParameter>
               </y:NodeLabel>
               <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
-                <y:AttributeLabel/>
+                <y:AttributeLabel>m_isMovable</y:AttributeLabel>
                 <y:MethodLabel>virtual void UpdateState( const Physics  &amp; Ph ) = 0
-virtual void Update( const float DeltaTime ) = 0</y:MethodLabel>
+virtual void Update( const float DeltaTime ) = 0
+bool GetMobility()</y:MethodLabel>
               </y:UML>
             </y:UMLClassNode>
           </data>
@@ -3535,7 +3536,7 @@ virtual void Update( const float DeltaTime ) = 0</y:MethodLabel>
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="134.93088373676542" width="270.2873533106165" x="3896.699838235301" y="746.930968825021"/>
+              <y:Geometry height="134.93088373676542" width="270.2873533106165" x="3844.0191133492194" y="746.930968825021"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="84.208984375" x="93.03918446780824" y="3.0">Actor_Player<y:LabelModel>
@@ -3556,7 +3557,7 @@ virtual void Update( const float DeltaTime ) = 0</y:MethodLabel>
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="134.93088373676542" width="261.1354284414108" x="4166.987191545917" y="746.930968825021"/>
+              <y:Geometry height="134.93088373676542" width="261.1354284414108" x="4114.306466659836" y="746.930968825021"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="66.8544921875" x="97.1404681269554" y="3.0">Actor_Car<y:LabelModel>
@@ -3603,7 +3604,7 @@ XMFLOAT3 GetOrientation()const
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="134.93088373676542" width="261.1354284414108" x="4428.122619987328" y="746.930968825021"/>
+              <y:Geometry height="134.93088373676542" width="261.1354284414108" x="4375.441895101247" y="746.930968825021"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="95.736328125" x="82.6995501582054" y="3.0">Actor_Monster<y:LabelModel>
@@ -3625,12 +3626,13 @@ void DoAI();</y:MethodLabel>
         </node>
         <node id="n12::n5">
           <data key="d4"/>
+          <data key="d5"><![CDATA[Cannot be interacted with]]></data>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="143.4875631399318" width="300.31432081911316" x="4885.739089684111" y="511.3747960382571"/>
+              <y:Geometry height="143.4875631399318" width="300.31432081911316" x="5235.738790575719" y="511.3747960382571"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="121.8125" x="89.25091040955658" y="3.0">Actor_Static<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="145.181640625" x="77.56634009705658" y="3.0">Actor_Scenery<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -3639,7 +3641,7 @@ void DoAI();</y:MethodLabel>
               </y:NodeLabel>
               <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
                 <y:AttributeLabel/>
-                <y:MethodLabel/>
+                <y:MethodLabel>Cannot be interacted with, doesn't check for collision</y:MethodLabel>
               </y:UML>
             </y:UMLClassNode>
           </data>
@@ -3728,10 +3730,12 @@ Camera
               </y:NodeLabel>
               <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
                 <y:AttributeLabel>const float gravity;</y:AttributeLabel>
-                <y:MethodLabel>XMFLOAT3 MoveToTarget(actor* pActor);
-XMFLOAT3 DoGravity();
-XMFLOAT3 ApplyForce();
-</y:MethodLabel>
+                <y:MethodLabel>PhysAttributes ApplyForce_Conserve();
+PhysAttributes ApplyForce_NonConserve();
+
+void DoPhysics();
+bool CheckCollision();
+XMFLOAT3 CorrectCollision();</y:MethodLabel>
               </y:UML>
             </y:UMLClassNode>
           </data>
@@ -3838,7 +3842,7 @@ Factory<y:LabelModel>
               <y:Geometry height="58.284307097485964" width="211.28573378839565" x="5154.724255125061" y="-1039.1396878537057"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="30" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="40.7529296875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="127.3544921875" x="41.96562080044782" y="3.0">SYSTEM<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="30" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="40.7529296875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="127.3544921875" x="41.96562080044805" y="6.607368285742268">SYSTEM<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -3859,7 +3863,7 @@ Factory<y:LabelModel>
               <y:Geometry height="58.284307097485964" width="211.28573378839565" x="5154.724255125061" y="-1127.4239949511916"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="30" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="40.7529296875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="135.630859375" x="37.82743720669782" y="3.0">WINDOW<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="30" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="40.7529296875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="135.630859375" x="37.82743720669805" y="6.607368285742268">WINDOW<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -3877,7 +3881,7 @@ Factory<y:LabelModel>
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="134.93088373676542" width="261.1354284414108" x="4783.781962937989" y="746.930968825021"/>
+              <y:Geometry height="134.93088373676542" width="261.1354284414108" x="5255.32823676457" y="746.930968825021"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="72.63720703125" x="94.2491107050804" y="3.0">Actor_Tree<y:LabelModel>
@@ -3898,7 +3902,7 @@ Factory<y:LabelModel>
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="134.93088373676542" width="261.1354284414108" x="5071.302274346348" y="746.930968825021"/>
+              <y:Geometry height="134.93088373676542" width="261.1354284414108" x="5542.8485481729285" y="746.930968825021"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="71.90087890625" x="94.6172747675804" y="3.0">Actor_Wall<y:LabelModel>
@@ -3922,7 +3926,7 @@ Factory<y:LabelModel>
               <y:Geometry height="40.00000000000006" width="211.28573378839565" x="3915.5776638742545" y="-1216.7532927802342"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="66.216796875" x="72.53446845669782" y="3.0">TIMER<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="66.216796875" x="72.53446845669805" y="4.26778738839289">TIMER<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -3943,7 +3947,7 @@ Factory<y:LabelModel>
               <y:Geometry height="297.27900810078444" width="461.8658958798983" x="4547.128143022121" y="-1039.1396878537055"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="30" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="40.7529296875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="94.0" x="183.93294793994914" y="3.0">GAME<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="30" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="40.7529296875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="94.0" x="183.93294793994937" y="117.2545296205999">GAME<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -4012,7 +4016,7 @@ void Run()</y:MethodLabel>
           <data key="d4"/>
           <data key="d6">
             <y:UMLClassNode>
-              <y:Geometry height="81.89159078271467" width="211.28573378839565" x="5301.765205814672" y="494.69150706514216"/>
+              <y:Geometry height="81.89159078271467" width="211.28573378839565" x="5584.0642346360055" y="494.69150706514216"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="30" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="40.7529296875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="205.767578125" x="2.759077831697823" y="3.0">Vertex Shader<y:LabelModel>
@@ -4036,7 +4040,7 @@ void Run()</y:MethodLabel>
               <y:Geometry height="40.00000000000006" width="211.28573378839565" x="5550.540379048007" y="-1029.9975343049628"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="64.0" x="73.64286689419782" y="3.0">INPUT<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="64.0" x="73.64286689419805" y="4.26778738839289">INPUT<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -4057,7 +4061,7 @@ void Run()</y:MethodLabel>
               <y:Geometry height="133.89683210621746" width="271.8798989905058" x="3854.9834986721435" y="-1133.7490334165136"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="108.4921875" x="81.6938557452529" y="3.0">GameState<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="108.4921875" x="81.69385574525313" y="47.73911912618428">GameState<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -4147,7 +4151,7 @@ GameOver }
               <y:Geometry height="218.70403501396544" width="271.8798989905049" x="3854.9834986721435" y="-999.852201310296"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="119.60546875" x="76.13721512025245" y="3.0">Game Event<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="119.60546875" x="76.13721512025222" y="87.00223342578579">Game Event<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -4211,6 +4215,28 @@ PARSER<y:LabelModel>
               <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
                 <y:AttributeLabel/>
                 <y:MethodLabel/>
+              </y:UML>
+            </y:UMLClassNode>
+          </data>
+        </node>
+        <node id="n12::n30">
+          <data key="d4"/>
+          <data key="d6">
+            <y:UMLClassNode>
+              <y:Geometry height="134.93088373676542" width="261.1354284414108" x="4636.577323542658" y="746.9309688250211"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="108.7490234375" x="76.1932025019554" y="3.0">Actor_Stationary<y:LabelModel>
+                  <y:SmartNodeLabelModel distance="4.0"/>
+                </y:LabelModel>
+                <y:ModelParameter>
+                  <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="-0.03703090122767855" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+                </y:ModelParameter>
+              </y:NodeLabel>
+              <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
+                <y:AttributeLabel/>
+                <y:MethodLabel>void Update( const float DeltaTime )override
+void CheckCollision()</y:MethodLabel>
               </y:UML>
             </y:UMLClassNode>
           </data>
@@ -4544,22 +4570,6 @@ the way?<y:LabelModel>
           </data>
         </node>
       </graph>
-    </node>
-    <node id="n14">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.start1">
-          <y:Geometry height="40.0" width="80.0" x="9591.655859288301" y="-1475.8732843635967"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="24.021484375" x="27.9892578125" y="10.6494140625">238<y:LabelModel>
-              <y:SmartNodeLabelModel distance="4.0"/>
-            </y:LabelModel>
-            <y:ModelParameter>
-              <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
-            </y:ModelParameter>
-          </y:NodeLabel>
-        </y:GenericNode>
-      </data>
     </node>
     <edge id="n6::e0" source="n6::n6" target="n6::n5">
       <data key="d10">
@@ -6947,7 +6957,7 @@ the way?<y:LabelModel>
     <edge id="n12::e2" source="n12::n2" target="n12::n0">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:Path sx="0.0" sy="0.0" tx="-52.68072488608232" ty="52.2068946474742"/>
           <y:LineStyle color="#000000" type="line" width="5.0"/>
           <y:Arrows source="none" target="white_delta"/>
           <y:BendStyle smoothed="false"/>
@@ -6957,7 +6967,7 @@ the way?<y:LabelModel>
     <edge id="n12::e3" source="n12::n4" target="n12::n0">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="25.73665799724131" sy="-53.92094998058813" tx="0.0" ty="0.0"/>
+          <y:Path sx="25.73665799724131" sy="-53.92094998058813" tx="-9.292321988737058" ty="47.09740996292521"/>
           <y:LineStyle color="#000000" type="line" width="5.0"/>
           <y:Arrows source="none" target="white_delta"/>
           <y:BendStyle smoothed="false"/>
@@ -7673,6 +7683,17 @@ the way?<y:LabelModel>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="5.0"/>
           <y:Arrows source="diamond" target="none"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n12::e38" source="n12::n30" target="n12::n0">
+      <data key="d8"/>
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="25.37065174428517" sy="-58.99804835080454" tx="62.24046359494969" ty="41.987925278376224"/>
+          <y:LineStyle color="#000000" type="line" width="5.0"/>
+          <y:Arrows source="none" target="white_delta"/>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>

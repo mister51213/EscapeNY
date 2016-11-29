@@ -12,6 +12,8 @@ Actor_Player_Alt::Actor_Player_Alt(
 	m_speed(0.2f)
 {
 	m_state = Actor_Dynamic::PLAYER_IDLE;
+	// Set in constructor, and can only be accessed but not changed thereafter
+	m_isMovable = true;
 }
 
 void Actor_Player_Alt::Update( float DeltaTime )

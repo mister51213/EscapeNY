@@ -45,10 +45,14 @@ void Scene_Collision::reset()
 	m_pActorsMASTER.clear();
 
 	// MAP
-	m_map = Actor_NPC( 
+	/*m_map = Actor_NPC( 
 	{ { 0.f, 0.f, 0.f },
 	{ 0.f, 0.f, 0.f },
-	{ 600.f, 400.f, 600.f } }, Energy, ModelSpecs_L(), SOME_EDIFICE );
+	{ 600.f, 400.f, 600.f } }, Energy, ModelSpecs_L(), SOME_EDIFICE );*/
+	m_map = Actor_Stationary( 
+	{ { 0.f, 0.f, 0.f },
+	{ 0.f, 0.f, 0.f },
+	{ 600.f, 400.f, 600.f } }, waterSHALLOW, ModelSpecs_L(), SOME_EDIFICE );
 
     // BALL 1
 	float radius1 = 50.0f;
@@ -65,7 +69,7 @@ void Scene_Collision::reset()
     { { 400.f, 300.f, 0.f },
     { 0.f, 0.f, 0.f },
 	{ radius2, radius2, radius2 } },		
-		eTexture::waterSHALLOW, ModelSpecs_L(), SPHERE);
+		eTexture::Underwater1, ModelSpecs_L(), SPHERE);
 	m_ball2.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
 
 	// LOAD DRAW LIST
@@ -105,6 +109,7 @@ void Scene_Collision::UpdateScene( const Input & InputRef, Camera * const pCamer
 	// CHECK COLLISIONS FOR BALLS
 	CheckCollisions();
 
+	// HANDLE ALL BALLS THAT COLLIDED
 	if ( !m_pActorsOverlapping.empty() )
 	{
 		//m_pActorsOverlapping[ 0 ]->ReboundDP(m_pActorsOverlapping[1]);
@@ -113,7 +118,6 @@ void Scene_Collision::UpdateScene( const Input & InputRef, Camera * const pCamer
 		m_pActorsOverlapping[ 1 ]->Rebound(m_pActorsOverlapping[0]);
 	}
 
-	// HANDLE ALL BALLS THAT COLLIDED (for now)
 	//for ( auto & actor : m_pActorsOverlapping )
 	//{
 		//actor->Stop();

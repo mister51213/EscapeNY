@@ -1,7 +1,5 @@
 #include "Actor_Dynamic.h"
 
-
-
 Actor_Dynamic::Actor_Dynamic(ModelSpecs_W worldSpecs, eTexture tex, ModelSpecs_L localSpecs, eModType modType): 
 	Actor( worldSpecs, tex, localSpecs, modType )
 {
@@ -178,6 +176,11 @@ bool Actor_Dynamic::CollisionTurnedOff()
 XMFLOAT3 Actor_Dynamic::GetInitialPosition() const
 {
 	return m_initalPosition;
+}
+
+bool Actor_Dynamic::CheckMobility()
+{
+	return m_isMovable;
 }
 
 void Actor_Dynamic::PauseCollisionChecking()

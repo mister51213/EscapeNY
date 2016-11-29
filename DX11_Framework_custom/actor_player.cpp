@@ -6,7 +6,10 @@ using namespace DirectX;
 Actor_Player::Actor_Player( const ModelSpecs_W & worldSpecs, eTexture tex, const ModelSpecs_L & localSpecs, eModType modType )
 	:
 	Actor_Dynamic( worldSpecs, tex, localSpecs, modType ) // base constructor
-{}
+{
+	// Set in constructor, and can only be accessed but not changed thereafter
+	m_isMovable = true;
+}
 
 void Actor_Player::GetInput( const Input& pInput, int randI, float randF )
 {

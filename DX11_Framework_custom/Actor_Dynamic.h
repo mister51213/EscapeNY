@@ -24,14 +24,15 @@ public:
 	virtual void Update( float deltaT );
 	void ConstantMove( const float deltaT );
 	void ChaseTarget( const float deltaT );
-	void Rebound_WRONG();
 	void Rebound( Actor_Dynamic * partnerBall );
 	void ReboundDP(Actor_Dynamic* partnerBall);
+	void Rebound_WRONG();
 	void Stop();
 	void PauseCollisionChecking();
 	void ResumeCollisionChecking();
 	bool CollisionTurnedOff();
 	XMFLOAT3 GetInitialPosition() const;
+	bool CheckMobility();
 
 protected: 
 	float integrator;
@@ -45,6 +46,7 @@ protected:
 	float m_integrator = 0.0f;
 
 	bool m_stopCheckFlag = false;
+	bool m_isMovable;
 };
 
 

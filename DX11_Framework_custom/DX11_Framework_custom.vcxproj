@@ -149,7 +149,8 @@
     <ClCompile Include="Actor_NPC.cpp" />
     <ClCompile Include="Actor_Player.cpp" />
     <ClCompile Include="Actor_Player_Alt.cpp" />
-    <ClCompile Include="Actor_Static.cpp" />
+    <ClCompile Include="Actor_Scenery.cpp" />
+    <ClCompile Include="Actor_Stationary.cpp" />
     <ClCompile Include="Algorithm_Grid3D.cpp" />
     <ClCompile Include="Algorithm_Random.cpp" />
     <ClCompile Include="Algorithm_Spiral3D.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="GameEvent.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GameView.cpp" />
+    <ClCompile Include="Physics_NEW.cpp" />
     <ClCompile Include="Scene_FPS.cpp" />
     <ClCompile Include="Scene_Maze.cpp" />
     <ClCompile Include="Algorithm_Maze.cpp" />
@@ -246,7 +248,8 @@
     <ClInclude Include="Actor_NPC.h" />
     <ClInclude Include="Actor_Player.h" />
     <ClInclude Include="Actor_Player_Alt.h" />
-    <ClInclude Include="Actor_Static.h" />
+    <ClInclude Include="Actor_Scenery.h" />
+    <ClInclude Include="Actor_Stationary.h" />
     <ClInclude Include="Algorithm_Grid3D.h" />
     <ClInclude Include="Algorithm_Random.h" />
     <ClInclude Include="Algorithm_Spiral3D.h" />
@@ -257,6 +260,7 @@
     <ClInclude Include="GameEvent.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GameView.h" />
+    <ClInclude Include="Physics_NEW.h" />
     <ClInclude Include="Scene_FPS.h" />
     <ClInclude Include="IGameState.h" />
     <ClInclude Include="ILight.h" />

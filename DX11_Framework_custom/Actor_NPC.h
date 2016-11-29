@@ -21,4 +21,5 @@ public:
 private:
 	void Move( const DirectX::XMFLOAT3 &offset );
 	void Rotate( const DirectX::XMFLOAT3 &rotation );
+
 };

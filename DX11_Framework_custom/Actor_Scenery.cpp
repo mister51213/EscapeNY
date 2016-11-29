@@ -1,6 +1,6 @@
-#include "Actor_Static.h"
+#include "Actor_Scenery.h"
 
-Actor_Static::Actor_Static( 
+Actor_Scenery::Actor_Scenery( 
 	const ModelSpecs_W & worldSpecs, eTexture tex, 
 	const ModelSpecs_L & localSpecs, eModType modType )
 	:

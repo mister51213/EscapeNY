@@ -237,9 +237,6 @@
     <ClCompile Include="GameEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Actor_Static.cpp">
-      <Filter>Source Files\Actors</Filter>
-    </ClCompile>
     <ClCompile Include="Actor_Dynamic.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
@@ -263,6 +260,15 @@
     </ClCompile>
     <ClCompile Include="Scene_Maze.cpp">
       <Filter>Source Files\SubGames</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor_Stationary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor_Scenery.cpp">
+      <Filter>Source Files\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics_NEW.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -455,17 +461,11 @@
     <ClInclude Include="Actor_Dynamic.h">
       <Filter>Header Files\Actors</Filter>
     </ClInclude>
-    <ClInclude Include="Actor_Static.h">
-      <Filter>Header Files\Actors</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files\SubGames</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files\Actors</Filter>
-    </ClInclude>
-    <ClInclude Include="Actor_Car.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DXBoundingMesh.h">
       <Filter>Header Files</Filter>
@@ -478,6 +478,18 @@
     </ClInclude>
     <ClInclude Include="Scene_FPS.h">
       <Filter>Header Files\SubGames</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_Stationary.h">
+      <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_Car.h">
+      <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_Scenery.h">
+      <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics_NEW.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
