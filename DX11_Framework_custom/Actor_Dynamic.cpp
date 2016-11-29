@@ -189,3 +189,8 @@ void Actor_Dynamic::PauseCollisionChecking()
 {
 	m_stopCheckFlag = true;
 }
+
+bool Actor_Dynamic::CheckMobility()
+{
+	return m_isMovable;
+}

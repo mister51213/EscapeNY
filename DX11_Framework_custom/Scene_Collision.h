@@ -4,6 +4,7 @@
 #include "Includes.h"			// Used for std::vector and std::unique_ptr
 #include "Actor_Light.h";		// Used for Actor and Actor_Light
 #include "Actor_NPC.h"			// Used for Actor and Actor_NPC
+#include "Actor_Stationary.h"
 #include "Actor_Player.h"		// Used for Actor and Actor_Player
 #include "Physics.h"			// Used for Physics
 #include "ISubGame.h"			// Used for ISubGame
@@ -66,7 +67,8 @@ private:
 	//////////////////////////////////////
 	Camera* m_pCamera; // dynamic / fixed, different camera angles
 
-	Actor_NPC m_map;
+	//Actor_NPC m_map;
+	Actor_Stationary m_map;
 
 	// TODO: Issue with sharing sphere radius info between actor (for collision) 
 	// TODO: and gameview (for drawing)

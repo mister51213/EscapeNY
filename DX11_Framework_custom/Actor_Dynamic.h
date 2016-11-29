@@ -34,6 +34,7 @@ public:
 	void ReboundDP( Actor_Dynamic* partnerBall = nullptr );
 	void Stop();
 	void PauseCollisionChecking();
+	bool CheckMobility();
 	void ResumeCollisionChecking();
 	bool CollisionTurnedOff();
 	DirectX::XMFLOAT3 GetInitialPosition() const;
@@ -50,6 +51,8 @@ protected:
 	float m_integrator = 0.0f;
 
 	bool m_stopCheckFlag = false;
+
+	bool m_isMovable;
 };
 
 
