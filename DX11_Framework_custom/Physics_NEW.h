@@ -17,6 +17,8 @@ public:
 
 	void DoPhysics();
 
+	void UpdateActor( Actor_Dynamic * pActor, const float deltaT );
+
 	void UpdatePosition( ModelSpecs_W & specs, PhysAttributes & attOld, PhysAttributes & attNew, const float deltaT );
 
 	void UpdateOrientation( ModelSpecs_W & specs, PhysAttributes & attOld, PhysAttributes & attNew, const float deltaT );

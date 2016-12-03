@@ -86,4 +86,5 @@ protected:
 
 public: //TODO: MAKE PROTECTED
 	PhysAttributes m_attributes;
+	PhysAttributes m_attributesPrev;
 };
