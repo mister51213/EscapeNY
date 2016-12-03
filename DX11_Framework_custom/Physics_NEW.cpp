@@ -19,6 +19,12 @@ void ForceEvent(PhysAttributes & attributes ) {}
 
 void UpdateAcceleration(PhysAttributes& attributes ) {}
 
+/*
+NOTE: 
+PhysAttributes struct should be made more smart and have its 
+own functions to calculate its momentum on update, etc.
+*/
+
 void Physics_NEW::UpdateActor( Actor_Dynamic* pActor, const float deltaT )
 {
 	// Store a copy of attributes from last iteration for derivative calculations
