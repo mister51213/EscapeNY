@@ -99,11 +99,11 @@ void Physics::DoPhysics( PhysAttributes& attributes, const float DeltaTime)
 {
 	DirectX::XMFLOAT3 acceleration = ApplyGravity( attributes.mass, DeltaTime );
 	acceleration += ApplyWind( attributes.mass, DeltaTime );
-	//acceleration += ApplyForce1( Mass )*DeltaTime;
-	//acceleration += ApplyForce2( Mass )*DeltaTime;
+	//accelLin += ApplyForce1( Mass )*DeltaTime;
+	//accelLin += ApplyForce2( Mass )*DeltaTime;
 
 	// Apply any physical forces desired, then increment acceleration
-	attributes.acceleration += acceleration;
+	attributes.accelLin += acceleration;
 	// TODO: add this to velocity in actor move function
 }
 
@@ -115,9 +115,9 @@ XMFLOAT3 Physics::ApplyGravity_OLD( const ModelSpecs_W& worldSpecs, PhysAttribut
 
 	// calculate incremental displacement
 	XMFLOAT3 currPosition = worldSpecs.position;
-	if ( attributes.velocity.y < attributes.terminalV )
+	if ( attributes.velocLin.y < attributes.terminalV )
 	{
-		float deltaPosY = ( attributes.velocity.y*deltaT ) + ( Gravity*( deltaT*deltaT ) ) * 0.5f;
+		float deltaPosY = ( attributes.velocLin.y*deltaT ) + ( Gravity*( deltaT*deltaT ) ) * 0.5f;
 		currPosition.y += deltaPosY;
 	}
 	else // Stop accelerating at terminal velocity
@@ -126,7 +126,7 @@ XMFLOAT3 Physics::ApplyGravity_OLD( const ModelSpecs_W& worldSpecs, PhysAttribut
 		currPosition.y += deltaPosY;
 	}
 	// update velocity
-	attributes.velocity.y += Gravity * deltaT;
+	attributes.velocLin.y += Gravity * deltaT;
 
 	return currPosition;
 }

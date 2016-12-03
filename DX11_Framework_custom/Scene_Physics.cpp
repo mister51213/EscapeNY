@@ -1,4 +1,4 @@
-#include "Scene_Collision.h"
+#include "Scene_Physics.h"
 #include "Camera.h"
 #include "D3DGraphics.h"
 #include "DXUtils.h"
@@ -10,7 +10,7 @@
 
 using namespace DirectX;
 
-void Scene_Collision::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const pCamera )
+void Scene_Physics::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const pCamera )
 {
 	// Take a copy of the graphics and direct3d pointers
 	m_pGraphics = pGraphics;
@@ -50,7 +50,7 @@ void Scene_Collision::Initialize( Graphics * pGraphics, Game * const pGame, Came
 	reset();
 }
 
-void Scene_Collision::reset()
+void Scene_Physics::reset()
 {
 	m_pActorsMASTER.clear();
 
@@ -89,7 +89,7 @@ void Scene_Collision::reset()
     m_pActorsMASTER.push_back(&m_map);
 }
 
-void Scene_Collision::UpdateScene( Input & InputRef, Camera * const pCamera, const Physics & refPhysics, const GameTimer & refTimer )
+void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const Physics & refPhysics, const GameTimer & refTimer )
 {
 	// TIMER 
 	#ifdef NDEBUG
@@ -170,7 +170,7 @@ void Scene_Collision::UpdateScene( Input & InputRef, Camera * const pCamera, con
 	}
 }
 
-void Scene_Collision::CheckCollisions()
+void Scene_Physics::CheckCollisions()
 {
 	// TODO: ITERATE through all actors; compare one actor w every other actor in list;
 	// Then do the same for all the other actors
@@ -219,7 +219,7 @@ void Scene_Collision::CheckCollisions()
 
 }
 
-bool Scene_Collision::Overlaps(Actor* pActor1, Actor* pActor2)
+bool Scene_Physics::Overlaps(Actor* pActor1, Actor* pActor2)
 {
 	float collisionDist = pActor1->GetAttributes().radius +
 		pActor2->GetAttributes().radius;
@@ -236,7 +236,7 @@ bool Scene_Collision::Overlaps(Actor* pActor1, Actor* pActor2)
 		return false;
 }
 
-void Scene_Collision::RenderFrame( const GameView & GameViewRef )
+void Scene_Physics::RenderFrame( const GameView & GameViewRef )
 {
 	// LIGHTS
 	SceneBufferType scene{};
@@ -252,7 +252,7 @@ void Scene_Collision::RenderFrame( const GameView & GameViewRef )
    	m_Overlay.Render( *m_pGraphics );
 }
 
-const SceneBufferType & Scene_Collision::GetSceneData() const
+const SceneBufferType & Scene_Physics::GetSceneData() const
 {
 	// TODO: IMPLEMENT THIS
 	return SceneBufferType();

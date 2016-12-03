@@ -16,11 +16,11 @@ class GameTimer;
 class Graphics;
 class Input;
 
-class Scene_Collision: public ISubGame
+class Scene_Physics: public ISubGame
 {
 public:
-	Scene_Collision() = default;
-	~Scene_Collision() = default;
+	Scene_Physics() = default;
+	~Scene_Physics() = default;
 
 	////////////////////////////////////
 	// ISUBGAME FUNCTIONS //////////////
@@ -84,7 +84,6 @@ private:
 	std::vector<std::unique_ptr<Actor>> m_actors_dynamic; // player, NPCs
 	std::vector<std::unique_ptr<Actor>> m_actors_static; // trees, walls, scenery, etc
 	std::vector<Actor*> m_pActorsMASTER;
-	
 	//////////////////////////////////////
 	// COLLISION TESTING /////////////////
 	//////////////////////////////////////	

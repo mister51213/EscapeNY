@@ -27,7 +27,7 @@ public:
 	void ResetPIDParams(const DirectX::XMFLOAT3 &target = { 0.f, 0.f, 0.f });
 
 	virtual void Update( float deltaT );
-	void ConstantMove( const float deltaT );
+	void UpdatePosition( const float deltaT );
 	void ChaseTarget( const float deltaT );
 	void Rebound_WRONG();
 	void Rebound( Actor_Dynamic * partnerBall = nullptr );

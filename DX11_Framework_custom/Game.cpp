@@ -6,6 +6,7 @@
 #include "Scene_FPS.h"
 #include "Scene.h"
 #include "Scene_Collision.h"
+#include "Scene_Physics.h"
 
 using namespace DirectX;
 
@@ -15,8 +16,8 @@ Game::Game( std::shared_ptr<Input> pInput )
 	//m_pActiveScene( new Scene_FPS )
 	//m_pActiveScene( new Scene_Maze )
 	//m_pActiveScene( new Scene )
-	m_pActiveScene( new Scene_Collision )
-
+	//m_pActiveScene( new Scene_Collision )
+	m_pActiveScene( new Scene_Physics )
 {
 	m_pInput = pInput;
 	srand( static_cast<unsigned int>( time( nullptr ) ) );

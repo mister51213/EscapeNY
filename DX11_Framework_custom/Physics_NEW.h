@@ -1,8 +1,13 @@
 #pragma once
 
 #include "Includes.h"
-#include "Utilities.h"
-#include "MathUtils.h"
+
+// FWD DECLARATIONS
+struct AlignedAxisBoundingBox;
+struct ModelSpecs_W;
+struct PhysAttributes;
+class Actor;
+class Actor_Dynamic;
 
 class Physics_NEW
 {
@@ -10,7 +15,24 @@ public:
 	Physics_NEW();
 	~Physics_NEW();
 
-	// Gives back work
+	void DoPhysics();
+
+	void UpdatePosition( ModelSpecs_W & specs, PhysAttributes & attOld, PhysAttributes & attNew, const float deltaT );
+
+	void UpdateOrientation( ModelSpecs_W & specs, PhysAttributes & attOld, PhysAttributes & attNew, const float deltaT );
+
+	bool Overlaps( Actor * pActor1, Actor * pActor2 );
+
+
+
+
+
+
+
+
+
+
+	// CONSERVATIVE - Gives back work
 	/*
 	gravity
 	electric
@@ -25,7 +47,7 @@ public:
 
 	PhysAttributes Force_Conservative(PhysAttributes& partner);
 
-	// Doesn't give back work
+	// NONCONSERVATIVE - Doesn't give back work
 	/*
 	friction
 	drag

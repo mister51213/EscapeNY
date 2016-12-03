@@ -246,9 +246,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
-    <ClCompile Include="Actor_Car.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DXBoundingMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -261,9 +258,6 @@
     <ClCompile Include="Scene_Maze.cpp">
       <Filter>Source Files\SubGames</Filter>
     </ClCompile>
-    <ClCompile Include="Actor_Stationary.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Actor_Scenery.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
@@ -272,6 +266,15 @@
     </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor_Stationary.cpp">
+      <Filter>Source Files\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor_Car.cpp">
+      <Filter>Source Files\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Physics.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -493,6 +496,9 @@
     </ClInclude>
     <ClInclude Include="Physics_NEW.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Physics.h">
+      <Filter>Header Files\SubGames</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

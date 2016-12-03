@@ -91,21 +91,28 @@ constexpr float Gravity = -9.8f; // units are meters/second^2
 struct PhysAttributes
 {
 	PhysAttributes() {}
-
 	// initialize momentum and center of mass here
 	PhysAttributes(DirectX::XMFLOAT3 cMass);
 
-	// would need to calculate this for more realistic physics.
-	float terminalV = 50.0f;
-	DirectX::XMFLOAT3 velocity = { 0.f, 0.f, 0.f };
-	DirectX::XMFLOAT3 acceleration = { 0.f, 0.f, 0.f };
-	DirectX::XMFLOAT3 momentum;
+	DirectX::XMFLOAT3 velocLin = { 0.f, 0.f, 0.f }; // linear velocity
+	DirectX::XMFLOAT3 velocAng = { 0.f, 0.f, 0.f }; // angular velocity
+
+	DirectX::XMFLOAT3 accelLin = { 0.f, 0.f, 0.f };
+	DirectX::XMFLOAT3 accelAng = { 0.f, 0.f, 0.f };
+
+	DirectX::XMFLOAT3 momentumLin;
+	DirectX::XMFLOAT3 momentumAng;
+
 	DirectX::XMFLOAT3 centerOfMass = { 0.f, 0.f, 0.f };
 
+	/// COEFFICIENTS ///
 	float mass = 1.0f;
 	float radius = 1.0f;
 	float energy = 0.0f;
-	
+	float elasticity = 0.0f;
+	// would need to calculate this for more realistic physics.
+	float terminalV = 50.0f;
+
 };
 
 enum eForceType

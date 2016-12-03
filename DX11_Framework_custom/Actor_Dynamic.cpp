@@ -37,7 +37,7 @@ void Actor_Dynamic::Update(float deltaT)
         {
         case STILL:
 		{
-			m_attributes.velocity = { 0.f, 0.f, 0.f };
+			m_attributes.velocLin = { 0.f, 0.f, 0.f };
 			return;
 		}
         case FALLING:
@@ -51,7 +51,7 @@ void Actor_Dynamic::Update(float deltaT)
             }
 		case CONST_MOVE:
             {
-                ConstantMove(deltaT);
+                UpdatePosition(deltaT);
 				break;
             }
         default:
@@ -59,10 +59,10 @@ void Actor_Dynamic::Update(float deltaT)
         }
 }
 
-void Actor_Dynamic::ConstantMove( const float deltaT)
+void Actor_Dynamic::UpdatePosition( const float deltaT)
 {
-	XMFLOAT3 deltaPos = m_attributes.velocity * deltaT;
-    m_worldSpecs.position += deltaPos;
+    XMFLOAT3 deltaPos = m_attributes.velocLin * deltaT;
+	m_worldSpecs.position += deltaPos;
 }
 
 void Actor_Dynamic::ChaseTarget(const float deltaT )
@@ -88,14 +88,14 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 		
 		This is how PID works in the real world.
 		*/
-		m_attributes.acceleration = dirToTarget * error * pCoeff;
-		m_attributes.acceleration += m_attributes.velocity * dCoeff;
+		m_attributes.accelLin = dirToTarget * error * pCoeff;
+		m_attributes.accelLin += m_attributes.velocLin * dCoeff;
 		// TODO: Add friction to damp the speed as it approaches target;
 		// TODO: that way, we won't only rely on P and D coefficients
 
 		////////// UNIVERSAL FINAL CALCULATION ///////
-		m_attributes.velocity += m_attributes.acceleration;
-		XMFLOAT3 displacement = m_attributes.velocity * deltaT;
+		m_attributes.velocLin += m_attributes.accelLin;
+		XMFLOAT3 displacement = m_attributes.velocLin * deltaT;
 		m_worldSpecs.position += displacement;
 }
 
@@ -109,8 +109,8 @@ that is perpendicular to the balls respective flight paths instead.
 
 void Actor_Dynamic::Rebound_WRONG()
 {
-	float reboundMagnitude = Magnitude( m_attributes.velocity );
-	XMFLOAT3 currVeloc = Normalize( m_attributes.velocity );
+	float reboundMagnitude = Magnitude( m_attributes.velocLin );
+	XMFLOAT3 currVeloc = Normalize( m_attributes.velocLin );
 	XMFLOAT3 reverseDir = -currVeloc;
 	XMFLOAT3 newTarget = reverseDir * reboundMagnitude;
 	m_target = newTarget;
@@ -132,9 +132,9 @@ void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
 
 void Actor_Dynamic::ReboundDP(Actor_Dynamic* partnerBall)
 {
-	float reboundMagnitude = Magnitude( m_attributes.velocity );
-	XMFLOAT3 veloc1 = Normalize( m_attributes.velocity );
-	XMFLOAT3 veloc2 = Normalize( partnerBall->GetAttributes().velocity );
+	float reboundMagnitude = Magnitude( m_attributes.velocLin );
+	XMFLOAT3 veloc1 = Normalize( m_attributes.velocLin );
+	XMFLOAT3 veloc2 = Normalize( partnerBall->GetAttributes().velocLin );
 
 	//float DP = DotProduct( veloc2, veloc1 );
 	//TODO: 
