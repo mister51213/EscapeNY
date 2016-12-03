@@ -69,7 +69,8 @@ void Scene_Physics::reset()
 		eTexture::Aluminum, ModelSpecs_L(), SPHERE );
 	m_ball1.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
 	m_ball1.m_attributes.velocLin = { 200.0f,0.f,0.f  };
-	m_ball1.m_attributes.accelLin = { 0.f, -500.f, 0.f };
+	//m_ball1.m_attributes.accelLin = { 0.f, -500.f, 0.f };
+	m_ball1.m_attributes.mass = 100.f;
 
 	// RIGHT BALL
 	float radius2 = 50.0f;
@@ -80,7 +81,8 @@ void Scene_Physics::reset()
 		eTexture::SharkSkin, ModelSpecs_L(), SPHERE);
 	m_ball2.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
 	m_ball2.m_attributes.velocLin = { -200.0f,0.f,0.f  };
-	m_ball2.m_attributes.accelLin = { 0.f, -500.f, 0.f };
+	//m_ball2.m_attributes.accelLin = { 0.f, -500.f, 0.f };
+	m_ball2.m_attributes.mass = 50.f;
 
 	// LOAD DRAW LIST
 	m_pActorsMASTER.reserve( 3 );
@@ -105,7 +107,7 @@ void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const
     m_ball2.GetInput(InputRef);
 
 	// PHYSICS
-	m_physics.DoPhysics();
+	//m_physics.DoPhysics();
 
 	// ACTOR MOVEMENT
 	m_physics.UpdateActor( &m_ball1,tSinceLastFrame);
@@ -141,6 +143,9 @@ void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const
 	{
 		m_spotLights[ i ].SetLookat( m_ball2.GetPosition() );
 	}
+
+	/// INPUT ///
+	GetInput(InputRef, tSinceLastFrame);
 }
 
 void Scene_Physics::CheckCollisions()
@@ -152,6 +157,29 @@ void Scene_Physics::CheckCollisions()
 
 	if(!m_ball2.CollisionTurnedOff())
 		m_pActorsOverlapping.push_back(&m_ball2);
+	}
+}
+
+/// GLOBAL INPUT ///
+void Scene_Physics::GetInput(Input& pInput, float time)
+{
+	// push towards target 0,0,0
+	XMFLOAT3 worldCenter = {0.f, 0.f, 0.f};
+
+	// ball1 mass is 1
+	XMFLOAT3 target1 = worldCenter - m_ball1.GetPosition();
+	Normalize( target1 );
+	target1 *= 300.f;
+
+	// ball1 mass is 0.5
+	XMFLOAT3 target2 = worldCenter - m_ball2.GetPosition();
+	Normalize( target2 );
+	target2 *= 300.f;
+
+	if ( pInput.IsKeyDown( VK_SPACE ))
+	{
+		m_physics.ApplyForce( &m_ball1, target1, time );
+		m_physics.ApplyForce( &m_ball2, target2, time );
 	}
 }
 

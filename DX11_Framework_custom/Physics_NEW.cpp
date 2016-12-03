@@ -30,6 +30,7 @@ void Physics_NEW::UpdateActor( Actor_Dynamic* pActor, const float deltaT )
 	// Store a copy of attributes from last iteration for derivative calculations
 	pActor->m_attributesPrev = pActor->m_attributes;
 	ModelSpecs_W specs = pActor->GetWorldSpecs();
+	//TODO: make this happen automatically within the physAttributes struct
 
 	/// UPDATE POSITION ///
     XMFLOAT3 dispLinear = 
@@ -50,6 +51,18 @@ void Physics_NEW::UpdateActor( Actor_Dynamic* pActor, const float deltaT )
 }
 
 // TODO: Add force (impulse) function
+void Physics_NEW::ApplyForce( Actor_Dynamic* pActor, DirectX::XMFLOAT3 force, float deltaT)
+{
+	DirectX::XMFLOAT3 impulse = force * deltaT;
+	impulse /= pActor->m_attributes.mass;
+	// a = f / m
+	pActor->m_attributes.accelLin += impulse;
+	// SHOULD BE ADDING OR ASSIGNING ABOVE???
+	
+	//TODO: decide when to START and STOP applying the force (impulse)
+}
+
+
 
 // TODO: Add collision function
 

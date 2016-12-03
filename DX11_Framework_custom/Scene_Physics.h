@@ -39,6 +39,8 @@ public:
 
 	void CheckCollisions();
 
+	void GetInput(Input& pInput, float time);
+
 	bool Overlaps( Actor * pActor1, Actor * pActor2 );
 
 private:
