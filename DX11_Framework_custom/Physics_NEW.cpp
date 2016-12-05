@@ -53,13 +53,29 @@ void Physics_NEW::UpdateActor( Actor_Dynamic* pActor, const float deltaT )
 // TODO: Add force (impulse) function
 void Physics_NEW::ApplyForce( Actor_Dynamic* pActor, DirectX::XMFLOAT3 force, float deltaT)
 {
-	DirectX::XMFLOAT3 impulse = force * deltaT;
-	impulse /= pActor->m_attributes.mass;
-	// a = f / m
-	pActor->m_attributes.accelLin += impulse;
+	DirectX::XMFLOAT3 impulse = force * deltaT; // J = F * deltaT
+	XMFLOAT3 deltaVelo = impulse / pActor->m_attributes.mass;
+	pActor->m_attributes.accelLin += deltaVelo; // a = f / m
+
 	// SHOULD BE ADDING OR ASSIGNING ABOVE???
 	
 	//TODO: decide when to START and STOP applying the force (impulse)
+}
+
+void Physics_NEW::AddDrag( Actor_Dynamic* pActor, float deltaT)
+{
+	XMFLOAT3 actorVeloc = pActor->m_attributes.velocLin;
+	float veloMag = Magnitude( actorVeloc );
+
+	if ( veloMag != 0.f )
+	{
+		float dragCoef = 10.f; // note: fulid density and area discounted
+		
+		XMFLOAT3 dragForce = -actorVeloc * abs(veloMag)* dragCoef * 0.5;
+		
+		ApplyForce( pActor, dragForce, deltaT );
+
+	}
 }
 
 

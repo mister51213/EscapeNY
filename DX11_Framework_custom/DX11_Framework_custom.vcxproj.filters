@@ -274,7 +274,7 @@
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
     <ClCompile Include="Scene_Physics.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\SubGames</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

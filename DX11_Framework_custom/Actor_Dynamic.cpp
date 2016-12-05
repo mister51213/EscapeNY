@@ -67,7 +67,7 @@ void Actor_Dynamic::UpdatePosition( const float deltaT)
 
 void Actor_Dynamic::ChaseTarget(const float deltaT )
 {
-		// Store a copy of attributes from last iteration for derivative calculations
+		// Store copy of attributes from last iteration for derivative calculations
 		m_attributesPrev = m_attributes;
 
 		XMFLOAT3 currDistV = m_target - m_worldSpecs.position;

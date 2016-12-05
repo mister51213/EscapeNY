@@ -21,6 +21,8 @@ public:
 
 	void ApplyForce( Actor_Dynamic* pActor, DirectX::XMFLOAT3 force, float deltaT);
 
+	void AddDrag( Actor_Dynamic * pActor, float deltaT );
+
 	void UpdatePosition( ModelSpecs_W & specs, PhysAttributes & attOld, PhysAttributes & attNew, const float deltaT );
 
 	void UpdateOrientation( ModelSpecs_W & specs, PhysAttributes & attOld, PhysAttributes & attNew, const float deltaT );

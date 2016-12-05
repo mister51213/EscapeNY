@@ -11,7 +11,7 @@
 /////////////
 const bool g_fullScreen = false;
 const bool g_vsyncEnabled = true;
-const float g_screenDepth = 3000.0f;
+const float g_screenDepth = 6000.0f;
 const float g_screenNear = 0.1f;
 const UINT g_screenWidth = 800;
 const UINT g_screenHeight = 600;

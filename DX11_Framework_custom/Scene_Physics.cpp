@@ -68,9 +68,9 @@ void Scene_Physics::reset()
 	{ radius1, radius1, radius1 } },
 		eTexture::Aluminum, ModelSpecs_L(), SPHERE );
 	m_ball1.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
-	m_ball1.m_attributes.velocLin = { 200.0f,0.f,0.f  };
+	m_ball1.m_attributes.velocLin = { 0.0f,0.f,0.f  };
 	//m_ball1.m_attributes.accelLin = { 0.f, -500.f, 0.f };
-	m_ball1.m_attributes.mass = 100.f;
+	m_ball1.m_attributes.mass = 50.f;
 
 	// RIGHT BALL
 	float radius2 = 50.0f;
@@ -80,9 +80,9 @@ void Scene_Physics::reset()
 	{ radius2, radius2, radius2 } },		
 		eTexture::SharkSkin, ModelSpecs_L(), SPHERE);
 	m_ball2.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
-	m_ball2.m_attributes.velocLin = { -200.0f,0.f,0.f  };
+	m_ball2.m_attributes.velocLin = { 0.0f,0.f,0.f  };
 	//m_ball2.m_attributes.accelLin = { 0.f, -500.f, 0.f };
-	m_ball2.m_attributes.mass = 50.f;
+	m_ball2.m_attributes.mass = 100.f;
 
 	// LOAD DRAW LIST
 	m_pActorsMASTER.reserve( 3 );
@@ -106,9 +106,10 @@ void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const
     m_ball1.GetInput(InputRef);
     m_ball2.GetInput(InputRef);
 
-	// PHYSICS
-	//m_physics.DoPhysics();
-
+	// PHYSICS FORCES
+	m_physics.AddDrag( &m_ball1,tSinceLastFrame);
+	m_physics.AddDrag( &m_ball2,tSinceLastFrame);
+	
 	// ACTOR MOVEMENT
 	m_physics.UpdateActor( &m_ball1,tSinceLastFrame);
 	m_physics.UpdateActor( &m_ball2,tSinceLastFrame);
