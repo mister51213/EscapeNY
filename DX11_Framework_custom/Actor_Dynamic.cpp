@@ -128,9 +128,23 @@ void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
 	XMFLOAT3 thisTrajectory = m_worldSpecs.position/* - m_initalPosition*/;
 	XMFLOAT3 otherTrajectory = partnerBall->GetPosition() - partnerBall->GetInitialPosition();
 	m_target = thisTrajectory + otherTrajectory/* + m_initalPosition*/;
+	//TODO: cam't use target anymore, have to apply force on other ball
 
 	PauseCollisionChecking();
-	// TODO: fix issue of balls getting stuck together.
+}
+
+XMFLOAT3 Actor_Dynamic::GetReboundFORCE(Actor_Dynamic* partnerBall)
+{
+	// TODO: try replacing current position with target and seeing if it works better
+	// NOTE: initialPosition is added, then subtracted, so they cancel out, but
+	// left them here commented out just to show how the vectors are arrived at visually.
+	XMFLOAT3 thisTrajectory = m_worldSpecs.position/* - m_initalPosition*/;
+	XMFLOAT3 otherTrajectory = partnerBall->GetPosition() - partnerBall->GetInitialPosition();
+	XMFLOAT3 force = thisTrajectory + otherTrajectory/* + m_initalPosition*/;
+
+	PauseCollisionChecking();
+
+	return force;
 }
 
 void Actor_Dynamic::ReboundDP(Actor_Dynamic* partnerBall)

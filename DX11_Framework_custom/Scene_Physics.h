@@ -37,7 +37,7 @@ public:
 	// Use RenderFrame to render the list of actors or other game objects
 	virtual void RenderFrame( const GameView &GameViewRef )override; 
 
-	void PoleCollidedActors();
+	void PoleForCollidedActors();
 
 	void GetInput(Input& pInput, float time);
 

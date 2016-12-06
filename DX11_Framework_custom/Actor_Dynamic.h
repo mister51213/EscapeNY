@@ -31,6 +31,7 @@ public:
 	void ChaseTarget( const float deltaT );
 	void Rebound_WRONG();
 	void Rebound( Actor_Dynamic * partnerBall = nullptr );
+	DirectX::XMFLOAT3 GetReboundFORCE( Actor_Dynamic * partnerBall );
 	void ReboundDP( Actor_Dynamic* partnerBall = nullptr );
 	void Stop();
 	void PauseCollisionChecking();

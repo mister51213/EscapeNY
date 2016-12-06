@@ -143,13 +143,17 @@ void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const
 	m_physics.UpdateActor( &m_box2,tSinceLastFrame);
 
 	// CHECK COLLISIONS FOR BALLS
-	PoleCollidedActors();
+	PoleForCollidedActors();
 
-	// HANDLE ALL BALLS THAT COLLIDED
+	// HANDLE ALL OBJECTS THAT COLLIDED
 	if ( !m_pActorsOverlapping.empty() )
 	{
-		m_pActorsOverlapping[ 0 ]->Rebound(m_pActorsOverlapping[1]);
-		m_pActorsOverlapping[ 1 ]->Rebound(m_pActorsOverlapping[0]);
+		//TODO: REBOUND FUNCTION IS WRONG; don't change target anymore!
+		m_physics.ApplyForce(m_pActorsOverlapping[1], m_pActorsOverlapping[ 0 ]->GetReboundFORCE(m_pActorsOverlapping[1]), tSinceLastFrame);
+		m_physics.ApplyForce(m_pActorsOverlapping[0], m_pActorsOverlapping[ 1 ]->GetReboundFORCE(m_pActorsOverlapping[0]), tSinceLastFrame);
+
+		//m_pActorsOverlapping[ 2 ]->Rebound(m_pActorsOverlapping[3]);
+		//m_pActorsOverlapping[ 3 ]->Rebound(m_pActorsOverlapping[2]);
 	}
 	m_pActorsOverlapping.clear(); // remove them from list
 
@@ -176,7 +180,7 @@ void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const
 	GetInput(InputRef, tSinceLastFrame);
 }
 
-void Scene_Physics::PoleCollidedActors()
+void Scene_Physics::PoleForCollidedActors()
 {
 	// check balls
 	if ( Overlaps( &m_ball1, &m_ball2 ))
