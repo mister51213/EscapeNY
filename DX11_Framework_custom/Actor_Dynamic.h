@@ -45,7 +45,6 @@ protected:
 
 	eActorState m_state;
 	DirectX::XMFLOAT3 m_target = { 0.0f,0.0f,0.0f };
-
 	DirectX::XMFLOAT3 m_initalPosition = { 0.0f, 0.0f, 0.0f };
 	DirectX::XMFLOAT3 m_initialHeading = { 0.0f, 0.0f, 0.0f };
 	float m_halfway = 0.0f;
@@ -54,6 +53,9 @@ protected:
 	bool m_stopCheckFlag = false;
 
 	bool m_isMovable;
+
+public: //TODO: make private
+	DirectX::XMFLOAT3 m_previousPosition = { 0.0f, 0.0f, 0.0f };
 };
 
 

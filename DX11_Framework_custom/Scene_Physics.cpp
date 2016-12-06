@@ -149,6 +149,8 @@ void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const
 	if ( !m_pActorsOverlapping.empty() )
 	{
 		//TODO: REBOUND FUNCTION IS WRONG; don't change target anymore!
+
+		//TODO: getting out of range exception; change to loop through each value in pActorsOverlapping
 		m_physics.ApplyForce(m_pActorsOverlapping[1], m_pActorsOverlapping[ 0 ]->GetReboundFORCE(m_pActorsOverlapping[1]), tSinceLastFrame);
 		m_physics.ApplyForce(m_pActorsOverlapping[0], m_pActorsOverlapping[ 1 ]->GetReboundFORCE(m_pActorsOverlapping[0]), tSinceLastFrame);
 
@@ -183,7 +185,7 @@ void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const
 void Scene_Physics::PoleForCollidedActors()
 {
 	// check balls
-	if ( Overlaps( &m_ball1, &m_ball2 ))
+	if ( CircleVsCircle( &m_ball1, &m_ball2 )) //TODO: change to global checker
 	{
 	if(!m_ball1.CollisionTurnedOff())
 		m_pActorsOverlapping.push_back(&m_ball1);
@@ -193,7 +195,7 @@ void Scene_Physics::PoleForCollidedActors()
 	}
 
 	// check boxes
-	if ( Overlaps( &m_box1, &m_box2 ))
+	if ( CircleVsCircle( &m_box1, &m_box2 )) //TODO: change to global checker
 	{
 	if(!m_box1.CollisionTurnedOff())
 		m_pActorsOverlapping.push_back(&m_box1);

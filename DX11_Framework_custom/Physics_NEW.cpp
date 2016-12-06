@@ -27,7 +27,8 @@ own functions to calculate its momentum on update, etc.
 
 void Physics_NEW::UpdateActor( Actor_Dynamic* pActor, const float deltaT )
 {
-	// Store a copy of attributes from last iteration for derivative calculations
+	// Store a copy of position and attributes from last iteration for derivative calculations
+	pActor->m_previousPosition = pActor->GetPosition();
 	pActor->m_attributesPrev = pActor->m_attributes;
 	ModelSpecs_W specs = pActor->GetWorldSpecs();
 	//TODO: make this happen automatically within the physAttributes struct

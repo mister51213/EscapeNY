@@ -139,9 +139,11 @@ XMFLOAT3 Actor_Dynamic::GetReboundFORCE(Actor_Dynamic* partnerBall)
 	// NOTE: initialPosition is added, then subtracted, so they cancel out, but
 	// left them here commented out just to show how the vectors are arrived at visually.
 	XMFLOAT3 thisTrajectory = m_worldSpecs.position/* - m_initalPosition*/;
-	XMFLOAT3 otherTrajectory = partnerBall->GetPosition() - partnerBall->GetInitialPosition();
+	XMFLOAT3 otherTrajectory = partnerBall->GetPosition() - partnerBall->m_previousPosition;
 	XMFLOAT3 force = thisTrajectory + otherTrajectory/* + m_initalPosition*/;
 
+	// TODO: We aren't using the PID function anymore so initialPosition is no longer being set!
+	// TODO: add a new member variable - PREVIOUS POSITION - to be set every update actor call.
 	PauseCollisionChecking();
 
 	return force;
@@ -201,6 +203,8 @@ XMFLOAT3 Actor_Dynamic::GetInitialPosition() const
 {
 	return m_initalPosition;
 }
+
+
 
 void Actor_Dynamic::PauseCollisionChecking()
 {
