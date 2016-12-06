@@ -1,5 +1,7 @@
 #include "Actor_Stationary.h"
 
+/// This is a more appropriate class than actor static ///
+
 Actor_Stationary::Actor_Stationary( 
 	const ModelSpecs_W & worldSpecs, 
 	eTexture tex, 
