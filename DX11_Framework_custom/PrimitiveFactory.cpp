@@ -131,174 +131,6 @@ void PrimitiveFactory::CreatePlaneNM( const ModelSpecs_L & Specs )
 	}
 }
 
-void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
-{
-	auto CreateVertexList = [ &Specs ]()->std::vector<DirectX::XMFLOAT3>
-	{
-		auto extentHalf = Specs.size * .5f;
-
-		return std::vector<DirectX::XMFLOAT3>
-		{
-			// Left
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-
-				// Right
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-
-				// Bottom
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-
-				// Top
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-
-				// Front
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
-
-				// Back
-			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
-			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z }
-		};
-	};
-	auto CreateNormalsList = []()->std::vector<DirectX::XMFLOAT3>
-	{
-		return std::vector<DirectX::XMFLOAT3>
-		{
-			// Left
-			{ -1.f, 0.f, 0.f },
-			{ -1.f, 0.f, 0.f },
-			{ -1.f, 0.f, 0.f },
-			{ -1.f, 0.f, 0.f },
-			{ -1.f, 0.f, 0.f },
-			{ -1.f, 0.f, 0.f },
-
-				// Right
-			{ 1.f, 0.f, 0.f },
-			{ 1.f, 0.f, 0.f },
-			{ 1.f, 0.f, 0.f },
-			{ 1.f, 0.f, 0.f },
-			{ 1.f, 0.f, 0.f },
-			{ 1.f, 0.f, 0.f },
-
-				// Bottom
-			{ 0.f, -1.f, 0.f },
-			{ 0.f, -1.f, 0.f },
-			{ 0.f, -1.f, 0.f },
-			{ 0.f, -1.f, 0.f },
-			{ 0.f, -1.f, 0.f },
-			{ 0.f, -1.f, 0.f },
-
-				// Top
-			{ 0.f, 1.f, 0.f },
-			{ 0.f, 1.f, 0.f },
-			{ 0.f, 1.f, 0.f },
-			{ 0.f, 1.f, 0.f },
-			{ 0.f, 1.f, 0.f },
-			{ 0.f, 1.f, 0.f },
-
-				// Front
-			{ 0.f, 0.f, -1.f },
-			{ 0.f, 0.f, -1.f },
-			{ 0.f, 0.f, -1.f },
-			{ 0.f, 0.f, -1.f },
-			{ 0.f, 0.f, -1.f },
-			{ 0.f, 0.f, -1.f },
-
-				// Back
-			{ 0.f, 0.f, 1.f },
-			{ 0.f, 0.f, 1.f },
-			{ 0.f, 0.f, 1.f },
-			{ 0.f, 0.f, 1.f },
-			{ 0.f, 0.f, 1.f },
-			{ 0.f, 0.f, 1.f }
-		};
-	};
-	auto CreateUVList = []()
-	{
-		return std::vector<XMFLOAT2>
-		{
-			// Left
-			{ 0.f, 0.f },
-			{ 1.f, 0.f },
-			{ 0.f, 1.f },
-			{ 0.f, 1.f },
-			{ 1.f, 0.f },
-			{ 1.f, 1.f },
-				// Right
-			{ 0.f, 0.f },
-			{ 1.f, 0.f },
-			{ 0.f, 1.f },
-			{ 0.f, 1.f },
-			{ 1.f, 0.f },
-			{ 1.f, 1.f },
-				// Bottom
-			{ 0.f, 0.f },
-			{ 1.f, 0.f },
-			{ 0.f, 1.f },
-			{ 0.f, 1.f },
-			{ 1.f, 0.f },
-			{ 1.f, 1.f },
-				// Top
-			{ 0.f, 0.f },
-			{ 1.f, 0.f },
-			{ 0.f, 1.f },
-			{ 0.f, 1.f },
-			{ 1.f, 0.f },
-			{ 1.f, 1.f },
-				// Front
-			{ 0.f, 0.f },
-			{ 1.f, 0.f },
-			{ 0.f, 1.f },
-			{ 0.f, 1.f },
-			{ 1.f, 0.f },
-			{ 1.f, 1.f },
-				// Back
-			{ 0.f, 0.f },
-			{ 1.f, 0.f },
-			{ 0.f, 1.f },
-			{ 0.f, 1.f },
-			{ 1.f, 0.f },
-			{ 1.f, 1.f }
-		};
-	};
-
-	PrimitiveFactory::ClearAllBuffers();
-
-	PrimitiveFactory::vertices = CreateVertexList();
-	PrimitiveFactory::normals = CreateNormalsList();
-	PrimitiveFactory::uvs = CreateUVList();
-
-	Common( Specs );
-}
-
 void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float radiusGlobe )
 {
 	//TODO: RIGHT NOW, Game and subGame dont know about radiusGlobe,
@@ -499,6 +331,175 @@ void PrimitiveFactory::CreateSphereNM( const ModelSpecs_L &Specs, const float ra
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
+void PrimitiveFactory::CreateCube( const ModelSpecs_L &Specs )
+{
+	auto CreateVertexList = [ &Specs ]()->std::vector<DirectX::XMFLOAT3>
+	{
+		// TODO: couldnt this just be a float, not xmfloat3?
+		DirectX::XMFLOAT3 extentHalf = Specs.size * .5f;
+
+		return std::vector<DirectX::XMFLOAT3>
+		{
+			// Left
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+
+				// Right
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+
+				// Bottom
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+
+				// Top
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+
+				// Front
+	    	{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+	/*MIN*/ { Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z - extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z - extentHalf.z },
+
+				// Back
+	/*MAX*/	{ Specs.center.x + extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x + extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y + extentHalf.y, Specs.center.z + extentHalf.z },
+			{ Specs.center.x - extentHalf.x, Specs.center.y - extentHalf.y, Specs.center.z + extentHalf.z }
+		};
+	};
+	auto CreateNormalsList = []()->std::vector<DirectX::XMFLOAT3>
+	{
+		return std::vector<DirectX::XMFLOAT3>
+		{
+			// Left
+			{ -1.f, 0.f, 0.f },
+			{ -1.f, 0.f, 0.f },
+			{ -1.f, 0.f, 0.f },
+			{ -1.f, 0.f, 0.f },
+			{ -1.f, 0.f, 0.f },
+			{ -1.f, 0.f, 0.f },
+
+				// Right
+			{ 1.f, 0.f, 0.f },
+			{ 1.f, 0.f, 0.f },
+			{ 1.f, 0.f, 0.f },
+			{ 1.f, 0.f, 0.f },
+			{ 1.f, 0.f, 0.f },
+			{ 1.f, 0.f, 0.f },
+
+				// Bottom
+			{ 0.f, -1.f, 0.f },
+			{ 0.f, -1.f, 0.f },
+			{ 0.f, -1.f, 0.f },
+			{ 0.f, -1.f, 0.f },
+			{ 0.f, -1.f, 0.f },
+			{ 0.f, -1.f, 0.f },
+
+				// Top
+			{ 0.f, 1.f, 0.f },
+			{ 0.f, 1.f, 0.f },
+			{ 0.f, 1.f, 0.f },
+			{ 0.f, 1.f, 0.f },
+			{ 0.f, 1.f, 0.f },
+			{ 0.f, 1.f, 0.f },
+
+				// Front
+			{ 0.f, 0.f, -1.f },
+			{ 0.f, 0.f, -1.f },
+			{ 0.f, 0.f, -1.f },
+			{ 0.f, 0.f, -1.f },
+			{ 0.f, 0.f, -1.f },
+			{ 0.f, 0.f, -1.f },
+
+				// Back
+			{ 0.f, 0.f, 1.f },
+			{ 0.f, 0.f, 1.f },
+			{ 0.f, 0.f, 1.f },
+			{ 0.f, 0.f, 1.f },
+			{ 0.f, 0.f, 1.f },
+			{ 0.f, 0.f, 1.f }
+		};
+	};
+	auto CreateUVList = []()
+	{
+		return std::vector<XMFLOAT2>
+		{
+			// Left
+			{ 0.f, 0.f },
+			{ 1.f, 0.f },
+			{ 0.f, 1.f },
+			{ 0.f, 1.f },
+			{ 1.f, 0.f },
+			{ 1.f, 1.f },
+				// Right
+			{ 0.f, 0.f },
+			{ 1.f, 0.f },
+			{ 0.f, 1.f },
+			{ 0.f, 1.f },
+			{ 1.f, 0.f },
+			{ 1.f, 1.f },
+				// Bottom
+			{ 0.f, 0.f },
+			{ 1.f, 0.f },
+			{ 0.f, 1.f },
+			{ 0.f, 1.f },
+			{ 1.f, 0.f },
+			{ 1.f, 1.f },
+				// Top
+			{ 0.f, 0.f },
+			{ 1.f, 0.f },
+			{ 0.f, 1.f },
+			{ 0.f, 1.f },
+			{ 1.f, 0.f },
+			{ 1.f, 1.f },
+				// Front
+			{ 0.f, 0.f },
+			{ 1.f, 0.f },
+			{ 0.f, 1.f },
+			{ 0.f, 1.f },
+			{ 1.f, 0.f },
+			{ 1.f, 1.f },
+				// Back
+			{ 0.f, 0.f },
+			{ 1.f, 0.f },
+			{ 0.f, 1.f },
+			{ 0.f, 1.f },
+			{ 1.f, 0.f },
+			{ 1.f, 1.f }
+		};
+	};
+
+	PrimitiveFactory::ClearAllBuffers();
+
+	PrimitiveFactory::vertices = CreateVertexList();
+	PrimitiveFactory::normals = CreateNormalsList();
+	PrimitiveFactory::uvs = CreateUVList();
+
+	Common( Specs );
+}
+
 void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )
 {
 	CreateCube( Specs );
@@ -526,6 +527,8 @@ void PrimitiveFactory::CreateCubeNM( const ModelSpecs_L & Specs )
 		normals[ i + 2 ] = normals[ i + 1 ] = normals[ i ];
 	}
 }
+
+//TODO: make function to invert a primitive for game board, etc
 
 void PrimitiveFactory::CreateMeshNM( const wstring & Filename )
 {

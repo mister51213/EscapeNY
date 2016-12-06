@@ -37,9 +37,17 @@ public:
 	// Use RenderFrame to render the list of actors or other game objects
 	virtual void RenderFrame( const GameView &GameViewRef )override; 
 
-	void CheckCollisions();
+	void PoleCollidedActors();
 
 	void GetInput(Input& pInput, float time);
+
+	bool CircleVsCircle( Actor * pActor1, Actor * pActor2 );
+
+	bool CircleVsBox( Actor * pActor1, Actor * pActor2 );
+
+	bool AABBvsAABB( Actor * pActor1, Actor * pActor2 );
+
+	bool BoxVsBox( Actor * pActor1, Actor * pActor2 );
 
 	bool Overlaps( Actor * pActor1, Actor * pActor2 );
 
@@ -69,10 +77,12 @@ private:
 	Actor_Stationary m_map;
 	Actor_Player m_ball1;
 	Actor_Player m_ball2;
-
+	Actor_Player m_box1;
+	Actor_Player m_box2;
 	float m_radiusB1; 
 	float m_radiusB2;
 	int m_numBalls = 2;
+	int m_numBoxes = 2;
 	int m_numLights = 8;
 	int m_lightsPerBall = m_numLights / m_numBalls;
 

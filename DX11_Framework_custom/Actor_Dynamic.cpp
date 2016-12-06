@@ -15,7 +15,7 @@ Actor_Dynamic::Actor_Dynamic( const ModelSpecs_W &worldSpecs,
 
 void Actor_Dynamic::SetState(eActorState state)
 {
-	    m_state = state;
+	 m_state = state;
 }
 
 Actor_Dynamic::eActorState Actor_Dynamic::GetState() const

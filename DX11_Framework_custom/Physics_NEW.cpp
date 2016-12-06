@@ -36,14 +36,16 @@ void Physics_NEW::UpdateActor( Actor_Dynamic* pActor, const float deltaT )
     XMFLOAT3 dispLinear = 
 		pActor->m_attributesPrev.velocLin*deltaT + 
 		pActor->m_attributes.accelLin * deltaT*deltaT * 0.5;
-		pActor->m_attributes.velocLin += pActor->m_attributes.accelLin * deltaT;
+	XMFLOAT3 avgAccel = ( pActor->m_attributesPrev.accelLin + pActor->m_attributes.accelLin ) *0.5;
+	pActor->m_attributes.velocLin += avgAccel * deltaT;
 	specs.position = specs.position + dispLinear;
 
 	/// UPDATE ROTATION ///
 	XMFLOAT3 dispAngular = 
 		pActor->m_attributesPrev.velocAng*deltaT + 
 		pActor->m_attributes.accelAng * deltaT*deltaT * 0.5;
-		pActor->m_attributes.velocAng += pActor->m_attributes.accelAng * deltaT;
+	XMFLOAT3 avgAccAng = ( pActor->m_attributesPrev.accelAng + pActor->m_attributes.accelAng ) *0.5;
+	pActor->m_attributes.velocAng += avgAccAng * deltaT;
 	specs.orientation = specs.orientation + dispAngular;
 
 	/// GIVE ACTOR UPDATED SPECS ///
@@ -53,13 +55,8 @@ void Physics_NEW::UpdateActor( Actor_Dynamic* pActor, const float deltaT )
 // TODO: Add force (impulse) function
 void Physics_NEW::ApplyForce( Actor_Dynamic* pActor, DirectX::XMFLOAT3 force, float deltaT)
 {
-	DirectX::XMFLOAT3 impulse = force * deltaT; // J = F * deltaT
-	XMFLOAT3 deltaVelo = impulse / pActor->m_attributes.mass;
-	pActor->m_attributes.accelLin += deltaVelo; // a = f / m
-
-	// SHOULD BE ADDING OR ASSIGNING ABOVE???
-	
-	//TODO: decide when to START and STOP applying the force (impulse)
+	DirectX::XMFLOAT3 accelApplied = force / pActor->m_attributes.mass; // a = f / m
+	pActor->m_attributes.accelLin += accelApplied * deltaT; 
 }
 
 void Physics_NEW::AddDrag( Actor_Dynamic* pActor, float deltaT)
@@ -69,9 +66,10 @@ void Physics_NEW::AddDrag( Actor_Dynamic* pActor, float deltaT)
 
 	if ( veloMag != 0.f )
 	{
-		float dragCoef = 10.f; // note: fulid density and area discounted
+		float dragCoef = .1f; // note: fulid density and area discounted
 		
-		XMFLOAT3 dragForce = -actorVeloc * abs(veloMag)* dragCoef * 0.5;
+		XMFLOAT3 dragForce = actorVeloc * veloMag * dragCoef; // calculate
+		dragForce = -dragForce; // negate
 		
 		ApplyForce( pActor, dragForce, deltaT );
 
@@ -114,6 +112,7 @@ bool Physics_NEW::Overlaps(Actor* pActor1, Actor* pActor2)
 	XMFLOAT3 distVector = pActor1->GetWorldSpecs().position -
 		pActor2->GetWorldSpecs().position;
 	float actorDistance = Magnitude( distVector );
+	//TODO: optimize this by comparing a^2 + b^2 = c^2 and not calculating distance
 
 	if ( abs( actorDistance ) <= collisionDist )
 	{

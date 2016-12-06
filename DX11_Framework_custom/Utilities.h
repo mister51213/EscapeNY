@@ -178,6 +178,17 @@ struct ModelSpecs_L
 	DirectX::XMFLOAT3 size;
 };
 
+// this will be initialized when actor is created.
+// holds top left and bottom right corners of axis alligned bounding box
+struct AABB
+{
+	AABB() = default;
+	AABB(const ModelSpecs_L& localSpecs);
+    DirectX::XMFLOAT3 m_extentHalf;
+	DirectX::XMFLOAT3 m_min;
+    DirectX::XMFLOAT3 m_max;
+};
+
 enum eModType
 {
 	CUBE,

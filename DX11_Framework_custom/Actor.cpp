@@ -8,7 +8,8 @@ Actor::Actor( const ModelSpecs_W & worldSpecs, eTexture tex, const ModelSpecs_L 
 	m_worldSpecs( worldSpecs ),
 	m_localSpecs( localSpecs ),
 	m_texIndex( tex ),
-	m_modType( modType )
+	m_modType( modType ),
+	m_AABBox(localSpecs)
 {}
 
 Actor::~Actor()
