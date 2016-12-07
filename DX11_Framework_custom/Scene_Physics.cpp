@@ -60,56 +60,30 @@ void Scene_Physics::reset()
 	{ 0.f, 0.f, 0.f },
 	{ 600.f, 400.f, 600.f } }, waterSHALLOW, ModelSpecs_L(), SOME_EDIFICE );
 
-    // LEFT BALL
-	float radius1 = 50.0f;
-    m_ball1 = Actor_Player(
-	{ { -400.f, 300.f, -0.f },
-	{ 0.f, 0.f, 0.f },
-	{ radius1, radius1, radius1 } },
-		eTexture::Aluminum, ModelSpecs_L(), SPHERE );
-	m_ball1.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
-	m_ball1.m_attributes.velocLin = { 0.0f,0.f,0.f  };
-	//m_ball1.m_attributes.accelLin = { 0.f, -500.f, 0.f };
-	m_ball1.m_attributes.mass = 50.f;
-
-	// RIGHT BALL
-	float radius2 = 50.0f;
-	m_ball2 = Actor_Player(
-    { { 400.f, 300.f, 0.f },
-    { 0.f, 0.f, 0.f },
-	{ radius2, radius2, radius2 } },		
-		eTexture::SharkSkin, ModelSpecs_L(), SPHERE);
-	m_ball2.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
-	m_ball2.m_attributes.velocLin = { 0.0f,0.f,0.f  };
-	//m_ball2.m_attributes.accelLin = { 0.f, -500.f, 0.f };
-	m_ball2.m_attributes.mass = 50.f;
-
 	// LEFT BOX
+	float size1 = 10.f;
     m_box1 = Actor_Player(
 	{ { -400.f, 0.f, -0.f },
 	{ 0.f, 0.f, 0.f },
-	{ radius1, radius1, radius1 } },
+	{ size1, size1, size1 } },
 		eTexture::Aluminum, ModelSpecs_L(), CUBE_TEXTURED );
-	m_box1.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
-	m_box1.m_attributes.velocLin = { 0.0f,0.f,0.f  };
+	m_box1.m_attributes.radius = 5.f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
 	//m_ball1.m_attributes.accelLin = { 0.f, -500.f, 0.f };
 	m_box1.m_attributes.mass = 250.f;
 
 	// RIGHT BOX
+	float size2 = 10.f;
 	m_box2 = Actor_Player(
     { { 400.f, 0.f, 0.f },
     { 0.f, 0.f, 0.f },
-	{ radius2, radius2, radius2 } },		
+	{ size2, size2, size2 } },		
 		eTexture::SharkSkin, ModelSpecs_L(), CUBE_TEXTURED);
-	m_box2.m_attributes.radius = 50.0f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
-	m_box2.m_attributes.velocLin = { 0.0f,0.f,0.f  };
+	m_box2.m_attributes.radius = 5.f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
 	//m_ball2.m_attributes.accelLin = { 0.f, -500.f, 0.f };
 	m_box2.m_attributes.mass = 100.f;
 
 	// LOAD DRAW LIST
-	m_pActorsMASTER.reserve( m_numBalls+m_numBoxes+1 );
-	m_pActorsMASTER.push_back(&m_ball1);
-	m_pActorsMASTER.push_back(&m_ball2);
+	m_pActorsMASTER.reserve( m_numBoxes+1 );
 	m_pActorsMASTER.push_back(&m_box1);
 	m_pActorsMASTER.push_back(&m_box2);
     m_pActorsMASTER.push_back(&m_map);
@@ -127,18 +101,10 @@ void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const
     // INPUT
     m_pCamera->GetInput(InputRef);
     m_pCamera->GetMouseInput(InputRef);
-    m_ball1.GetInput(InputRef);
-    m_ball2.GetInput(InputRef);
     m_box1.GetInput(InputRef);
     m_box2.GetInput(InputRef);
-
-	// PHYSICS FORCES
-	//m_physics.AddDrag( &m_ball1,tSinceLastFrame);
-	//m_physics.AddDrag( &m_ball2,tSinceLastFrame);
 	
 	// ACTOR MOVEMENT
-	m_physics.UpdateActor( &m_ball1,tSinceLastFrame);
-	m_physics.UpdateActor( &m_ball2,tSinceLastFrame);
 	m_physics.UpdateActor( &m_box1,tSinceLastFrame);
 	m_physics.UpdateActor( &m_box2,tSinceLastFrame);
 
@@ -148,21 +114,26 @@ void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const
 	// HANDLE ALL OBJECTS THAT COLLIDED
 	if ( !m_pActorsOverlapping.empty() )
 	{
-		//TODO: REBOUND FUNCTION IS WRONG; don't change target anymore!
-
 		//TODO: getting out of range exception; change to loop through each value in pActorsOverlapping
-		m_physics.ApplyForce(m_pActorsOverlapping[1], m_pActorsOverlapping[ 0 ]->GetReboundFORCE(m_pActorsOverlapping[1]), tSinceLastFrame);
-		m_physics.ApplyForce(m_pActorsOverlapping[0], m_pActorsOverlapping[ 1 ]->GetReboundFORCE(m_pActorsOverlapping[0]), tSinceLastFrame);
+		//m_physics.ApplyForce(
+		//	m_pActorsOverlapping[0], 
+		//	m_pActorsOverlapping[ 0 ]->GetReboundForce(m_pActorsOverlapping[1]), 
+		//	tSinceLastFrame);
+		//m_physics.ApplyForce(
+		//	m_pActorsOverlapping[1], 
+		//	m_pActorsOverlapping[ 1 ]->GetReboundForce(m_pActorsOverlapping[0]), 
+		//	tSinceLastFrame);
 
-		//m_pActorsOverlapping[ 2 ]->Rebound(m_pActorsOverlapping[3]);
-		//m_pActorsOverlapping[ 3 ]->Rebound(m_pActorsOverlapping[2]);
+		m_pActorsOverlapping[ 0 ]->Stop();
+		m_pActorsOverlapping[ 1 ]->Stop();
+
 	}
 	m_pActorsOverlapping.clear(); // remove them from list
 
 	// NOW RESUME COLLISION CHECKING ONCE BALLS HAVE BROKEN AWAY FROM EACH OTHER
 	for ( auto & actor : m_pActorsMASTER )
 	{
-		if ( !CircleVsCircle(&m_ball1, &m_ball2) ) // TODO: make it polymorphic for all shapes
+		if ( !CircleVsCircle(&m_box1, &m_box2) ) // TODO: make it polymorphic for all shapes
 		{
 			dynamic_cast< Actor_Dynamic* >( actor )->ResumeCollisionChecking();
 		}
@@ -171,11 +142,11 @@ void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const
 	// LIGHTS distributed among balls
 	for ( int i = 0; i < m_lightsPerBall; i++ )
 	{
-		m_spotLights[i].SetLookat( m_ball1.GetPosition() );
+		m_spotLights[i].SetLookat( m_box1.GetPosition() );
 	}
 	for ( int i = m_lightsPerBall; i < m_numLights; i++ )
 	{
-		m_spotLights[ i ].SetLookat( m_ball2.GetPosition() );
+		m_spotLights[ i ].SetLookat( m_box2.GetPosition() );
 	}
 
 	/// INPUT ///
@@ -184,18 +155,8 @@ void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const
 
 void Scene_Physics::PoleForCollidedActors()
 {
-	// check balls
-	if ( CircleVsCircle( &m_ball1, &m_ball2 )) //TODO: change to global checker
-	{
-	if(!m_ball1.CollisionTurnedOff())
-		m_pActorsOverlapping.push_back(&m_ball1);
-
-	if(!m_ball2.CollisionTurnedOff())
-		m_pActorsOverlapping.push_back(&m_ball2);
-	}
-
 	// check boxes
-	if ( CircleVsCircle( &m_box1, &m_box2 )) //TODO: change to global checker
+	if ( AABBvsAABB( &m_box1, &m_box2 )) //TODO: change to global checker
 	{
 	if(!m_box1.CollisionTurnedOff())
 		m_pActorsOverlapping.push_back(&m_box1);
@@ -212,16 +173,6 @@ void Scene_Physics::GetInput(Input& pInput, float time)
 	// push towards target 0,0,0
 	XMFLOAT3 worldCenter = {0.f, 0.f, 0.f};
 
-	// ball1 mass is 1
-	XMFLOAT3 target1 = worldCenter - m_ball1.GetPosition();
-	Normalize( target1 );
-	target1 *= 300.f; // force magnitude
-
-	// ball2 mass is 0.5
-	XMFLOAT3 target2 = worldCenter - m_ball2.GetPosition();
-	Normalize( target2 );
-	target2 *= 300.f; // force magnitude
-
 	// box1 mass is 1
 	XMFLOAT3 targetB1 = worldCenter - m_box1.GetPosition();
 	Normalize( targetB1 );
@@ -234,8 +185,6 @@ void Scene_Physics::GetInput(Input& pInput, float time)
 
 	if ( pInput.IsKeyDown( VK_SPACE ))
 	{
-		m_physics.ApplyForce( &m_ball1, target1, time );
-		m_physics.ApplyForce( &m_ball2, target2, time );
 		m_physics.ApplyForce( &m_box1, targetB1, time );
 		m_physics.ApplyForce( &m_box2, targetB2, time );
 	}
@@ -277,12 +226,12 @@ bool Scene_Physics::AABBvsAABB( Actor* pActor1, Actor* pActor2 )
 	AABB box2 = pActor2->m_AABBox;
 
 	// Exit with no intersection if found separated along an axis
-	if ( box1.m_max.x < box2.m_min.x || box1.m_min.x > box2.m_max.x ) return false;
-	if ( box1.m_max.y < box2.m_min.y || box1.m_min.y > box2.m_max.y ) return false;
-	if ( box1.m_max.z < box2.m_min.z || box1.m_min.z > box2.m_max.z ) return false;
+	if ( box1.m_max.x < box2.m_min.x || box1.m_min.x > box2.m_max.x ) return true;
+	if ( box1.m_max.y < box2.m_min.y || box1.m_min.y > box2.m_max.y ) return true;
+	if ( box1.m_max.z < box2.m_min.z || box1.m_min.z > box2.m_max.z ) return true;
  
   // No separating axis found, therefore there is at least one overlapping axis
-	return true;
+	return false;
 }
 
 // non axis alligned bounding boxes

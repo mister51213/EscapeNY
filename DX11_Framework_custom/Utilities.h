@@ -183,7 +183,7 @@ struct ModelSpecs_L
 struct AABB
 {
 	AABB() = default;
-	AABB(const ModelSpecs_L& localSpecs);
+	AABB(const ModelSpecs_W& specs);
     DirectX::XMFLOAT3 m_extentHalf;
 	DirectX::XMFLOAT3 m_min;
     DirectX::XMFLOAT3 m_max;

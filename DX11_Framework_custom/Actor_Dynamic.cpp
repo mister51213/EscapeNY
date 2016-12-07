@@ -133,20 +133,19 @@ void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
 	PauseCollisionChecking();
 }
 
-XMFLOAT3 Actor_Dynamic::GetReboundFORCE(Actor_Dynamic* partnerBall)
+// NOTE: currently only works with another ball
+XMFLOAT3 Actor_Dynamic::GetReboundForce(Actor_Dynamic* partnerBall)
 {
-	// TODO: try replacing current position with target and seeing if it works better
-	// NOTE: initialPosition is added, then subtracted, so they cancel out, but
-	// left them here commented out just to show how the vectors are arrived at visually.
-	XMFLOAT3 thisTrajectory = m_worldSpecs.position/* - m_initalPosition*/;
-	XMFLOAT3 otherTrajectory = partnerBall->GetPosition() - partnerBall->m_previousPosition;
-	XMFLOAT3 force = thisTrajectory + otherTrajectory/* + m_initalPosition*/;
-
-	// TODO: We aren't using the PID function anymore so initialPosition is no longer being set!
-	// TODO: add a new member variable - PREVIOUS POSITION - to be set every update actor call.
+	PhysAttributes partnerAtt = partnerBall->GetAttributes();
+	XMFLOAT3 newDir = Normalize( partnerAtt.velocLin );
+	XMFLOAT3 newForce = newDir * abs(Magnitude(m_attributes.velocLin));
+	// stop the ball
+	m_attributes.velocLin = { 0.f,0.f,0.f };
 	PauseCollisionChecking();
-
-	return force;
+	return newForce;
+	//TODO: dont apply force in usual way; must DISREGARD time
+	//   otherwise it will be mulitplied down to a tiny fraction and 
+	//   have no influence
 }
 
 void Actor_Dynamic::ReboundDP(Actor_Dynamic* partnerBall)
@@ -176,11 +175,9 @@ void Actor_Dynamic::ReboundDP(Actor_Dynamic* partnerBall)
 	U [dot] V = 
 	U.x*V.x + U.y*V.y = 
 	magnitude(U)*magnitude(V)*cos(angle between 'em)
-	
 	*/
 		
 	m_target = newTarget;
-
 	PauseCollisionChecking();
 }
 

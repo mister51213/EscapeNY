@@ -239,17 +239,17 @@ PhysAttributes::PhysAttributes(DirectX::XMFLOAT3 cMass)
 		centerOfMass = cMass; // TODO: actor to pass this in in constructor
 }
 
-AABB::AABB( const ModelSpecs_L& localSpecs)
+AABB::AABB( const ModelSpecs_W& specs)
 {
-	m_extentHalf = localSpecs.size * .5f;
+	m_extentHalf = specs.scale * .5f;
 
 	m_max =
-	{ localSpecs.center.x + m_extentHalf.x,
-		localSpecs.center.y + m_extentHalf.y,
-		localSpecs.center.z + m_extentHalf.z };
+	{ specs.position.x + m_extentHalf.x,
+		specs.position.y + m_extentHalf.y,
+		specs.position.z + m_extentHalf.z };
 
 	m_min =
-	{ localSpecs.center.x - m_extentHalf.x,
-		localSpecs.center.y - m_extentHalf.y,
-		localSpecs.center.z - m_extentHalf.z };
+	{ specs.position.x - m_extentHalf.x,
+		specs.position.y - m_extentHalf.y,
+		specs.position.z - m_extentHalf.z };
 }
