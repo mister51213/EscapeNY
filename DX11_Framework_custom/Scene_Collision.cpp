@@ -180,10 +180,10 @@ void Scene_Collision::CheckCollisions()
 
 	if ( Overlaps( &m_ball1, &m_ball2 ))
 	{
-	if(!m_ball1.CollisionTurnedOff())
+	if(!m_ball1.CollisionOn())
 		m_pActorsOverlapping.push_back(&m_ball1);
 
-	if(!m_ball2.CollisionTurnedOff())
+	if(!m_ball2.CollisionOn())
 		m_pActorsOverlapping.push_back(&m_ball2);
 	}
 

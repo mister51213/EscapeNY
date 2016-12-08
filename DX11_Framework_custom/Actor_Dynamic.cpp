@@ -18,7 +18,7 @@ void Actor_Dynamic::SetState(eActorState state){ m_state = state;}
 Actor_Dynamic::eActorState Actor_Dynamic::GetState() const{	return m_state;}
 XMFLOAT3 Actor_Dynamic::GetInitialPosition() const{	return m_initalPosition;}
 bool Actor_Dynamic::CheckMobility(){return m_isMovable;}
-bool Actor_Dynamic::CollisionTurnedOff(){ return m_stopCheckFlag;}
+bool Actor_Dynamic::CollisionOn(){ return m_collisionOn;}
 
 /// Reset / State functions ///
 void Actor_Dynamic::Update(float deltaT)
@@ -147,5 +147,5 @@ void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
 	PauseCollisionChecking();
 }
 
-void Actor_Dynamic::ResumeCollisionChecking(){m_stopCheckFlag = false;}
-void Actor_Dynamic::PauseCollisionChecking(){m_stopCheckFlag = true;}
+void Actor_Dynamic::ResumeCollisionChecking(){m_collisionOn = true;}
+void Actor_Dynamic::PauseCollisionChecking(){m_collisionOn = false;}

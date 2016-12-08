@@ -63,25 +63,21 @@ void Scene_Physics::reset()
 	{ 600.f, 400.f, 600.f } }, waterSHALLOW, ModelSpecs_L(), SOME_EDIFICE );
 
 	// LEFT BOX
-	float size1 = 100.f;
+	float scale1 = 10.f;
     m_box1 = Actor_Player(
 	{ { -400.f, 0.f, -0.f },
 	{ 0.f, 0.f, 0.f },
-	{ size1, size1, size1 } },
+	{ scale1, scale1, scale1 } },
 		eTexture::Aluminum, ModelSpecs_L(), CUBE_TEXTURED );
-	m_box1.m_attributes.radius = 5.f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
-	//m_ball1.m_attributes.accelLin = { 0.f, -500.f, 0.f };
 	m_box1.m_attributes.mass = 250.f;
 
 	// RIGHT BOX
-	float size2 = 100.f;
+	float scale2 = 10.f;
 	m_box2 = Actor_Player(
     { { 400.f, 0.f, 0.f },
     { 0.f, 0.f, 0.f },
-	{ size2, size2, size2 } },		
+	{ scale2, scale2, scale2 } },		
 		eTexture::SharkSkin, ModelSpecs_L(), CUBE_TEXTURED);
-	m_box2.m_attributes.radius = 5.f; // NOTE technically radius in primitive factory is 1; then it gets scaled up by world specs!
-	//m_ball2.m_attributes.accelLin = { 0.f, -500.f, 0.f };
 	m_box2.m_attributes.mass = 100.f;
 
 	// LOAD DRAW LIST
@@ -154,29 +150,18 @@ void Scene_Physics::DoCollision()
 	// Check for any collided objects in scene
 	if ( AABBvsAABB( &m_box1, &m_box2 ))
 	{
-	if(!m_box1.CollisionTurnedOff())
-		m_pActorsOverlapping.push_back(&m_box1);
+	if(m_box1.CollisionOn())
+		m_pActorsOverlapping.push(&m_box1);
 
-	if(!m_box2.CollisionTurnedOff())
-		m_pActorsOverlapping.push_back(&m_box2);
+	if(m_box2.CollisionOn())
+		m_pActorsOverlapping.push(&m_box2);
 	}
 
 	// HANDLE ALL OBJECTS THAT COLLIDED
-	if ( !m_pActorsOverlapping.empty() )
+	while ( !m_pActorsOverlapping.empty() )
 	{
-		//TODO: getting out of range exception; change to loop through each value in pActorsOverlapping
-		//m_physics.ApplyForce(
-		//	m_pActorsOverlapping[0], 
-		//	m_pActorsOverlapping[ 0 ]->GetReboundForce(m_pActorsOverlapping[1]), 
-		//	tSinceLastFrame);
-		//m_physics.ApplyForce(
-		//	m_pActorsOverlapping[1], 
-		//	m_pActorsOverlapping[ 1 ]->GetReboundForce(m_pActorsOverlapping[0]), 
-		//	tSinceLastFrame);
-		m_pActorsOverlapping[ 0 ]->Stop();
-		m_pActorsOverlapping[ 1 ]->Stop();
+		m_pActorsOverlapping.front()->Stop();
 	}
-	m_pActorsOverlapping.clear(); // remove them from list
 
 	// NOW RESUME COLLISION CHECKING ONCE BALLS HAVE BROKEN AWAY FROM EACH OTHER
 	for ( auto & actor : m_pActorsMASTER )

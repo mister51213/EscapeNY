@@ -41,7 +41,7 @@ public:
 	DirectX::XMFLOAT3 GetReboundForce( Actor_Dynamic * partnerBall );
 	void PauseCollisionChecking();
 	void ResumeCollisionChecking();
-	bool CollisionTurnedOff();
+	bool CollisionOn();
 
 protected: 
 	float integrator;
@@ -53,7 +53,7 @@ protected:
 	float m_halfway = 0.0f;
 	float m_integrator = 0.0f;
 
-	bool m_stopCheckFlag = false;
+	bool m_collisionOn = true;
 
 	bool m_isMovable;
 
