@@ -25,6 +25,10 @@ void Physics_NEW::GenericForce( Actor_Dynamic* pActor, DirectX::XMFLOAT3 force, 
 	DirectX::XMFLOAT3 accelApplied = force / pActor->m_attributes.mass; // a = f / m
 	pActor->m_attributes.accelLin += accelApplied * deltaT; 
 }
+//TODO: this isnt how forces work!
+// It shouldnt increase acceleration and then just leave it there.
+// acceleration should go back to zero after force subsides.
+
 void Physics_NEW::AddDrag( Actor_Dynamic* pActor, float deltaT)
 {
 	XMFLOAT3 actorVeloc = pActor->m_attributes.velocLin;

@@ -33,6 +33,7 @@ public:
 
 	/// Motion functions ///
 	void UpdateMotion( const float deltaT );
+	void StopAccelerating();
 	void ChaseTarget( const float deltaT );
 	void Stop();
 

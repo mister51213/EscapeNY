@@ -69,7 +69,7 @@ void Scene_Physics::reset()
 	{ 0.f, 0.f, 0.f },
 	{ scale1, scale1, scale1 } },
 		eTexture::Aluminum, ModelSpecs_L(), CUBE_TEXTURED );
-	m_box1.m_attributes.mass = 250.f;
+	m_box1.m_attributes.mass = 25.f;
 
 	// RIGHT BOX
 	float scale2 = 10.f;
@@ -78,7 +78,7 @@ void Scene_Physics::reset()
     { 0.f, 0.f, 0.f },
 	{ scale2, scale2, scale2 } },		
 		eTexture::SharkSkin, ModelSpecs_L(), CUBE_TEXTURED);
-	m_box2.m_attributes.mass = 100.f;
+	m_box2.m_attributes.mass = 5.f;
 
 	// LOAD DRAW LIST
 	m_pActorsMASTER.push_back(&m_box1);
@@ -104,19 +104,21 @@ void Scene_Physics::UpdateScene(
     m_pCamera->GetMouseInput(InputRef);
     m_box1.GetInput(InputRef);
     m_box2.GetInput(InputRef);
+	InputForces(InputRef, tSinceLastFrame);
 	
 	// ACTOR MOVEMENT
 	m_box1.UpdateMotion(tSinceLastFrame);
 	m_box2.UpdateMotion(tSinceLastFrame);
+	// Stop actor accelerating after updating
+	m_box1.StopAccelerating();
+	m_box2.StopAccelerating();
+	//TODO: this is a HACK; do it properly!
 
 	// CHECK COLLISIONS FOR BALLS AND HANDLE COLLISIONS
 	DoCollision();
 
 	// Light up the balls
 	Lighting();
-
-	/// INPUT ///
-	InputForces(InputRef, tSinceLastFrame);
 }
 
 /// GLOBAL INPUT ///
@@ -161,16 +163,32 @@ void Scene_Physics::DoCollision()
 	while ( !m_pActorsOverlapping.empty() )
 	{
 		m_pActorsOverlapping.front()->Stop();
+		m_pActorsOverlapping.pop();
 	}
 
 	// NOW RESUME COLLISION CHECKING ONCE BALLS HAVE BROKEN AWAY FROM EACH OTHER
 	for ( auto & actor : m_pActorsMASTER )
 	{
-		if ( !CircleVsCircle(&m_box1, &m_box2) ) // TODO: make it polymorphic for all shapes
+		if ( !AABBvsAABB(&m_box1, &m_box2) ) // TODO: make it polymorphic for all shapes
 		{
 			dynamic_cast< Actor_Dynamic* >( actor )->ResumeCollisionChecking();
 		}
 	}
+}
+
+// check two axis-alligned bounding boxes
+bool Scene_Physics::AABBvsAABB( Actor* pActor1, Actor* pActor2 )
+{
+	AABB box1 = pActor1->m_AABBox;
+	AABB box2 = pActor2->m_AABBox;
+
+	// Exit with no intersection if found separated along an axis
+	if ( box1.m_max.x < box2.m_min.x || box1.m_min.x > box2.m_max.x ) return true;
+	if ( box1.m_max.y < box2.m_min.y || box1.m_min.y > box2.m_max.y ) return true;
+	if ( box1.m_max.z < box2.m_min.z || box1.m_min.z > box2.m_max.z ) return true;
+ 
+  // No separating axis found, therefore there is at least one overlapping axis
+	return false;
 }
 
 bool Scene_Physics::CircleVsCircle(Actor* pActor1, Actor* pActor2)
@@ -194,24 +212,6 @@ bool Scene_Physics::CircleVsCircle(Actor* pActor1, Actor* pActor2)
 bool Scene_Physics::CircleVsBox( Actor* pActor1, Actor* pActor2 )
 {
 		return true;
-}
-
-// TODO: different version for inverted boxes
-// - or just use a more versatile mesh checking function for that model
-
-// check two axis-alligned bounding boxes
-bool Scene_Physics::AABBvsAABB( Actor* pActor1, Actor* pActor2 )
-{
-	AABB box1 = pActor1->m_AABBox;
-	AABB box2 = pActor2->m_AABBox;
-
-	// Exit with no intersection if found separated along an axis
-	if ( box1.m_max.x < box2.m_min.x || box1.m_min.x > box2.m_max.x ) return true;
-	if ( box1.m_max.y < box2.m_min.y || box1.m_min.y > box2.m_max.y ) return true;
-	if ( box1.m_max.z < box2.m_min.z || box1.m_min.z > box2.m_max.z ) return true;
- 
-  // No separating axis found, therefore there is at least one overlapping axis
-	return false;
 }
 
 // non axis alligned bounding boxes

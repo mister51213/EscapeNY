@@ -81,6 +81,11 @@ void Actor_Dynamic::UpdateMotion( const float deltaT )
 	m_AABBox.m_center = m_worldSpecs.position;
 }
 
+void Actor_Dynamic::StopAccelerating( )
+{
+	m_attributes.accelLin = { 0.f, 0.f, 0.f };
+}
+
 void Actor_Dynamic::ChaseTarget(const float deltaT )
 {
 		// Store copy of attributes from last iteration for derivative calculations
