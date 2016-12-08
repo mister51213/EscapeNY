@@ -13,16 +13,39 @@ Actor_Dynamic::Actor_Dynamic( const ModelSpecs_W &worldSpecs,
 	ResetPIDParams();
 }
 
-void Actor_Dynamic::SetState(eActorState state)
-{
-	 m_state = state;
-}
+/// ACCESSOR FUNCTIONS ///
+void Actor_Dynamic::SetState(eActorState state){ m_state = state;}
+Actor_Dynamic::eActorState Actor_Dynamic::GetState() const{	return m_state;}
+XMFLOAT3 Actor_Dynamic::GetInitialPosition() const{	return m_initalPosition;}
+bool Actor_Dynamic::CheckMobility(){return m_isMovable;}
+bool Actor_Dynamic::CollisionTurnedOff(){ return m_stopCheckFlag;}
 
-Actor_Dynamic::eActorState Actor_Dynamic::GetState() const
+/// Reset / State functions ///
+void Actor_Dynamic::Update(float deltaT)
 {
-	return m_state;
+        switch (m_state)
+        {
+        case STOPPED:
+		{
+			m_attributes.velocLin = { 0.f, 0.f, 0.f };
+			return;
+		}
+        case FALLING:
+            {}
+        case HOMING:
+            {
+                ChaseTarget(deltaT); // TODO: change this to non-default parameter
+				break;
+            }
+		case CONST_MOVE:
+            {
+                UpdateMotion(deltaT);
+				break;
+            }
+        default:
+            return;
+        }
 }
-
 void Actor_Dynamic::ResetPIDParams( const XMFLOAT3 &target )
 {
 	m_target = target;
@@ -31,38 +54,31 @@ void Actor_Dynamic::ResetPIDParams( const XMFLOAT3 &target )
 	m_halfway = abs(Magnitude(m_initialHeading)) * 0.5;
 }
 
-void Actor_Dynamic::Update(float deltaT)
+/// Motion functions ///
+void Actor_Dynamic::UpdateMotion( const float deltaT )
 {
-        switch (m_state)
-        {
-        case STILL:
-		{
-			m_attributes.velocLin = { 0.f, 0.f, 0.f };
-			return;
-		}
-        case FALLING:
-            {
+	// Store a copy of position and attributes from last iteration for derivative calculations
+	m_previousPosition = GetPosition();
+	m_attributesPrev = m_attributes;
 
-            }
-        case HOMING:
-            {
-                ChaseTarget(deltaT); // TODO: change this to non-default parameter
-				break;
-            }
-		case CONST_MOVE:
-            {
-                UpdatePosition(deltaT);
-				break;
-            }
-        default:
-            return;
-        }
-}
+	/// UPDATE POSITION ///
+	XMFLOAT3 dispLinear =
+		m_attributesPrev.velocLin*deltaT +
+		m_attributes.accelLin * deltaT*deltaT * 0.5;
+	XMFLOAT3 avgAccel = ( m_attributesPrev.accelLin + m_attributes.accelLin ) *0.5;
+	m_attributes.velocLin += avgAccel * deltaT;
+	m_worldSpecs.position = m_worldSpecs.position + dispLinear;
 
-void Actor_Dynamic::UpdatePosition( const float deltaT)
-{
-    XMFLOAT3 deltaPos = m_attributes.velocLin * deltaT;
-	m_worldSpecs.position += deltaPos;
+	/// UPDATE ROTATION ///
+	XMFLOAT3 dispAngular =
+		m_attributesPrev.velocAng*deltaT +
+		m_attributes.accelAng * deltaT*deltaT * 0.5;
+	XMFLOAT3 avgAccAng = ( m_attributesPrev.accelAng + m_attributes.accelAng ) *0.5;
+	m_attributes.velocAng += avgAccAng * deltaT;
+	m_worldSpecs.orientation = m_worldSpecs.orientation + dispAngular;
+
+	// Update bounding box according to actor position
+	m_AABBox.m_center = m_worldSpecs.position;
 }
 
 void Actor_Dynamic::ChaseTarget(const float deltaT )
@@ -101,38 +117,9 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 		XMFLOAT3 displacement = m_attributes.velocLin * deltaT;
 		m_worldSpecs.position += displacement;
 }
+void Actor_Dynamic::Stop(){	m_state = STOPPED;}
 
-//TODO:
-/*
-Now, since it only negates their velocties on rebound, 
-the rebound physics are not quite accurate. 
-We need to properly reflect these vectors across the plane 
-that is perpendicular to the balls respective flight paths instead.
-*/
-
-void Actor_Dynamic::Rebound_WRONG()
-{
-	float reboundMagnitude = Magnitude( m_attributes.velocLin );
-	XMFLOAT3 currVeloc = Normalize( m_attributes.velocLin );
-	XMFLOAT3 reverseDir = -currVeloc;
-	XMFLOAT3 newTarget = reverseDir * reboundMagnitude;
-	m_target = newTarget;
-	PauseCollisionChecking();
-}
-
-void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
-{
-	// TODO: try replacing current position with target and seeing if it works better
-	// NOTE: initialPosition is added, then subtracted, so they cancel out, but
-	// left them here commented out just to show how the vectors are arrived at visually.
-	XMFLOAT3 thisTrajectory = m_worldSpecs.position/* - m_initalPosition*/;
-	XMFLOAT3 otherTrajectory = partnerBall->GetPosition() - partnerBall->GetInitialPosition();
-	m_target = thisTrajectory + otherTrajectory/* + m_initalPosition*/;
-	//TODO: cam't use target anymore, have to apply force on other ball
-
-	PauseCollisionChecking();
-}
-
+/// Collision related functions ///
 // NOTE: currently only works with another ball
 XMFLOAT3 Actor_Dynamic::GetReboundForce(Actor_Dynamic* partnerBall)
 {
@@ -147,68 +134,18 @@ XMFLOAT3 Actor_Dynamic::GetReboundForce(Actor_Dynamic* partnerBall)
 	//   otherwise it will be mulitplied down to a tiny fraction and 
 	//   have no influence
 }
-
-void Actor_Dynamic::ReboundDP(Actor_Dynamic* partnerBall)
+void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
 {
-	float reboundMagnitude = Magnitude( m_attributes.velocLin );
-	XMFLOAT3 veloc1 = Normalize( m_attributes.velocLin );
-	XMFLOAT3 veloc2 = Normalize( partnerBall->GetAttributes().velocLin );
+	// TODO: try replacing current position with target and seeing if it works better
+	// NOTE: initialPosition is added, then subtracted, so they cancel out, but
+	// left them here commented out just to show how the vectors are arrived at visually.
+	XMFLOAT3 thisTrajectory = m_worldSpecs.position/* - m_initalPosition*/;
+	XMFLOAT3 otherTrajectory = partnerBall->GetPosition() - partnerBall->GetInitialPosition();
+	m_target = thisTrajectory + otherTrajectory/* + m_initalPosition*/;
+	//TODO: cam't use target anymore, have to apply force on other ball
 
-	//float DP = DotProduct( veloc2, veloc1 );
-	//TODO: 
-	/*
-	1. take dot product between two balls' velocities (normalized)
-	2. maintain the Y component of each of their velocities
-	3. flip the X component of each of their velocities
-	4. scale the resultant vector by the dot product	
-	*/
-
-	// simply swap velocities here
-	XMFLOAT3 reverseDir = veloc2/* * DP */;
-	XMFLOAT3 newTarget = reverseDir * reboundMagnitude;
-
-	//TODO:
-	/*
-	negate only the perpendicular component of the vector of approach;
-	get that component efficiently using dot product
-
-	U [dot] V = 
-	U.x*V.x + U.y*V.y = 
-	magnitude(U)*magnitude(V)*cos(angle between 'em)
-	*/
-		
-	m_target = newTarget;
 	PauseCollisionChecking();
 }
 
-void Actor_Dynamic::Stop()
-{
-	m_state = STILL;
-}
-
-void Actor_Dynamic::ResumeCollisionChecking()
-{
-	m_stopCheckFlag = false;
-}
-
-bool Actor_Dynamic::CollisionTurnedOff()
-{
-	return m_stopCheckFlag;
-}
-
-XMFLOAT3 Actor_Dynamic::GetInitialPosition() const
-{
-	return m_initalPosition;
-}
-
-
-
-void Actor_Dynamic::PauseCollisionChecking()
-{
-	m_stopCheckFlag = true;
-}
-
-bool Actor_Dynamic::CheckMobility()
-{
-	return m_isMovable;
-}
+void Actor_Dynamic::ResumeCollisionChecking(){m_stopCheckFlag = false;}
+void Actor_Dynamic::PauseCollisionChecking(){m_stopCheckFlag = true;}

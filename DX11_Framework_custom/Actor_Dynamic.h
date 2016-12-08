@@ -9,7 +9,7 @@ public:
 	enum eActorState
 	{	
 		// TODO: REMOVE THESE, add specific state collections for each Actor child
-		STILL, FALLING, CONST_MOVE, HOMING,
+		STOPPED, FALLING, CONST_MOVE, HOMING,
 		PLAYER_IDLE, PLAYER_WALKING, PLAYER_PUSHING, PLAYER_QUICKTIME, PLAYER_DROWNING, PLAYER_PINNED
 	};
 
@@ -21,24 +21,27 @@ public:
 		eModType modType );
 	~Actor_Dynamic() = default;
 
+	/// ACCESSOR FUNCTIONS ///
 	void SetState( eActorState state );
 	eActorState GetState()const;
-
-	void ResetPIDParams(const DirectX::XMFLOAT3 &target = { 0.f, 0.f, 0.f });
-
-	virtual void Update( float deltaT );
-	void UpdatePosition( const float deltaT );
-	void ChaseTarget( const float deltaT );
-	void Rebound_WRONG();
-	void Rebound( Actor_Dynamic * partnerBall = nullptr );
-	DirectX::XMFLOAT3 GetReboundForce( Actor_Dynamic * partnerBall );
-	void ReboundDP( Actor_Dynamic* partnerBall = nullptr );
-	void Stop();
-	void PauseCollisionChecking();
 	bool CheckMobility();
+	DirectX::XMFLOAT3 GetInitialPosition() const;
+	
+	/// Reset / update functions ///
+	void ResetPIDParams(const DirectX::XMFLOAT3 &target = { 0.f, 0.f, 0.f });
+	virtual void Update( float deltaT );
+
+	/// Motion functions ///
+	void UpdateMotion( const float deltaT );
+	void ChaseTarget( const float deltaT );
+	void Stop();
+
+	/// Collision related functions ///
+	void Rebound( Actor_Dynamic * partnerBall );
+	DirectX::XMFLOAT3 GetReboundForce( Actor_Dynamic * partnerBall );
+	void PauseCollisionChecking();
 	void ResumeCollisionChecking();
 	bool CollisionTurnedOff();
-	DirectX::XMFLOAT3 GetInitialPosition() const;
 
 protected: 
 	float integrator;
@@ -54,7 +57,6 @@ protected:
 
 	bool m_isMovable;
 
-public: //TODO: make private
 	DirectX::XMFLOAT3 m_previousPosition = { 0.0f, 0.0f, 0.0f };
 };
 

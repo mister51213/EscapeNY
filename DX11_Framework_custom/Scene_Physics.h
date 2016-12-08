@@ -34,12 +34,14 @@ public:
 	virtual void UpdateScene( Input &InputRef, Camera *const pCamera, 
 							  const Physics& refPhysics, const GameTimer& refTimer )override;
 
+	void Lighting();
+
 	// Use RenderFrame to render the list of actors or other game objects
 	virtual void RenderFrame( const GameView &GameViewRef )override; 
 
-	void PoleForCollidedActors();
+	void DoCollision();
 
-	void GetInput(Input& pInput, float time);
+	void InputForces(Input& pInput, float time);
 
 	bool CircleVsCircle( Actor * pActor1, Actor * pActor2 );
 
@@ -48,8 +50,6 @@ public:
 	bool AABBvsAABB( Actor * pActor1, Actor * pActor2 );
 
 	bool BoxVsBox( Actor * pActor1, Actor * pActor2 );
-
-	bool Overlaps( Actor * pActor1, Actor * pActor2 );
 
 private:
 	void reset();

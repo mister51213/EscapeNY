@@ -184,6 +184,9 @@ struct AABB
 {
 	AABB() = default;
 	AABB(const ModelSpecs_W& specs);
+	void ResetMinMax(DirectX::XMFLOAT3 position);
+
+	DirectX::XMFLOAT3 m_center;
     DirectX::XMFLOAT3 m_extentHalf;
 	DirectX::XMFLOAT3 m_min;
     DirectX::XMFLOAT3 m_max;

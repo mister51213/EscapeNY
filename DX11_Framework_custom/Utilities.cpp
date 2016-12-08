@@ -190,8 +190,7 @@ ModelSpecs_L::ModelSpecs_L( const XMFLOAT3 & Center, const XMFLOAT3 & Orientatio
 	center( Center ),
 	orientation( Orientation ),
 	size( Size )
-{
-}
+{}
 
 ////////////////////////////////////////////////////
 // TODO: Make generic function
@@ -225,7 +224,7 @@ bool AlignedAxisBoundingBox::Overlaps( const AlignedAxisBoundingBox & AABB ) con
 	const bool zOverlap = ( RightTopBackA.z > RightTopBackB.z &&
 							LeftBottomFrontA.z < LeftBottomFrontB.z );
 
-	// AND the overlap results together 
+	// AND the overlap results together
 	const bool doesOverlap = ( xOverlap && yOverlap && zOverlap );
 
 	// Return the final result
@@ -242,14 +241,21 @@ PhysAttributes::PhysAttributes(DirectX::XMFLOAT3 cMass)
 AABB::AABB( const ModelSpecs_W& specs)
 {
 	m_extentHalf = specs.scale * .5f;
+	m_center = specs.position;
+	ResetMinMax(m_center);
+}
+
+void AABB::ResetMinMax(DirectX::XMFLOAT3 position)
+{
+	m_center = position;
 
 	m_max =
-	{ specs.position.x + m_extentHalf.x,
-		specs.position.y + m_extentHalf.y,
-		specs.position.z + m_extentHalf.z };
+	{ m_center.x + m_extentHalf.x,
+		m_center.y + m_extentHalf.y,
+		m_center.z + m_extentHalf.z };
 
 	m_min =
-	{ specs.position.x - m_extentHalf.x,
-		specs.position.y - m_extentHalf.y,
-		specs.position.z - m_extentHalf.z };
+	{ m_center.x - m_extentHalf.x,
+		m_center.y - m_extentHalf.y,
+		m_center.z - m_extentHalf.z };
 }

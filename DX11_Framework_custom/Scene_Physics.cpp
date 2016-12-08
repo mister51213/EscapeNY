@@ -10,7 +10,9 @@
 
 using namespace DirectX;
 
-void Scene_Physics::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const pCamera )
+void Scene_Physics::Initialize( Graphics * pGraphics, 
+								Game * const pGame, 
+								Camera * const pCamera )
 {
 	// Take a copy of the graphics and direct3d pointers
 	m_pGraphics = pGraphics;
@@ -61,7 +63,7 @@ void Scene_Physics::reset()
 	{ 600.f, 400.f, 600.f } }, waterSHALLOW, ModelSpecs_L(), SOME_EDIFICE );
 
 	// LEFT BOX
-	float size1 = 10.f;
+	float size1 = 100.f;
     m_box1 = Actor_Player(
 	{ { -400.f, 0.f, -0.f },
 	{ 0.f, 0.f, 0.f },
@@ -72,7 +74,7 @@ void Scene_Physics::reset()
 	m_box1.m_attributes.mass = 250.f;
 
 	// RIGHT BOX
-	float size2 = 10.f;
+	float size2 = 100.f;
 	m_box2 = Actor_Player(
     { { 400.f, 0.f, 0.f },
     { 0.f, 0.f, 0.f },
@@ -83,13 +85,16 @@ void Scene_Physics::reset()
 	m_box2.m_attributes.mass = 100.f;
 
 	// LOAD DRAW LIST
-	m_pActorsMASTER.reserve( m_numBoxes+1 );
 	m_pActorsMASTER.push_back(&m_box1);
 	m_pActorsMASTER.push_back(&m_box2);
     m_pActorsMASTER.push_back(&m_map);
 }
 
-void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const Physics & refPhysics, const GameTimer & refTimer )
+void Scene_Physics::UpdateScene( 
+	Input & InputRef, 
+	Camera * const pCamera, 
+	const Physics & refPhysics, 
+	const GameTimer & refTimer )
 {
 	// TIMER 
 	#ifdef NDEBUG
@@ -105,72 +110,23 @@ void Scene_Physics::UpdateScene( Input & InputRef, Camera * const pCamera, const
     m_box2.GetInput(InputRef);
 	
 	// ACTOR MOVEMENT
-	m_physics.UpdateActor( &m_box1,tSinceLastFrame);
-	m_physics.UpdateActor( &m_box2,tSinceLastFrame);
+	m_box1.UpdateMotion(tSinceLastFrame);
+	m_box2.UpdateMotion(tSinceLastFrame);
 
-	// CHECK COLLISIONS FOR BALLS
-	PoleForCollidedActors();
+	// CHECK COLLISIONS FOR BALLS AND HANDLE COLLISIONS
+	DoCollision();
 
-	// HANDLE ALL OBJECTS THAT COLLIDED
-	if ( !m_pActorsOverlapping.empty() )
-	{
-		//TODO: getting out of range exception; change to loop through each value in pActorsOverlapping
-		//m_physics.ApplyForce(
-		//	m_pActorsOverlapping[0], 
-		//	m_pActorsOverlapping[ 0 ]->GetReboundForce(m_pActorsOverlapping[1]), 
-		//	tSinceLastFrame);
-		//m_physics.ApplyForce(
-		//	m_pActorsOverlapping[1], 
-		//	m_pActorsOverlapping[ 1 ]->GetReboundForce(m_pActorsOverlapping[0]), 
-		//	tSinceLastFrame);
-
-		m_pActorsOverlapping[ 0 ]->Stop();
-		m_pActorsOverlapping[ 1 ]->Stop();
-
-	}
-	m_pActorsOverlapping.clear(); // remove them from list
-
-	// NOW RESUME COLLISION CHECKING ONCE BALLS HAVE BROKEN AWAY FROM EACH OTHER
-	for ( auto & actor : m_pActorsMASTER )
-	{
-		if ( !CircleVsCircle(&m_box1, &m_box2) ) // TODO: make it polymorphic for all shapes
-		{
-			dynamic_cast< Actor_Dynamic* >( actor )->ResumeCollisionChecking();
-		}
-	}
-
-	// LIGHTS distributed among balls
-	for ( int i = 0; i < m_lightsPerBall; i++ )
-	{
-		m_spotLights[i].SetLookat( m_box1.GetPosition() );
-	}
-	for ( int i = m_lightsPerBall; i < m_numLights; i++ )
-	{
-		m_spotLights[ i ].SetLookat( m_box2.GetPosition() );
-	}
+	// Light up the balls
+	Lighting();
 
 	/// INPUT ///
-	GetInput(InputRef, tSinceLastFrame);
-}
-
-void Scene_Physics::PoleForCollidedActors()
-{
-	// check boxes
-	if ( AABBvsAABB( &m_box1, &m_box2 )) //TODO: change to global checker
-	{
-	if(!m_box1.CollisionTurnedOff())
-		m_pActorsOverlapping.push_back(&m_box1);
-
-	if(!m_box2.CollisionTurnedOff())
-		m_pActorsOverlapping.push_back(&m_box2);
-	}
-
+	InputForces(InputRef, tSinceLastFrame);
 }
 
 /// GLOBAL INPUT ///
-void Scene_Physics::GetInput(Input& pInput, float time)
+void Scene_Physics::InputForces(Input& pInput, float time)
 {
-	// push towards target 0,0,0
+	// get a force vector towards center of the world
 	XMFLOAT3 worldCenter = {0.f, 0.f, 0.f};
 
 	// box1 mass is 1
@@ -185,14 +141,52 @@ void Scene_Physics::GetInput(Input& pInput, float time)
 
 	if ( pInput.IsKeyDown( VK_SPACE ))
 	{
-		m_physics.ApplyForce( &m_box1, targetB1, time );
-		m_physics.ApplyForce( &m_box2, targetB2, time );
+		m_physics.GenericForce( &m_box1, targetB1, time );
+		m_physics.GenericForce( &m_box2, targetB2, time );
 	}
 }
 
-///////////////////////////////////
-/// CHECK OVERLAPPING FUNCTIONS ///
-///////////////////////////////////
+/////////////////////////////////
+/// CHECK COLLISION FUNCTIONS ///
+/////////////////////////////////
+void Scene_Physics::DoCollision()
+{
+	// Check for any collided objects in scene
+	if ( AABBvsAABB( &m_box1, &m_box2 ))
+	{
+	if(!m_box1.CollisionTurnedOff())
+		m_pActorsOverlapping.push_back(&m_box1);
+
+	if(!m_box2.CollisionTurnedOff())
+		m_pActorsOverlapping.push_back(&m_box2);
+	}
+
+	// HANDLE ALL OBJECTS THAT COLLIDED
+	if ( !m_pActorsOverlapping.empty() )
+	{
+		//TODO: getting out of range exception; change to loop through each value in pActorsOverlapping
+		//m_physics.ApplyForce(
+		//	m_pActorsOverlapping[0], 
+		//	m_pActorsOverlapping[ 0 ]->GetReboundForce(m_pActorsOverlapping[1]), 
+		//	tSinceLastFrame);
+		//m_physics.ApplyForce(
+		//	m_pActorsOverlapping[1], 
+		//	m_pActorsOverlapping[ 1 ]->GetReboundForce(m_pActorsOverlapping[0]), 
+		//	tSinceLastFrame);
+		m_pActorsOverlapping[ 0 ]->Stop();
+		m_pActorsOverlapping[ 1 ]->Stop();
+	}
+	m_pActorsOverlapping.clear(); // remove them from list
+
+	// NOW RESUME COLLISION CHECKING ONCE BALLS HAVE BROKEN AWAY FROM EACH OTHER
+	for ( auto & actor : m_pActorsMASTER )
+	{
+		if ( !CircleVsCircle(&m_box1, &m_box2) ) // TODO: make it polymorphic for all shapes
+		{
+			dynamic_cast< Actor_Dynamic* >( actor )->ResumeCollisionChecking();
+		}
+	}
+}
 
 bool Scene_Physics::CircleVsCircle(Actor* pActor1, Actor* pActor2)
 {
@@ -202,6 +196,7 @@ bool Scene_Physics::CircleVsCircle(Actor* pActor1, Actor* pActor2)
 	XMFLOAT3 distVector = pActor1->GetWorldSpecs().position -
 		pActor2->GetWorldSpecs().position;
 	float actorDistance = Magnitude( distVector );
+	//TODO: optimize this by comparing a^2 + b^2 = c^2 and not calculating distance
 
 	if ( abs( actorDistance ) <= collisionDist )
 	{
@@ -240,17 +235,21 @@ bool Scene_Physics::BoxVsBox( Actor* pActor1, Actor* pActor2 )
 	return true;
 }
 
-// check what type of object then divert it to the appropriate checking function
-bool Scene_Physics::Overlaps(Actor* pActor1, Actor* pActor2)
-{
-	// TODO: based on actor mod type, call one of the above functions
-		return true;
-}
-
-
 ///////////////
 /// DRAWING ///
 ///////////////
+void Scene_Physics::Lighting()
+{
+	// LIGHTS distributed among balls
+	for ( int i = 0; i < m_lightsPerBall; i++ )
+	{
+		m_spotLights[i].SetLookat( m_box1.GetPosition() );
+	}
+	for ( int i = m_lightsPerBall; i < m_numLights; i++ )
+	{
+		m_spotLights[ i ].SetLookat( m_box2.GetPosition() );
+	}
+}
 
 void Scene_Physics::RenderFrame( const GameView & GameViewRef )
 {
@@ -268,6 +267,7 @@ void Scene_Physics::RenderFrame( const GameView & GameViewRef )
    	m_Overlay.Render( *m_pGraphics );
 }
 
+/// ACCESSOR ///
 const SceneBufferType & Scene_Physics::GetSceneData() const
 {
 	// TODO: IMPLEMENT THIS
