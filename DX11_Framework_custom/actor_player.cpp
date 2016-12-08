@@ -44,6 +44,6 @@ void Actor_Player::GetInput( Input& pInput, int randI, float randF )
 			ResetPIDParams({ 0.f, 0.f, 0.f });
 	}
 
-	m_worldSpecs.orientation.y += pInput.GetRelativeX();
-	m_worldSpecs.orientation.x += pInput.GetRelativeY();
+	//m_worldSpecs.orientation.y += pInput.GetRelativeX();
+	//m_worldSpecs.orientation.x += pInput.GetRelativeY();
 }

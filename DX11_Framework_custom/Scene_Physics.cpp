@@ -65,7 +65,7 @@ void Scene_Physics::reset()
 	// LEFT BOX
 	float scale1 = 100.f;
     m_box1 = Actor_Player(
-	{ { -400.f, 0.f, -0.f },
+	{ { -400.f, 0.f, 0.f },
 	{ 0.f, 0.f, 0.f },
 	{ scale1, scale1, scale1 } },
 		eTexture::Aluminum, ModelSpecs_L(), CUBE_TEXTURED );
@@ -102,10 +102,10 @@ void Scene_Physics::UpdateScene(
     // INPUT
     m_pCamera->GetInput(InputRef);
     m_pCamera->GetMouseInput(InputRef);
-    m_box1.GetInput(InputRef);
-    m_box2.GetInput(InputRef);
+    //m_box1.GetInput(InputRef);
+    //m_box2.GetInput(InputRef);
 	InputForces(InputRef, tSinceLastFrame);
-	
+
 	// ACTOR MOVEMENT
 	m_box1.UpdateMotion(tSinceLastFrame);
 	m_box2.UpdateMotion(tSinceLastFrame);
@@ -141,6 +141,11 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 	{
 		m_physics.GenericForce( &m_box1, targetB1, time );
 		m_physics.GenericForce( &m_box2, targetB2, time );
+	}
+	if ( pInput.IsKeyDown( VK_CONTROL ))
+	{
+		m_physics.GenericForce( &m_box1, -targetB1, time );
+		m_physics.GenericForce( &m_box2, -targetB2, time );
 	}
 }
 
