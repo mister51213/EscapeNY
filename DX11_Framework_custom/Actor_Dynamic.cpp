@@ -78,7 +78,7 @@ void Actor_Dynamic::UpdateMotion( const float deltaT )
 	m_worldSpecs.orientation = m_worldSpecs.orientation + dispAngular;
 
 	// Update bounding box according to actor position
-	m_AABBox.m_center = m_worldSpecs.position;
+	m_AABBox.ResetMinMax(m_worldSpecs.position);
 }
 
 void Actor_Dynamic::StopAccelerating( )
@@ -122,7 +122,11 @@ void Actor_Dynamic::ChaseTarget(const float deltaT )
 		XMFLOAT3 displacement = m_attributes.velocLin * deltaT;
 		m_worldSpecs.position += displacement;
 }
-void Actor_Dynamic::Stop(){	m_state = STOPPED;}
+void Actor_Dynamic::Stop(){	
+	m_attributes.accelLin = {0.f,0.f,0.f};
+	m_attributes.velocLin = {0.f,0.f,0.f};
+	// TODO: make a function in the attributes struct to zero our everything
+}
 
 /// Collision related functions ///
 // NOTE: currently only works with another ball

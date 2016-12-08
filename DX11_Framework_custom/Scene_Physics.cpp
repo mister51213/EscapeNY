@@ -63,7 +63,7 @@ void Scene_Physics::reset()
 	{ 600.f, 400.f, 600.f } }, waterSHALLOW, ModelSpecs_L(), SOME_EDIFICE );
 
 	// LEFT BOX
-	float scale1 = 10.f;
+	float scale1 = 100.f;
     m_box1 = Actor_Player(
 	{ { -400.f, 0.f, -0.f },
 	{ 0.f, 0.f, 0.f },
@@ -72,7 +72,7 @@ void Scene_Physics::reset()
 	m_box1.m_attributes.mass = 25.f;
 
 	// RIGHT BOX
-	float scale2 = 10.f;
+	float scale2 = 100.f;
 	m_box2 = Actor_Player(
     { { 400.f, 0.f, 0.f },
     { 0.f, 0.f, 0.f },
@@ -176,19 +176,19 @@ void Scene_Physics::DoCollision()
 	}
 }
 
-// check two axis-alligned bounding boxes
+// True if overlaps, false if no overlap
 bool Scene_Physics::AABBvsAABB( Actor* pActor1, Actor* pActor2 )
 {
-	AABB box1 = pActor1->m_AABBox;
+ 	AABB box1 = pActor1->m_AABBox;
 	AABB box2 = pActor2->m_AABBox;
 
 	// Exit with no intersection if found separated along an axis
-	if ( box1.m_max.x < box2.m_min.x || box1.m_min.x > box2.m_max.x ) return true;
-	if ( box1.m_max.y < box2.m_min.y || box1.m_min.y > box2.m_max.y ) return true;
-	if ( box1.m_max.z < box2.m_min.z || box1.m_min.z > box2.m_max.z ) return true;
+	if ( box1.m_max.x < box2.m_min.x || box1.m_min.x > box2.m_max.x ) return false;
+	if ( box1.m_max.y < box2.m_min.y || box1.m_min.y > box2.m_max.y ) return false;
+	if ( box1.m_max.z < box2.m_min.z || box1.m_min.z > box2.m_max.z ) return false;
  
   // No separating axis found, therefore there is at least one overlapping axis
-	return false;
+	return true;
 }
 
 bool Scene_Physics::CircleVsCircle(Actor* pActor1, Actor* pActor2)
