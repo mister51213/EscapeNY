@@ -37,6 +37,20 @@ void Physics_NEW::Force_Instantaneous( Actor_Dynamic* pActor, DirectX::XMFLOAT3 
 	pActor->m_attributes.velocLin += impulse; 
 }
 
+void Physics_NEW::Friction(Actor_Dynamic* pActor, float deltaT)
+{
+//  friction is proportional to actor's weight (a product of normal force, therefore mass)
+// *we assume that the whole world floor is alligned with x axis, so just use x component of motion
+	PhysAttributes attributes = pActor->GetAttributes();
+	float frictionCoeff = 2.0f;
+	float error = Magnitude( attributes.velocLin );
+
+	XMFLOAT3 frictionDir = { -attributes.velocLin.x, 0.f, 0.f };
+	XMFLOAT3 frictionForce = frictionDir * attributes.mass * frictionCoeff * error;
+	
+	Force_Steady(pActor, frictionForce, deltaT);
+}
+
 void Physics_NEW::AddDrag( Actor_Dynamic* pActor, float deltaT)
 {
 	XMFLOAT3 actorVeloc = pActor->m_attributes.velocLin;
@@ -46,10 +60,8 @@ void Physics_NEW::AddDrag( Actor_Dynamic* pActor, float deltaT)
 	{
 		float dragCoef = .1f; // note: fulid density and area discounted
 		
-		XMFLOAT3 dragForce = actorVeloc * veloMag * dragCoef; // calculate
-		dragForce = -dragForce; // negate
+		XMFLOAT3 dragForce = -actorVeloc * veloMag * dragCoef; // calculate
 		
 		Force_Steady( pActor, dragForce, deltaT );
-
 	}
 }

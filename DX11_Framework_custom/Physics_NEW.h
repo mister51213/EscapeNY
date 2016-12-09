@@ -21,6 +21,8 @@ public:
 
 	void Force_Instantaneous( Actor_Dynamic * pActor, DirectX::XMFLOAT3 force );
 
+	void Friction( Actor_Dynamic * pActor, float deltaT );
+
 	void AddDrag( Actor_Dynamic * pActor, float deltaT );
 
 

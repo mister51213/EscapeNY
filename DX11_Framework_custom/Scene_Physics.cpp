@@ -102,14 +102,18 @@ void Scene_Physics::UpdateScene(
     // INPUT
     m_pCamera->GetInput(InputRef);
     m_pCamera->GetMouseInput(InputRef);
+	InputForces(InputRef, tSinceLastFrame);
     //m_box1.GetInput(InputRef);
     //m_box2.GetInput(InputRef);
-	InputForces(InputRef, tSinceLastFrame);
+
+	// ADD FORCES	
+	m_physics.Friction(&m_box1, tSinceLastFrame);
+	m_physics.Friction(&m_box2, tSinceLastFrame);
 
 	// ACTOR MOVEMENT
 	m_box1.UpdateMotion(tSinceLastFrame);
 	m_box2.UpdateMotion(tSinceLastFrame);
-	// Stop actor accelerating after updating
+	// Stop applying acceleration after updating
 	m_box1.StopAccelerating();
 	m_box2.StopAccelerating();
 	//TODO: this is a HACK; do it properly!
@@ -139,13 +143,17 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 
 	if ( pInput.IsKeyDown( VK_SPACE ))
 	{
-		m_physics.Force_Steady( &m_box1, targetB1, time );
-		m_physics.Force_Steady( &m_box2, targetB2, time );
+		/*m_physics.Force_Steady( &m_box1, targetB1, time );
+		m_physics.Force_Steady( &m_box2, targetB2, time );*/
+		m_physics.Force_Steady( &m_box1, { 120000.f, 0.f, 0.f }, time );
+		m_physics.Force_Steady( &m_box2, { -120000.f, 0.f, 0.f }, time );
 	}
 	if ( pInput.IsKeyDown( VK_CONTROL ))
 	{
-		m_physics.Force_Steady( &m_box1, -targetB1, time );
-		m_physics.Force_Steady( &m_box2, -targetB2, time );
+		//m_physics.Force_Steady( &m_box1, -targetB1, time );
+		//m_physics.Force_Steady( &m_box2, -targetB2, time );
+		m_physics.Force_Steady( &m_box1, { -120000.f, 0.f, 0.f }, time );
+		m_physics.Force_Steady( &m_box2, { 120000.f, 0.f, 0.f }, time );
 	}
 }
 
