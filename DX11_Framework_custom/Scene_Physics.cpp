@@ -57,12 +57,18 @@ void Scene_Physics::reset()
 	m_pActorsMASTER.clear();
 
 	// MAP
-	m_map = Actor_Stationary( 
-	{ { 0.f, 0.f, 0.f },
-	{ 0.f, 0.f, 0.f },
-	{ 600.f, 400.f, 600.f } }, waterSHALLOW, ModelSpecs_L(), SOME_EDIFICE );
+	//m_map = Actor_Stationary( 
+	//{ { 0.f, 0.f, 0.f },
+	//{ 0.f, 0.f, 0.f },
+	//{ 600.f, 400.f, 600.f } }, waterSHALLOW, ModelSpecs_L(), SOME_EDIFICE );
 
-	// LEFT BOX
+	m_map = Actor_Dynamic( 
+	{ { 0.f, -200.f, 0.f },
+	{ 0.f, 0.f, 0.f },
+	{ 1500.f, 20.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED );
+	m_box1.m_attributes.mass = 10000.f;
+
+		// LEFT BOX
 	float scale1 = 100.f;
     m_box1 = Actor_Player(
 	{ { -400.f, 0.f, 0.f },
@@ -109,6 +115,10 @@ void Scene_Physics::UpdateScene(
 	// ADD FORCES	
 	m_physics.Friction(&m_box1, tSinceLastFrame);
 	m_physics.Friction(&m_box2, tSinceLastFrame);
+
+	// Gravity
+	m_physics.Force_Steady( &m_box1, { 0.f, -30000.f, 0.f }, tSinceLastFrame );
+	m_physics.Force_Steady(&m_box2, { 0.f, -30000.f, 0.f }, tSinceLastFrame);
 
 	// ACTOR MOVEMENT
 	m_box1.UpdateMotion(tSinceLastFrame);
@@ -163,6 +173,11 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 void Scene_Physics::DoCollision()
 {
 	// If the two objects overlap, add one to list and give it awareness of the other
+	for each ( Actor_Dynamic* pActor in m_pActorsMASTER )
+	{
+
+	}
+
 	if ( AABBvsAABB( &m_box1, &m_box2 ))
 	{ // TODO: check if already added as a partner force
 		if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
@@ -171,6 +186,23 @@ void Scene_Physics::DoCollision()
 			m_box1.m_pCollision_partner = &m_box2;
 		}
 	}
+
+	if ( AABBvsAABB( &m_box1, &m_map ))
+	{ // TODO: check if already added as a partner force
+		if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
+		{
+			m_box1.ReboundX1();
+		}
+	}
+
+		if ( AABBvsAABB( &m_box2, &m_map ))
+	{ // TODO: check if already added as a partner force
+		if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
+		{
+			m_box2.ReboundX1();
+		}
+	}
+	// TODO: how to implement collision with many objects??
 
 	// HANDLE ALL OBJECTS THAT COLLIDED
 	while ( !m_pActorsOverlapping.empty() )

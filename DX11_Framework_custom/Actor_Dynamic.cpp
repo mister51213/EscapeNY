@@ -144,10 +144,19 @@ void Actor_Dynamic::ReboundX2()
 	m_attributes.velocLin += forceOn1;
 	PauseCollisionChecking();
 
-	m_pCollision_partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
-	m_pCollision_partner->m_attributes.velocLin += forceOn2;
-	m_pCollision_partner->PauseCollisionChecking();
+		m_pCollision_partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
+		m_pCollision_partner->m_attributes.velocLin += forceOn2;
+		m_pCollision_partner->PauseCollisionChecking();
 }
+
+void Actor_Dynamic::ReboundX1()
+{
+	// calculate velocity change for this actor
+	m_attributes.velocLin.y *= -1.0f;
+
+	PauseCollisionChecking();
+}
+
 void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
 {
 	// TODO: try replacing current position with target and seeing if it works better

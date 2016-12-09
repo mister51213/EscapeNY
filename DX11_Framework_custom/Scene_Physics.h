@@ -74,7 +74,8 @@ private:
 	// ACTORS ////////////////////////////
 	//////////////////////////////////////
 	Camera* m_pCamera; // dynamic / fixed, different camera angles
-	Actor_Stationary m_map;
+	//Actor_Stationary m_map;
+	Actor_Dynamic m_map;
 	Actor_Player m_ball1;
 	Actor_Player m_ball2;
 	Actor_Player m_box1;
