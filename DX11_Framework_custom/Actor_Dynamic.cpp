@@ -132,11 +132,13 @@ void Actor_Dynamic::Stop(){
 // NOTE: currently only works with another ball
 XMFLOAT3 Actor_Dynamic::GetReboundForce(Actor_Dynamic* partnerBall)
 {
-	PhysAttributes partnerAtt = partnerBall->GetAttributes();
-	XMFLOAT3 newDir = Normalize( partnerAtt.velocLin );
-	XMFLOAT3 newForce = newDir * abs(Magnitude(m_attributes.velocLin));
-	// stop the ball
-	m_attributes.velocLin = { 0.f,0.f,0.f };
+	/*XMFLOAT3 newDir = Normalize( partnerBall->GetAttributes().velocLin );
+	XMFLOAT3 newForce = newDir * Magnitude( m_attributes.velocLin );*/	// stop the ball
+	
+	float momentumTransferRatio = partnerBall->GetAttributes().mass / m_attributes.mass;
+	XMFLOAT3 newForce = partnerBall->GetAttributes().velocLin * momentumTransferRatio;
+	m_attributes.velocLin = { 0.f, 0.f, 0.f };
+
 	PauseCollisionChecking();
 	return newForce;
 	//TODO: dont apply force in usual way; must DISREGARD time

@@ -139,13 +139,13 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 
 	if ( pInput.IsKeyDown( VK_SPACE ))
 	{
-		m_physics.GenericForce( &m_box1, targetB1, time );
-		m_physics.GenericForce( &m_box2, targetB2, time );
+		m_physics.Force_Steady( &m_box1, targetB1, time );
+		m_physics.Force_Steady( &m_box2, targetB2, time );
 	}
 	if ( pInput.IsKeyDown( VK_CONTROL ))
 	{
-		m_physics.GenericForce( &m_box1, -targetB1, time );
-		m_physics.GenericForce( &m_box2, -targetB2, time );
+		m_physics.Force_Steady( &m_box1, -targetB1, time );
+		m_physics.Force_Steady( &m_box2, -targetB2, time );
 	}
 }
 
@@ -154,20 +154,31 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 /////////////////////////////////
 void Scene_Physics::DoCollision()
 {
-	// Check for any collided objects in scene
+	// If the two objects overlap, add one to list and give it awareness of the other
 	if ( AABBvsAABB( &m_box1, &m_box2 ))
-	{
-	if(m_box1.CollisionOn())
+	{ // TODO: check if already added as a partner force
+	if(m_box1.CollisionOn()&&m_box1.CollisionOn())
 		m_pActorsOverlapping.push(&m_box1);
-
-	if(m_box2.CollisionOn())
-		m_pActorsOverlapping.push(&m_box2);
+		m_box1.m_pCollision_partner = &m_box2;
 	}
 
 	// HANDLE ALL OBJECTS THAT COLLIDED
 	while ( !m_pActorsOverlapping.empty() )
 	{
-		m_pActorsOverlapping.front()->Stop();
+		//m_pActorsOverlapping.front()->Stop();
+		// handle both the actor and its partner
+		Actor_Dynamic* pActor = m_pActorsOverlapping.front();
+		Actor_Dynamic* pPartner = pActor->m_pCollision_partner;
+
+		XMFLOAT3 impulse = pActor->GetReboundForce(pPartner);
+		XMFLOAT3 partnerImpulse = pPartner->GetReboundForce(pActor);
+
+		m_physics.Force_Collision( pActor, impulse );
+		m_physics.Force_Collision( pPartner, partnerImpulse );
+		
+		//delete pActor;
+		//delete pPartner;
+
 		m_pActorsOverlapping.pop();
 	}
 

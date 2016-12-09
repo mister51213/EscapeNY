@@ -20,7 +20,7 @@ void ForceEvent(PhysAttributes & attributes ) {}
 void UpdateAcceleration(PhysAttributes& attributes ) {}
 
 // TODO: Add force (impulse) function
-void Physics_NEW::GenericForce( Actor_Dynamic* pActor, DirectX::XMFLOAT3 force, float deltaT)
+void Physics_NEW::Force_Steady( Actor_Dynamic* pActor, DirectX::XMFLOAT3 force, float deltaT)
 {
 	DirectX::XMFLOAT3 accelApplied = force / pActor->m_attributes.mass; // a = f / m
 	pActor->m_attributes.accelLin += accelApplied * deltaT; 
@@ -28,6 +28,15 @@ void Physics_NEW::GenericForce( Actor_Dynamic* pActor, DirectX::XMFLOAT3 force, 
 //TODO: this isnt how forces work!
 // It shouldnt increase acceleration and then just leave it there.
 // acceleration should go back to zero after force subsides.
+
+// Note: we treat collisions as an INSTANTANEOUS change in velocity; therefore we dont 
+// even change the actor's acceleration and do a one time change in the actor's velocity only.
+// - saves us the burden of setting acceleration back to 0 when force is spent
+void Physics_NEW::Force_Collision( Actor_Dynamic* pActor, DirectX::XMFLOAT3 impulse)
+{
+	DirectX::XMFLOAT3 accelApplied = impulse /*/ pActor->m_attributes.mass*/; // a = f / m
+	pActor->m_attributes.velocLin += accelApplied; 
+}
 
 void Physics_NEW::AddDrag( Actor_Dynamic* pActor, float deltaT)
 {
@@ -41,7 +50,7 @@ void Physics_NEW::AddDrag( Actor_Dynamic* pActor, float deltaT)
 		XMFLOAT3 dragForce = actorVeloc * veloMag * dragCoef; // calculate
 		dragForce = -dragForce; // negate
 		
-		GenericForce( pActor, dragForce, deltaT );
+		Force_Steady( pActor, dragForce, deltaT );
 
 	}
 }

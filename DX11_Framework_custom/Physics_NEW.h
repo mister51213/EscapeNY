@@ -17,7 +17,9 @@ public:
 
 	void DoPhysics();
 
-	void GenericForce( Actor_Dynamic* pActor, DirectX::XMFLOAT3 force, float deltaT);
+	void Force_Steady( Actor_Dynamic* pActor, DirectX::XMFLOAT3 force, float deltaT);
+
+	void Force_Collision( Actor_Dynamic * pActor, DirectX::XMFLOAT3 force );
 
 	void AddDrag( Actor_Dynamic * pActor, float deltaT );
 

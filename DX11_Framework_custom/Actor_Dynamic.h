@@ -44,6 +44,9 @@ public:
 	void ResumeCollisionChecking();
 	bool CollisionOn();
 
+public:
+	Actor_Dynamic* m_pCollision_partner;
+
 protected: 
 	float integrator;
 
