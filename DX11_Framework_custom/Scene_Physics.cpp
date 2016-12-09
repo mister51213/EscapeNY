@@ -172,7 +172,7 @@ void Scene_Physics::DoCollision()
 		Actor_Dynamic* pActor = m_pActorsOverlapping.front();
 		Actor_Dynamic* pPartner = pActor->m_pCollision_partner;
 
-		/*XMFLOAT3 impulse = */pActor->ReboundNEW(pPartner);
+		/*XMFLOAT3 impulse = */pActor->ReboundX2();
 		///*XMFLOAT3 partnerImpulse = */pPartner->GetReboundForce(pActor); // 
 		// TODO: why is partnerImpulse getting set to 000??? not getting calculated or initialized properly
 			// ANSWER - because it has no partner force of its own. these two things should be processed within actors local function.
