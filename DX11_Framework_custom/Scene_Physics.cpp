@@ -172,12 +172,10 @@ void Scene_Physics::DoCollision()
 
 		XMFLOAT3 impulse = pActor->GetReboundForce(pPartner);
 		XMFLOAT3 partnerImpulse = pPartner->GetReboundForce(pActor);
+		// TODO: why is partnerImpulse getting set to 000??? not getting calculated or initialized properly
 
 		m_physics.Force_Collision( pActor, impulse );
 		m_physics.Force_Collision( pPartner, partnerImpulse );
-		
-		//delete pActor;
-		//delete pPartner;
 
 		m_pActorsOverlapping.pop();
 	}
