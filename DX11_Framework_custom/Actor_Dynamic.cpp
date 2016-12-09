@@ -130,20 +130,23 @@ void Actor_Dynamic::Stop(){
 
 /// Collision related functions ///
 // NOTE: currently only works with another ball
-XMFLOAT3 Actor_Dynamic::GetReboundForce(Actor_Dynamic* partnerBall)
+void Actor_Dynamic::ReboundX2()
 {
-	/*XMFLOAT3 newDir = Normalize( partnerBall->GetAttributes().velocLin );
-	XMFLOAT3 newForce = newDir * Magnitude( m_attributes.velocLin );*/	// stop the ball
-	
-	float momentumTransferRatio = partnerBall->GetAttributes().mass / m_attributes.mass;
-	XMFLOAT3 newForce = partnerBall->GetAttributes().velocLin * momentumTransferRatio;
-	m_attributes.velocLin = { 0.f, 0.f, 0.f };
+	PhysAttributes partnerAttributes = m_pCollision_partner->GetAttributes();
+	// calculate velocity change for this actor
+	float momentumTransferRatio = partnerAttributes.mass / m_attributes.mass;
+	XMFLOAT3 forceOn1 = partnerAttributes.velocLin * momentumTransferRatio;
+	// calculate velocity change for the actor it collided with
+	XMFLOAT3 forceOn2 = m_attributes.velocLin / momentumTransferRatio;
 
+	// Now apply to both
+	m_attributes.velocLin = { 0.f, 0.f, 0.f };
+	m_attributes.velocLin += forceOn1;
 	PauseCollisionChecking();
-	return newForce;
-	//TODO: dont apply force in usual way; must DISREGARD time
-	//   otherwise it will be mulitplied down to a tiny fraction and 
-	//   have no influence
+
+	m_pCollision_partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
+	m_pCollision_partner->m_attributes.velocLin += forceOn2;
+	m_pCollision_partner->PauseCollisionChecking();
 }
 void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
 {

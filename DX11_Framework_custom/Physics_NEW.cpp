@@ -32,10 +32,9 @@ void Physics_NEW::Force_Steady( Actor_Dynamic* pActor, DirectX::XMFLOAT3 force, 
 // Note: we treat collisions as an INSTANTANEOUS change in velocity; therefore we dont 
 // even change the actor's acceleration and do a one time change in the actor's velocity only.
 // - saves us the burden of setting acceleration back to 0 when force is spent
-void Physics_NEW::Force_Collision( Actor_Dynamic* pActor, DirectX::XMFLOAT3 impulse)
+void Physics_NEW::Force_Instantaneous( Actor_Dynamic* pActor, DirectX::XMFLOAT3 impulse)
 {
-	DirectX::XMFLOAT3 accelApplied = impulse /*/ pActor->m_attributes.mass*/; // a = f / m
-	pActor->m_attributes.velocLin += accelApplied; 
+	pActor->m_attributes.velocLin += impulse; 
 }
 
 void Physics_NEW::AddDrag( Actor_Dynamic* pActor, float deltaT)

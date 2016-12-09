@@ -157,9 +157,11 @@ void Scene_Physics::DoCollision()
 	// If the two objects overlap, add one to list and give it awareness of the other
 	if ( AABBvsAABB( &m_box1, &m_box2 ))
 	{ // TODO: check if already added as a partner force
-	if(m_box1.CollisionOn()&&m_box1.CollisionOn())
-		m_pActorsOverlapping.push(&m_box1);
-		m_box1.m_pCollision_partner = &m_box2;
+		if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
+		{
+			m_pActorsOverlapping.push( &m_box1 );
+			m_box1.m_pCollision_partner = &m_box2;
+		}
 	}
 
 	// HANDLE ALL OBJECTS THAT COLLIDED
@@ -170,12 +172,13 @@ void Scene_Physics::DoCollision()
 		Actor_Dynamic* pActor = m_pActorsOverlapping.front();
 		Actor_Dynamic* pPartner = pActor->m_pCollision_partner;
 
-		XMFLOAT3 impulse = pActor->GetReboundForce(pPartner);
-		XMFLOAT3 partnerImpulse = pPartner->GetReboundForce(pActor);
+		/*XMFLOAT3 impulse = */pActor->ReboundNEW(pPartner);
+		///*XMFLOAT3 partnerImpulse = */pPartner->GetReboundForce(pActor); // 
 		// TODO: why is partnerImpulse getting set to 000??? not getting calculated or initialized properly
+			// ANSWER - because it has no partner force of its own. these two things should be processed within actors local function.
 
-		m_physics.Force_Collision( pActor, impulse );
-		m_physics.Force_Collision( pPartner, partnerImpulse );
+		//m_physics.Force_Collision( pActor, impulse );
+		//m_physics.Force_Collision( pPartner, partnerImpulse );
 
 		m_pActorsOverlapping.pop();
 	}
