@@ -76,10 +76,13 @@ private:
 	Camera* m_pCamera; // dynamic / fixed, different camera angles
 	//Actor_Stationary m_map;
 	Actor_Dynamic m_map;
-	Actor_Player m_ball1;
-	Actor_Player m_ball2;
-	Actor_Player m_box1;
-	Actor_Player m_box2;
+	//Actor_Player m_ball1;
+	//Actor_Player m_ball2;
+	//Actor_Player m_box1;
+	//Actor_Player m_box2;
+	Actor_Dynamic m_box1;
+	Actor_Dynamic m_box2;
+
 	float m_radiusB1; 
 	float m_radiusB2;
 	int m_numBalls = 2;

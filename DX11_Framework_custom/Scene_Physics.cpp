@@ -31,7 +31,7 @@ void Scene_Physics::Initialize( Graphics * pGraphics,
 		// light.Initialize( { x, y, z}, { 0.f, 0.f, 0.f } );
 
 		// LOOKAT ball1
-		light.Initialize( { x, y, z}, m_ball1.GetPosition() );
+		//light.Initialize( { x, y, z}, m_ball1.GetPosition() );
 		
 		// Randomly create colors for new spot lights
 		float r = static_cast<float>(rand() % 100) * .01f;
@@ -179,7 +179,7 @@ void Scene_Physics::DoCollision()
 {
 	for ( int i = 0; i < m_numCollidables; i++ )
 	{
-		Actor_Dynamic* pBox1 = ( Actor_Dynamic* )m_pActorsMASTER[ i ];
+		Actor_Dynamic* pBox1 = m_collidableObjects[ i ];
 		Actor_Dynamic* pBox2 = NULL;
 
 		// check if there's one more actor in the list to add as partner
@@ -198,8 +198,8 @@ void Scene_Physics::DoCollision()
 		{
 			if ( pBox1->CollisionOn() && pBox2->CollisionOn() )
 			{
+				pBox1->m_pCollision_partner = pBox2;
 				m_pActorsOverlapping.push( pBox1 );
-				m_box1.m_pCollision_partner = pBox2;
 			}
 		}
 	}
