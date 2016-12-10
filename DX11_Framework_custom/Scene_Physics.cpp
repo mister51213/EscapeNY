@@ -113,12 +113,12 @@ void Scene_Physics::UpdateScene(
     //m_box2.GetInput(InputRef);
 
 	// ADD FORCES	
-	m_physics.Friction(&m_box1, tSinceLastFrame);
-	m_physics.Friction(&m_box2, tSinceLastFrame);
+	//m_physics.Friction(&m_box1, tSinceLastFrame);
+	//m_physics.Friction(&m_box2, tSinceLastFrame);
 
 	// Gravity
-	m_physics.Force_Steady( &m_box1, { 0.f, -30000.f, 0.f }, tSinceLastFrame );
-	m_physics.Force_Steady(&m_box2, { 0.f, -30000.f, 0.f }, tSinceLastFrame);
+	m_physics.Force_Steady( &m_box1, { 0.f, -60000.f, 0.f }, tSinceLastFrame );
+	m_physics.Force_Steady(&m_box2, { 0.f, -60000.f, 0.f }, tSinceLastFrame);
 
 	// ACTOR MOVEMENT
 	m_box1.UpdateMotion(tSinceLastFrame);
@@ -173,35 +173,51 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 void Scene_Physics::DoCollision()
 {
 	// If the two objects overlap, add one to list and give it awareness of the other
-	for each ( Actor_Dynamic* pActor in m_pActorsMASTER )
+	for ( UINT64 i = 0; i < m_pActorsMASTER.size(); i++ )
 	{
+		Actor_Dynamic* pBox1 = ( Actor_Dynamic* )m_pActorsMASTER[ i ];
+		
+		Actor_Dynamic* pBox2 = NULL;
+		int size = m_pActorsMASTER.size();
+		//if (i++ != size--)
+		//{
+		pBox2 = ( Actor_Dynamic* )m_pActorsMASTER[ i++ ];
+//		}
 
-	}
-
-	if ( AABBvsAABB( &m_box1, &m_box2 ))
-	{ // TODO: check if already added as a partner force
-		if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
+		if ( AABBvsAABB( pBox1, pBox2 ) )
 		{
-			m_pActorsOverlapping.push( &m_box1 );
-			m_box1.m_pCollision_partner = &m_box2;
+			if ( pBox1->CollisionOn() && pBox1->CollisionOn() )
+			{
+				m_pActorsOverlapping.push( pBox1 );
+				m_box1.m_pCollision_partner = pBox2;
+			}
 		}
 	}
+	
+	//if ( AABBvsAABB( &m_box1, &m_box2 ))
+	//{ // TODO: check if already added as a partner force
+	//	if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
+	//	{
+	//		m_pActorsOverlapping.push( &m_box1 );
+	//		m_box1.m_pCollision_partner = &m_box2;
+	//	}
+	//}
 
-	if ( AABBvsAABB( &m_box1, &m_map ))
-	{ // TODO: check if already added as a partner force
-		if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
-		{
-			m_box1.ReboundX1();
-		}
-	}
+	//if ( AABBvsAABB( &m_box1, &m_map ))
+	//{ // TODO: check if already added as a partner force
+	//	if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
+	//	{
+	//		m_box1.ReboundX1();
+	//	}
+	//}
 
-		if ( AABBvsAABB( &m_box2, &m_map ))
-	{ // TODO: check if already added as a partner force
-		if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
-		{
-			m_box2.ReboundX1();
-		}
-	}
+	//	if ( AABBvsAABB( &m_box2, &m_map ))
+	//{ // TODO: check if already added as a partner force
+	//	if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
+	//	{
+	//		m_box2.ReboundX1();
+	//	}
+	//}
 	// TODO: how to implement collision with many objects??
 
 	// HANDLE ALL OBJECTS THAT COLLIDED
