@@ -94,6 +94,8 @@ private:
 	// COLLISION TESTING /////////////////
 	//////////////////////////////////////	
 	std::queue<Actor_Dynamic*> m_pActorsOverlapping;
+	const int m_numCollidables = 3;
+	Actor_Dynamic* m_collidableObjects[3];
 
 	//////////////////////////////////////
 	// LIGHTING //////////////////////////

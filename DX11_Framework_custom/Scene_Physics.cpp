@@ -90,6 +90,11 @@ void Scene_Physics::reset()
 	m_pActorsMASTER.push_back(&m_box1);
 	m_pActorsMASTER.push_back(&m_box2);
     m_pActorsMASTER.push_back(&m_map);
+
+	// Load collidable objects
+	m_collidableObjects[ 0 ] = &m_box1;
+	m_collidableObjects[ 1 ] = &m_box2;
+	m_collidableObjects[ 2 ] = &m_map;
 }
 
 void Scene_Physics::UpdateScene( 
@@ -172,31 +177,58 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 /////////////////////////////////
 void Scene_Physics::DoCollision()
 {
-	// If the two objects overlap, add one to list and give it awareness of the other
-	for ( UINT64 i = 0; i < m_pActorsMASTER.size(); i++ )
+	for ( int i = 0; i < m_numCollidables; i++ )
 	{
 		Actor_Dynamic* pBox1 = ( Actor_Dynamic* )m_pActorsMASTER[ i ];
-		
 		Actor_Dynamic* pBox2 = NULL;
-		int size = m_pActorsMASTER.size();
-		//if (i++ != size--)
-		//{
-		pBox2 = ( Actor_Dynamic* )m_pActorsMASTER[ i++ ];
-//		}
 
+		// check if there's one more actor in the list to add as partner
+		if (i++ < m_numCollidables)
+		{
+		pBox2 = m_collidableObjects[ i++ ];
+		}
+		else // otherwise test it w first actor in list
+		{
+		pBox2 = m_collidableObjects[ 0 ];
+		}
+
+		// check collision
 		if ( AABBvsAABB( pBox1, pBox2 ) )
 		{
-			if ( pBox1->CollisionOn() && pBox1->CollisionOn() )
+			if ( pBox1->CollisionOn() && pBox2->CollisionOn() )
 			{
 				m_pActorsOverlapping.push( pBox1 );
 				m_box1.m_pCollision_partner = pBox2;
 			}
 		}
 	}
+
+
+//	// If the two objects overlap, add one to list and give it awareness of the other
+//	for ( UINT64 i = 0; i < m_pActorsMASTER.size(); i++ )
+//	{
+//		Actor_Dynamic* pBox1 = ( Actor_Dynamic* )m_pActorsMASTER[ i ];
+//		
+//		Actor_Dynamic* pBox2 = NULL;
+//		int size = m_pActorsMASTER.size();
+//		//if (i++ != size--)
+//		//{
+//		pBox2 = ( Actor_Dynamic* )m_pActorsMASTER[ i++ ];
+////		}
+//
+//		if ( AABBvsAABB( pBox1, pBox2 ) )
+//		{
+//			if ( pBox1->CollisionOn() && pBox2->CollisionOn() )
+//			{
+//				m_pActorsOverlapping.push( pBox1 );
+//				m_box1.m_pCollision_partner = pBox2;
+//			}
+//		}
+//	}
 	
 	//if ( AABBvsAABB( &m_box1, &m_box2 ))
 	//{ // TODO: check if already added as a partner force
-	//	if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
+	//	if ( m_box1.CollisionOn() && m_box2.CollisionOn() )
 	//	{
 	//		m_pActorsOverlapping.push( &m_box1 );
 	//		m_box1.m_pCollision_partner = &m_box2;
@@ -205,7 +237,7 @@ void Scene_Physics::DoCollision()
 
 	//if ( AABBvsAABB( &m_box1, &m_map ))
 	//{ // TODO: check if already added as a partner force
-	//	if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
+	//	if ( m_box1.CollisionOn() && m_map.CollisionOn() )
 	//	{
 	//		m_box1.ReboundX1();
 	//	}
@@ -213,7 +245,7 @@ void Scene_Physics::DoCollision()
 
 	//	if ( AABBvsAABB( &m_box2, &m_map ))
 	//{ // TODO: check if already added as a partner force
-	//	if ( m_box1.CollisionOn() && m_box1.CollisionOn() )
+	//	if ( m_box2.CollisionOn() && m_map.CollisionOn() )
 	//	{
 	//		m_box2.ReboundX1();
 	//	}
