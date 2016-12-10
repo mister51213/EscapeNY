@@ -183,9 +183,10 @@ void Scene_Physics::DoCollision()
 		Actor_Dynamic* pBox2 = NULL;
 
 		// check if there's one more actor in the list to add as partner
-		if (i++ < m_numCollidables)
+		int next = i + 1;
+		if (next < m_numCollidables)
 		{
-		pBox2 = m_collidableObjects[ i++ ];
+		pBox2 = m_collidableObjects[ next ];
 		}
 		else // otherwise test it w first actor in list
 		{
