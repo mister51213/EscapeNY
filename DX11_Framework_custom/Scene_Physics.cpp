@@ -83,10 +83,12 @@ void Scene_Physics::reset()
 	m_collidables[2].m_attributes.mass = 10000.f;
 
 	// LOAD DRAW LIST
-	for each ( auto actor in m_collidables )
+	for ( int i = m_collidables.size() - 1; i >= 0; i-- )
 	{
-		m_pActorsMASTER.push_back( &actor );
-	}/*
+		m_pActorsMASTER.push_back(&(m_collidables[i]) );
+	}
+	
+	/*
 	m_pActorsMASTER.push_back(&m_box1);
 	m_pActorsMASTER.push_back(&m_box2);
     m_pActorsMASTER.push_back(&m_map);*/
