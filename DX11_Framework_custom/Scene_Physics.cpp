@@ -203,33 +203,32 @@ void Scene_Physics::DoCollision()
 	//	}
 	//}
 
-	vector<Actor_Dynamic>::iterator trailingIter;
-
 	// double iterator loop for collision checking
 for (vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end(); ++iter1) {
-    for (std::vector<Actor_Dynamic>::iterator iter2 = m_collidables.begin(); iter2 != m_collidables.end(); ++iter2) {
-		if ( iter1 == iter2 )
+	vector<Actor_Dynamic>::iterator trailingIter;
+	for ( std::vector<Actor_Dynamic>::iterator iter2 = m_collidables.begin(); iter2 != m_collidables.end(); ++iter2 )
+	{
+		if ( iter1 == iter2 /*||*/ // don't compare for collision against itself
+			 /*iter2 == trailingIter*/ ) // skip redundant pairs
 		{
-			// don't compare for collision against itself
 			continue;
 		}
 
-		trailingIter = iter1;
 		if ( iter1 != m_collidables.begin() )
 		{
-			trailingIter--;
-		}
-		// skip redundant pairs
-		if ( iter2 == trailingIter)
-		{
-			continue;
+			trailingIter = iter1;
+			--trailingIter;
+			if ( iter2 == trailingIter )
+			{
+				continue;
+			}
 		}
 
-		if ( AABBvsAABB( iter1, iter2 ))
+		if ( AABBvsAABB( iter1, iter2 ) )
 		{
 			iter1->ReboundWith( iter2 );
 		}
-    }
+	}
 }
 
 //	// If the two objects overlap, add one to list and give it awareness of the other
@@ -293,22 +292,22 @@ for (vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_c
 	//}
 
 	// NOW RESUME COLLISION CHECKING ONCE BALLS HAVE BROKEN AWAY FROM EACH OTHER
-for ( vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end(); ++iter1 )
-{
-	for ( std::vector<Actor_Dynamic>::iterator iter2 = m_collidables.begin(); iter2 != m_collidables.end(); ++iter2 )
-	{
-		if ( iter1 == iter2 )
-		{
-			// don't compare for collision against itself
-			continue;
-		}
-		if ( !AABBvsAABB( iter1, iter2 ) ) // TODO: make it polymorphic for all shapes
-		{
-			iter1->ResumeCollision();
-			iter2->ResumeCollision();
-		}
-	}
-}
+//for ( vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end(); ++iter1 )
+//{
+//	for ( std::vector<Actor_Dynamic>::iterator iter2 = m_collidables.begin(); iter2 != m_collidables.end(); ++iter2 )
+//	{
+//		if ( iter1 == iter2 )
+//		{
+//			// don't compare for collision against itself
+//			continue;
+//		}
+//		if ( !AABBvsAABB( iter1, iter2 ) ) // TODO: make it polymorphic for all shapes
+//		{
+//			iter1->ResumeCollision();
+//			iter2->ResumeCollision();
+//		}
+//	}
+//}
 }
 
 

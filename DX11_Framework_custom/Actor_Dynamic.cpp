@@ -138,22 +138,29 @@ void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator& partner)
 	XMFLOAT3 forceOn1 = partnerAttributes.velocLin * momentumTransferRatio;
 
 	if ( partnerAttributes.mass >= 2000 )
-		forceOn1 = -m_attributes.velocLin;
+	{
+		forceOn1.y += -m_attributes.velocLin.y;
+		m_attributes.velocLin.y = 0.f; // TODO: component perpendicular to trajectory only
+	}
+	else
+	{
+m_attributes.velocLin = { 0.f, 0.f, 0.f };
+	}
 
 	// calculate velocity change for the actor it collided with
 	XMFLOAT3 forceOn2 = m_attributes.velocLin / momentumTransferRatio;
 
 	// Now apply to both
-	m_attributes.velocLin = { 0.f, 0.f, 0.f };
+	
 	m_attributes.velocLin += forceOn1;
-	PauseCollision();
+	//PauseCollision();
 
 		//m_pCollision_partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
 		//m_pCollision_partner->m_attributes.velocLin += forceOn2;
 		//m_pCollision_partner->PauseCollisionChecking();
 	partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
 	partner->m_attributes.velocLin += forceOn2;
-	partner->PauseCollision();
+	//partner->PauseCollision();
 }
 
 void Actor_Dynamic::ReboundX1()
