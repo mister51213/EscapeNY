@@ -26,6 +26,7 @@
 #include <string>
 #include <time.h>
 #include <vector>
+#include <list>
 
 // Win API headers
 #include <windows.h>

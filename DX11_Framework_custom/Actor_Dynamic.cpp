@@ -130,7 +130,7 @@ void Actor_Dynamic::Stop(){
 
 /// Collision related functions ///
 // NOTE: currently only works with another ball
-void Actor_Dynamic::ReboundX2()
+void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator partner)
 {
 	PhysAttributes partnerAttributes = m_pCollision_partner->GetAttributes();
 	// calculate velocity change for this actor
@@ -144,9 +144,12 @@ void Actor_Dynamic::ReboundX2()
 	m_attributes.velocLin += forceOn1;
 	PauseCollisionChecking();
 
-		m_pCollision_partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
-		m_pCollision_partner->m_attributes.velocLin += forceOn2;
-		m_pCollision_partner->PauseCollisionChecking();
+		//m_pCollision_partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
+		//m_pCollision_partner->m_attributes.velocLin += forceOn2;
+		//m_pCollision_partner->PauseCollisionChecking();
+	partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
+	partner->m_attributes.velocLin += forceOn2;
+	partner->PauseCollisionChecking();
 }
 
 void Actor_Dynamic::ReboundX1()

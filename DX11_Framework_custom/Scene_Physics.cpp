@@ -9,6 +9,7 @@
 #include "MathUtils.h"
 
 using namespace DirectX;
+using namespace std;
 
 void Scene_Physics::Initialize( Graphics * pGraphics, 
 								Game * const pGame, 
@@ -56,45 +57,43 @@ void Scene_Physics::reset()
 {
 	m_pActorsMASTER.clear();
 
-	// MAP
-	//m_map = Actor_Stationary( 
-	//{ { 0.f, 0.f, 0.f },
-	//{ 0.f, 0.f, 0.f },
-	//{ 600.f, 400.f, 600.f } }, waterSHALLOW, ModelSpecs_L(), SOME_EDIFICE );
-
-	m_map = Actor_Dynamic( 
-	{ { 0.f, -200.f, 0.f },
-	{ 0.f, 0.f, 0.f },
-	{ 1500.f, 20.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED );
-	m_box1.m_attributes.mass = 10000.f;
-
-		// LEFT BOX
+	// LEFT BOX
 	float scale1 = 100.f;
-    m_box1 = Actor_Player(
+    m_collidables.push_back(Actor_Dynamic( 
 	{ { -400.f, 0.f, 0.f },
 	{ 0.f, 0.f, 0.f },
 	{ scale1, scale1, scale1 } },
-		eTexture::Aluminum, ModelSpecs_L(), CUBE_TEXTURED );
-	m_box1.m_attributes.mass = 25.f;
+		eTexture::Aluminum, ModelSpecs_L(), CUBE_TEXTURED ));
+	m_collidables[0].m_attributes.mass = 25.f;
 
 	// RIGHT BOX
 	float scale2 = 100.f;
-	m_box2 = Actor_Player(
+	m_collidables.push_back(Actor_Dynamic( 
     { { 400.f, 0.f, 0.f },
     { 0.f, 0.f, 0.f },
 	{ scale2, scale2, scale2 } },		
-		eTexture::SharkSkin, ModelSpecs_L(), CUBE_TEXTURED);
-	m_box2.m_attributes.mass = 5.f;
+		eTexture::SharkSkin, ModelSpecs_L(), CUBE_TEXTURED));
+	m_collidables[1].m_attributes.mass = 5.f;
+
+	// MAP
+	m_collidables.push_back(Actor_Dynamic( 
+	{ { 0.f, -200.f, 0.f },
+	{ 0.f, 0.f, 0.f },
+	{ 1500.f, 20.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED ));
+	m_collidables[2].m_attributes.mass = 10000.f;
 
 	// LOAD DRAW LIST
+	for each ( auto actor in m_collidables )
+	{
+		m_pActorsMASTER.push_back( &actor );
+	}/*
 	m_pActorsMASTER.push_back(&m_box1);
 	m_pActorsMASTER.push_back(&m_box2);
-    m_pActorsMASTER.push_back(&m_map);
+    m_pActorsMASTER.push_back(&m_map);*/
 
-	// Load collidable objects
-	m_collidableObjects[ 0 ] = &m_box1;
-	m_collidableObjects[ 1 ] = &m_box2;
-	m_collidableObjects[ 2 ] = &m_map;
+	//m_collidableObjects[ 0 ] = &m_box1;
+	//m_collidableObjects[ 1 ] = &m_box2;
+	//m_collidableObjects[ 2 ] = &m_map;
 }
 
 void Scene_Physics::UpdateScene( 
@@ -122,15 +121,15 @@ void Scene_Physics::UpdateScene(
 	//m_physics.Friction(&m_box2, tSinceLastFrame);
 
 	// Gravity
-	m_physics.Force_Steady( &m_box1, { 0.f, -60000.f, 0.f }, tSinceLastFrame );
-	m_physics.Force_Steady(&m_box2, { 0.f, -60000.f, 0.f }, tSinceLastFrame);
+	m_physics.Force_Steady( &m_collidables[0], { 0.f, -60000.f, 0.f }, tSinceLastFrame );
+	m_physics.Force_Steady(&m_collidables[1], { 0.f, -60000.f, 0.f }, tSinceLastFrame);
 
 	// ACTOR MOVEMENT
-	m_box1.UpdateMotion(tSinceLastFrame);
-	m_box2.UpdateMotion(tSinceLastFrame);
+	m_collidables[0].UpdateMotion(tSinceLastFrame);
+	m_collidables[1].UpdateMotion(tSinceLastFrame);
 	// Stop applying acceleration after updating
-	m_box1.StopAccelerating();
-	m_box2.StopAccelerating();
+	m_collidables[0].StopAccelerating();
+	m_collidables[1].StopAccelerating();
 	//TODO: this is a HACK; do it properly!
 
 	// CHECK COLLISIONS FOR BALLS AND HANDLE COLLISIONS
@@ -147,12 +146,12 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 	XMFLOAT3 worldCenter = {0.f, 0.f, 0.f};
 
 	// box1 mass is 1
-	XMFLOAT3 targetB1 = worldCenter - m_box1.GetPosition();
+	XMFLOAT3 targetB1 = worldCenter - m_collidables[0].GetPosition();
 	Normalize( targetB1 );
 	targetB1 *= 300.f; // force magnitude
 
 	// box2 mass is 0.5
-	XMFLOAT3 targetB2 = worldCenter - m_box2.GetPosition();
+	XMFLOAT3 targetB2 = worldCenter - m_collidables[1].GetPosition();
 	Normalize( targetB2 );
 	targetB2 *= 300.f; // force magnitude
 
@@ -160,15 +159,15 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 	{
 		/*m_physics.Force_Steady( &m_box1, targetB1, time );
 		m_physics.Force_Steady( &m_box2, targetB2, time );*/
-		m_physics.Force_Steady( &m_box1, { 120000.f, 0.f, 0.f }, time );
-		m_physics.Force_Steady( &m_box2, { -120000.f, 0.f, 0.f }, time );
+		m_physics.Force_Steady( &m_collidables[0], { 120000.f, 0.f, 0.f }, time );
+		m_physics.Force_Steady( &m_collidables[1], { -120000.f, 0.f, 0.f }, time );
 	}
 	if ( pInput.IsKeyDown( VK_CONTROL ))
 	{
 		//m_physics.Force_Steady( &m_box1, -targetB1, time );
 		//m_physics.Force_Steady( &m_box2, -targetB2, time );
-		m_physics.Force_Steady( &m_box1, { -120000.f, 0.f, 0.f }, time );
-		m_physics.Force_Steady( &m_box2, { 120000.f, 0.f, 0.f }, time );
+		m_physics.Force_Steady( &m_collidables[0], { -120000.f, 0.f, 0.f }, time );
+		m_physics.Force_Steady( &m_collidables[1], { 120000.f, 0.f, 0.f }, time );
 	}
 }
 
@@ -177,33 +176,45 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 /////////////////////////////////
 void Scene_Physics::DoCollision()
 {
-	for ( int i = 0; i < m_numCollidables; i++ )
-	{
-		Actor_Dynamic* pBox1 = m_collidableObjects[ i ];
-		Actor_Dynamic* pBox2 = NULL;
+	//for ( int i = 0; i < m_numCollidables; i++ )
+	//{
+	//	Actor_Dynamic* pBox1 = m_collidableObjects[ i ];
+	//	Actor_Dynamic* pBox2 = NULL;
+	//	// check if there's one more actor in the list to add as partner
+	//	int next = i + 1;
+	//	if (next < m_numCollidables)
+	//	{
+	//	pBox2 = m_collidableObjects[ next ];
+	//	}
+	//	else // otherwise test it w first actor in list
+	//	{
+	//	pBox2 = m_collidableObjects[ 0 ];
+	//	}
+	//	// check collision
+	//	if ( AABBvsAABB( pBox1, pBox2 ) )
+	//	{
+	//		if ( pBox1->CollisionOn() && pBox2->CollisionOn() )
+	//		{
+	//			pBox1->m_pCollision_partner = pBox2;
+	//			m_pActorsOverlapping.push( pBox1 );
+	//		}
+	//	}
+	//}
 
-		// check if there's one more actor in the list to add as partner
-		int next = i + 1;
-		if (next < m_numCollidables)
+	// double iterator loop for collision checking
+for (vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end(); ++iter1) {
+    for (std::vector<Actor_Dynamic>::iterator iter2 = m_collidables.begin(); iter2 != m_collidables.end(); ++iter2) {
+		if ( iter1 == iter2 )
 		{
-		pBox2 = m_collidableObjects[ next ];
+			// don't compare for collision against itself
+			continue;
 		}
-		else // otherwise test it w first actor in list
+		if ( AABBvsAABB( iter1, iter2 ))
 		{
-		pBox2 = m_collidableObjects[ 0 ];
+			iter1->ReboundWith( iter2 );
 		}
-
-		// check collision
-		if ( AABBvsAABB( pBox1, pBox2 ) )
-		{
-			if ( pBox1->CollisionOn() && pBox2->CollisionOn() )
-			{
-				pBox1->m_pCollision_partner = pBox2;
-				m_pActorsOverlapping.push( pBox1 );
-			}
-		}
-	}
-
+    }
+}
 
 //	// If the two objects overlap, add one to list and give it awareness of the other
 //	for ( UINT64 i = 0; i < m_pActorsMASTER.size(); i++ )
@@ -225,8 +236,7 @@ void Scene_Physics::DoCollision()
 //				m_box1.m_pCollision_partner = pBox2;
 //			}
 //		}
-//	}
-	
+//	}	
 	//if ( AABBvsAABB( &m_box1, &m_box2 ))
 	//{ // TODO: check if already added as a partner force
 	//	if ( m_box1.CollisionOn() && m_box2.CollisionOn() )
@@ -235,7 +245,6 @@ void Scene_Physics::DoCollision()
 	//		m_box1.m_pCollision_partner = &m_box2;
 	//	}
 	//}
-
 	//if ( AABBvsAABB( &m_box1, &m_map ))
 	//{ // TODO: check if already added as a partner force
 	//	if ( m_box1.CollisionOn() && m_map.CollisionOn() )
@@ -243,7 +252,6 @@ void Scene_Physics::DoCollision()
 	//		m_box1.ReboundX1();
 	//	}
 	//}
-
 	//	if ( AABBvsAABB( &m_box2, &m_map ))
 	//{ // TODO: check if already added as a partner force
 	//	if ( m_box2.CollisionOn() && m_map.CollisionOn() )
@@ -252,38 +260,43 @@ void Scene_Physics::DoCollision()
 	//	}
 	//}
 	// TODO: how to implement collision with many objects??
-
 	// HANDLE ALL OBJECTS THAT COLLIDED
-	while ( !m_pActorsOverlapping.empty() )
-	{
-		//m_pActorsOverlapping.front()->Stop();
-		// handle both the actor and its partner
-		Actor_Dynamic* pActor = m_pActorsOverlapping.front();
-		Actor_Dynamic* pPartner = pActor->m_pCollision_partner;
-
-		/*XMFLOAT3 impulse = */pActor->ReboundX2();
-		///*XMFLOAT3 partnerImpulse = */pPartner->GetReboundForce(pActor); // 
-		// TODO: why is partnerImpulse getting set to 000??? not getting calculated or initialized properly
-			// ANSWER - because it has no partner force of its own. these two things should be processed within actors local function.
-
-		//m_physics.Force_Collision( pActor, impulse );
-		//m_physics.Force_Collision( pPartner, partnerImpulse );
-
-		m_pActorsOverlapping.pop();
-	}
+	//while ( !m_pActorsOverlapping.empty() )
+	//{
+	//	//m_pActorsOverlapping.front()->Stop();
+	//	// handle both the actor and its partner
+	//	Actor_Dynamic* pActor = m_pActorsOverlapping.front();
+	//	Actor_Dynamic* pPartner = pActor->m_pCollision_partner;
+	//	/*XMFLOAT3 impulse = */pActor->ReboundX2();
+	//	///*XMFLOAT3 partnerImpulse = */pPartner->GetReboundForce(pActor); // 
+	//	// TODO: why is partnerImpulse getting set to 000??? not getting calculated or initialized properly
+	//		// ANSWER - because it has no partner force of its own. these two things should be processed within actors local function.
+	//	//m_physics.Force_Collision( pActor, impulse );
+	//	//m_physics.Force_Collision( pPartner, partnerImpulse );
+	//	m_pActorsOverlapping.pop();
+	//}
 
 	// NOW RESUME COLLISION CHECKING ONCE BALLS HAVE BROKEN AWAY FROM EACH OTHER
-	for ( auto & actor : m_pActorsMASTER )
+for ( vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end(); ++iter1 )
+{
+	for ( std::vector<Actor_Dynamic>::iterator iter2 = m_collidables.begin(); iter2 != m_collidables.end(); ++iter2 )
 	{
-		if ( !AABBvsAABB(&m_box1, &m_box2) ) // TODO: make it polymorphic for all shapes
+		if ( iter1 == iter2 )
 		{
-			dynamic_cast< Actor_Dynamic* >( actor )->ResumeCollisionChecking();
+			// don't compare for collision against itself
+			continue;
+		}
+		if ( !AABBvsAABB( iter1, iter2 ) ) // TODO: make it polymorphic for all shapes
+		{
+			iter1->ResumeCollisionChecking();
+			iter2->ResumeCollisionChecking();
 		}
 	}
 }
+}
 
-// True if overlaps, false if no overlap
-bool Scene_Physics::AABBvsAABB( Actor* pActor1, Actor* pActor2 )
+
+bool Scene_Physics::AABBvsAABB( vector<Actor_Dynamic>::iterator pActor1, vector<Actor_Dynamic>::iterator pActor2 )
 {
  	AABB box1 = pActor1->m_AABBox;
 	AABB box2 = pActor2->m_AABBox;
@@ -296,6 +309,21 @@ bool Scene_Physics::AABBvsAABB( Actor* pActor1, Actor* pActor2 )
   // No separating axis found, therefore there is at least one overlapping axis
 	return true;
 }
+
+// True if overlaps, false if no overlap
+//bool Scene_Physics::AABBvsAABB( Actor_Dynamic* pActor1, Actor_Dynamic* pActor2 )
+//{
+// 	AABB box1 = pActor1->m_AABBox;
+//	AABB box2 = pActor2->m_AABBox;
+//
+//	// Exit with no intersection if found separated along an axis
+//	if ( box1.m_max.x < box2.m_min.x || box1.m_min.x > box2.m_max.x ) return false;
+//	if ( box1.m_max.y < box2.m_min.y || box1.m_min.y > box2.m_max.y ) return false;
+//	if ( box1.m_max.z < box2.m_min.z || box1.m_min.z > box2.m_max.z ) return false;
+// 
+//  // No separating axis found, therefore there is at least one overlapping axis
+//	return true;
+//}
 
 bool Scene_Physics::CircleVsCircle(Actor* pActor1, Actor* pActor2)
 {
@@ -334,11 +362,11 @@ void Scene_Physics::Lighting()
 	// LIGHTS distributed among balls
 	for ( int i = 0; i < m_lightsPerBall; i++ )
 	{
-		m_spotLights[i].SetLookat( m_box1.GetPosition() );
+		m_spotLights[ i ].SetLookat( m_collidables[0].GetPosition() );
 	}
 	for ( int i = m_lightsPerBall; i < m_numLights; i++ )
 	{
-		m_spotLights[ i ].SetLookat( m_box2.GetPosition() );
+		m_spotLights[ i ].SetLookat( m_collidables[1].GetPosition() );
 	}
 }
 

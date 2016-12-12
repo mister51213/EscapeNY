@@ -244,7 +244,7 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
     wcex.cbWndExtra = 0;
     wcex.hInstance = m_hInstance;
     wcex.hIcon = LoadIcon(NULL, IDI_WINLOGO);
-    wcex.hIconSm       = wcex.hIcon;
+    wcex.hIconSm = wcex.hIcon;
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
     wcex.lpszMenuName = NULL;

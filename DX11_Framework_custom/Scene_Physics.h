@@ -16,6 +16,8 @@ class GameTimer;
 class Graphics;
 class Input;
 
+using namespace std;
+
 class Scene_Physics: public ISubGame
 {
 public:
@@ -41,13 +43,15 @@ public:
 
 	void DoCollision();
 
+	bool AABBvsAABB( std::vector<Actor_Dynamic>::iterator pActor1, std::vector<Actor_Dynamic>::iterator pActor2 );
+
+	//bool AABBvsAABB( Actor_Dynamic* pActor1, Actor_Dynamic* pActor2 );
+
 	void InputForces(Input& pInput, float time);
 
 	bool CircleVsCircle( Actor * pActor1, Actor * pActor2 );
 
 	bool CircleVsBox( Actor * pActor1, Actor * pActor2 );
-
-	bool AABBvsAABB( Actor * pActor1, Actor * pActor2 );
 
 	bool BoxVsBox( Actor * pActor1, Actor * pActor2 );
 
@@ -96,9 +100,11 @@ private:
 	//////////////////////////////////////
 	// COLLISION TESTING /////////////////
 	//////////////////////////////////////	
-	std::queue<Actor_Dynamic*> m_pActorsOverlapping;
-	const int m_numCollidables = 3;
-	Actor_Dynamic* m_collidableObjects[3];
+	//std::queue<Actor_Dynamic*> m_pActorsOverlapping;
+	//const int m_numCollidables = 3;
+	//Actor_Dynamic* m_collidableObjects[3];
+	std::vector<Actor_Dynamic> m_collidables;
+	//TODO: separate list for non collidable actos
 
 	//////////////////////////////////////
 	// LIGHTING //////////////////////////

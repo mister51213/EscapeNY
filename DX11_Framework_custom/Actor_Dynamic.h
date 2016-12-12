@@ -39,7 +39,7 @@ public:
 
 	/// Collision related functions ///
 	void Rebound( Actor_Dynamic * partnerBall );
-	void ReboundX2();
+	void ReboundWith(std::vector<Actor_Dynamic>::iterator partner);
 	void ReboundX1();
 	void PauseCollisionChecking();
 	void ResumeCollisionChecking();
