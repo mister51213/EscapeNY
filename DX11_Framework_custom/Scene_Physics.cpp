@@ -123,8 +123,8 @@ void Scene_Physics::UpdateScene(
 	//m_physics.Friction(&m_box2, tSinceLastFrame);
 
 	// Gravity
-	//m_physics.Force_Steady( &m_collidables[0], { 0.f, -60000.f, 0.f }, tSinceLastFrame );
-	//m_physics.Force_Steady(&m_collidables[1], { 0.f, -60000.f, 0.f }, tSinceLastFrame);
+	m_physics.Force_Steady( &m_collidables[0], { 0.f, -60000.f, 0.f }, tSinceLastFrame );
+	m_physics.Force_Steady(&m_collidables[1], { 0.f, -60000.f, 0.f }, tSinceLastFrame);
 
 	// ACTOR MOVEMENT
 	m_collidables[0].UpdateMotion(tSinceLastFrame);
@@ -203,6 +203,8 @@ void Scene_Physics::DoCollision()
 	//	}
 	//}
 
+	vector<Actor_Dynamic>::iterator trailingIter;
+
 	// double iterator loop for collision checking
 for (vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end(); ++iter1) {
     for (std::vector<Actor_Dynamic>::iterator iter2 = m_collidables.begin(); iter2 != m_collidables.end(); ++iter2) {
@@ -211,6 +213,18 @@ for (vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_c
 			// don't compare for collision against itself
 			continue;
 		}
+
+		trailingIter = iter1;
+		if ( iter1 != m_collidables.begin() )
+		{
+			trailingIter--;
+		}
+		// skip redundant pairs
+		if ( iter2 == trailingIter)
+		{
+			continue;
+		}
+
 		if ( AABBvsAABB( iter1, iter2 ))
 		{
 			iter1->ReboundWith( iter2 );
