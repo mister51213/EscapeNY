@@ -130,9 +130,9 @@ void Actor_Dynamic::Stop(){
 
 /// Collision related functions ///
 // NOTE: currently only works with another ball
-void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator partner)
+void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator& partner)
 {
-	PhysAttributes partnerAttributes = m_pCollision_partner->GetAttributes();
+	PhysAttributes partnerAttributes = partner->GetAttributes();
 	// calculate velocity change for this actor
 	float momentumTransferRatio = partnerAttributes.mass / m_attributes.mass;
 	XMFLOAT3 forceOn1 = partnerAttributes.velocLin * momentumTransferRatio;
@@ -142,14 +142,14 @@ void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator partner)
 	// Now apply to both
 	m_attributes.velocLin = { 0.f, 0.f, 0.f };
 	m_attributes.velocLin += forceOn1;
-	PauseCollisionChecking();
+	PauseCollision();
 
 		//m_pCollision_partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
 		//m_pCollision_partner->m_attributes.velocLin += forceOn2;
 		//m_pCollision_partner->PauseCollisionChecking();
 	partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
 	partner->m_attributes.velocLin += forceOn2;
-	partner->PauseCollisionChecking();
+	partner->PauseCollision();
 }
 
 void Actor_Dynamic::ReboundX1()
@@ -157,7 +157,7 @@ void Actor_Dynamic::ReboundX1()
 	// calculate velocity change for this actor
 	m_attributes.velocLin.y *= -1.0f;
 
-	PauseCollisionChecking();
+	PauseCollision();
 }
 
 void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
@@ -170,8 +170,8 @@ void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
 	m_target = thisTrajectory + otherTrajectory/* + m_initalPosition*/;
 	//TODO: cam't use target anymore, have to apply force on other ball
 
-	PauseCollisionChecking();
+	PauseCollision();
 }
 
-void Actor_Dynamic::ResumeCollisionChecking(){m_collisionOn = true;}
-void Actor_Dynamic::PauseCollisionChecking(){m_collisionOn = false;}
+void Actor_Dynamic::ResumeCollision(){m_collisionOn = true;}
+void Actor_Dynamic::PauseCollision(){m_collisionOn = false;}

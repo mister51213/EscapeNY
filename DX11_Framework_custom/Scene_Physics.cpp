@@ -123,8 +123,8 @@ void Scene_Physics::UpdateScene(
 	//m_physics.Friction(&m_box2, tSinceLastFrame);
 
 	// Gravity
-	m_physics.Force_Steady( &m_collidables[0], { 0.f, -60000.f, 0.f }, tSinceLastFrame );
-	m_physics.Force_Steady(&m_collidables[1], { 0.f, -60000.f, 0.f }, tSinceLastFrame);
+	//m_physics.Force_Steady( &m_collidables[0], { 0.f, -60000.f, 0.f }, tSinceLastFrame );
+	//m_physics.Force_Steady(&m_collidables[1], { 0.f, -60000.f, 0.f }, tSinceLastFrame);
 
 	// ACTOR MOVEMENT
 	m_collidables[0].UpdateMotion(tSinceLastFrame);
@@ -290,8 +290,8 @@ for ( vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_
 		}
 		if ( !AABBvsAABB( iter1, iter2 ) ) // TODO: make it polymorphic for all shapes
 		{
-			iter1->ResumeCollisionChecking();
-			iter2->ResumeCollisionChecking();
+			iter1->ResumeCollision();
+			iter2->ResumeCollision();
 		}
 	}
 }
