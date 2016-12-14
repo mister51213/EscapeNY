@@ -228,7 +228,8 @@ enum eTexture
 	Lava = 7,
 	Lava2 = 8,
 	Bush = 9,
-	Energy = 10
+	Energy = 10,
+	Rock = 11
 	//Water2 = 4,
 	//Water3 = 5,
 	//Underwater2 = 7,

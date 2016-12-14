@@ -39,4 +39,3 @@
 // Microsoft helper headers
 #include <DirectXMath.h>
 #include <wrl.h>
-

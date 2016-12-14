@@ -64,7 +64,7 @@ void Scene_Physics::reset()
 	{ 0.f, 0.f, 0.f },
 	{ scale1, scale1, scale1 } },
 		eTexture::Aluminum, ModelSpecs_L(), CUBE_TEXTURED ));
-	m_collidables[0].m_attributes.mass = 25.f;
+	m_collidables[0].m_attributes.mass = 5.f;
 
 	// RIGHT BOX
 	float scale2 = 100.f;
@@ -79,7 +79,7 @@ void Scene_Physics::reset()
 	m_collidables.push_back(Actor_Dynamic( 
 	{ { 0.f, -200.f, 0.f },
 	{ 0.f, 0.f, 0.f },
-	{ 1500.f, 20.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED ));
+	{ 1500.f, 20.f, 1500.f } }, Rock, ModelSpecs_L(), CUBE_TEXTURED ));
 	m_collidables[2].m_attributes.mass = 10000.f;
 
 	// LOAD DRAW LIST
@@ -170,6 +170,16 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 		//m_physics.Force_Steady( &m_box2, -targetB2, time );
 		m_physics.Force_Steady( &m_collidables[0], { -120000.f, 0.f, 0.f }, time );
 		m_physics.Force_Steady( &m_collidables[1], { 120000.f, 0.f, 0.f }, time );
+	}
+	if ( pInput.IsKeyDown( VK_UP ))
+	{
+		m_physics.Force_Steady( &m_collidables[0], { 0.f, 120000.f, 0.f }, time );
+		m_physics.Force_Steady( &m_collidables[1], { 0.f, 1200000.f, 0.f }, time );
+	}
+	if ( pInput.IsKeyDown( VK_DOWN ))
+	{
+		m_physics.Force_Steady( &m_collidables[0], { 0.f, -120000.f, 0.f }, time );
+		m_physics.Force_Steady( &m_collidables[1], { 0.f, -1200000.f, 0.f }, time );
 	}
 }
 
