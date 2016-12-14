@@ -157,14 +157,14 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 	Normalize( targetB2 );
 	targetB2 *= 300.f; // force magnitude
 
-	if ( pInput.IsKeyDown( VK_SPACE ))
+	if ( pInput.IsKeyDown( VK_LEFT ))
 	{
 		/*m_physics.Force_Steady( &m_box1, targetB1, time );
 		m_physics.Force_Steady( &m_box2, targetB2, time );*/
 		m_physics.Force_Steady( &m_collidables[0], { 120000.f, 0.f, 0.f }, time );
 		m_physics.Force_Steady( &m_collidables[1], { -120000.f, 0.f, 0.f }, time );
 	}
-	if ( pInput.IsKeyDown( VK_CONTROL ))
+	if ( pInput.IsKeyDown( VK_RIGHT ))
 	{
 		//m_physics.Force_Steady( &m_box1, -targetB1, time );
 		//m_physics.Force_Steady( &m_box2, -targetB2, time );
