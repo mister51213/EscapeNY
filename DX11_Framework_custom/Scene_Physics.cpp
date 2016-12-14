@@ -56,6 +56,7 @@ void Scene_Physics::Initialize( Graphics * pGraphics,
 void Scene_Physics::reset()
 {
 	m_pActorsMASTER.clear();
+	m_collidables.clear();
 
 	// LEFT BOX
 	float scale1 = 100.f;
@@ -67,20 +68,34 @@ void Scene_Physics::reset()
 	m_collidables[0].m_attributes.mass = 5.f;
 
 	// RIGHT BOX
-	float scale2 = 100.f;
+	float scale2 = 200.f;
 	m_collidables.push_back(Actor_Dynamic( 
     { { 400.f, 0.f, 0.f },
     { 0.f, 0.f, 0.f },
 	{ scale2, scale2, scale2 } },		
 		eTexture::SharkSkin, ModelSpecs_L(), CUBE_TEXTURED));
-	m_collidables[1].m_attributes.mass = 5.f;
+	m_collidables[1].m_attributes.mass = 10.f;
 
-	// MAP
+	// FLOOR
 	m_collidables.push_back(Actor_Dynamic( 
 	{ { 0.f, -200.f, 0.f },
 	{ 0.f, 0.f, 0.f },
 	{ 1500.f, 20.f, 1500.f } }, Rock, ModelSpecs_L(), CUBE_TEXTURED ));
 	m_collidables[2].m_attributes.mass = 10000.f;
+
+	// RIGHT WALL
+	m_collidables.push_back(Actor_Dynamic( 
+	{ { 750.f, 230.f, 0.f },
+	{ 0.f, 0.f, 0.f },
+	{ scale2, 500.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED ));
+	m_collidables[3].m_attributes.mass = 10.f;
+
+	// LEFT WALL
+	m_collidables.push_back(Actor_Dynamic( 
+	{ { -750.f, 230.f, 0.f },
+	{ 0.f, 0.f, 0.f },
+	{ scale2, 500.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED ));
+	m_collidables[4].m_attributes.mass = 10.f;
 
 	// LOAD DRAW LIST
 	for ( int i = m_collidables.size() - 1; i >= 0; i-- )
@@ -123,15 +138,20 @@ void Scene_Physics::UpdateScene(
 	//m_physics.Friction(&m_box2, tSinceLastFrame);
 
 	// Gravity
-	m_physics.Force_Steady( &m_collidables[0], { 0.f, -60000.f, 0.f }, tSinceLastFrame );
-	m_physics.Force_Steady(&m_collidables[1], { 0.f, -60000.f, 0.f }, tSinceLastFrame);
+	//m_physics.Force_Steady( &m_collidables[0], { 0.f, -60000.f, 0.f }, tSinceLastFrame );
+	//m_physics.Force_Steady(&m_collidables[1], { 0.f, -60000.f, 0.f }, tSinceLastFrame);
 
 	// ACTOR MOVEMENT
-	m_collidables[0].UpdateMotion(tSinceLastFrame);
-	m_collidables[1].UpdateMotion(tSinceLastFrame);
-	// Stop applying acceleration after updating
-	m_collidables[0].StopAccelerating();
-	m_collidables[1].StopAccelerating();
+	for ( int i = 0; i < m_collidables.size(); i++ )
+	{
+		m_collidables[i].UpdateMotion(tSinceLastFrame);
+		m_collidables[i].StopAccelerating();
+	}
+	//m_collidables[0].UpdateMotion(tSinceLastFrame);
+	//m_collidables[0].StopAccelerating();
+
+	//m_collidables[1].UpdateMotion(tSinceLastFrame);
+	//m_collidables[1].StopAccelerating();
 	//TODO: this is a HACK; do it properly!
 
 	// CHECK COLLISIONS FOR BALLS AND HANDLE COLLISIONS
@@ -147,12 +167,10 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 	// get a force vector towards center of the world
 	XMFLOAT3 worldCenter = {0.f, 0.f, 0.f};
 
-	// box1 mass is 1
 	XMFLOAT3 targetB1 = worldCenter - m_collidables[0].GetPosition();
 	Normalize( targetB1 );
 	targetB1 *= 300.f; // force magnitude
 
-	// box2 mass is 0.5
 	XMFLOAT3 targetB2 = worldCenter - m_collidables[1].GetPosition();
 	Normalize( targetB2 );
 	targetB2 *= 300.f; // force magnitude
@@ -161,25 +179,30 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 	{
 		/*m_physics.Force_Steady( &m_box1, targetB1, time );
 		m_physics.Force_Steady( &m_box2, targetB2, time );*/
-		m_physics.Force_Steady( &m_collidables[0], { 120000.f, 0.f, 0.f }, time );
-		m_physics.Force_Steady( &m_collidables[1], { -120000.f, 0.f, 0.f }, time );
+		m_physics.Force_Steady( &m_collidables[0], { 120000.f, 0.f, 0.f }, time ); // force on left
+		m_physics.Force_Steady( &m_collidables[1], { -240000.f, 0.f, 0.f }, time ); // force on right
 	}
 	if ( pInput.IsKeyDown( VK_RIGHT ))
 	{
 		//m_physics.Force_Steady( &m_box1, -targetB1, time );
 		//m_physics.Force_Steady( &m_box2, -targetB2, time );
-		m_physics.Force_Steady( &m_collidables[0], { -120000.f, 0.f, 0.f }, time );
-		m_physics.Force_Steady( &m_collidables[1], { 120000.f, 0.f, 0.f }, time );
+		m_physics.Force_Steady( &m_collidables[0], { -120000.f, 0.f, 0.f }, time ); // force on left
+		m_physics.Force_Steady( &m_collidables[1], { 240000.f, 0.f, 0.f }, time ); // force on right
 	}
 	if ( pInput.IsKeyDown( VK_UP ))
 	{
-		m_physics.Force_Steady( &m_collidables[0], { 0.f, 120000.f, 0.f }, time );
-		m_physics.Force_Steady( &m_collidables[1], { 0.f, 1200000.f, 0.f }, time );
+		m_physics.Force_Steady( &m_collidables[0], { 0.f, 120000.f, 0.f }, time ); // force on left
+		m_physics.Force_Steady( &m_collidables[1], { 0.f, 120000.f, 0.f }, time ); //// force on right
 	}
 	if ( pInput.IsKeyDown( VK_DOWN ))
 	{
-		m_physics.Force_Steady( &m_collidables[0], { 0.f, -120000.f, 0.f }, time );
-		m_physics.Force_Steady( &m_collidables[1], { 0.f, -1200000.f, 0.f }, time );
+		m_physics.Force_Steady( &m_collidables[0], { 0.f, -120000.f, 0.f }, time ); // force on left
+		m_physics.Force_Steady( &m_collidables[1], { 0.f, -120000.f, 0.f }, time ); // force on right
+	}
+	if ( pInput.IsKeyDown( 'R' ))
+	{
+
+		reset();
 	}
 }
 

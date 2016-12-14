@@ -138,30 +138,24 @@ void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator& partner)
 	XMFLOAT3 forceOn1;
 	XMFLOAT3 forceOn2;
 
-	if ( partnerAttributes.mass >= 2000 )
+	if ( partnerAttributes.mass >= 4000 ) // INFINITE MASS
 	{
-		XMFLOAT3 reboundComponent = {0.f, -m_attributes.velocLin.y, 0.f};
-		reboundComponent *= 2.0f;
-		forceOn1 = m_attributes.velocLin + reboundComponent;
-		m_attributes.velocLin.y = 0.f; // TODO: component perpendicular to trajectory only
+		XMFLOAT3 rbndComponent = {0.f, -m_attributes.velocLin.y, 0.f};
+		rbndComponent *= 2.0f;
+		forceOn1 = m_attributes.velocLin + rbndComponent;
 		forceOn2 = { 0.f, 0.f, 0.f };
+		m_attributes.velocLin.y = 0.f; // TODO: component perpendicular to trajectory only
 	}
-	else
+	else // FINITE MASS
 	{
 		forceOn1 = partnerAttributes.velocLin * momentumTransferRatio;
-		m_attributes.velocLin = { 0.f, 0.f, 0.f };
 		forceOn2 = m_attributes.velocLin / momentumTransferRatio;
+		m_attributes.velocLin = { 0.f, 0.f, 0.f };
+		partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
 	}
 	
 	m_attributes.velocLin += forceOn1;
-	//PauseCollision();
-
-		//m_pCollision_partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
-		//m_pCollision_partner->m_attributes.velocLin += forceOn2;
-		//m_pCollision_partner->PauseCollisionChecking();
-	//partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
 	partner->m_attributes.velocLin += forceOn2;
-	//partner->PauseCollision();
 }
 
 void Actor_Dynamic::ReboundX1()
