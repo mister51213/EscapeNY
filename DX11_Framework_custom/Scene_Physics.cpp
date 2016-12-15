@@ -88,14 +88,14 @@ void Scene_Physics::reset()
 	{ { 750.f, 230.f, 0.f },
 	{ 0.f, 0.f, 0.f },
 	{ scale2, 500.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED ));
-	m_collidables[3].m_attributes.mass = 10.f;
+	m_collidables[3].m_attributes.mass = 100.f;
 
 	// LEFT WALL
 	m_collidables.push_back(Actor_Dynamic( 
 	{ { -750.f, 230.f, 0.f },
 	{ 0.f, 0.f, 0.f },
 	{ scale2, 500.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED ));
-	m_collidables[4].m_attributes.mass = 10.f;
+	m_collidables[4].m_attributes.mass = 100.f;
 
 	// LOAD DRAW LIST
 	for ( int i = m_collidables.size() - 1; i >= 0; i-- )
@@ -138,8 +138,8 @@ void Scene_Physics::UpdateScene(
 	//m_physics.Friction(&m_box2, tSinceLastFrame);
 
 	// Gravity
-	//m_physics.Force_Steady( &m_collidables[0], { 0.f, -60000.f, 0.f }, tSinceLastFrame );
-	//m_physics.Force_Steady(&m_collidables[1], { 0.f, -60000.f, 0.f }, tSinceLastFrame);
+	m_physics.Force_Steady( &m_collidables[0], { 0.f, -60000.f, 0.f }, tSinceLastFrame );
+	m_physics.Force_Steady(&m_collidables[1], { 0.f, -60000.f, 0.f }, tSinceLastFrame);
 
 	// ACTOR MOVEMENT
 	for ( int i = 0; i < m_collidables.size(); i++ )
@@ -147,12 +147,6 @@ void Scene_Physics::UpdateScene(
 		m_collidables[i].UpdateMotion(tSinceLastFrame);
 		m_collidables[i].StopAccelerating();
 	}
-	//m_collidables[0].UpdateMotion(tSinceLastFrame);
-	//m_collidables[0].StopAccelerating();
-
-	//m_collidables[1].UpdateMotion(tSinceLastFrame);
-	//m_collidables[1].StopAccelerating();
-	//TODO: this is a HACK; do it properly!
 
 	// CHECK COLLISIONS FOR BALLS AND HANDLE COLLISIONS
 	DoCollision();
@@ -179,14 +173,14 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 	{
 		/*m_physics.Force_Steady( &m_box1, targetB1, time );
 		m_physics.Force_Steady( &m_box2, targetB2, time );*/
-		m_physics.Force_Steady( &m_collidables[0], { 120000.f, 0.f, 0.f }, time ); // force on left
+		//m_physics.Force_Steady( &m_collidables[0], { 120000.f, 0.f, 0.f }, time ); // force on left
 		m_physics.Force_Steady( &m_collidables[1], { -240000.f, 0.f, 0.f }, time ); // force on right
 	}
 	if ( pInput.IsKeyDown( VK_RIGHT ))
 	{
 		//m_physics.Force_Steady( &m_box1, -targetB1, time );
 		//m_physics.Force_Steady( &m_box2, -targetB2, time );
-		m_physics.Force_Steady( &m_collidables[0], { -120000.f, 0.f, 0.f }, time ); // force on left
+		//m_physics.Force_Steady( &m_collidables[0], { -120000.f, 0.f, 0.f }, time ); // force on left
 		m_physics.Force_Steady( &m_collidables[1], { 240000.f, 0.f, 0.f }, time ); // force on right
 	}
 	if ( pInput.IsKeyDown( VK_UP ))
@@ -237,32 +231,33 @@ void Scene_Physics::DoCollision()
 	//}
 
 	// double iterator loop for collision checking
-for (vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end(); ++iter1) {
-	vector<Actor_Dynamic>::iterator trailingIter;
-	for ( std::vector<Actor_Dynamic>::iterator iter2 = m_collidables.begin(); iter2 != m_collidables.end(); ++iter2 )
-	{
-		if ( iter1 == iter2 /*||*/ // don't compare for collision against itself
-			 /*iter2 == trailingIter*/ ) // skip redundant pairs
-		{
-			continue;
-		}
+		vector<Actor_Dynamic>::iterator skipMe;
 
-		if ( iter1 != m_collidables.begin() )
+		for ( vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end(); ++iter1 )
 		{
-			trailingIter = iter1;
-			--trailingIter;
-			if ( iter2 == trailingIter )
+			if ( iter1 != m_collidables.begin() )
 			{
-				continue;
+				skipMe = iter1;
+				--skipMe;
+			}
+
+			for ( std::vector<Actor_Dynamic>::iterator iter2 = m_collidables.begin(); iter2 != m_collidables.end(); ++iter2 )
+			{
+				if ( iter1 == iter2 )
+					continue;
+
+				if ( iter1 != m_collidables.begin() )
+				{
+					if ( iter2 <= skipMe ) // The <= is the key!
+						continue;
+				}
+
+				if ( AABBvsAABB( iter1, iter2 ) )
+				{
+					iter1->ReboundWith( iter2 );
+				}
 			}
 		}
-
-		if ( AABBvsAABB( iter1, iter2 ) )
-		{
-			iter1->ReboundWith( iter2 );
-		}
-	}
-}
 
 //	// If the two objects overlap, add one to list and give it awareness of the other
 //	for ( UINT64 i = 0; i < m_pActorsMASTER.size(); i++ )
