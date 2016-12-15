@@ -88,7 +88,7 @@ void Scene_Physics::reset()
 	{ { 750.f, 230.f, 0.f },
 	{ 0.f, 0.f, 0.f },
 	{ scale2, 500.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED ));
-	m_collidables[3].m_attributes.mass = 100.f;
+	m_collidables[3].m_attributes.mass = 5000.f;
 
 	// LEFT WALL
 	m_collidables.push_back(Actor_Dynamic( 

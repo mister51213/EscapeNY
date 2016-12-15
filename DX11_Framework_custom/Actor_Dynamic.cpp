@@ -132,30 +132,50 @@ void Actor_Dynamic::Stop(){
 // NOTE: currently only works with another ball
 void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator& partner)
 {
-	PhysAttributes partnerAttributes = partner->GetAttributes();
+	PhysAttributes& partnerAttributes = partner->GetAttributes();
 	// calculate velocity change for this actor
 	float momentumTransferRatio = partnerAttributes.mass / m_attributes.mass;
-	XMFLOAT3 forceOn1;
-	XMFLOAT3 forceOn2;
+	XMFLOAT3 forceOnThis;
+	XMFLOAT3 forceOnPartner;
 
 	if ( partnerAttributes.mass >= 4000 ) // INFINITE MASS
 	{
 		XMFLOAT3 rbndComponent = {0.f, -m_attributes.velocLin.y, 0.f};
 		rbndComponent *= 2.0f;
-		forceOn1 = m_attributes.velocLin + rbndComponent;
-		forceOn2 = { 0.f, 0.f, 0.f };
+
+		forceOnThis = m_attributes.velocLin + rbndComponent;
+		forceOnPartner = { 0.f, 0.f, 0.f };
+		
 		m_attributes.velocLin.y = 0.f; // TODO: component perpendicular to trajectory only
 	}
+	else if ( m_attributes.mass >= 4000 ) // INFINITE MASS
+	{
+		XMFLOAT3 rbndComponent = {0.f, -partnerAttributes.velocLin.y, 0.f};
+		rbndComponent *= 2.0f;
+
+		forceOnThis = { 0.f, 0.f, 0.f };
+		forceOnPartner = partnerAttributes.velocLin + rbndComponent;
+
+		/* 
+		calculate force component perpendicular to the surface of collision
+		1. Get the normal value from that model (or tangent and binormal)
+		2. use DP to PROJECT the current velocity vector onto that normal vector
+		3. return that DP component * -2 to be added to the current velocity
+		*/
+
+		partner->m_attributes.velocLin.y = 0.f; // TODO: component perpendicular to trajectory only
+	}
+
 	else // FINITE MASS
 	{
-		forceOn1 = partnerAttributes.velocLin * momentumTransferRatio;
-		forceOn2 = m_attributes.velocLin / momentumTransferRatio;
+		forceOnThis = partnerAttributes.velocLin * momentumTransferRatio;
+		forceOnPartner = m_attributes.velocLin / momentumTransferRatio;
 		m_attributes.velocLin = { 0.f, 0.f, 0.f };
 		partner->m_attributes.velocLin = { 0.f, 0.f, 0.f };
 	}
 	
-	m_attributes.velocLin += forceOn1;
-	partner->m_attributes.velocLin += forceOn2;
+	m_attributes.velocLin += forceOnThis;
+	partner->m_attributes.velocLin += forceOnPartner;
 }
 
 void Actor_Dynamic::ReboundX1()
