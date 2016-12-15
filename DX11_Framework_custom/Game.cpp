@@ -47,9 +47,12 @@ bool Game::Initialize(
 
 	// Pass all member pointers to GameObjects class so it can draw with them
 	m_GameView = GameView( m_pGraphics, m_pDirect3D, m_pCamera.get() );
-	m_GameView.Initialize(m_NormalPool);
 
-    m_pActiveScene->Initialize(m_pGraphics, this, m_pCamera.get());
+	std::vector<std::vector<DirectX::XMFLOAT3>>* pNorms = &m_NormMeshPool;
+	m_pNorms.reset( pNorms );
+	m_GameView.Initialize(m_pNorms);
+    
+	m_pActiveScene->Initialize(m_pGraphics, this, m_pCamera.get(), m_pNorms);
 
 	return true;
 }

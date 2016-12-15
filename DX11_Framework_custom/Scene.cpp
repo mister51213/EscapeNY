@@ -3,7 +3,7 @@
 #include "GameView.h"
 #include "Graphics.h"
 
-void Scene::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const pCamera )
+void Scene::Initialize( Graphics * pGraphics, Game * const pGame, Camera * const pCamera, std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals)
 {
 	// Take a copy of the graphics and direct3d pointers
 	m_pGraphics = pGraphics;

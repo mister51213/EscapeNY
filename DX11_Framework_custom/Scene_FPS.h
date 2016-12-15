@@ -21,7 +21,8 @@ public:
     virtual void Initialize(
         Graphics *pGraphics,
         Game *const pGame,
-        Camera *const pCamera) override;
+        Camera *const pCamera,
+		std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals) override;
 
 	// Use UpdateFrame to update actors, camera and anything else that needs updating.
     virtual void UpdateScene( 

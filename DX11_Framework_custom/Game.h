@@ -55,6 +55,7 @@ private:
 	Physics m_physics;
 
 	// Normal map pool for collisions
-	std::vector<std::vector<DirectX::XMFLOAT3>> m_NormalPool;
+	std::vector<std::vector<DirectX::XMFLOAT3>> m_NormMeshPool;
+	std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> m_pNorms;
 };
 

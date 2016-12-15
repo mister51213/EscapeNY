@@ -13,7 +13,8 @@ Scene_Maze::Scene_Maze( Input * pInput )
 void Scene_Maze::Initialize(
 	Graphics *pGraphics,
 	Game *const pGame,
-	Camera *const pCamera )
+	Camera *const pCamera,
+	std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals)
 {
 	// Copy Game and Graphics pointers to member viarable
 	m_pGame = pGame;

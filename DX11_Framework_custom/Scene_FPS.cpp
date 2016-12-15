@@ -10,7 +10,7 @@
 #include "Light_Point.h"
 //#include "Light_Spot.h"
 
-void Scene_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const pCamera) 
+void Scene_FPS::Initialize(Graphics *pGraphics, Game *const pGame, Camera *const pCamera, std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals) 
 {
     //srand( static_cast<unsigned int>( time( nullptr ) ) );
 

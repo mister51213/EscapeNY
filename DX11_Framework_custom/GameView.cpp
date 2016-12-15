@@ -21,9 +21,9 @@ GameView::GameView( Graphics * pGfx, D3DGraphics * pD3D, Camera* pCam )
 	m_pCam( pCam )
 {}
 
-void GameView::Initialize(std::vector<std::vector<DirectX::XMFLOAT3>>& normPool)
+void GameView::Initialize(std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormMeshPool)
 {
-    initModelPool(normPool);
+    initModelPool(pNormMeshPool);
 	initTexturePool();
     initNormalMapPool();
 	initializeShader();
@@ -91,7 +91,7 @@ void GameView::drawModel( const Actor & actor, MatrixBufferType &Transforms ) co
     m_pGfx->RenderModel(*(m_ModelPool[actor.GetModelType()]));
 }
 
-void GameView::initModelPool(std::vector<std::vector<DirectX::XMFLOAT3>>& normPool)
+void GameView::initModelPool(std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormMeshPool)
 {
     char numModels = 11;
     ModelSpecs_L defaultSpecs;
@@ -102,59 +102,59 @@ void GameView::initModelPool(std::vector<std::vector<DirectX::XMFLOAT3>>& normPo
     prim.CreateColor(1.f,0.f,0.f,.5f);
     m_ModelPool[CUBE].reset(new Model_TexturedNM );
     m_ModelPool[CUBE]->Initialize(prim, *m_pGfx);
-	normPool.push_back(prim.GetNormals());
+	pNormMeshPool->push_back(prim.GetNormals());
 
     prim.CreateCubeNM(defaultSpecs);
 	prim.CreateColor( 1.f, 1.f, 1.f, 1.f );
     m_ModelPool[CUBE_TEXTURED].reset(new Model_TexturedNM );
     m_ModelPool[CUBE_TEXTURED]->Initialize(prim, *m_pGfx);
-	normPool.push_back(prim.GetNormals());
+	pNormMeshPool->push_back(prim.GetNormals());
 
     prim.CreatePlaneNM(defaultSpecs);
     m_ModelPool[PLANE].reset(new Model_TexturedNM );
     m_ModelPool[PLANE]->Initialize(prim, *m_pGfx);
-	normPool.push_back(prim.GetNormals());
+	pNormMeshPool->push_back(prim.GetNormals());
 
 	prim.CreateSphereNM( defaultSpecs, 1.0f); // TODO: MAKE SURE YOU HAVE UNIVERSAL UNITS TO BE SHARED GLOBALLY
     m_ModelPool[SPHERE].reset(new Model_TexturedNM );
     m_ModelPool[SPHERE]->Initialize(prim, *m_pGfx);
-	normPool.push_back(prim.GetNormals());
+	pNormMeshPool->push_back(prim.GetNormals());
 
     prim.CreateTriangle(defaultSpecs);
     m_ModelPool[POLYGON].reset(new Model_Textured);
     m_ModelPool[POLYGON]->Initialize(prim, *m_pGfx);
-	normPool.push_back(prim.GetNormals());
+	pNormMeshPool->push_back(prim.GetNormals());
 
     //prim.CreateMesh(L"Meshes\\Cube.txt");
     prim.CreateMeshNM(L"Meshes\\model.BinaryMesh");
     m_ModelPool[CUSTOM_MESH].reset(new Model_TexturedNM );
     m_ModelPool[CUSTOM_MESH]->Initialize(prim, *m_pGfx);
-	normPool.push_back(prim.GetNormals());
+	pNormMeshPool->push_back(prim.GetNormals());
 
     prim.CreateMesh(L"Meshes\\model2.BinaryMesh");
     m_ModelPool[CUSTOM_MESH2].reset(new Model_Textured);
     m_ModelPool[CUSTOM_MESH2]->Initialize(prim, *m_pGfx);
-	normPool.push_back(prim.GetNormals());
+	pNormMeshPool->push_back(prim.GetNormals());
 
     prim.CreateMesh(L"Meshes\\model3.BinaryMesh");
     m_ModelPool[CUSTOM_MESH3].reset(new Model_Textured);
     m_ModelPool[CUSTOM_MESH3]->Initialize(prim, *m_pGfx);
-	normPool.push_back(prim.GetNormals());
+	pNormMeshPool->push_back(prim.GetNormals());
 
     prim.CreateMesh(L"Meshes\\model4.BinaryMesh");
     m_ModelPool[CUSTOM_MESH4].reset(new Model_Textured);
     m_ModelPool[CUSTOM_MESH4]->Initialize(prim, *m_pGfx);
-	normPool.push_back(prim.GetNormals());
+	pNormMeshPool->push_back(prim.GetNormals());
 
 	prim.CreateMeshNM( L"Meshes/cube_inverted.BinaryMesh" );
 	m_ModelPool[ SOME_EDIFICE ].reset( new Model_TexturedNM );
 	m_ModelPool[ SOME_EDIFICE ]->Initialize( prim, *m_pGfx );
-	normPool.push_back(prim.GetNormals());
+	pNormMeshPool->push_back(prim.GetNormals());
 
     prim.CreateMeshNM( L"Meshes/car.BinaryMesh" );
 	m_ModelPool[ CAR ].reset( new Model_TexturedNM );
 	m_ModelPool[ CAR ]->Initialize( prim, *m_pGfx );
-	normPool.push_back(prim.GetNormals());
+	pNormMeshPool->push_back(prim.GetNormals());
 
 	//prim.CreateSphereNM( defaultSpecs, 10.0f );
 	//prim.CreateColor( 1.f, 0.f, 0.f, 1.f );

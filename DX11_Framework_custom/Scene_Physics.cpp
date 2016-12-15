@@ -13,7 +13,7 @@ using namespace std;
 
 Scene_Physics::Scene_Physics( std::vector<std::vector<DirectX::XMFLOAT3>>& normPool )
 {
-	m_pNormals.reset(&normPool);
+	m_pNormals.reset(&normPool); // TODO: make this happen in INITIALIZE function so it happens after game view.
 	// Now physics scene knows about normal maps of objects.
 	// must make each object use these as templates, and then rescale individual version
 	// to be held by each actor.
@@ -21,7 +21,8 @@ Scene_Physics::Scene_Physics( std::vector<std::vector<DirectX::XMFLOAT3>>& normP
 
 void Scene_Physics::Initialize( Graphics * pGraphics,
 								Game * const pGame, 
-								Camera * const pCamera )
+								Camera * const pCamera,
+								std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals)
 {
 	// Take a copy of the graphics and direct3d pointers
 	m_pGraphics = pGraphics;
@@ -57,6 +58,8 @@ void Scene_Physics::Initialize( Graphics * pGraphics,
     }
 
     m_lightSet.resize(m_numLights);
+
+	m_pNormals = pNormals;
 
 	reset();
 }
