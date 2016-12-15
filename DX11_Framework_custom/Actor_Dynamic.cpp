@@ -6,9 +6,10 @@ using namespace DirectX;
 Actor_Dynamic::Actor_Dynamic( const ModelSpecs_W &worldSpecs,
 							  eTexture tex,
 							  const ModelSpecs_L &localSpecs,
-							  eModType modType )
+							  eModType modType,
+							  std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals)
 	:
-	Actor( worldSpecs, tex, localSpecs, modType )
+	Actor( worldSpecs, tex, localSpecs, modType, pNormals )
 {
 	ResetPIDParams();
 }
@@ -155,6 +156,7 @@ void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator& partner)
 
 		forceOnThis = { 0.f, 0.f, 0.f };
 		forceOnPartner = partnerAttributes.velocLin + rbndComponent;
+
 
 		/* 
 		calculate force component perpendicular to the surface of collision

@@ -238,11 +238,24 @@ PhysAttributes::PhysAttributes(DirectX::XMFLOAT3 cMass)
 		centerOfMass = cMass; // TODO: actor to pass this in in constructor
 }
 
-AABB::AABB( const ModelSpecs_W& specs)
+AABB::AABB( const ModelSpecs_W& specs, std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals, eModType model)
 {
 	m_extentHalf = specs.scale * .5f;
 	m_center = specs.position;
 	ResetMinMax(m_center);
+	m_model = model;
+	if ( m_model == CUBE_TEXTURED )
+	{
+		// make a normal map based on corresponding template
+		/*		
+		issue with allocating this; likely vector out of range.
+		TODO: step through the allocation process from Game object initialize stage
+		*** apparently pNormals is a null pointer. Why isnt it getting assigned? ***
+		*/
+		//m_Normals = pNormals->at( (int)CUBE_TEXTURED );
+	}
+
+	// TODO: rotate and translate this every time it moves for non-axis-alligned BB
 }
 
 void AABB::ResetMinMax(DirectX::XMFLOAT3 position)

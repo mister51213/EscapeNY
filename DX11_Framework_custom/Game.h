@@ -53,5 +53,8 @@ private:
     std::unique_ptr<ISubGame> m_pActiveScene;
 	GameTimer m_timer; // TODO: move into GAME, make it use them when it calls m_pActiveScene.UpdateScene();
 	Physics m_physics;
+
+	// Normal map pool for collisions
+	std::vector<std::vector<DirectX::XMFLOAT3>> m_NormalPool;
 };
 

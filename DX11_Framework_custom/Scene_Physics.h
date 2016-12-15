@@ -24,6 +24,8 @@ public:
 	Scene_Physics() = default;
 	~Scene_Physics() = default;
 
+	Scene_Physics( std::vector<std::vector<DirectX::XMFLOAT3>>& normPool );
+
 	////////////////////////////////////
 	// ISUBGAME FUNCTIONS //////////////
 	////////////////////////////////////
@@ -105,6 +107,7 @@ private:
 	//Actor_Dynamic* m_collidableObjects[3];
 	std::vector<Actor_Dynamic> m_collidables;
 	//TODO: separate list for non collidable actos
+	std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> m_pNormals;
 
 	//////////////////////////////////////
 	// LIGHTING //////////////////////////

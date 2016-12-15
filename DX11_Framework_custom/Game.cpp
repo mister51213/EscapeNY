@@ -47,7 +47,8 @@ bool Game::Initialize(
 
 	// Pass all member pointers to GameObjects class so it can draw with them
 	m_GameView = GameView( m_pGraphics, m_pDirect3D, m_pCamera.get() );
-	m_GameView.Initialize();
+	m_GameView.Initialize(m_NormalPool);
+
     m_pActiveScene->Initialize(m_pGraphics, this, m_pCamera.get());
 
 	return true;

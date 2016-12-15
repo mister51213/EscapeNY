@@ -36,9 +36,9 @@ public:
 	GameView();
 	GameView( Graphics* pGfx, D3DGraphics* pD3D, Camera *pCam );
 	 
-    void Initialize();
+    void Initialize(std::vector<std::vector<DirectX::XMFLOAT3>>& normPool);
 	void UpdateView( const std::vector<Actor*>& actors, const SceneBufferType& SceneLights ) const;
-    void initModelPool();
+    void initModelPool(std::vector<std::vector<DirectX::XMFLOAT3>>& normPool);
 private:
 	void initTexturePool();
     void initNormalMapPool();

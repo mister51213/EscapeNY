@@ -180,17 +180,6 @@ struct ModelSpecs_L
 
 // this will be initialized when actor is created.
 // holds top left and bottom right corners of axis alligned bounding box
-struct AABB
-{
-	AABB() = default;
-	AABB(const ModelSpecs_W& specs);
-	void ResetMinMax(DirectX::XMFLOAT3 position);
-
-	DirectX::XMFLOAT3 m_center;
-    DirectX::XMFLOAT3 m_extentHalf;
-	DirectX::XMFLOAT3 m_min;
-    DirectX::XMFLOAT3 m_max;
-};
 
 enum eModType
 {
@@ -238,6 +227,20 @@ enum eTexture
 	//Underwater5 = 10,
 	//Underwater6 = 11,
 	//Underwater7 = 12,
+};
+
+struct AABB
+{
+	AABB() = default;
+	AABB(const ModelSpecs_W& specs, std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals, eModType model = CUBE_TEXTURED);
+	void ResetMinMax(DirectX::XMFLOAT3 position);
+
+	DirectX::XMFLOAT3 m_center;
+    DirectX::XMFLOAT3 m_extentHalf;
+	DirectX::XMFLOAT3 m_min;
+    DirectX::XMFLOAT3 m_max;
+	eModType m_model;
+	std::vector<DirectX::XMFLOAT3> m_Normals;
 };
 
 ////////////////////////////////////////////////////////////////

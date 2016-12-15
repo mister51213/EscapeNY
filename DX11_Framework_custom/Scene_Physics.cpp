@@ -11,7 +11,15 @@
 using namespace DirectX;
 using namespace std;
 
-void Scene_Physics::Initialize( Graphics * pGraphics, 
+Scene_Physics::Scene_Physics( std::vector<std::vector<DirectX::XMFLOAT3>>& normPool )
+{
+	m_pNormals.reset(&normPool);
+	// Now physics scene knows about normal maps of objects.
+	// must make each object use these as templates, and then rescale individual version
+	// to be held by each actor.
+}
+
+void Scene_Physics::Initialize( Graphics * pGraphics,
 								Game * const pGame, 
 								Camera * const pCamera )
 {
@@ -55,6 +63,11 @@ void Scene_Physics::Initialize( Graphics * pGraphics,
 
 void Scene_Physics::reset()
 {
+	// TODO: MUST INITIALIZE GAMEVIEW before this, 
+	// so that we have the normal templates for actors to work with!
+
+	//TODO: Also need to move normal / model pool into Game Object, not Gameview???
+
 	m_pActorsMASTER.clear();
 	m_collidables.clear();
 
