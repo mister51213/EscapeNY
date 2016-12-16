@@ -374,6 +374,7 @@ bool Scene_Physics::AABBvsAABB( vector<Actor_Dynamic>::iterator pActor1, vector<
 
 // call this to check collision AND see which face collided w which
 // FALSE means no collision. TRUE means collision.
+// TODO: must revert of old way of doing it, must check ALL THREE dimensions every time!
 bool Scene_Physics::GetCollisionNormal( vector<Actor_Dynamic>::iterator pActor1, vector<Actor_Dynamic>::iterator pActor2, eCollisionDir& dir )
 {
 	// The Collision dir passed by reference stands for normal vector from surface of Actor1 that collided
