@@ -337,7 +337,6 @@ void Scene_Physics::DoCollision()
 	//	//m_physics.Force_Collision( pPartner, partnerImpulse );
 	//	m_pActorsOverlapping.pop();
 	//}
-
 	// NOW RESUME COLLISION CHECKING ONCE BALLS HAVE BROKEN AWAY FROM EACH OTHER
 //for ( vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end(); ++iter1 )
 //{
@@ -382,45 +381,67 @@ bool Scene_Physics::GetCollisionNormal( vector<Actor_Dynamic>::iterator pActor1,
 	AABB box1 = pActor1->m_AABBox;
 	AABB box2 = pActor2->m_AABBox;
 
-	// TODO: fix if and else if s so that it does EVERY SINGLE CHECK
-	// A SEPARATING AXIS WASNT FOUND, so exit WITH intersection
-	if ( box1.m_max.x > box2.m_min.x )
+		// TODO: fix if and else if s so that it does EVERY SINGLE CHECK
+	// A SEPARATING AXIS WAS FOUND, so exit with no intersection
+	if ( box1.m_max.x < box2.m_min.x )
+	{
+		return false;
+	}
+	else
 	{
 		dir = LR;
 		return true;
 	}
 
-	if ( box1.m_min.x < box2.m_max.x )
+	if ( box1.m_min.x > box2.m_max.x )
+	{
+		return false;
+	}
+	else
 	{
 		dir = RL;
 		return true;
 	}
 
-	if ( box1.m_max.y > box2.m_min.y )
+	if ( box1.m_max.y < box2.m_min.y )
+	{
+		return false;
+	}
+	else
 	{
 		dir = BT;		
 		return true;
 	}
 
-	if ( box1.m_min.y < box2.m_max.y )
+	if ( box1.m_min.y > box2.m_max.y )
+	{
+		return false;
+	}
+	else
 	{
 		dir = TB;		
 		return true;
 	}
 
-	if ( box1.m_max.z > box2.m_min.z )
+	if ( box1.m_max.z < box2.m_min.z )
+	{
+		return false;
+	}
+	else
 	{
 		dir = FB;		
 		return true;
 	}
 
-	if ( box1.m_min.z < box2.m_max.z )
+	if ( box1.m_min.z > box2.m_max.z )
+	{
+		return false;
+	}
+	else
 	{
 		dir = BF;		
 		return true;
 	}
-
-	return false;
 }
 
 // True if overlaps, false if no overlap
