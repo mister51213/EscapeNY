@@ -373,6 +373,7 @@ bool Scene_Physics::AABBvsAABB( vector<Actor_Dynamic>::iterator pActor1, vector<
 }
 
 // call this to check collision AND see which face collided w which
+// FALSE means no collision. TRUE means collision.
 bool Scene_Physics::GetCollisionNormal( vector<Actor_Dynamic>::iterator pActor1, vector<Actor_Dynamic>::iterator pActor2, eCollisionDir& dir )
 {
 	// The Collision dir passed by reference stands for normal vector from surface of Actor1 that collided
@@ -381,66 +382,44 @@ bool Scene_Physics::GetCollisionNormal( vector<Actor_Dynamic>::iterator pActor1,
 	AABB box2 = pActor2->m_AABBox;
 
 	// TODO: fix if and else if s so that it does EVERY SINGLE CHECK
-	// A SEPARATING AXIS WAS FOUND, so exit with no intersection
-	if ( box1.m_max.x < box2.m_min.x )
-	{
-		return false;
-	}
-	else
+	// A SEPARATING AXIS WASNT FOUND, so exit WITH intersection
+	if ( box1.m_max.x > box2.m_min.x )
 	{
 		dir = LR;
 		return true;
 	}
 
-	if ( box1.m_min.x > box2.m_max.x )
-	{
-		return false;
-	}
-	else
+	if ( box1.m_min.x < box2.m_max.x )
 	{
 		dir = RL;
 		return true;
 	}
 
-	if ( box1.m_max.y < box2.m_min.y )
-	{
-		return false;
-	}
-	else
+	if ( box1.m_max.y > box2.m_min.y )
 	{
 		dir = BT;		
 		return true;
 	}
 
-	if ( box1.m_min.y > box2.m_max.y )
-	{
-		return false;
-	}
-	else
+	if ( box1.m_min.y < box2.m_max.y )
 	{
 		dir = TB;		
 		return true;
 	}
 
-	if ( box1.m_max.z < box2.m_min.z )
-	{
-		return false;
-	}
-	else
+	if ( box1.m_max.z > box2.m_min.z )
 	{
 		dir = FB;		
 		return true;
 	}
 
-	if ( box1.m_min.z > box2.m_max.z )
-	{
-		return false;
-	}
-	else
+	if ( box1.m_min.z < box2.m_max.z )
 	{
 		dir = BF;		
 		return true;
 	}
+
+	return false;
 }
 
 // True if overlaps, false if no overlap
