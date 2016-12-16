@@ -48,6 +48,8 @@ public:
 
 	bool AABBvsAABB( std::vector<Actor_Dynamic>::iterator pActor1, std::vector<Actor_Dynamic>::iterator pActor2 );
 
+	bool GetCollisionNormal( vector<Actor_Dynamic>::iterator pActor1, vector<Actor_Dynamic>::iterator pActor2, eCollisionDir& dir );
+
 	//bool AABBvsAABB( Actor_Dynamic* pActor1, Actor_Dynamic* pActor2 );
 
 	void InputForces(Input& pInput, float time);

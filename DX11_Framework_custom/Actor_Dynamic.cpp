@@ -131,7 +131,7 @@ void Actor_Dynamic::Stop(){
 
 /// Collision related functions ///
 // NOTE: currently only works with another ball
-void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator& partner)
+void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator& partner, eCollisionDir& eDir)
 {
 	PhysAttributes& partnerAttributes = partner->GetAttributes();
 	// calculate velocity change for this actor
@@ -160,7 +160,12 @@ void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator& partner)
 
 		/* 
 		calculate force component perpendicular to the surface of collision
+		
 		1. Get the normal value from that model (or tangent and binormal)
+		*********** IN THIS CASE, we can just use eDir, because only 6 faces of cube! ***********
+		*********** This will work for both sphere with box and box with box collision **********
+		*********** Can even rotate these values later as necessary! ****************************
+
 		2. use DP to PROJECT the current velocity vector onto that normal vector
 		3. return that DP component * -2 to be added to the current velocity
 		*/

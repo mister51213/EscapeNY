@@ -229,11 +229,24 @@ enum eTexture
 	//Underwater7 = 12,
 };
 
+// RL = Right to Left, TB = Top to Bottom, BF = back to front, and so on
+enum eCollisionDir
+{
+	LR,
+	RL,
+	BT,
+	TB,
+	FB,
+	BF
+};
+
 struct AABB
 {
 	AABB() = default;
 	AABB(const ModelSpecs_W& specs, std::vector<DirectX::XMFLOAT3>* pNormMesh, eModType model = CUBE_TEXTURED);
 	void ResetMinMax(DirectX::XMFLOAT3 position);
+
+	DirectX::XMFLOAT3 GetCollidingNormal( AABB & partner );
 
 	DirectX::XMFLOAT3 m_center;
     DirectX::XMFLOAT3 m_extentHalf;

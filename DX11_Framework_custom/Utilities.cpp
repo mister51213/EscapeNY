@@ -255,6 +255,7 @@ AABB::AABB( const ModelSpecs_W& specs, std::vector<DirectX::XMFLOAT3>* pNormMesh
 		*/
 
 		m_Normals = *pNormMesh;
+		// TODO: for aabb, really just need 8 FACES
 	}
 
 	// TODO: rotate and translate this every time it moves for non-axis-alligned BB
@@ -273,4 +274,10 @@ void AABB::ResetMinMax(DirectX::XMFLOAT3 position)
 	{ m_center.x - m_extentHalf.x,
 		m_center.y - m_extentHalf.y,
 		m_center.z - m_extentHalf.z };
+}
+
+DirectX::XMFLOAT3 AABB::GetCollidingNormal(AABB& partner)
+{
+	//TODO: get normal
+	return XMFLOAT3();
 }

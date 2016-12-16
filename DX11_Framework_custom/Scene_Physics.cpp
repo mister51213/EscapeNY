@@ -242,7 +242,13 @@ void Scene_Physics::DoCollision()
 	//	}
 	//}
 
+	eCollisionDir eDir;
+
 	// double iterator loop for collision checking
+
+	//TODO: just make the inner iterator start looping at iter1++, 
+	//TODO: and only loop until m_collidables.end()-- because last iteration is redundant
+
 		vector<Actor_Dynamic>::iterator skipMe;
 
 		for ( vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end(); ++iter1 )
@@ -264,9 +270,10 @@ void Scene_Physics::DoCollision()
 						continue;
 				}
 
-				if ( AABBvsAABB( iter1, iter2 ) )
+				//if ( AABBvsAABB( iter1, iter2 ) )
+				if ( GetCollisionNormal( iter1, iter2, eDir) )	
 				{
-					iter1->ReboundWith( iter2 );
+					iter1->ReboundWith( iter2, eDir );
 				}
 			}
 		}
@@ -350,19 +357,90 @@ void Scene_Physics::DoCollision()
 //}
 }
 
-
+// TODO: move this INSIDE the AABB struct
 bool Scene_Physics::AABBvsAABB( vector<Actor_Dynamic>::iterator pActor1, vector<Actor_Dynamic>::iterator pActor2 )
 {
  	AABB box1 = pActor1->m_AABBox;
 	AABB box2 = pActor2->m_AABBox;
 
-	// Exit with no intersection if found separated along an axis
+	// A SEPARATING AXIS WAS FOUND, so exit with no intersection
 	if ( box1.m_max.x < box2.m_min.x || box1.m_min.x > box2.m_max.x ) return false;
 	if ( box1.m_max.y < box2.m_min.y || box1.m_min.y > box2.m_max.y ) return false;
 	if ( box1.m_max.z < box2.m_min.z || box1.m_min.z > box2.m_max.z ) return false;
  
   // No separating axis found, therefore there is at least one overlapping axis
 	return true;
+}
+
+// call this to check collision AND see which face collided w which
+bool Scene_Physics::GetCollisionNormal( vector<Actor_Dynamic>::iterator pActor1, vector<Actor_Dynamic>::iterator pActor2, eCollisionDir& dir )
+{
+	// The Collision dir passed by reference stands for normal vector from surface of Actor1 that collided
+
+	AABB box1 = pActor1->m_AABBox;
+	AABB box2 = pActor2->m_AABBox;
+
+	// TODO: fix if and else if s so that it does EVERY SINGLE CHECK
+	// A SEPARATING AXIS WAS FOUND, so exit with no intersection
+	if ( box1.m_max.x < box2.m_min.x )
+	{
+		return false;
+	}
+	else
+	{
+		dir = LR;
+		return true;
+	}
+
+	if ( box1.m_min.x > box2.m_max.x )
+	{
+		return false;
+	}
+	else
+	{
+		dir = RL;
+		return true;
+	}
+
+	if ( box1.m_max.y < box2.m_min.y )
+	{
+		return false;
+	}
+	else
+	{
+		dir = BT;		
+		return true;
+	}
+
+	if ( box1.m_min.y > box2.m_max.y )
+	{
+		return false;
+	}
+	else
+	{
+		dir = TB;		
+		return true;
+	}
+
+	if ( box1.m_max.z < box2.m_min.z )
+	{
+		return false;
+	}
+	else
+	{
+		dir = FB;		
+		return true;
+	}
+
+	if ( box1.m_min.z > box2.m_max.z )
+	{
+		return false;
+	}
+	else
+	{
+		dir = BF;		
+		return true;
+	}
 }
 
 // True if overlaps, false if no overlap
