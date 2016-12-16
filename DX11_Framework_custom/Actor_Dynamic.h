@@ -19,7 +19,7 @@ public:
 		eTexture tex, 
 		const ModelSpecs_L &localSpecs, 
 		eModType modType,
-		 std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals = NULL);
+		std::vector<DirectX::XMFLOAT3>* pNormMesh = NULL);
 	~Actor_Dynamic() = default;
 
 	/// ACCESSOR FUNCTIONS ///

@@ -7,9 +7,9 @@ Actor_Dynamic::Actor_Dynamic( const ModelSpecs_W &worldSpecs,
 							  eTexture tex,
 							  const ModelSpecs_L &localSpecs,
 							  eModType modType,
-							  std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals)
+							 std::vector<DirectX::XMFLOAT3>* pNormMesh)
 	:
-	Actor( worldSpecs, tex, localSpecs, modType, pNormals )
+	Actor( worldSpecs, tex, localSpecs, modType, pNormMesh )
 {
 	ResetPIDParams();
 }

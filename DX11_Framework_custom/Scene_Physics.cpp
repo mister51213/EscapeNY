@@ -76,11 +76,17 @@ void Scene_Physics::reset()
 
 	// LEFT BOX
 	float scale1 = 100.f;
-    m_collidables.push_back(Actor_Dynamic( 
-	{ { -400.f, 0.f, 0.f },
-	{ 0.f, 0.f, 0.f },
-	{ scale1, scale1, scale1 } },
-		eTexture::Aluminum, ModelSpecs_L(), CUBE_TEXTURED ));
+    m_collidables.push_back(
+		Actor_Dynamic( 
+			{ { -400.f, 0.f, 0.f },
+			{ 0.f, 0.f, 0.f },
+			{ scale1, scale1, scale1 } },
+			eTexture::Aluminum, 
+			ModelSpecs_L(), 
+			CUBE_TEXTURED, 
+			&(m_pNormals->at(CUBE_TEXTURED)))
+	);
+
 	m_collidables[0].m_attributes.mass = 5.f;
 
 	// RIGHT BOX
@@ -89,28 +95,28 @@ void Scene_Physics::reset()
     { { 400.f, 0.f, 0.f },
     { 0.f, 0.f, 0.f },
 	{ scale2, scale2, scale2 } },		
-		eTexture::SharkSkin, ModelSpecs_L(), CUBE_TEXTURED));
+		eTexture::SharkSkin, ModelSpecs_L(), CUBE_TEXTURED, &(m_pNormals->at(CUBE_TEXTURED))));
 	m_collidables[1].m_attributes.mass = 10.f;
 
 	// FLOOR
 	m_collidables.push_back(Actor_Dynamic( 
 	{ { 0.f, -200.f, 0.f },
 	{ 0.f, 0.f, 0.f },
-	{ 1500.f, 20.f, 1500.f } }, Rock, ModelSpecs_L(), CUBE_TEXTURED ));
+	{ 1500.f, 20.f, 1500.f } }, Rock, ModelSpecs_L(), CUBE_TEXTURED, &(m_pNormals->at(CUBE_TEXTURED))));
 	m_collidables[2].m_attributes.mass = 10000.f;
 
 	// RIGHT WALL
 	m_collidables.push_back(Actor_Dynamic( 
 	{ { 750.f, 230.f, 0.f },
 	{ 0.f, 0.f, 0.f },
-	{ scale2, 500.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED ));
+	{ scale2, 500.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED, &(m_pNormals->at(CUBE_TEXTURED))));
 	m_collidables[3].m_attributes.mass = 5000.f;
 
 	// LEFT WALL
 	m_collidables.push_back(Actor_Dynamic( 
 	{ { -750.f, 230.f, 0.f },
 	{ 0.f, 0.f, 0.f },
-	{ scale2, 500.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED ));
+	{ scale2, 500.f, 1500.f } }, waterSHALLOW, ModelSpecs_L(), CUBE_TEXTURED, &(m_pNormals->at(CUBE_TEXTURED))));
 	m_collidables[4].m_attributes.mass = 100.f;
 
 	// LOAD DRAW LIST
@@ -146,12 +152,6 @@ void Scene_Physics::UpdateScene(
     m_pCamera->GetInput(InputRef);
     m_pCamera->GetMouseInput(InputRef);
 	InputForces(InputRef, tSinceLastFrame);
-    //m_box1.GetInput(InputRef);
-    //m_box2.GetInput(InputRef);
-
-	// ADD FORCES	
-	//m_physics.Friction(&m_box1, tSinceLastFrame);
-	//m_physics.Friction(&m_box2, tSinceLastFrame);
 
 	// Gravity
 	m_physics.Force_Steady( &m_collidables[0], { 0.f, -60000.f, 0.f }, tSinceLastFrame );
@@ -187,16 +187,12 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 
 	if ( pInput.IsKeyDown( VK_LEFT ))
 	{
-		/*m_physics.Force_Steady( &m_box1, targetB1, time );
-		m_physics.Force_Steady( &m_box2, targetB2, time );*/
-		//m_physics.Force_Steady( &m_collidables[0], { 120000.f, 0.f, 0.f }, time ); // force on left
+		m_physics.Force_Steady( &m_collidables[0], { 120000.f, 0.f, 0.f }, time ); // force on left
 		m_physics.Force_Steady( &m_collidables[1], { -240000.f, 0.f, 0.f }, time ); // force on right
 	}
 	if ( pInput.IsKeyDown( VK_RIGHT ))
 	{
-		//m_physics.Force_Steady( &m_box1, -targetB1, time );
-		//m_physics.Force_Steady( &m_box2, -targetB2, time );
-		//m_physics.Force_Steady( &m_collidables[0], { -120000.f, 0.f, 0.f }, time ); // force on left
+		m_physics.Force_Steady( &m_collidables[0], { -120000.f, 0.f, 0.f }, time ); // force on left
 		m_physics.Force_Steady( &m_collidables[1], { 240000.f, 0.f, 0.f }, time ); // force on right
 	}
 	if ( pInput.IsKeyDown( VK_UP ))

@@ -54,7 +54,7 @@ public:
         eTexture tex,
         const ModelSpecs_L &localSpecs,
         eModType modType = CUBE_TEXTURED,
-    	std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals = NULL);
+		std::vector<DirectX::XMFLOAT3>* pNormMesh = NULL);
 	// Parent classes need virtual destructors so the child destructor is called,
 	// just like virtual functions.  Though the child destructors don't need
 	// the override specified.  Child classes are automatically virtual, so

@@ -232,7 +232,7 @@ enum eTexture
 struct AABB
 {
 	AABB() = default;
-	AABB(const ModelSpecs_W& specs, std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals, eModType model = CUBE_TEXTURED);
+	AABB(const ModelSpecs_W& specs, std::vector<DirectX::XMFLOAT3>* pNormMesh, eModType model = CUBE_TEXTURED);
 	void ResetMinMax(DirectX::XMFLOAT3 position);
 
 	DirectX::XMFLOAT3 m_center;

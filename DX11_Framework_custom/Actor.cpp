@@ -3,13 +3,13 @@
 
 using namespace DirectX;
 
-Actor::Actor( const ModelSpecs_W & worldSpecs, eTexture tex, const ModelSpecs_L & localSpecs, eModType modType,  std::shared_ptr<std::vector<std::vector<DirectX::XMFLOAT3>>> pNormals )
+Actor::Actor( const ModelSpecs_W & worldSpecs, eTexture tex, const ModelSpecs_L & localSpecs, eModType modType, std::vector<DirectX::XMFLOAT3>* pNormMesh )
 	:
 	m_worldSpecs( worldSpecs ),
 	m_localSpecs( localSpecs ),
 	m_texIndex( tex ),
 	m_modType( modType ),
-	m_AABBox(worldSpecs, pNormals)
+	m_AABBox(worldSpecs, pNormMesh)
 {}
 
 Actor::~Actor()
