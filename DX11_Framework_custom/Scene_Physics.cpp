@@ -245,38 +245,16 @@ void Scene_Physics::DoCollision()
 	eCollisionDir eDir;
 
 	// double iterator loop for collision checking
-
-	//TODO: just make the inner iterator start looping at iter1++, 
-	//TODO: and only loop until m_collidables.end()-- because last iteration is redundant
-
-		vector<Actor_Dynamic>::iterator skipMe;
-
-		for ( vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end(); ++iter1 )
+	for ( vector<Actor_Dynamic>::iterator iter1 = m_collidables.begin(); iter1 != m_collidables.end() - 1; ++iter1 )
+	{
+		for ( vector<Actor_Dynamic>::iterator iter2 = iter1 + 1; iter2 != m_collidables.end(); ++iter2 )
 		{
-			if ( iter1 != m_collidables.begin() )
-			{
-				skipMe = iter1;
-				--skipMe;
-			}
-
-			for ( std::vector<Actor_Dynamic>::iterator iter2 = m_collidables.begin(); iter2 != m_collidables.end(); ++iter2 )
-			{
-				if ( iter1 == iter2 )
-					continue;
-
-				if ( iter1 != m_collidables.begin() )
-				{
-					if ( iter2 <= skipMe ) // The <= is the key!
-						continue;
-				}
-
-				//if ( AABBvsAABB( iter1, iter2 ) )
 				if ( GetCollisionNormal( iter1, iter2, eDir) )	
 				{
 					iter1->ReboundWith( iter2, eDir );
 				}
-			}
 		}
+	}
 
 //	// If the two objects overlap, add one to list and give it awareness of the other
 //	for ( UINT64 i = 0; i < m_pActorsMASTER.size(); i++ )
