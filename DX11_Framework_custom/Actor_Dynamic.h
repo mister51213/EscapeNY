@@ -7,19 +7,19 @@ class Actor_Dynamic :
 {
 public:
 	enum eActorState
-	{	
+	{
 		// TODO: REMOVE THESE, add specific state collections for each Actor child
 		STOPPED, FALLING, CONST_MOVE, HOMING,
 		PLAYER_IDLE, PLAYER_WALKING, PLAYER_PUSHING, PLAYER_QUICKTIME, PLAYER_DROWNING, PLAYER_PINNED
 	};
 
 	Actor_Dynamic() = default;
-	Actor_Dynamic( 
-		const ModelSpecs_W &worldSpecs, 
-		eTexture tex, 
-		const ModelSpecs_L &localSpecs, 
+	Actor_Dynamic(
+		const ModelSpecs_W &worldSpecs,
+		eTexture tex,
+		const ModelSpecs_L &localSpecs,
 		eModType modType,
-		std::vector<DirectX::XMFLOAT3>* pNormMesh = NULL);
+		std::vector<DirectX::XMFLOAT3>* pNormMesh = NULL );
 	~Actor_Dynamic() = default;
 
 	/// ACCESSOR FUNCTIONS ///
@@ -27,9 +27,9 @@ public:
 	eActorState GetState()const;
 	bool CheckMobility();
 	DirectX::XMFLOAT3 GetInitialPosition() const;
-	
+
 	/// Reset / update functions ///
-	void ResetPIDParams(const DirectX::XMFLOAT3 &target = { 0.f, 0.f, 0.f });
+	void ResetPIDParams( const DirectX::XMFLOAT3 &target = { 0.f, 0.f, 0.f } );
 	virtual void Update( float deltaT );
 
 	/// Motion functions ///
@@ -40,7 +40,7 @@ public:
 
 	/// Collision related functions ///
 	void Rebound( Actor_Dynamic * partnerBall );
-	void ReboundWith(std::vector<Actor_Dynamic>::iterator& partner, eCollisionDir& eDir);
+	void ReboundWith( std::vector<Actor_Dynamic>::iterator& partner, eCollisionDir& eDir );
 	void ReboundX1();
 	void PauseCollision();
 	void ResumeCollision();
@@ -49,11 +49,11 @@ public:
 public:
 	//Actor_Dynamic* m_pCollision_partner;
 
-protected: 
+protected:
 	float integrator;
 
 	eActorState m_state;
-	DirectX::XMFLOAT3 m_target = { 0.0f,0.0f,0.0f };
+	DirectX::XMFLOAT3 m_target = { 0.0f, 0.0f, 0.0f };
 	DirectX::XMFLOAT3 m_initalPosition = { 0.0f, 0.0f, 0.0f };
 	DirectX::XMFLOAT3 m_initialHeading = { 0.0f, 0.0f, 0.0f };
 	float m_halfway = 0.0f;
@@ -61,9 +61,22 @@ protected:
 
 	bool m_collisionOn = true;
 
+	eCollisionDir m_CollDir;
+
 	bool m_isMovable;
 
 	DirectX::XMFLOAT3 m_previousPosition = { 0.0f, 0.0f, 0.0f };
+
+	DirectX::XMFLOAT3 m_AABBNorms[ 6 ] =
+	{
+		{ 1.f, 0.f, 0.f },
+		{ -1.f, 0.f, 0.f },
+		{ 0.f, 1.f, 0.f },
+		{ 0.f, -1.f, 0.f },
+		{ 0.f, 0.f, 1.f },
+		{ 0.f, 0.f, -1.f },
+	};
+
 };
 
 

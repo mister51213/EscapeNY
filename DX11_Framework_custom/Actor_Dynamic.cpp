@@ -139,24 +139,23 @@ void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator& partner, e
 	XMFLOAT3 forceOnThis;
 	XMFLOAT3 forceOnPartner;
 
-	if ( partnerAttributes.mass >= 4000 ) // INFINITE MASS
-	{
-		XMFLOAT3 rbndComponent = {0.f, -m_attributes.velocLin.y, 0.f};
-		rbndComponent *= 2.0f;
+	if ( partnerAttributes.mass >= 4000 ) // Partner has INFINITE MASS
+	{	
+		//XMFLOAT3 normal = m_AABBNorms[ eDir ];
+		XMFLOAT3 normal = { 0.f, 1.f, 0.f };
 
-		forceOnThis = m_attributes.velocLin + rbndComponent;
+		XMFLOAT3 rbndComponent = normal * DotProduct( m_attributes.velocLin, normal );
+		forceOnThis = m_attributes.velocLin - rbndComponent * 3.2f;
 		forceOnPartner = { 0.f, 0.f, 0.f };
-		
-		m_attributes.velocLin.y = 0.f; // TODO: component perpendicular to trajectory only
 	}
-	else if ( m_attributes.mass >= 4000 ) // INFINITE MASS
+	else if ( m_attributes.mass >= 4000 ) // This object has INFINITE MASS
 	{
-		XMFLOAT3 rbndComponent = {0.f, -partnerAttributes.velocLin.y, 0.f};
-		rbndComponent *= 2.0f;
+		//XMFLOAT3 normal = m_AABBNorms[ eDir ];
+		XMFLOAT3 normal = { 0.f, 1.f, 0.f };
 
+		XMFLOAT3 rbndComponent = normal * DotProduct( partnerAttributes.velocLin, normal );
 		forceOnThis = { 0.f, 0.f, 0.f };
 		forceOnPartner = partnerAttributes.velocLin + rbndComponent;
-
 
 		/* 
 		calculate force component perpendicular to the surface of collision
@@ -169,11 +168,9 @@ void Actor_Dynamic::ReboundWith(std::vector<Actor_Dynamic>::iterator& partner, e
 		2. use DP to PROJECT the current velocity vector onto that normal vector
 		3. return that DP component * -2 to be added to the current velocity
 		*/
-
-		partner->m_attributes.velocLin.y = 0.f; // TODO: component perpendicular to trajectory only
 	}
 
-	else // FINITE MASS
+	else // Both have FINITE MASS
 	{
 		forceOnThis = partnerAttributes.velocLin * momentumTransferRatio;
 		forceOnPartner = m_attributes.velocLin / momentumTransferRatio;
@@ -201,7 +198,7 @@ void Actor_Dynamic::Rebound(Actor_Dynamic* partnerBall)
 	XMFLOAT3 thisTrajectory = m_worldSpecs.position/* - m_initalPosition*/;
 	XMFLOAT3 otherTrajectory = partnerBall->GetPosition() - partnerBall->GetInitialPosition();
 	m_target = thisTrajectory + otherTrajectory/* + m_initalPosition*/;
-	//TODO: cam't use target anymore, have to apply force on other ball
+	//TODO: can't use target anymore, have to apply force on other ball
 
 	PauseCollision();
 }

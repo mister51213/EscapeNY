@@ -207,7 +207,6 @@ void Scene_Physics::InputForces(Input& pInput, float time)
 	}
 	if ( pInput.IsKeyDown( 'R' ))
 	{
-
 		reset();
 	}
 }
